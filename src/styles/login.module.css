@@ -1,0 +1,14 @@
+.loginSideLogo{
+    position: absolute;
+    top: 17px;
+    left: 120px;
+}
+
+.loginSideImage{
+    margin-top: 92px;
+    width: 100%;
+}
+
+.signInUpColor{
+    color:#ff8e2d
+}
