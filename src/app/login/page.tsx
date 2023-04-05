@@ -1,8 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Button, Divider } from "@mui/material";
-import CssBaseline from "@mui/material/CssBaseline";
+import { Button, Divider, IconButton } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
@@ -12,39 +11,54 @@ import styles from "../../styles/login.module.css";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import GoogleIcon from "@mui/icons-material/Google";
+import AuthSidebar from "./authSidebar";
+import CircularProgressBar from "@/common/circularProgressBar";
+import { LoadingButton } from "@mui/lab";
+import { useRouter } from "next/navigation";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { userLoginValidations } from "@/validation_schema/authValidation";
+import { useForm } from "react-hook-form";
+import { loginType } from "../../types/authType";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { HandleLogin } from "@/services/auth";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const theme = createTheme();
 
 export default function Login() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
+
+  const { register,	handleSubmit,formState: { errors } } = useForm<loginType>({resolver: yupResolver(userLoginValidations)});
+  const router = useRouter();
+  const [loading,setLoading] = React.useState<boolean>(false);
+  const [showPassword, setShowPassword] = React.useState(false);
+
+const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const onSubmit = async(event:any) => {
+
+    setLoading(true)
+    await HandleLogin(event).then((res) => {
+      if(res.status === 200){
+        // router.push('/profile')
+        localStorage.setItem('loginToken',res.data.loginToken)
+      }
+      setLoading(false)
+    }).catch(() => {
+      setLoading(false)
+    })
+
+};
+
+  function ErrorShowing (errorMessage:any){
+    return ( <Typography variant="body2" color={'error'} gutterBottom>{errorMessage} </Typography> );
+  }
 
   return (
     <ThemeProvider theme={theme}>
+      <ToastContainer/>
       <Grid container component="main" sx={{ height: "100vh" }}>
-        <CssBaseline />
-        <Grid item xs={false} sm={5} md={7} lg={7}>
-          <Box
-            component={"img"}
-            src={"/Images/company_logo.png"}
-            width={"210px"}
-            height={"70px"}
-            className={styles.loginSideLogo}
-          />
-
-          <Box
-            component={"img"}
-            src={"/Images/authSide.png"}
-            className={styles.loginSideImage}
-            height={"640px"}
-          />
-        </Grid>
+        <AuthSidebar/>
         <Grid item xs={12} sm={7} md={5} lg={5}>
           <Box
             sx={{
@@ -64,7 +78,7 @@ export default function Login() {
             </Typography>
             <Grid container>
               <Grid item className="GlobalTextColor">
-                Don't have an account?
+                Don&lsquo;t have an account?
                 <Link
                   href="/register"
                   variant="body2"
@@ -78,36 +92,55 @@ export default function Login() {
 
             <Box
               component="form"
+              // method="POST"
               noValidate
-              onSubmit={handleSubmit}
+              autoComplete="off"
+              onSubmit={handleSubmit(onSubmit)}
               sx={{ mt: 1 }}
             >
               <TextField
                 margin="normal"
                 fullWidth
-                id="email"
+                id="outlined-email"
                 label="Email Address"
-                name="email"
                 autoFocus
+                {...register("email")}
               />
+              {errors && errors.email ? ErrorShowing(errors?.email?.message) : ''}
               <TextField
                 margin="normal"
                 fullWidth
-                name="password"
                 label="Password"
-                type="password"
-                id="password"
+                type={showPassword ? 'text' : 'password'}
+                id="outlined-password"
+                {...register("password")}
+                InputProps={{
+                  endAdornment: (
+                     <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+                  ),
+                }}
               />
-
-              <Button
+              {errors && errors.password ? ErrorShowing(errors?.password?.message) : ''}
+             {!loading ? <Button
                 type="submit"
                 fullWidth
                 size="large"
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
+                
                 Sign In
-              </Button>
+              </Button>: <LoadingButton loading={loading}  fullWidth
+                size="large" sx={{ mt: 3, mb: 2 }}
+                variant="outlined" disabled >
+         <CircularProgressBar/>
+        </LoadingButton>}
 
               <Link
                 href="/forgotpassword"
@@ -129,7 +162,7 @@ export default function Login() {
               </Box>
               <Box textAlign={"center"}>
                 <Button
-                  type="submit"
+                  type="button"
                   fullWidth
                   variant="outlined"
                   startIcon={<FacebookIcon />}
@@ -139,7 +172,7 @@ export default function Login() {
                 </Button>
 
                 <Button
-                  type="submit"
+                  type="button"
                   fullWidth
                   variant="outlined"
                   startIcon={<GoogleIcon />}

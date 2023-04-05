@@ -1,19 +1,17 @@
 "use client";
 
+// ** Import React
 import { useEffect } from 'react'
+
+//  ** Services Import
 import { GenerateToken } from '../services/auth'
 import Login from './login/page'
 
 export default function Home() {
 
   useEffect(() =>{
-
-   const ss = GenerateToken()
- 
-      console.log(ss,"3333333333333333333")
-
+    GenerateToken()
   },[])
-
 
   return (
     < >

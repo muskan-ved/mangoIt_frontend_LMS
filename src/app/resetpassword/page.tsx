@@ -1,51 +1,62 @@
 "use client";
 
 import * as React from "react";
-import { Button, Divider } from "@mui/material";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import styles from "../../styles/login.module.css";
+import { Button ,TextField,Box,Grid,Typography, InputAdornment, IconButton} from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useRouter } from "next/navigation";
+import AuthSidebar from "../login/authSidebar";
+import { LoadingButton } from "@mui/lab";
+import CircularProgressBar from "@/common/circularProgressBar";
+import { resetPasswordType } from "@/types/authType";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { userResetPasswordValidations } from "@/validation_schema/authValidation";
+import { useForm } from "react-hook-form";
+import { HandleResetPassword } from "@/services/auth";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const theme = createTheme();
 
 export default function ResetPassword() {
 
+    const { register,	handleSubmit,formState: { errors } } = useForm<resetPasswordType>({resolver: yupResolver(userResetPasswordValidations)});
     const router = useRouter();
+    const [loading,setLoading] = React.useState<boolean>(false);
+    const [showPassword, setShowPassword] = React.useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    router.push('/')
-    // const data = new FormData(event.currentTarget);
-    // console.log({
-    //   email: data.get("email"),
-    //   password: data.get("password"),
-    // });
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowConfirmPassword = () => setShowConfirmPassword((show) => !show);
+
+  const onSubmit = async(event: any) => {
+    
+    const getToken = {token : localStorage.getItem('ForgotPasswordToken'),
+  }
+  const reqData = {
+    ...getToken,
+    ...event
+};
+    setLoading(true)
+    await HandleResetPassword(reqData).then((res) => {
+    if(res.response.status === 200){
+      router.push('/login')
+    }
+      setLoading(false)
+    }).catch(() => {
+      setLoading(false)
+    })
   };
+
+  function ErrorShowing (errorMessage:any){
+    return ( <Typography variant="body2" color={'error'} gutterBottom>{errorMessage} </Typography> );
+  }
 
   return (
     <ThemeProvider theme={theme}>
+      <ToastContainer/>
       <Grid container component="main" sx={{ height: "100vh" }}>
-        <CssBaseline />
-        <Grid item xs={false} sm={5} md={7} lg={7}>
-          <Box
-            component={"img"}
-            src={"/Images/company_logo.png"}
-            width={"210px"}
-            height={"70px"}
-            className={styles.loginSideLogo}
-          />
-          <Box
-            component={"img"}
-            src={"/Images/authSide.png"}
-            className={styles.loginSideImage}
-            height={"640px"}
-          />
-        </Grid>
+        <AuthSidebar/>
         <Grid item xs={12} sm={7} md={5} lg={5}>
           <Box
             sx={{
@@ -67,28 +78,54 @@ export default function ResetPassword() {
             <Box
               component="form"
               noValidate
-              onSubmit={handleSubmit}
+              onSubmit={handleSubmit(onSubmit)}
               sx={{ mt: 1 }}
             >
               <TextField
                 margin="normal"
                 fullWidth
-                id="npassword"
+                id="outlined-password"
                 label="Enter New Password"
-                name="npassword"
-                type="password"
+                {...register("password")}
+                type={showPassword ? 'text' : 'password'}
                 autoFocus
+                InputProps={{
+                  endAdornment: (
+                     <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+                  ),
+                }}
+               
               />
+              {errors && errors.password ? ErrorShowing(errors?.password?.message) : ''}
+
               <TextField
                 margin="normal"
                 fullWidth
-                name="cpassword"
+                {...register("confirm_password")}
                 label="Confirm Password"
-                type="password"
-                id="cpassword"
+                type={showConfirmPassword ? 'text' : 'password'}
+                id="outlined-confirm_password"
+                InputProps={{
+                  endAdornment: (
+                     <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowConfirmPassword}
+                  edge="end"
+                >
+                  {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+                  ),
+                }}
               />
+              {errors && errors.confirm_password ? ErrorShowing(errors?.confirm_password?.message) : ''}
 
-              <Button
+             {!loading ? <Button
                 type="submit"
                 fullWidth
                 size="large"
@@ -96,7 +133,11 @@ export default function ResetPassword() {
                 sx={{ mt: 3, mb: 2 }}
               >
                 Save
-              </Button>
+              </Button> : <LoadingButton loading={loading}  fullWidth
+                size="large" sx={{ mt: 3, mb: 2 }}
+                variant="outlined" disabled >
+         <CircularProgressBar/>
+        </LoadingButton>}
             </Box>
           </Box>
         </Grid>

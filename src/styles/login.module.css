@@ -1,11 +1,11 @@
 .loginSideLogo{
-    position: absolute;
+    position: relative;
     top: 17px;
     left: 120px;
 }
 
 .loginSideImage{
-    margin-top: 92px;
+    margin-top: 16px;
     width: 100%;
 }
 
