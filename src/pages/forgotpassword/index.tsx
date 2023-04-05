@@ -35,7 +35,7 @@ export default function ForgotPassword() {
       formData.append(key, reqData[key]);
     }
     setLoading(true)
-    await HandleForgotPassword(formData).then(() => {
+    await HandleForgotPassword(formData).then((res) => {
       setLoading(false)
     }).catch(() => {
       setLoading(false)

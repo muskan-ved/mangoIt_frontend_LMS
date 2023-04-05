@@ -40,7 +40,7 @@ const handleClickShowPassword = () => setShowPassword((show) => !show);
     setLoading(true)
     await HandleLogin(event).then((res) => {
       if(res.status === 200){
-        // router.push('/profile')
+        router.push('/profile')
         localStorage.setItem('loginToken',res.data.loginToken)
       }
       setLoading(false)

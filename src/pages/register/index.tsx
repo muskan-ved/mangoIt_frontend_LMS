@@ -36,7 +36,7 @@ const handleClickShowConfirmPassword = () => setShowConfirmPassword((show) => !s
 
     setLoading(true)
       await HandleRegister(event).then((res) => {
-        if(res.response.status === 200){
+        if(res.status === 201){
           router.push('/login')
         }
         setLoading(false)
@@ -124,7 +124,7 @@ const handleClickShowConfirmPassword = () => setShowConfirmPassword((show) => !s
                 margin="normal"
                 fullWidth
                 id="outlined-password"
-                label="Enter New Password"
+                label="Password"
                 {...register("password")}
                 type={showPassword ? 'text' : 'password'}
                 autoFocus

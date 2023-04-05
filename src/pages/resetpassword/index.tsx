@@ -31,7 +31,7 @@ export default function ResetPassword() {
 
   const onSubmit = async(event: any) => {
     
-    const getToken = {token : localStorage.getItem('ForgotPasswordToken'),
+    const getToken = {token : localStorage.getItem('forgotPasswordToken'),
   }
   const reqData = {
     ...getToken,
@@ -39,8 +39,10 @@ export default function ResetPassword() {
 };
     setLoading(true)
     await HandleResetPassword(reqData).then((res) => {
-    if(res.response.status === 200){
+      console.log(res,"33333333333333333")
+    if(res.status === 202){
       router.push('/login')
+      localStorage.removeItem('forgotPasswordToken')
     }
       setLoading(false)
     }).catch(() => {
@@ -84,8 +86,8 @@ export default function ResetPassword() {
               <TextField
                 margin="normal"
                 fullWidth
-                id="outlined-password"
-                label="Enter New Password"
+                id="outlined-basic"
+                label="New Password"
                 {...register("password")}
                 type={showPassword ? 'text' : 'password'}
                 autoFocus
@@ -105,7 +107,7 @@ export default function ResetPassword() {
               {errors && errors.password ? ErrorShowing(errors?.password?.message) : ''}
 
               <TextField
-                margin="normal"
+                margin="none"
                 fullWidth
                 {...register("confirm_password")}
                 label="Confirm Password"

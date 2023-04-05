@@ -70,7 +70,10 @@ export const HandleForgotPassword = async(reqData:any) =>{
     data: reqData,
     headers: authHeader(),
   }).then((request) => {
+    if(request.status === 200){
       toast.success("Check your mail");
+      localStorage.setItem('forgotPasswordToken',request.data)
+    }
       return request;
     }).catch((error) => {
       if(error.response.status === 400){
