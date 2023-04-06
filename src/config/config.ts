@@ -12,4 +12,5 @@ export const API = {
  forgotPassword: `${BASE_URL}/sendgmail`,
  resetPassword: `${BASE_URL}/resetpassword`,
 
+ userProfile:`${BASE_URL}/`,
 };

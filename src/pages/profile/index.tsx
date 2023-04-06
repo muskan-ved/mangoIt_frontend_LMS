@@ -18,6 +18,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import Input from '@mui/material/Input';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -74,7 +75,11 @@ export default function RecipeReviewCard() {
           <VisibilityIcon />
      </Box>
 
-     <Box sx={{float:"right"}}>
+     <Box sx={{float:"left"}}>
+     <Input sx = {{width: " 150"}}
+    type="text"
+    hidden
+  />
       
       </Box>
      </CardContent>
