@@ -20,6 +20,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import Navbar from '@/common/navbar';
 import SideBar from '@/common/sideBar';
+import styles from '../../styles/sidebar.module.css'
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -46,7 +47,7 @@ export default function RecipeReviewCard() {
   return (
     <>
     <Navbar/>
-    <Box sx={{ height: "100vh", display: "flex" ,position: "absolute",   top: "64px"}}>
+    <Box className={styles.combineContentAndSidebar}>
     <SideBar/>
     
   

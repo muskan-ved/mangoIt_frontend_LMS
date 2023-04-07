@@ -1,71 +1,52 @@
 import * as React from 'react';
-import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
+import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import MailIcon from '@mui/icons-material/Mail';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
+import { useProSidebar } from 'react-pro-sidebar';
+import { Avatar, Typography } from '@mui/material';
+import { useRouter } from 'next/navigation';
+import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
+import styles from '../styles/appbar.module.css'
+import { HandleLogout } from '@/services/auth';
+import PowerSettingsNewOutlinedIcon from '@mui/icons-material/PowerSettingsNewOutlined';
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import { capitalizeFirstLetter } from './capitalizeFirstLetter';
 
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(3),
-    width: 'auto',
-  },
-}));
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '20ch',
-    },
-  },
-}));
 
 export default function Navbar() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
-    React.useState<null | HTMLElement>(null);
-
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =  React.useState<null | HTMLElement>(null);
+  const [userData, setUserData] =  React.useState<any>('');
+  const {  collapseSidebar, toggleSidebar,toggled } = useProSidebar();
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const router = useRouter()
 
-  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+  React.useEffect(()=>{
+    let localData:any;
+    if (typeof window !== "undefined") {
+      localData = window.localStorage.getItem('userData')
+    }
+    if(localData) {
+      setUserData(JSON.parse(localData))
+    }
+
+  },[])
+
+  const toggle = () => {
+    toggleSidebar();
+    if (toggled) {
+      collapseSidebar();
+    } else {
+      collapseSidebar();
+    }
   };
 
   const handleMobileMenuClose = () => {
@@ -75,6 +56,10 @@ export default function Navbar() {
   const handleMenuClose = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
+  };
+
+  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
   };
 
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -98,8 +83,30 @@ export default function Navbar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+ <MenuItem onClick={() => {router.push('/profile'),handleMenuClose()}}>
+        <IconButton
+          size="large"
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <AccountCircleOutlinedIcon />
+        </IconButton>
+        <Typography>Profile</Typography>
+      </MenuItem>
+      <MenuItem onClick={HandleLogout}>
+        <IconButton
+          size="large"
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <PowerSettingsNewOutlinedIcon />
+        </IconButton>
+        <Typography>Logout</Typography>
+      </MenuItem>
     </Menu>
   );
 
@@ -120,13 +127,9 @@ export default function Navbar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
+      <MenuItem onClick={() => router.push('/profile')}>
+        <Typography variant='body1'>Welcome</Typography>&nbsp;
+        <Typography variant='body2'>{capitalizeFirstLetter(userData?.first_name)} {capitalizeFirstLetter(userData?.last_name)}</Typography>
       </MenuItem>
       <MenuItem>
         <IconButton
@@ -135,12 +138,12 @@ export default function Navbar() {
           color="inherit"
         >
           <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
+            <NotificationsNoneOutlinedIcon />
           </Badge>
         </IconButton>
-        <p>Notifications</p>
+        <Typography>Notifications</Typography>
       </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
+      <MenuItem onClick={() => router.push('/profile')}>
         <IconButton
           size="large"
           aria-label="account of current user"
@@ -148,70 +151,57 @@ export default function Navbar() {
           aria-haspopup="true"
           color="inherit"
         >
-          <AccountCircle />
+          <AccountCircleOutlinedIcon />
         </IconButton>
-        <p>Profile</p>
+        <Typography>Profile</Typography>
+      </MenuItem>
+      <MenuItem onClick={HandleLogout}>
+        <IconButton
+          size="large"
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <PowerSettingsNewOutlinedIcon />
+        </IconButton>
+        <Typography>Logout</Typography>
       </MenuItem>
     </Menu>
   );
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ display: { xs: 'none', sm: 'block' } }}
-          >
-            MUI
-          </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
+      <AppBar position="static" className={styles.appBarCss}>
+        <Toolbar>      
+           <Box component='img' src='../../Images/company_logo.png' width={'180px'} height={'50px'}  sx={{ display: { xs: 'block', sm: 'block' } }} alt="Company logo"/>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
-              </Badge>
-            </IconButton>
             <IconButton
               size="large"
               aria-label="show 17 new notifications"
               color="inherit"
             >
               <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
+                <NotificationsNoneOutlinedIcon />
               </Badge>
             </IconButton>
-            <IconButton
+           <Box className={styles.createVrLine}></Box>
+        
+            <Avatar src='/ddd/dd.png' alt="Remy Sharp" className={styles.windowFullWidthAvatar} />
+              <Typography variant='body2' className={styles.windowFullWidthNameAlign}>{capitalizeFirstLetter(userData?.first_name)} {capitalizeFirstLetter(userData?.last_name)}</Typography>
+            
+          <IconButton
               size="large"
               edge="end"
               aria-label="account of current user"
               aria-controls={menuId}
               aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
               color="inherit"
+              onClick={handleProfileMenuOpen}
             >
-              <AccountCircle />
-              fftrrtrtr
+             
+              <KeyboardArrowDownOutlinedIcon/>
             </IconButton>
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
@@ -225,6 +215,17 @@ export default function Navbar() {
             >
               <MoreIcon />
             </IconButton>
+            <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="open drawer"
+            sx={{ mr: 2}}
+          >
+            <MenuIcon onClick={() => {
+              toggle();
+            }}/>
+          </IconButton>
           </Box>
         </Toolbar>
       </AppBar>

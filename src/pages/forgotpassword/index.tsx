@@ -47,7 +47,7 @@ export default function ForgotPassword() {
   return (
     <ThemeProvider theme={theme}>
       <ToastContainer/>
-      <Grid container component="main" sx={{ height: "100vh" }}>
+      <Grid container component="main">
         <AuthSidebar/>
         <Grid item xs={12} sm={7} md={5} lg={5}>
           <Box

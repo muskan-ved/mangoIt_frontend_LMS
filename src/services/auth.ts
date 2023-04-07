@@ -112,9 +112,9 @@ export const HandleResetPassword = async(reqData:any) =>{
 export const HandleLogout = () => {
 
   localStorage.clear()
-  setTimeout(() => {
-    window.location.replace("/login");
-  },500);
+  window.location.replace("/login");
+  GenerateToken()
+
 };
  
 
