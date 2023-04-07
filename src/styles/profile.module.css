@@ -1,0 +1,12 @@
+.profileImageBox{
+    float: left;
+    justify-content: space-around;
+    width:450px;
+    display: flex;
+}
+
+.profileDetailBox{
+    float: right;
+    justify-content: space-around;
+    /* display: flex; */
+}

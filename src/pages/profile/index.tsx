@@ -1,103 +1,161 @@
-import * as React from 'react';
-import { Grid } from "@mui/material";
-import { styled } from '@mui/material/styles';
-import Card from '@mui/material/Card';
+import * as React from "react";
+import {
+  Button,
+  TextField,
+  Grid,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from "@mui/material";
+import ProfileEdit from "./profileEdit";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { userRegisterValidations } from "../../validation_schema/authValidation";
+import { registerType } from "../../types/authType";
+import Card from "@mui/material/Card";
 import Box from "@mui/material/Box";
-import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
-import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
-import Collapse from '@mui/material/Collapse';
-import Avatar from '@mui/material/Avatar';
-import IconButton, { IconButtonProps } from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import { red } from '@mui/material/colors';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import EditIcon from '@mui/icons-material/Edit';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-<<<<<<< HEAD
-import Input from '@mui/material/Input';
-=======
-import Navbar from '@/common/navbar';
-import SideBar from '@/common/sideBar';
->>>>>>> 47e273fa92c089a92057421ffd479e2235c91918
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import { red } from "@mui/material/colors";
+import EditIcon from "@mui/icons-material/Edit";
+import Navbar from "@/common/navbar";
+import SideBar from "@/common/sideBar";
+import BackupIcon from "@mui/icons-material/Backup";
+import styles from "../../styles/profile.module.css";
+import { ToastContainer } from "react-toastify";
 
-interface ExpandMoreProps extends IconButtonProps {
-  expand: boolean;
-}
+export default function Profile() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<registerType>({ resolver: yupResolver(userRegisterValidations) });
 
-const ExpandMore = styled((props: ExpandMoreProps) => {
-  const { expand, ...other } = props;
-  return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-  marginLeft: 'auto',
-  transition: theme.transitions.create('transform', {
-    duration: theme.transitions.duration.shortest,
-  }),
-}));
+  const [toggle,setToggle] = React.useState<boolean>(false);
 
-export default function RecipeReviewCard() {
-  const [expanded, setExpanded] = React.useState(false);
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
+  const handleEdit = async() => {
+    setToggle(true)
+   
+    // await ProfileEdit(event).then((res) => {
+    //   if(res.status === 201){
+    //     router.push('/login')
+    //   }
+    //   setToggle(false)
+    // }).catch(() => {
+    //   setToggle(false)
+    // })
+  
+
+    ProfileEdit()
+  }
 
   return (
     <>
-    <Navbar/>
-    <Box sx={{ height: "100vh", display: "flex" ,position: "absolute",   top: "64px"}}>
-    <SideBar/>
-    
-  
-    <Grid item xs={12} sm={7} md={5} lg={5}>
-    <Card >
-    <CardContent>
+      <Navbar />
       <Box
-       sx={{my:5, mx:5, display: 'inline-block'}}>
-      <Avatar sx={{ bgcolor: red[500], width: 150, height: 150, }} src="/static/images/avatar/1.jpg" variant="rounded" />
+        sx={{
+          height: "100vh",
+          display: "flex",
+          position: "absolute",
+          top: "64px",
+          width: "100% !important"
+        }}
+      >
+        <SideBar />
+        <ToastContainer />
+        <Card sx={{ width: "100%" }} >
+          <CardContent >
+            <Grid container spacing={3}>
+
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+                <Box className={styles.profileImageBox}>
+                  <Box component='img' src="/profile.png" width='150px' height='150px' />
+                  <Box >
+                    <Typography
+                      variant="subtitle1"
+                      sx={{ fontWeight: "bold" }}>
+                      Shubham
+                    </Typography>
+
+                    <Typography
+                      variant="subtitle2"
+                      sx={{ fontWeight: "bold" }}>
+                      Email: testemail@gmail.com
+                    </Typography>
+
+                    <Typography
+                      variant="subtitle2"
+                      sx={{ fontWeight: "bold" }}>
+                      Role: Learner
+                    </Typography>
+
+                    <EditIcon onClick={handleEdit}>
+                    </EditIcon>
+                 
+                  </Box>
+                </Box>
+              </Grid>
+            </Grid>
+
+
+            <Grid container spacing={3} sx={{ width: '100%', maxWidth: '50%', float: 'right' }}>
+
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <TextField
+                  fullWidth
+                  InputProps={{
+                    readOnly: toggle ? false : true,
+                  }}
+                  id="outlined-fname"
+                  label="First Name"
+                  autoFocus
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <TextField
+                  fullWidth
+                  InputProps={{
+                    readOnly: toggle ? false : true,
+                  }}
+                  id="outlined-fname"
+                  label="Last Name"
+                  autoFocus
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <TextField
+                  fullWidth
+                  InputProps={{
+                    readOnly: toggle ? false : true,
+                  }}
+                  id="outlined-email"
+                  label="Email Address"
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <FormControl fullWidth >
+                  <InputLabel id="demo-simple-select-label">Role</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={2}
+                    label="Role"
+                   
+                  >
+                    <MenuItem value={1}>Admin</MenuItem>
+                    <MenuItem value={2}>Learner</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
       </Box>
-
-      <Box sx={{ display: 'inline-block' }}>
-          <Typography
-            variant="subtitle1"
-            className="GlobalTextColor"
-            sx={{ fontWeight: "bold" }}>
-            Shubham
-          </Typography>
-          
-          <Typography 
-            variant="subtitle2"
-            sx={{ fontWeight: "bold" }}>
-            Email: testemail@gmail.com
-          </Typography>
-
-          <Typography 
-            variant="subtitle2"
-            sx={{ fontWeight: "bold" }}>
-            Role: User
-          </Typography>
-
-          <EditIcon />  
-          <VisibilityIcon />
-     </Box>
-
-     <Box sx={{float:"left"}}>
-     <Input sx = {{width: " 150"}}
-    type="text"
-    hidden
-  />
-      
-      </Box>
-     </CardContent>
-
-    </Card>
-    </Grid>
-    </Box>
     </>
   );
 }
