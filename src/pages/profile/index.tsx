@@ -18,7 +18,12 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+<<<<<<< HEAD
 import Input from '@mui/material/Input';
+=======
+import Navbar from '@/common/navbar';
+import SideBar from '@/common/sideBar';
+>>>>>>> 47e273fa92c089a92057421ffd479e2235c91918
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -43,6 +48,12 @@ export default function RecipeReviewCard() {
   };
 
   return (
+    <>
+    <Navbar/>
+    <Box sx={{ height: "100vh", display: "flex" ,position: "absolute",   top: "64px"}}>
+    <SideBar/>
+    
+  
     <Grid item xs={12} sm={7} md={5} lg={5}>
     <Card >
     <CardContent>
@@ -86,5 +97,7 @@ export default function RecipeReviewCard() {
 
     </Card>
     </Grid>
+    </Box>
+    </>
   );
 }

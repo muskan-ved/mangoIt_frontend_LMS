@@ -1,5 +1,3 @@
-"use client";
-
 import {useState} from "react";
 import { Button, Divider,TextField,Link,Box,Grid,Typography, IconButton, } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -16,7 +14,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from "next/navigation";
 import CircularProgressBar from "@/common/circularProgressBar";
-import AuthSidebar from "../login/authSidebar";
+import AuthSidebar from "../../common/authSidebar";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const theme = createTheme();
