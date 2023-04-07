@@ -3,6 +3,7 @@ import Login from './login'
 import { useEffect } from 'react'
 import { GenerateToken } from '@/services/auth'
 
+
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
@@ -11,6 +12,7 @@ export default function Home() {
   },[])
   return (
     <>
+    
       <Login/>
     </>
   )

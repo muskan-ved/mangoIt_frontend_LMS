@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import { Button, Divider, IconButton } from "@mui/material";
 import TextField from "@mui/material/TextField";
@@ -11,7 +9,7 @@ import styles from "../../styles/login.module.css";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import GoogleIcon from "@mui/icons-material/Google";
-import AuthSidebar from "./authSidebar";
+import AuthSidebar from "../../common/authSidebar";
 import CircularProgressBar from "@/common/circularProgressBar";
 import { LoadingButton } from "@mui/lab";
 import { useRouter } from "next/navigation";
@@ -59,7 +57,7 @@ const handleClickShowPassword = () => setShowPassword((show) => !show);
       <ToastContainer/>
       <Grid container component="main" sx={{ height: "100vh" }}>
         <AuthSidebar/>
-        <Grid item xs={12} sm={7} md={5} lg={5}>
+        <Grid item xs={12} sm={6} md={6} lg={5}>
           <Box
             sx={{
               my: 12,
@@ -92,7 +90,7 @@ const handleClickShowPassword = () => setShowPassword((show) => !show);
 
             <Box
               component="form"
-              // method="POST"
+              method="POST"
               noValidate
               autoComplete="off"
               onSubmit={handleSubmit(onSubmit)}

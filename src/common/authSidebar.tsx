@@ -1,10 +1,10 @@
 import { Box, Grid } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
-import styles from "../../styles/login.module.css";
+import styles from "../styles/login.module.css";
 
 const AuthSidebar = () => {
     return ( <><CssBaseline />
-    <Grid item xs={false} sm={5} md={7} lg={7}>
+    <Grid item xs={12} sm={6} md={6} lg={7}>
       <Box
         component={"img"}
         src={"/Images/company_logo.png"}

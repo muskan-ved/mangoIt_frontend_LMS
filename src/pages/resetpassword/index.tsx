@@ -1,10 +1,8 @@
-"use client";
-
 import * as React from "react";
 import { Button ,TextField,Box,Grid,Typography, InputAdornment, IconButton} from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useRouter } from "next/navigation";
-import AuthSidebar from "../login/authSidebar";
+import AuthSidebar from "../../common/authSidebar";
 import { LoadingButton } from "@mui/lab";
 import CircularProgressBar from "@/common/circularProgressBar";
 import { resetPasswordType } from "@/types/authType";
@@ -39,7 +37,6 @@ export default function ResetPassword() {
 };
     setLoading(true)
     await HandleResetPassword(reqData).then((res) => {
-      console.log(res,"33333333333333333")
     if(res.status === 202){
       router.push('/login')
       localStorage.removeItem('forgotPasswordToken')
