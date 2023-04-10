@@ -12,5 +12,5 @@ export const API = {
  forgotPassword: `${BASE_URL}/sendgmail`,
  resetPassword: `${BASE_URL}/resetpassword`,
 
- userProfile:`${BASE_URL}/`,
+ userInfoById:`${BASE_URL}/${process.env.NEXT_PUBLIC_GET_USER_BY_ID}`,
 };
