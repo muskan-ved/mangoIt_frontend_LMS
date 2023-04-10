@@ -32,6 +32,7 @@ export default function Profile() {
     formState: { errors },
   } = useForm<registerType>({ resolver: yupResolver(userRegisterValidations) });
 
+
   const [toggle,setToggle] = React.useState<boolean>(false);
 
 
@@ -53,7 +54,16 @@ export default function Profile() {
 
   return (
     <>
-      <Navbar />
+
+    <Navbar/>
+    <Box className={styles.combineContentAndSidebar}>
+    <SideBar/>
+    
+  
+    <Grid item xs={12} sm={7} md={5} lg={5}>
+    <Card >
+    <CardContent>
+
       <Box
         sx={{
           height: "100vh",
@@ -155,6 +165,10 @@ export default function Profile() {
             </Grid>
           </CardContent>
         </Card>
+      </Box>
+      </CardContent>
+      </Card>
+      </Grid>
       </Box>
     </>
   );

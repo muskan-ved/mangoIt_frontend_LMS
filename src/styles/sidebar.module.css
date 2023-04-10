@@ -1,0 +1,21 @@
+.combineContentAndSidebar{
+  height: -webkit-fill-available;
+  display: flex;
+  position: absolute;
+  top: 65px;
+  width: 100%;
+}
+
+.activeMenuItem{
+  border-top-right-radius: 23px !important;
+  border-bottom-right-radius: 23px !important;
+  max-width: 200px !important;
+  color: white !important;
+  background-color: black !important;
+}
+
+.nonActiveMenuItem{
+  border-top-right-radius: 23px !important;
+  border-bottom-right-radius: 23px !important;
+  max-width: 200px !important;
+}

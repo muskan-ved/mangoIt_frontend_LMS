@@ -40,6 +40,7 @@ const handleClickShowPassword = () => setShowPassword((show) => !show);
       if(res.status === 200){
         router.push('/profile')
         localStorage.setItem('loginToken',res.data.loginToken)
+        localStorage.setItem('userData',JSON.stringify(res.data.userDetails))
       }
       setLoading(false)
     }).catch(() => {
@@ -55,7 +56,7 @@ const handleClickShowPassword = () => setShowPassword((show) => !show);
   return (
     <ThemeProvider theme={theme}>
       <ToastContainer/>
-      <Grid container component="main" sx={{ height: "100vh" }}>
+      <Grid container component="main">
         <AuthSidebar/>
         <Grid item xs={12} sm={6} md={6} lg={5}>
           <Box
