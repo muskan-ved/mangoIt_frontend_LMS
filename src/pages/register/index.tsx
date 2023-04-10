@@ -14,7 +14,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from "next/navigation";
 import CircularProgressBar from "@/common/circularProgressBar";
-import AuthSidebar from "../../common/authSidebar";
+import AuthSidebar from "../../common/LayoutNavigations/authSideLayout";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const theme = createTheme();

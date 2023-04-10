@@ -1,8 +1,8 @@
 import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
-import { VerticalMenuItems } from "./verticalMenuItems";
+import { VerticalMenuItems } from "../RoutingMenuItems/verticalMenuItems";
 import { HandleLogout } from "@/services/auth";
 import { useRouter } from "next/router";
-import styles from "../styles/sidebar.module.css";
+import styles from "../../styles/sidebar.module.css";
 
 const SideBar = () => {
   const router = useRouter();
