@@ -41,7 +41,7 @@ export const VerticalMenuItems = () => {
   {
     title: 'User',
     icon: PeopleAltOutlinedIcon,
-    path: '/user'
+    path: '/profile'
   },
   {
     title: 'Invoices',

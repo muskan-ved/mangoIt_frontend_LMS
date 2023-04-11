@@ -8,7 +8,7 @@ import { HandleLogout } from "./auth"
 
 export const HandleProfile = async(userId:any) =>{
   
-    console.log(userId)
+    // console.log(userId)
     return await axios({
       method: "",
       url: `${API.userInfoById}/${userId}`,
