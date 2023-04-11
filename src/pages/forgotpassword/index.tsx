@@ -12,7 +12,7 @@ import { forgotPasswordType } from "@/types/authType";
 import { userForgotPasswordValidations } from "@/validation_schema/authValidation";
 import { HandleForgotPassword } from "@/services/auth";
 import { LoadingButton } from "@mui/lab";
-import CircularProgressBar from "@/common/circularProgressBar";
+import CircularProgressBar from "@/common/CircularProcess/circularProgressBar";
 
 const theme = createTheme();
 

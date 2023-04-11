@@ -13,7 +13,7 @@ import { HandleRegister } from "@/services/auth";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from "next/navigation";
-import CircularProgressBar from "@/common/circularProgressBar";
+import CircularProgressBar from "@/common/CircularProcess/circularProgressBar";
 import AuthSidebar from "../../common/LayoutNavigations/authSideLayout";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 

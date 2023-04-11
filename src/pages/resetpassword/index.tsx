@@ -4,7 +4,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useRouter } from "next/navigation";
 import AuthSidebar from "../../common/LayoutNavigations/authSideLayout";
 import { LoadingButton } from "@mui/lab";
-import CircularProgressBar from "@/common/circularProgressBar";
+import CircularProgressBar from "@/common/CircularProcess/circularProgressBar";
 import { resetPasswordType } from "@/types/authType";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { userResetPasswordValidations } from "@/validation_schema/authValidation";
