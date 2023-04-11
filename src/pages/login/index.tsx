@@ -10,7 +10,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import GoogleIcon from "@mui/icons-material/Google";
 import AuthSidebar from "../../common/LayoutNavigations/authSideLayout";
-import CircularProgressBar from "@/common/circularProgressBar";
+import CircularProgressBar from "@/common/CircularProcess/circularProgressBar";
 import { LoadingButton } from "@mui/lab";
 import { useRouter } from "next/navigation";
 import { yupResolver } from "@hookform/resolvers/yup";

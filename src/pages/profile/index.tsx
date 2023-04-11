@@ -26,7 +26,7 @@ import profiles from "../../styles/profile.module.css";
 import styles from "../../styles/sidebar.module.css";
 import { ToastContainer } from "react-toastify";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import BreadcrumbsHeading from "@/common/breadcrumbs";
+import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
 import { useTheme } from '@mui/material/styles';
 import { HandleProfile } from '@/services/user'
 
