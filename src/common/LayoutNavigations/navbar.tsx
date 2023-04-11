@@ -13,11 +13,11 @@ import { useProSidebar } from 'react-pro-sidebar';
 import { Avatar, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
-import styles from '../styles/appbar.module.css'
+import styles from '../../styles/appbar.module.css'
 import { HandleLogout } from '@/services/auth';
 import PowerSettingsNewOutlinedIcon from '@mui/icons-material/PowerSettingsNewOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-import { capitalizeFirstLetter } from './capitalizeFirstLetter';
+import { capitalizeFirstLetter } from '../CapitalFirstLetter/capitalizeFirstLetter';
 
 
 export default function Navbar() {

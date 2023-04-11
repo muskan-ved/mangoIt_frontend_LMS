@@ -2,7 +2,7 @@ import * as React from "react";
 import { Button ,TextField,Box,Grid,Typography, InputAdornment, IconButton} from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useRouter } from "next/navigation";
-import AuthSidebar from "../../common/authSidebar";
+import AuthSidebar from "../../common/LayoutNavigations/authSideLayout";
 import { LoadingButton } from "@mui/lab";
 import CircularProgressBar from "@/common/circularProgressBar";
 import { resetPasswordType } from "@/types/authType";

@@ -19,3 +19,14 @@
   border-bottom-right-radius: 23px !important;
   max-width: 200px !important;
 }
+
+.footerContainercss{
+    width: 100%;
+    padding: 15px;
+    position: absolute;
+    background: white;
+    bottom: 0px;
+    border-top: 1px solid #685f601f;
+    text-align: center;
+    color:#7C7C7C;
+}

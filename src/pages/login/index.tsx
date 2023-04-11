@@ -9,7 +9,7 @@ import styles from "../../styles/login.module.css";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import GoogleIcon from "@mui/icons-material/Google";
-import AuthSidebar from "../../common/authSidebar";
+import AuthSidebar from "../../common/LayoutNavigations/authSideLayout";
 import CircularProgressBar from "@/common/circularProgressBar";
 import { LoadingButton } from "@mui/lab";
 import { useRouter } from "next/navigation";

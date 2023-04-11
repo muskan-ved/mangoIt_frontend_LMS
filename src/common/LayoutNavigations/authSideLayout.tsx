@@ -1,6 +1,6 @@
 import { Box, Grid } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
-import styles from "../styles/login.module.css";
+import styles from "../../styles/login.module.css";
 
 const AuthSidebar = () => {
     return ( <><CssBaseline />
