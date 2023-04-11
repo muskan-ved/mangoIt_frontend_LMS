@@ -4,6 +4,7 @@
     /* width:450px; */
     display: flex;
     padding: 10px;
+    flex-wrap: wrap;
 }
 
 /* .userContainer{
