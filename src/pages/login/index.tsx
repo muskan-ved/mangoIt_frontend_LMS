@@ -19,8 +19,10 @@ import { useForm } from "react-hook-form";
 import { loginType } from "../../types/authType";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { HandleLogin } from "@/services/auth";
+import { HandleLogin, HandleLoginByGoogle } from "@/services/auth";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useGoogleLogin } from "@react-oauth/google";
+import FacebookLogin from '@greatsumini/react-facebook-login';
 
 const theme = createTheme();
 
@@ -49,9 +51,25 @@ const handleClickShowPassword = () => setShowPassword((show) => !show);
 
 };
 
+const responseFacebook = (response:any) => {
+  console.log(response,"facebook");
+}
+
   function ErrorShowing (errorMessage:any){
     return ( <Typography variant="body2" color={'error'} gutterBottom>{errorMessage} </Typography> );
   }
+
+  const googleLogin = useGoogleLogin({
+    onSuccess: async(tokenResponse) => {
+  await HandleLoginByGoogle(tokenResponse)
+                    .then((res) => {
+
+                        console.log(res.data,"resss");
+                    })
+                    .catch((err) => console.log(err));
+        },
+    onError: errorResponse => console.log(errorResponse), 
+  });
 
   return (
     <ThemeProvider theme={theme}>
@@ -169,12 +187,25 @@ const handleClickShowPassword = () => setShowPassword((show) => !show);
                 >
                   Continue with Facebook
                 </Button>
-
+                <FacebookLogin
+  appId="902443271035407"
+  onSuccess={(response) => {
+    console.log('Login Success!', response);
+  }}
+  onFail={(error) => {
+    console.log('Login Failed!', error);
+  }}
+  onProfileSuccess={(response) => {
+    console.log('Get Profile Success!', response);
+  }}
+/>
+                
                 <Button
                   type="button"
                   fullWidth
                   variant="outlined"
                   startIcon={<GoogleIcon />}
+                  onClick={() => googleLogin()}
                   sx={{ mt: 1 }}
                 >
                   Continue with Google

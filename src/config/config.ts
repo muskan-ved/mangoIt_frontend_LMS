@@ -6,11 +6,11 @@ export const BASE_URL = "https://api-mangoit-lms.mangoitsol.com";
 
 export const API = {
 
- authToken: `${BASE_URL}/generatetoken`,
- register: `${BASE_URL}/registration`,
- login: `${BASE_URL}/loginuser`,
- forgotPassword: `${BASE_URL}/sendgmail`,
- resetPassword: `${BASE_URL}/resetpassword`,
+ authToken: `${BASE_URL}/${process.env.NEXT_PUBLIC_AUTH_TOKEN}`,
+ register: `${BASE_URL}/${process.env.NEXT_PUBLIC_REGISTER}`,
+ login: `${BASE_URL}/${process.env.NEXT_PUBLIC_LOGIN}`,
+ forgotPassword: `${BASE_URL}/${process.env.NEXT_PUBLIC_FORGOT_PASSWORD}`,
+ resetPassword: `${BASE_URL}/${process.env.NEXT_PUBLIC_RESET_PASSWORD}`,
 
  userInfoById:`${BASE_URL}/${process.env.NEXT_PUBLIC_GET_USER_BY_ID}`,
 };

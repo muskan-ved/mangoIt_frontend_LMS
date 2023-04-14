@@ -3,6 +3,7 @@ import { API } from "@/config/config"
 import axios from "axios"
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css";
+import { googleLogout } from "@react-oauth/google";
 
 export const GenerateToken = async() =>{
 
@@ -62,6 +63,30 @@ export const HandleLogin = async(reqData:any) =>{
     })
 }
 
+export const HandleLoginByGoogle = async(reqData:any) =>{
+  
+  return await axios({
+    method: "GET",
+    url: `${process.env.NEXT_PUBLIC_GOOGLE_RESPONSE_API_URL}${reqData.access_token}`,
+    data: reqData,
+    headers: {
+      Authorization: `Bearer ${reqData.access_token}`,
+      Accept: 'application/json'
+  },
+  }).then((request) => {
+      return request;
+    }).catch((error) => {
+      if(error.response.status === 400){
+        toast.error(error.response.data)
+      }else if(error.response.status === 404){
+        toast.error(error.response.data)
+      }else{
+        toast.error("Google login failed")
+      }
+      return error;
+    })
+}
+
 export const HandleForgotPassword = async(reqData:any) =>{
   
   return await axios({
@@ -111,6 +136,7 @@ export const HandleResetPassword = async(reqData:any) =>{
 
 export const HandleLogout = () => {
 
+  googleLogout()
   localStorage.clear()
   window.location.replace("/login");
   GenerateToken()
