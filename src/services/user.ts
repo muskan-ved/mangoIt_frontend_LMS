@@ -10,9 +10,29 @@ export const HandleProfile = async(userId:any) =>{
   
     // console.log(userId)
     return await axios({
-      method: "",
+      method: "GET",
       url: `${API.userInfoById}/${userId}`,
       headers: LoginHeader(),
+    }).then((request) => {
+        return request;
+      }).catch((error) => {
+        if(error.response.status === 401){
+          HandleLogout()
+        }else{
+          toast.error("Something went wrong")
+        }
+        return error;
+      })
+  }
+
+  export const HandleUpdateProfile = async(userId:any,reqData:any) =>{
+  
+    // console.log(userId)
+    return await axios({
+      method: "PUT",
+      headers: LoginHeader(),
+      data:reqData,
+      url: `${API.userUpdateById}/${userId}`,
     }).then((request) => {
         return request;
       }).catch((error) => {
