@@ -23,6 +23,7 @@ import { HandleLogin, HandleLoginByGoogle } from "@/services/auth";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useGoogleLogin } from "@react-oauth/google";
 import FacebookLogin from '@greatsumini/react-facebook-login';
+import { red } from "@mui/material/colors";
 
 const theme = createTheme();
 
@@ -145,11 +146,14 @@ const responseFacebook = (response:any) => {
               />
               {errors && errors.password ? ErrorShowing(errors?.password?.message) : ''}
              {!loading ? <Button
+             
                 type="submit"
                 fullWidth
                 size="large"
                 variant="contained"
+                className="authPageButton"
                 sx={{ mt: 3, mb: 2 }}
+                
               >
                 
                 Sign In

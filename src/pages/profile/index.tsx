@@ -18,10 +18,10 @@ import BackupIcon from "@mui/icons-material/Backup";
 // Extra Import
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { userRegisterValidations } from "../../validation_schema/authValidation";
+import { userProfileValidations } from '@/validation_schema/profileValidation';
+import { ToastContainer } from 'react-toastify';
 
 // Types Import
-import { registerType } from "../../types/authType";
 import { userType } from '@/types/userType';
 
 // External Components
@@ -35,32 +35,70 @@ import SpinnerProgress from '@/common/CircularProgressComponent/spinnerComponent
 // External css IMport
 import profiles from "../../styles/profile.module.css";
 import styles from "../../styles/sidebar.module.css";
+import 'react-toastify/dist/ReactToastify.css';
 
 // API services
 import { HandleProfile } from '@/services/user';
+import { HandleUpdateProfile } from '@/services/user';
 
 
 export default function Profile() {
 	const {
-		register,
-		handleSubmit,
+		register, handleSubmit, reset, setValue, getValues,
 		formState: { errors },
-	} = useForm<registerType>({ resolver: yupResolver(userRegisterValidations) });
-
-	const [toggle, setToggle] = useState<boolean>(false);
+	} = useForm<userType | any>({ resolver: yupResolver(userProfileValidations) });
 
 	const [userUpdated, setUpdateData] = useState<userType | any>({
 		first_name: '',
 		last_name: '',
 		email: '',
 		profile_pic: '',
-		role: 0,
+		role_id: 0,
 	})
-console.log(userUpdated,"userUpdated")
+	// console.log(userUpdated,"userUpdated")
 	const [isLoading, setLoading] = useState(false)
+	const [toggle, setToggle] = useState<boolean>(false);
 
-	// console.log(userUpdated)
 
+
+
+	const onSubmit = async (event: any) => {
+		const getuserValue = getValues()
+		// console.log(event)
+		//  console.log(getuserValue.id)
+
+		await HandleUpdateProfile(getuserValue).then((res) => {
+			console.log(res)
+			setTimeout(() => {
+				getProfileData(res.data.id)
+				setToggle(!toggle)
+			}, 3000)
+		}).catch((err) => {
+			console.log(err)
+		})
+
+	}
+
+	function ErrorShowing(errorMessage: any) {
+		return (<Typography variant="body2" color={'error'} gutterBottom>{errorMessage} </Typography>);
+	}
+
+	const getProfileData = (userId: any) => {
+		setLoading(true)
+		HandleProfile(userId)
+			.then((user) => {
+				const fields = ['id', 'first_name', 'last_name', 'email', 'role_id', 'profile_pic'];
+				fields.forEach(field => setValue(field, user.data[field]));
+				setUpdateData({
+					first_name: user.data.first_name,
+					last_name: user.data.last_name,
+					email: user.data.email,
+					profile_pic: user.data.profile_pic,
+					role_id: user.data.role_id,
+				})
+				setLoading(false)
+			})
+	}
 	useEffect(() => {
 		let localData: any;
 		if (typeof window !== "undefined") {
@@ -68,19 +106,7 @@ console.log(userUpdated,"userUpdated")
 		}
 		if (localData) {
 			const userId = JSON.parse(localData)
-			setLoading(true)
-			HandleProfile(userId?.id)
-				.then((user) => {
-					// setData(user.data)
-					setUpdateData({
-						first_name: user.data.first_name,
-						last_name: user.data.last_name,
-						email: user.data.email,
-						profile_pic: user.data.profile_pic,
-						role: user.data.role_id,
-					})
-					setLoading(false)
-				})
+			getProfileData(userId?.id)
 		}
 
 	}, [])
@@ -92,16 +118,14 @@ console.log(userUpdated,"userUpdated")
 		setToggle(!toggle)
 	}
 	const handleChange = (e: any) => {
-		
 		const data = e.target.name
 		if (e.target.name !== "profile_pic") {
-			setUpdateData({ ...userUpdated, [data]: e.target.value})
-		}else if(e.target.name === "profile_pic"){
-			setUpdateData({ ...userUpdated, [data]: e.target.files[0]})
+			setUpdateData({ ...userUpdated, [data]: e.target.value })
+		} else if (e.target.name === "profile_pic") {
+			setUpdateData({ ...userUpdated, [data]: e.target.files[0] })
 		}
-
-	 
 	}
+
 	return (
 		<>
 			<Navbar />
@@ -141,7 +165,7 @@ console.log(userUpdated,"userUpdated")
 											<Typography
 												variant="subtitle2"
 												sx={{ color: "#7C7C7C" }}>
-												{userUpdated?.role === 2 ? "Learner" : "Admin"}
+												{userUpdated?.role_id === 2 ? "Learner" : "Admin"}
 											</Typography>
 
 											<IconButton onClick={handleEdit}>
@@ -154,87 +178,104 @@ console.log(userUpdated,"userUpdated")
 								</Grid>
 							</Grid>
 
-							<Grid container spacing={3} columns={{ xs: 8, sm: 8, md: 12, lg: 12 }} sx={{ maxWidth: '50%', width: ' 100%', float: 'right', marginRight: '100px', marginBottom: '150px' }}>
+							<Box
+								component="form"
+								method='POST'
+								noValidate
+								autoComplete="off"
+								onSubmit={handleSubmit(onSubmit)}
+								onReset={reset}>
+								<Grid container spacing={3} sx={{ maxWidth: '50%', width: ' 100%', float: 'right', marginRight: '100px', marginBottom: '150px' }}>
+									<Grid item xs={12} sm={12} md={6} lg={6}>
 
-								<Grid item xs={12} sm={12} md={6} lg={6}>
+										<TextField
+											label="First Name"
+											{...register("first_name")}
+											defaultValue={userUpdated?.first_name}
 
-									<TextField
-										label="First Name"
-										name='first_name'
-										onChange={handleChange}
-										value={userUpdated ? capitalizeFirstLetter(userUpdated?.first_name) : ' '}
-										InputProps={{
-											readOnly: !toggle,
-										}}
-									/>
-								</Grid>
-
-								<Grid item xs={12} sm={12} md={6} lg={6}>
-									<TextField
-										label="Last Name"
-										name='last_name'
-										onChange={handleChange}
-										value={userUpdated ? capitalizeFirstLetter(userUpdated?.last_name) : ' '}
-										InputProps={{
-											readOnly: !toggle
-										}}
-									/>
-								</Grid>
-
-								<Grid item xs={12} sm={12} md={6} lg={6}>
-									<TextField
-										label="Email"
-										name='email'
-										onChange={handleChange}
-										value={userUpdated ? userUpdated?.email : ' '}
-										InputProps={{
-											readOnly: !toggle,
-										}}
-									/>
-								</Grid>
-
-								<Grid item xs={12} sm={12} md={6} lg={6}>
-									<FormControl fullWidth>
-										<InputLabel>Role</InputLabel>
-										<Select
-											label="Role"
-											name='role'
-											onChange={handleChange}
-											value={userUpdated.role}
-											inputProps={{ readOnly: !toggle }}
-										>
-											<MenuItem value={1}>Admin</MenuItem>
-											<MenuItem value={2}>Learner</MenuItem>
-										</Select>
-									</FormControl>
-								</Grid>
-
-								{toggle && <><Grid item xs={12} sm={12} md={12} lg={12} >
-									<Button
-										fullWidth
-										sx={{ backgroundColor: "blue !important", border: 'dashed' }}
-										variant="contained"
-										component="label"
-									>
-										<BackupIcon />
-										Upload a File
-										<input
-										 	onChange={handleChange}
-											type="file"
-											name='profile_pic'
-											hidden
+											InputProps={{
+												readOnly: !toggle,
+											}}
 										/>
-									</Button>
+										{errors && errors.first_name ? ErrorShowing(errors?.first_name?.message) : ''}
+									</Grid>
+
+									<Grid item xs={12} sm={12} md={6} lg={6}>
+										<TextField
+											label="Last Name"
+											{...register("last_name")}
+											defaultValue={capitalizeFirstLetter(userUpdated?.last_name)}
+											InputProps={{
+												readOnly: !toggle
+											}}
+										/>
+										{errors && errors.last_name ? ErrorShowing(errors?.last_name?.message) : ''}
+									</Grid>
+
+									<Grid item xs={12} sm={12} md={6} lg={6}>
+										<TextField
+											label="Email"
+											{...register("email")}
+											defaultValue={userUpdated?.email}
+											InputProps={{
+												readOnly: !toggle,
+											}}
+										/>
+										{errors && errors.email ? ErrorShowing(errors?.email?.message) : ''}
+									</Grid>
+
+									<Grid item xs={12} sm={12} md={6} lg={6}>
+										<FormControl fullWidth>
+											<InputLabel>Role</InputLabel>
+											<Select
+												label="Role"
+												{...register("role_id")}
+												defaultValue={userUpdated.role_id}
+												inputProps={{ readOnly: !toggle }}
+											>
+												<MenuItem value={1}>Admin</MenuItem>
+												<MenuItem value={2}>Learner</MenuItem>
+											</Select>
+										</FormControl>
+									</Grid>
+
+									{toggle && <><Grid item xs={12} sm={12} md={12} lg={12} >
+									{/* <Typography> Pick Your Photo </Typography> */}
+										<InputLabel											
+											sx={{ border: '1.5px dashed grey',textAlign:'center'}}															
+										>
+										
+											<BackupIcon  sx={{color:'grey !important',width:'100%' }}/>
+										
+											<Typography> Upload a File </Typography> 
+											<input
+												type="file"
+												{...register("profile_pic")}
+												onChange={handleChange}
+												hidden
+											/>
+										</InputLabel>
+									</Grid>
+										<Grid item xs={12} sm={12} md={12} lg={12} textAlign={'right'}>
+											<Button
+												type="submit"
+												fullWidth
+												size="large"
+												variant="contained"
+												sx={{ mt: 3, mb: 2 }}
+											>
+												Update Profile
+											</Button>
+											</Grid></>}
 								</Grid>
-									<Grid item xs={12} sm={12} md={12} lg={12} textAlign={'right'}>
-										<Button variant="contained">Update</Button></Grid></>}
-							</Grid>
+							</Box>
 						</CardContent>
 					</Card>
 
 				</Box>
 			</Box>
-			<Footer />
+			{/* <Footer /> */}
+			<ToastContainer />
 		</>
 
 	);

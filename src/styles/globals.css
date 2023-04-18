@@ -106,7 +106,7 @@ a {
   }
 }
 
-.MuiButtonBase-root.MuiButton-root.MuiButton-contained{
+.MuiButtonBase-root.MuiButton-root.MuiButton-contained.authPageButton{
   background-color: #E8661B !important;
 }
 
