@@ -48,9 +48,18 @@ export default function Profile() {
 	} = useForm<registerType>({ resolver: yupResolver(userRegisterValidations) });
 
 	const [toggle, setToggle] = useState<boolean>(false);
-	const [user, setData] = useState<userType | null>(null)
-	const [role, setRole] = useState<userType | number>(0)
+
+	const [userUpdated, setUpdateData] = useState<userType | any>({
+		first_name: '',
+		last_name: '',
+		email: '',
+		profile_pic: '',
+		role: 0,
+	})
+console.log(userUpdated,"userUpdated")
 	const [isLoading, setLoading] = useState(false)
+
+	// console.log(userUpdated)
 
 	useEffect(() => {
 		let localData: any;
@@ -62,25 +71,37 @@ export default function Profile() {
 			setLoading(true)
 			HandleProfile(userId?.id)
 				.then((user) => {
-					setData(user.data)
-					setRole(user.data.role_id)
+					// setData(user.data)
+					setUpdateData({
+						first_name: user.data.first_name,
+						last_name: user.data.last_name,
+						email: user.data.email,
+						profile_pic: user.data.profile_pic,
+						role: user.data.role_id,
+					})
 					setLoading(false)
 				})
 		}
 
 	}, [])
-	
-	if (isLoading) return <SpinnerProgress/>
-	if (!user) return <p>No profile data</p>
+
+	if (isLoading) return <SpinnerProgress />
+	if (!userUpdated) return <p>No profile data</p>
 
 	const handleEdit = async () => {
-		setToggle(true)
+		setToggle(!toggle)
 	}
+	const handleChange = (e: any) => {
+		
+		const data = e.target.name
+		if (e.target.name !== "profile_pic") {
+			setUpdateData({ ...userUpdated, [data]: e.target.value})
+		}else if(e.target.name === "profile_pic"){
+			setUpdateData({ ...userUpdated, [data]: e.target.files[0]})
+		}
 
-	const handleChange = () => {
-
+	 
 	}
-
 	return (
 		<>
 			<Navbar />
@@ -108,19 +129,19 @@ export default function Profile() {
 											<Typography
 												variant="subtitle1"
 												sx={{ fontWeight: "bold", color: "#7C7C7C" }}>
-												{user ? capitalizeFirstLetter(user?.first_name) : ''} {user?.last_name}
+												{userUpdated ? capitalizeFirstLetter(userUpdated?.first_name) : ''} {userUpdated?.last_name}
 											</Typography>
 
 											<Typography
 												variant="subtitle2"
 												sx={{ color: "#7C7C7C" }}>
-												{user?.email}
+												{userUpdated?.email}
 											</Typography>
 
 											<Typography
 												variant="subtitle2"
 												sx={{ color: "#7C7C7C" }}>
-												Learner
+												{userUpdated?.role === 2 ? "Learner" : "Admin"}
 											</Typography>
 
 											<IconButton onClick={handleEdit}>
@@ -138,9 +159,10 @@ export default function Profile() {
 								<Grid item xs={12} sm={12} md={6} lg={6}>
 
 									<TextField
-										id="outlined-read-only-input"
 										label="First Name"
-										value={user ? capitalizeFirstLetter(user?.first_name) : ' '}
+										name='first_name'
+										onChange={handleChange}
+										value={userUpdated ? capitalizeFirstLetter(userUpdated?.first_name) : ' '}
 										InputProps={{
 											readOnly: !toggle,
 										}}
@@ -149,22 +171,22 @@ export default function Profile() {
 
 								<Grid item xs={12} sm={12} md={6} lg={6}>
 									<TextField
-
+										label="Last Name"
+										name='last_name'
+										onChange={handleChange}
+										value={userUpdated ? capitalizeFirstLetter(userUpdated?.last_name) : ' '}
 										InputProps={{
-											readOnly: !toggle,
+											readOnly: !toggle
 										}}
-										label="First Name"
-										id="outlined-fname"
-										value={user ? capitalizeFirstLetter(user?.last_name) : ' '}
-
 									/>
 								</Grid>
 
 								<Grid item xs={12} sm={12} md={6} lg={6}>
 									<TextField
-										id="outlined-read-email-input"
 										label="Email"
-										value={user ? user?.email : ' '}
+										name='email'
+										onChange={handleChange}
+										value={userUpdated ? userUpdated?.email : ' '}
 										InputProps={{
 											readOnly: !toggle,
 										}}
@@ -172,21 +194,17 @@ export default function Profile() {
 								</Grid>
 
 								<Grid item xs={12} sm={12} md={6} lg={6}>
-
-
 									<FormControl fullWidth>
-										<InputLabel id="demo-simple-select-readonly-label">Role</InputLabel>
+										<InputLabel>Role</InputLabel>
 										<Select
-											labelId="demo-simple-select-readonly-label"
-											id="demo-simple-select-readonly"
-											value={role}
 											label="Role"
+											name='role'
 											onChange={handleChange}
+											value={userUpdated.role}
 											inputProps={{ readOnly: !toggle }}
 										>
 											<MenuItem value={1}>Admin</MenuItem>
 											<MenuItem value={2}>Learner</MenuItem>
-
 										</Select>
 									</FormControl>
 								</Grid>
@@ -201,7 +219,9 @@ export default function Profile() {
 										<BackupIcon />
 										Upload a File
 										<input
+										 	onChange={handleChange}
 											type="file"
+											name='profile_pic'
 											hidden
 										/>
 									</Button>

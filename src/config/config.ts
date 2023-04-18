@@ -13,4 +13,5 @@ export const API = {
  resetPassword: `${BASE_URL}/${process.env.NEXT_PUBLIC_RESET_PASSWORD}`,
 
  userInfoById:`${BASE_URL}/${process.env.NEXT_PUBLIC_GET_USER_BY_ID}`,
+ userUpdateById: `${BASE_URL}/${process.env.NEXT_PUBLIC_UPDATE_USER_BY_ID}`,
 };
