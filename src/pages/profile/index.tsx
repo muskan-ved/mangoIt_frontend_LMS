@@ -1,5 +1,5 @@
 // ***** React Import 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 // MUI Import
 import {
@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import BackupIcon from "@mui/icons-material/Backup";
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
 
 // Extra Import
 import { useForm } from "react-hook-form";
@@ -68,7 +69,7 @@ export default function Profile() {
 		//  console.log(getuserValue.id)
 
 		await HandleUpdateProfile(getuserValue).then((res) => {
-			console.log(res)
+			// console.log(res)
 			setTimeout(() => {
 				getProfileData(res.data.id)
 				setToggle(!toggle)
@@ -108,7 +109,6 @@ export default function Profile() {
 			const userId = JSON.parse(localData)
 			getProfileData(userId?.id)
 		}
-
 	}, [])
 
 	if (isLoading) return <SpinnerProgress />
@@ -118,11 +118,33 @@ export default function Profile() {
 		setToggle(!toggle)
 	}
 	const handleChange = (e: any) => {
+		// console.log(e.target.files[0])
+		// const uploadedImage = useRef(null)
+		// const [file] = e.target.files;
+		// if (file) {
+		//   const reader = new FileReader();
+		//   const {current} = uploadedImage;
+		//   current.file = file;
+		//   reader.onload = (e) => {
+		// 	  current.src = e.target.result;
+		//   }
+		//   reader.readAsDataURL(file);
+		// }
+
+
+
 		const data = e.target.name
+		// const uploadedImage = useRef(null)
+		const [file] = e.target.files;
 		if (e.target.name !== "profile_pic") {
 			setUpdateData({ ...userUpdated, [data]: e.target.value })
-		} else if (e.target.name === "profile_pic") {
-			setUpdateData({ ...userUpdated, [data]: e.target.files[0] })
+		} else if (e.target.name === "profile_pic") {	
+			const reader = new FileReader();			
+			reader.onload = (e:any) => {
+				console.log(e.target.result)
+			}
+			reader.readAsDataURL(file);
+			
 		}
 	}
 
@@ -149,6 +171,8 @@ export default function Profile() {
 								<Grid item xs={12} sm={12} md={12} lg={12}>
 									<Box className={profiles.profileImageBox} >
 										<Box component='img' src="/profile.png" width='150px' height='150px' borderRadius='15px' />
+										{toggle && <CameraAltIcon />} 
+										
 										<Box sx={{ marginLeft: '15px' }}>
 											<Typography
 												variant="subtitle1"
@@ -169,8 +193,7 @@ export default function Profile() {
 											</Typography>
 
 											<IconButton onClick={handleEdit}>
-												<EditIcon>
-												</EditIcon>
+												<EditIcon />
 											</IconButton>
 
 										</Box>
@@ -240,20 +263,22 @@ export default function Profile() {
 									</Grid>
 
 									{toggle && <><Grid item xs={12} sm={12} md={12} lg={12} >
-									{/* <Typography> Pick Your Photo </Typography> */}
-										<InputLabel											
-											sx={{ border: '1.5px dashed grey',textAlign:'center'}}															
+										{/* <Typography> Pick Your Photo </Typography> */}
+										<InputLabel
+											sx={{ border: '1.5px dashed grey', textAlign: 'center' }}
 										>
-										
-											<BackupIcon  sx={{color:'grey !important',width:'100%' }}/>
-										
-											<Typography> Upload a File </Typography> 
+
+											<BackupIcon sx={{ color: 'grey !important', width: '100%' }} />
+
+											<Typography> Upload a File </Typography>
 											<input
 												type="file"
 												{...register("profile_pic")}
 												onChange={handleChange}
 												hidden
+												
 											/>
+											{/* <img src={profile_pic} /> */}
 										</InputLabel>
 									</Grid>
 										<Grid item xs={12} sm={12} md={12} lg={12} textAlign={'right'}>
@@ -266,7 +291,7 @@ export default function Profile() {
 											>
 												Update Profile
 											</Button>
-											</Grid></>}
+										</Grid></>}
 								</Grid>
 							</Box>
 						</CardContent>
