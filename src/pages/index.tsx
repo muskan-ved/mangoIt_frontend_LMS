@@ -1,18 +1,35 @@
-import { Inter } from 'next/font/google'
 import Login from './login'
 import { useEffect } from 'react'
 import { GenerateToken } from '@/services/auth'
-
-
-const inter = Inter({ subsets: ['latin'] })
+import {useRouter} from 'next/navigation'
+import SpinnerProgress from '@/common/CircularProgressComponent/spinnerComponent'
 
 export default function Home() {
-  useEffect(() =>{
+
+  const router = useRouter()
+
+  useEffect(() => {
     GenerateToken()
+    if (typeof window !== "undefined" && !window.localStorage.getItem('loginToken')) {
+      // If token exists, redirect user to dashboard page
+      router.push('/login')
+    }else{
+      router.push('/profile')
+    }
+      // if (typeof window !== "undefined" ) {
+      //   if (window.location.pathname === '/' && !window.localStorage.getItem('loginToken')) { 
+      //     router.push('/login')
+      //   }
+      //   else{
+      //     router.push(window.location.pathname)
+      //   }
+      // }
+    
   },[])
+
   return (
     <>
-      <Login/>
+<Login/>
     </>
   )
 }

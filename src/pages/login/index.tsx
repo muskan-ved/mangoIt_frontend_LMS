@@ -19,7 +19,7 @@ import { useForm } from "react-hook-form";
 import { loginType } from "../../types/authType";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { HandleLogin, HandleLoginByGoogle } from "@/services/auth";
+import { GenerateToken, HandleLogin, HandleLoginByGoogle } from "@/services/auth";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useGoogleLogin } from "@react-oauth/google";
 import FacebookLogin from '@greatsumini/react-facebook-login';
@@ -70,6 +70,15 @@ const responseFacebook = (response:any) => {
         },
     onError: errorResponse => console.log(errorResponse), 
   });
+
+  React.useEffect(() => {
+    GenerateToken()
+    if (typeof window !== "undefined" && window.localStorage.getItem('loginToken')) {
+      // If token exists, redirect user to dashboard page
+      router.back();
+    }
+  }, [])
+  
 
   return (
     <ThemeProvider theme={theme}>
