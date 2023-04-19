@@ -25,15 +25,16 @@ export const HandleProfile = async(userId:any) =>{
       })
   }
 
-  export const HandleUpdateProfile = async(userId:any,reqData:any) =>{
+  export const HandleUpdateProfile = async(reqData:any) =>{
   
     // console.log(userId)
     return await axios({
-      method: "PUT",
+      method: "put",
+      url: `${API.userUpdateById}/${reqData.id}`,
       headers: LoginHeader(),
       data:reqData,
-      url: `${API.userUpdateById}/${userId}`,
     }).then((request) => {
+      toast.success("Profile updated")
         return request;
       }).catch((error) => {
         if(error.response.status === 400){
@@ -41,7 +42,7 @@ export const HandleProfile = async(userId:any) =>{
         }else if(error.response.status === 401){
           HandleLogout()
         }else{
-          toast.error("Something went wrong")
+          toast.error("User added failed")
         }
         return error;
       })

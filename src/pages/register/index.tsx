@@ -166,6 +166,7 @@ const handleClickShowConfirmPassword = () => setShowConfirmPassword((show) => !s
                 fullWidth
                 size="large"
                 variant="contained"
+                className="authPageButton"
                 sx={{ mt: 3, mb: 2 }}
               >
                 Register
