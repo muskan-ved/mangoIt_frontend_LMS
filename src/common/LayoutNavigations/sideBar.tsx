@@ -15,7 +15,7 @@ const SideBar = () => {
   return (
     <>
       <Sidebar
-        style={{ height: "-webkit-fill-available" }}
+        className={styles.asideTag}
         breakPoint="sm"
         transitionDuration={500}
         backgroundColor={"rgb(255, 255, 255)"}

@@ -1,7 +1,6 @@
 .combineContentAndSidebar{
-  height: -webkit-fill-available;
+  height: 100%;
   display: flex;
-  position: absolute;
   top: 65px;
   width: 100%;
 }
@@ -29,4 +28,14 @@
     border-top: 1px solid #685f601f;
     text-align: center;
     color:#7C7C7C;
+}
+
+.siteBodyContainer{
+  padding: 16px;
+  width: 100%;
+  background: #685f600d;
+}
+
+.asideTag{
+  min-height: calc(100vh - 65px);
 }
