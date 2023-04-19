@@ -18,6 +18,7 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import BackupIcon from "@mui/icons-material/Backup";
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
 
 // Extra Import
 import { useForm } from "react-hook-form";
@@ -85,6 +86,7 @@ export default function Profile() {
         console.log(err);
       });
   };
+ 
 
   function ErrorShowing(errorMessage: any) {
     return (
@@ -134,13 +136,35 @@ export default function Profile() {
     setToggle(!toggle);
   };
   const handleChange = (e: any) => {
-    const data = e.target.name;
-    if (e.target.name !== "profile_pic") {
-      setUpdateData({ ...userUpdated, [data]: e.target.value });
-    } else if (e.target.name === "profile_pic") {
-      setUpdateData({ ...userUpdated, [data]: e.target.files[0] });
-    }
-  };
+	// console.log(e.target.files[0])
+	// const uploadedImage = useRef(null)
+	// const [file] = e.target.files;
+	// if (file) {
+	//   const reader = new FileReader();
+	//   const {current} = uploadedImage;
+	//   current.file = file;
+	//   reader.onload = (e) => {
+	// 	  current.src = e.target.result;
+	//   }
+	//   reader.readAsDataURL(file);
+	// }
+
+
+
+	const data = e.target.name
+	// const uploadedImage = useRef(null)
+	const [file] = e.target.files;
+	if (e.target.name !== "profile_pic") {
+		setUpdateData({ ...userUpdated, [data]: e.target.value })
+	} else if (e.target.name === "profile_pic") {	
+		const reader = new FileReader();			
+		reader.onload = (e:any) => {
+			console.log(e.target.result)
+		}
+		reader.readAsDataURL(file);
+		
+	}
+}
 
   return (
     <>
@@ -170,6 +194,7 @@ export default function Profile() {
                       height="150px"
                       borderRadius="15px"
                     />
+						{toggle && <CameraAltIcon />} 
                     <Box sx={{ marginLeft: "15px" }}>
                       <Typography
                         variant="subtitle1"
