@@ -1,47 +1,55 @@
 // ** React Imports
-import { Fragment } from 'react'
+import { Fragment } from "react";
 
 // ** MUI Components
-import useMediaQuery from '@mui/material/useMediaQuery'
-import { styled, useTheme } from '@mui/material/styles'
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { styled, useTheme } from "@mui/material/styles";
 
+interface FooterIllustrationsProp {
+  pageCode?: string;
+}
 
 // Styled Components
-const MaskImg = styled('img')(() => ({
+const MaskImg = styled("img")(() => ({
   bottom: 0,
   zIndex: -1,
-  width: '100%',
-  position: 'absolute'
-}))
+  width: "100%",
+  position: "absolute",
+}));
 
-const ShapeImg = styled('img')(({ theme }) => ({
-  left: '15%',
-  bottom: '12%',
-  position: 'absolute',
+const ShapeImg = styled("img")(({ theme }) => ({
+  left: "15%",
+  bottom: "12%",
+  position: "absolute",
 
-  [theme.breakpoints.down('lg')]: {
-    bottom: '7%'
-  }
-}))
+  [theme.breakpoints.down("lg")]: {
+    bottom: "7%",
+  },
+}));
 
-const FooterIllustrations = () => {
+const FooterIllustrations = (props: FooterIllustrationsProp) => {
+  // ** Props
+  const { pageCode } = props;
 
   // ** Hook
-  const theme = useTheme()
+  const theme = useTheme();
 
   // ** Vars
-  const hidden = useMediaQuery(theme.breakpoints.down('md'))
+  const hidden = useMediaQuery(theme.breakpoints.down("md"));
 
   if (!hidden) {
     return (
       <Fragment>
-        <ShapeImg alt='shape' src={'/Images/pages/misc-404-object.png'} />
-        <MaskImg alt='mask' src={`/Images/pages/misc-mask-light.png`} />
+        <ShapeImg
+          alt="shape"
+          src={`/Images/pages/misc-${pageCode}-object.png`}
+        />
+        <MaskImg alt="mask" src={`/Images/pages/misc-mask-light.png`} />
       </Fragment>
-    )
+    );
   } else {
-    return null
+    return null;
   }
-}
+};
 
-export default FooterIllustrations
+export default FooterIllustrations;
