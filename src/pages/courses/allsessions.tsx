@@ -11,7 +11,7 @@ const AllSessions = () => {
       <Box className={styles.combineContentAndSidebar}>
         <SideBar />
 
-        <Box padding={2}>
+        <Box className={styles.siteBodyContainer}>
           {/* breadcumbs */}
           <BreadcrumbsHeading
             First="Home"
