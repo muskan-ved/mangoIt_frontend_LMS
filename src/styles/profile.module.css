@@ -7,10 +7,11 @@
     flex-wrap: wrap;
 }
 
-/* .userContainer{
-    float: right;
-    width: 100%;
-    max-width: 50%
-} */
-
-/* sx={{ maxWidth: '50%', width:' 100%',  float: 'right', marginRight:'100px'}} */
+.cameraIcon{
+    right: 17px;
+    color: white;
+    position: relative;
+    background: #1a73e8;
+    padding: 5px !important;
+    border-radius: 50%;
+}

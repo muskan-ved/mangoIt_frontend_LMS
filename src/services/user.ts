@@ -25,12 +25,11 @@ export const HandleProfile = async(userId:any) =>{
       })
   }
 
-  export const HandleUpdateProfile = async(reqData:any) =>{
+  export const HandleUpdateProfile = async(userId:number,reqData:any) =>{
   
-    // console.log(userId)
     return await axios({
       method: "put",
-      url: `${API.userUpdateById}/${reqData.id}`,
+      url: `${API.userUpdateById}/${userId}`,
       headers: LoginHeader(),
       data:reqData,
     }).then((request) => {
