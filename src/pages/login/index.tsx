@@ -12,7 +12,7 @@ import GoogleIcon from "@mui/icons-material/Google";
 import AuthSidebar from "../../common/LayoutNavigations/authSideLayout";
 import CircularProgressBar from "@/common/CircularProcess/circularProgressBar";
 import { LoadingButton } from "@mui/lab";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { userLoginValidations } from "@/validation_schema/authValidation";
 import { useForm } from "react-hook-form";
@@ -29,7 +29,7 @@ const theme = createTheme();
 export default function Login() {
 
   const { register,	handleSubmit,formState: { errors } } = useForm<loginType>({resolver: yupResolver(userLoginValidations)});
-  const router = useRouter();
+  const router:any = useRouter();
   const [loading,setLoading] = React.useState<boolean>(false);
   const [showPassword, setShowPassword] = React.useState(false);
 
@@ -72,11 +72,16 @@ const responseFacebook = (response:any) => {
   });
 
   React.useEffect(() => {
-    GenerateToken()
-    if (typeof window !== "undefined" && window.localStorage.getItem('loginToken')) {
-      // If token exists, redirect user to dashboard page
-      router.back();
-    }
+    GenerateToken()      
+      if (typeof window !== "undefined" && window.localStorage.getItem('loginToken')) {
+        // If token exists, redirect user to dashboard page
+        if(window.location.pathname === '/' || window.location.pathname === '/login' ){
+          router.push('/profile');
+        }else{
+          router.back()
+        }
+      }
+      
   }, [])
   
 
