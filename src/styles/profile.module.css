@@ -1,16 +1,50 @@
-.profileImageBox{
+.profileImageBox {
     float: left;
     justify-content: center;
-    /* width:450px; */
     display: flex;
     padding: 10px;
     flex-wrap: wrap;
 }
 
-/* .userContainer{
-    float: right;
-    width: 100%;
-    max-width: 50%
-} */
+.profileCameraIcon {
+    right: 17px !important;
+    color: white !important;
+    position: relative !important;
+    background: #1a73e8 !important;
+    padding: 5px !important;
+    border-radius: 50% !important;
+}
 
-/* sx={{ maxWidth: '50%', width:' 100%',  float: 'right', marginRight:'100px'}} */
+.imageComponent {
+    width: 120px;
+    height: 120px;
+    border-radius: 6px;
+}
+
+.userDetailGrid {
+    max-width: 50%;
+    width: 100%;
+    float: right;
+    margin-right: 100px;
+    margin-bottom: 32px;
+}
+
+.userDetailFront {
+    color: #7C7C7C;
+}
+
+.useNameFront {
+    color: #7C7C7C;
+    font-weight: bold;
+}
+
+.cameraAltIcon {
+    font-size: medium !important;
+}
+
+.updateLoadingButton {
+    width: 178px;
+}
+.userData{
+    margin-left: 15px;
+}

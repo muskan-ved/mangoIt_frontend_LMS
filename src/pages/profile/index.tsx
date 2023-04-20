@@ -3,28 +3,30 @@ import { useState, useEffect } from "react";
 
 // MUI Import
 import {
-  Button,
-  TextField,
-  Grid,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  IconButton,
-  Card,
-  Box,
-  CardContent,
-  Typography,
+	Button,
+	TextField,
+	Grid,
+	FormControl,
+	InputLabel,
+	Select,
+	MenuItem,
+	IconButton,
+	Card,
+	Box,
+	CardContent,
+	Typography,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import BackupIcon from "@mui/icons-material/Backup";
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 
-// Extra Import
+// validation import
+import { userProfileValidations } from "@/validation_schema/profileValidation";
+
+// Helper Import
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { userProfileValidations } from "@/validation_schema/profileValidation";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // Types Import
 import { userType } from "@/types/userType";
@@ -36,289 +38,285 @@ import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
 import Footer from "@/common/LayoutNavigations/footer";
 import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
 import SpinnerProgress from "@/common/CircularProgressComponent/spinnerComponent";
+import CircularProgressBar from "@/common/CircularProcess/circularProgressBar";
 
-// External css IMport
+// CSS Import
 import profiles from "../../styles/profile.module.css";
 import styles from "../../styles/sidebar.module.css";
-import "react-toastify/dist/ReactToastify.css";
 
 // API services
 import { HandleProfile } from "@/services/user";
 import { HandleUpdateProfile } from "@/services/user";
+import { BASE_URL } from "@/config/config";
+import { LoadingButton } from "@mui/lab";
 
 export default function Profile() {
-  const {
-    register,
-    handleSubmit,
-    reset,
-    setValue,
-    getValues,
-    formState: { errors },
-  } = useForm<userType | any>({
-    resolver: yupResolver(userProfileValidations),
-  });
 
-  const [userUpdated, setUpdateData] = useState<userType | any>({
-    first_name: "",
-    last_name: "",
-    email: "",
-    profile_pic: "",
-    role_id: 0,
-  });
-  // console.log(userUpdated,"userUpdated")
-  const [isLoading, setLoading] = useState(false);
-  const [toggle, setToggle] = useState<boolean>(false);
+	const [previewProfile, setPreviewProfile] = useState('')
+	const [file, setFile] = useState('')
+	const [isLoading, setLoading] = useState(false);
+	const [isLoadingButton, setLoadingButton] = useState(false);
+	const [getUserData, setUserData] = useState<any>('');
+	const [toggle, setToggle] = useState<boolean>(false);
 
-  const onSubmit = async (event: any) => {
-    const getuserValue = getValues();
-    // console.log(event)
-    //  console.log(getuserValue.id)
+	const {
+		register,
+		handleSubmit,
+		reset,
+		setValue,
+		formState: { errors },
+	} = useForm<userType | any>({
+		resolver: yupResolver(userProfileValidations),
+	});
 
-    await HandleUpdateProfile(getuserValue)
-      .then((res) => {
-        console.log(res);
-        setTimeout(() => {
-          getProfileData(res.data.id);
-          setToggle(!toggle);
-        }, 3000);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
- 
+	const onSubmit = async (event: any) => {
+		const reqData = { ...event, 'profile_pic': file }
+		const formData = new FormData()
 
-  function ErrorShowing(errorMessage: any) {
-    return (
-      <Typography variant="body2" color={"error"} gutterBottom>
-        {errorMessage}{" "}
-      </Typography>
-    );
-  }
-
-  const getProfileData = (userId: any) => {
-    setLoading(true);
-    HandleProfile(userId).then((user) => {
-      const fields = [
-        "id",
-        "first_name",
-        "last_name",
-        "email",
-        "role_id",
-        "profile_pic",
-      ];
-      fields.forEach((field) => setValue(field, user.data[field]));
-      setUpdateData({
-        first_name: user.data.first_name,
-        last_name: user.data.last_name,
-        email: user.data.email,
-        profile_pic: user.data.profile_pic,
-        role_id: user.data.role_id,
-      });
-      setLoading(false);
-    });
-  };
-  useEffect(() => {
-    let localData: any;
-    if (typeof window !== "undefined") {
-      localData = window.localStorage.getItem("userData");
-    }
-    if (localData) {
-      const userId = JSON.parse(localData);
-      getProfileData(userId?.id);
-    }
-  }, []);
-
-  if (isLoading) return <SpinnerProgress />;
-  if (!userUpdated) return <p>No profile data</p>;
-
-  const handleEdit = async () => {
-    setToggle(!toggle);
-  };
-  const handleChange = (e: any) => {
-	// console.log(e.target.files[0])
-	// const uploadedImage = useRef(null)
-	// const [file] = e.target.files;
-	// if (file) {
-	//   const reader = new FileReader();
-	//   const {current} = uploadedImage;
-	//   current.file = file;
-	//   reader.onload = (e) => {
-	// 	  current.src = e.target.result;
-	//   }
-	//   reader.readAsDataURL(file);
-	// }
-
-
-
-	const data = e.target.name
-	// const uploadedImage = useRef(null)
-	const [file] = e.target.files;
-	if (e.target.name !== "profile_pic") {
-		setUpdateData({ ...userUpdated, [data]: e.target.value })
-	} else if (e.target.name === "profile_pic") {	
-		const reader = new FileReader();			
-		reader.onload = (e:any) => {
-			console.log(e.target.result)
+		for (var key in reqData) {
+			formData.append(key, reqData[key]);
 		}
-		reader.readAsDataURL(file);
-		
+		setLoadingButton(true)
+		await HandleUpdateProfile(reqData.id, formData)
+			.then((res) => {
+				setLoadingButton(false)
+
+				setTimeout(() => {
+					setToggle(!toggle);
+					getProfileData(res.data.id);
+				}, 900);
+			})
+			.catch((err) => {
+				console.log(err);
+				setLoadingButton(false)
+
+			});
+	};
+
+
+	const getProfileData = (userId: any) => {
+		setLoading(true);
+		HandleProfile(userId).then((user) => {
+			setUserData(user.data)
+			const fields = [
+				"id",
+				"first_name",
+				"last_name",
+				"email",
+				"role_id",
+				"profile_pic",
+			];
+			fields.forEach((field) => setValue(field, user.data[field]));
+			setLoading(false);
+		});
+	};
+	useEffect(() => {
+		let localData: any;
+		if (typeof window !== "undefined") {
+			localData = window.localStorage.getItem("userData");
+		}
+		if (localData) {
+			const userId = JSON.parse(localData);
+			getProfileData(userId?.id);
+		}
+	}, []);
+
+	function ErrorShowing(errorMessage: any) {
+		return (
+			<Typography variant="body2" color={"error"} gutterBottom>
+				{errorMessage}{" "}
+			</Typography>
+		);
 	}
-}
 
-  return (
-    <>
-      <Navbar />
-      <Box className={styles.combineContentAndSidebar}>
-        <SideBar />
+	const handleEdit = async () => {
+		setToggle(!toggle);
+	};
 
-        <Box className={styles.siteBodyContainer}>
-          {/* breadcumbs */}
-          <BreadcrumbsHeading
-            First="Home"
-            Middle="Profile"
-            Text="USER PROFILE"
-            Link="/profile"
-          />
+	const handleChange = (e: any) => {
+		const file = e.target.files[0];
+		if (e.target.name === "profile_pic") {
+			const reader = new FileReader();
+			reader.onload = (e: any) => {
+				setPreviewProfile(e.target.result);
+				setFile(file)
+			}
+			reader.readAsDataURL(file);
+		}
+	}
 
-          {/* main content */}
-          <Card>
-            <CardContent>
-              <Grid container spacing={3}>
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                  <Box className={profiles.profileImageBox}>
-                    <Box
-                      component="img"
-                      src="/profile.png"
-                      width="150px"
-                      height="150px"
-                      borderRadius="15px"
-                    />
-						{toggle && <CameraAltIcon />} 
-                    <Box sx={{ marginLeft: "15px" }}>
-                      <Typography
-                        variant="subtitle1"
-                        sx={{ fontWeight: "bold", color: "#7C7C7C" }}
-                      >
-                        {userUpdated
-                          ? capitalizeFirstLetter(userUpdated?.first_name)
-                          : ""}{" "}
-                        {userUpdated?.last_name}
-                      </Typography>
+	if (!getUserData) return <p>No profile data</p>;
 
-                      <Typography variant="subtitle2" sx={{ color: "#7C7C7C" }}>
-                        {userUpdated?.email}
-                      </Typography>
+	return (
+		<>
+			<Navbar />
+			<Box className={styles.combineContentAndSidebar}>
+				<SideBar />
 
-                      <Typography variant="subtitle2" sx={{ color: "#7C7C7C" }}>
-                        {userUpdated?.role_id === 2 ? "Learner" : "Admin"}
-                      </Typography>
+				<Box className={styles.siteBodyContainer}>
+					{/* breadcumbs */}
+					<BreadcrumbsHeading
+						First="Home"
+						Middle="Profile"
+						Text="USER PROFILE"
+						Link="/profile"
+					/>
 
-                      <IconButton onClick={handleEdit}>
-                        <EditIcon></EditIcon>
-                      </IconButton>
-                    </Box>
-                  </Box>
-                </Grid>
-              </Grid>
+					{/* main content */}
+					<Card>
+						<CardContent>
+							{!isLoading ?
+								<Box
+									component="form"
+									method="POST"
+									noValidate
+									autoComplete="off"
+									onSubmit={handleSubmit(onSubmit)}
+									onReset={reset}
+								>
+									<Grid container spacing={3} marginBottom={'20px'} >
+										<Grid item xs={12} sm={12} md={12} lg={12}>
+											<Box className={profiles.profileImageBox}>
+												<Box >
+													{!toggle ? <Box
+														component="img"
+														className={profiles.imageComponent}
+														src={getUserData.profile_pic ? `${BASE_URL}/${getUserData.profile_pic}` : "/profile.png"}
+													/> :
+														<InputLabel>
+															<Box>
+																<Box
+																	component="img"
+																	className={profiles.imageComponent}
+																	src={previewProfile ? previewProfile : getUserData.profile_pic ? `${BASE_URL}/${getUserData.profile_pic}` : "/profile.png"}
+																/>
+																<IconButton className={profiles.profileCameraIcon} aria-label="upload picture" component="label"> <CameraAltIcon className={profiles.cameraAltIcon} /> <input
+																	type="file"
+																	{...register("profile_pic")}
+																	onChange={handleChange}
+																	hidden
+																/></IconButton>
 
-              <Box
-                component="form"
-                method="POST"
-                noValidate
-                autoComplete="off"
-                onSubmit={handleSubmit(onSubmit)}
-                onReset={reset}
-              >
-                <Grid
-                  container
-                  spacing={4}
-                  sx={{
-                    maxWidth: "50%",
-                    width: " 100%",
-                    float: "right",
-                    marginRight: "100px",
-                    marginBottom: "32px",
-                  }}
-                >
-                  <Grid item xs={12} sm={12} md={6} lg={6}>
-                    <TextField
-                      fullWidth
-                      label="First Name"
-                      {...register("first_name")}
-                      defaultValue={userUpdated?.first_name}
-					  disabled ={!toggle}
-                    />
-                    {errors && errors.first_name
-                      ? ErrorShowing(errors?.first_name?.message)
-                      : ""}
-                  </Grid>
 
-                  <Grid item xs={12} sm={12} md={6} lg={6}>
-                    <TextField
-                      fullWidth
-                      label="Last Name"
-                      {...register("last_name")}
-                      defaultValue={capitalizeFirstLetter(
-                        userUpdated?.last_name
-                      )}
-					  disabled ={!toggle}
-                    />
-                    {errors && errors.last_name
-                      ? ErrorShowing(errors?.last_name?.message)
-                      : ""}
-                  </Grid>
+															</Box>
+														</InputLabel>}
+												</Box>
+												<Box className={profiles.userData}>
+													<Typography
+														variant="subtitle1"
+														className={profiles.useNameFront}
+													>
+														{getUserData
+															? capitalizeFirstLetter(getUserData?.first_name)
+															: ""}{" "}
+														{getUserData?.last_name}
+													</Typography>
 
-                  <Grid item xs={12} sm={12} md={6} lg={6}>
-                    <TextField
-                      fullWidth
-                      label="Email"
-                      {...register("email")}
-                      defaultValue={userUpdated?.email}
-					  disabled ={!toggle}
-                    />
-                    {errors && errors.email
-                      ? ErrorShowing(errors?.email?.message)
-                      : ""}
-                  </Grid>
+													<Typography variant="subtitle2" className={profiles.userDetailFront}>
+														{getUserData?.email}
+													</Typography>
 
-                  <Grid item xs={12} sm={12} md={6} lg={6}>
-                    <FormControl fullWidth>
-                      <InputLabel>Role</InputLabel>
-                      <Select
-                        label="Role"
-                        {...register("role_id")}
-                        defaultValue={userUpdated.role_id}
-						disabled ={!toggle}
-                      >
-                        <MenuItem value={1}>Admin</MenuItem>
-                        <MenuItem value={2}>Learner</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Grid>
+													<Typography variant="subtitle2" className={profiles.userDetailFront}>
+														{getUserData?.role_id === 2 ? "Learner" : "Admin"}
+													</Typography>
 
-                  {toggle && (
-                      <Grid
-                        item
-                        xs={12}
-                        sm={12}
-                        md={12}
-                        lg={12}
-                        textAlign={"right"}
-                      >
-                        <Button type="submit" size="large" variant="contained">
-                          Update Profile
-                        </Button>
-                      </Grid>
-                  )}
-                </Grid>
-              </Box>
-            </CardContent>
-          </Card>
-        </Box>
-      </Box>
-      {/* <Footer /> */}
-      <ToastContainer />
-    </>
-  );
+													<IconButton onClick={handleEdit}>
+														<EditIcon></EditIcon>
+													</IconButton>
+												</Box>
+											</Box>
+										</Grid>
+									</Grid>
+
+
+									<Grid
+										container
+										spacing={4}
+										className={profiles.userDetailGrid}
+									>
+										<Grid item xs={12} sm={12} md={6} lg={6}>
+											<TextField
+												fullWidth
+												label="First Name"
+												{...register("first_name")}
+												defaultValue={getUserData?.first_name}
+												disabled={!toggle}
+											/>
+											{errors && errors.first_name
+												? ErrorShowing(errors?.first_name?.message)
+												: ""}
+										</Grid>
+
+										<Grid item xs={12} sm={12} md={6} lg={6}>
+											<TextField
+												fullWidth
+												label="Last Name"
+												{...register("last_name")}
+												defaultValue={capitalizeFirstLetter(
+													getUserData?.last_name
+												)}
+												disabled={!toggle}
+											/>
+											{errors && errors.last_name
+												? ErrorShowing(errors?.last_name?.message)
+												: ""}
+										</Grid>
+
+										<Grid item xs={12} sm={12} md={6} lg={6}>
+											<TextField
+												fullWidth
+												label="Email"
+												{...register("email")}
+												defaultValue={getUserData?.email}
+												disabled={!toggle}
+											/>
+											{errors && errors.email
+												? ErrorShowing(errors?.email?.message)
+												: ""}
+										</Grid>
+
+										<Grid item xs={12} sm={12} md={6} lg={6}>
+											<FormControl fullWidth>
+												<InputLabel>Role</InputLabel>
+												<Select
+													label="Role"
+													{...register("role_id")}
+													defaultValue={getUserData.role_id}
+													disabled={!toggle}
+												>
+													<MenuItem value={1}>Admin</MenuItem>
+													<MenuItem value={2}>Learner</MenuItem>
+												</Select>
+											</FormControl>
+										</Grid>
+
+										{toggle && (
+											<Grid
+												item
+												xs={12}
+												sm={12}
+												md={12}
+												lg={12}
+												textAlign={"right"}
+											>
+												{!isLoadingButton ? <Button type="submit" size="large" variant="contained">
+													Update Profile
+												</Button> : <LoadingButton loading={isLoadingButton}
+													size="large" className={profiles.updateLoadingButton} variant="contained" disabled >
+													<CircularProgressBar />
+												</LoadingButton>}
+
+											</Grid>
+										)}
+									</Grid>
+								</Box>
+								: <SpinnerProgress />}
+						</CardContent>
+					</Card>
+				</Box>
+			</Box>
+			{/* <Footer /> */}
+			<ToastContainer />
+		</>
+	);
 }
