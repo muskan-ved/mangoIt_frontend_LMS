@@ -145,8 +145,6 @@ export default function Profile() {
 		}
 	}
 
-	if (!getUserData) return <p>No profile data</p>;
-
 	return (
 		<>
 			<Navbar />
@@ -174,6 +172,7 @@ export default function Profile() {
 									onSubmit={handleSubmit(onSubmit)}
 									onReset={reset}
 								>
+									{getUserData ?<>
 									<Grid container spacing={3} marginBottom={'20px'} >
 										<Grid item xs={12} sm={12} md={12} lg={12}>
 											<Box className={profiles.profileImageBox}>
@@ -227,7 +226,6 @@ export default function Profile() {
 											</Box>
 										</Grid>
 									</Grid>
-
 
 									<Grid
 										container
@@ -308,7 +306,7 @@ export default function Profile() {
 
 											</Grid>
 										)}
-									</Grid>
+									</Grid></>:'Record not found'}
 								</Box>
 								: <SpinnerProgress />}
 						</CardContent>
