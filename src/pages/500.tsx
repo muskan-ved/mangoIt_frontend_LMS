@@ -8,7 +8,7 @@ import {Button, Typography, Box } from '@mui/material'
 import FooterIllustrations from '@/common/ServerPagesFooter/footerIllustrations'
 
 // ** Styled Components
-import { BoxWrapper, Img } from './errorCodePagesDesign'
+import { BoxWrapper, Img } from '../lib/errorCodePagesDesign'
 import styles from '../styles/errorCodePages.module.css'
 
 

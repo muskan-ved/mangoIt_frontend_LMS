@@ -32,6 +32,7 @@ export default function Login() {
   const router:any = useRouter();
   const [loading,setLoading] = React.useState<boolean>(false);
   const [showPassword, setShowPassword] = React.useState(false);
+  const [googleLoading, setGoogleLoading] = React.useState(false);
 
 const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -62,7 +63,18 @@ const responseFacebook = (response:any) => {
   const googleLogin = useGoogleLogin({
     onSuccess: async(tokenResponse) => {
   await HandleLoginByGoogle(tokenResponse)
-                    .then((res) => {
+                    .then(async(res) => {
+                      setGoogleLoading(true)
+                          await HandleLogin(event).then((res) => {
+                            if(res.status === 200){
+                              router.push('/profile')
+                              localStorage.setItem('loginToken',res.data.loginToken)
+                              localStorage.setItem('userData',JSON.stringify(res.data.userDetails))
+                            }
+                            setGoogleLoading(false)
+                          }).catch(() => {
+                            setGoogleLoading(false)
+                          })
 
                         console.log(res.data,"resss");
                     })
@@ -205,17 +217,17 @@ const responseFacebook = (response:any) => {
                   Continue with Facebook
                 </Button>
                 <FacebookLogin
-  appId="902443271035407"
-  onSuccess={(response) => {
-    console.log('Login Success!', response);
-  }}
-  onFail={(error) => {
-    console.log('Login Failed!', error);
-  }}
-  onProfileSuccess={(response) => {
-    console.log('Get Profile Success!', response);
-  }}
-/>
+                    appId="902443271035407"
+                    onSuccess={(response) => {
+                      console.log('Login Success!', response);
+                    }}
+                    onFail={(error) => {
+                      console.log('Login Failed!', error);
+                    }}
+                    onProfileSuccess={(response) => {
+                      console.log('Get Profile Success!', response);
+                    }}
+                  />
                 
                 <Button
                   type="button"

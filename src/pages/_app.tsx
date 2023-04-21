@@ -14,15 +14,13 @@ export default function App({ Component, pageProps }: AppProps) {
     
     const handleRouteChange = (url:any, { shallow }:any) => {
       if (!shallow) {
+        // prevent back button from exiting the app
         if (!window.localStorage.getItem('loginToken')) {
          // If token doesn't exist, redirect user to login page
         window.history.pushState(url, '', '/login/');
         }else{
           window.history.pushState(url, '', url);
         }
-
-        console.log(url,"appjs",window.localStorage.getItem('loginToken'))
-        // prevent back button from exiting the app
       }
     };
 

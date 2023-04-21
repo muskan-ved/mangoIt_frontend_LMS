@@ -16,7 +16,6 @@ export default function Home() {
 
   
     if (typeof window !== "undefined") {
-        console.log(window.location.pathname,"index")
         if(window.location.pathname === '/' && !window.localStorage.getItem('loginToken') || !window.localStorage.getItem('loginToken'))
         {
           // If token exists, redirect user to dashboard page

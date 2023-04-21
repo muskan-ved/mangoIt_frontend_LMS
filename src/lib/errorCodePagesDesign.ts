@@ -1,7 +1,6 @@
 import { styled } from '@mui/material/styles'
 import Box, { BoxProps } from '@mui/material/Box'
 
-
 // ** Styled Components
 export const Img = styled('img')(({ theme }:any) => ({
     marginTop: theme.spacing(5),
