@@ -25,7 +25,10 @@ export const HandleRegister = async(reqData:any) =>{
     data: reqData,
     headers: authHeader(),
   }).then((request) => {
-    toast.success("User added")
+    console.log(request,"3333333333333")
+    if(request.data?.loggedin_by === ''){
+      toast.success("User added")
+    }
       return request;
     }).catch((error) => {
       if(error.response.status === 400){

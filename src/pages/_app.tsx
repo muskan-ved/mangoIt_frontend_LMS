@@ -10,9 +10,11 @@ export default function App({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      if (!window.localStorage.getItem("loginToken")) {
+      if (!window.localStorage.getItem("loginToken")){
+       if(window.location.pathname !== '/register/' && window.location.pathname !== '/forgotpassword/' && window.location.pathname !== '/resetpassword/') {
         // If token doesn't exist, redirect user to login page
         router.push("/login/");
+       }
       } else {
         router.push(window.location.pathname);
       }
