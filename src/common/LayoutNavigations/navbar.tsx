@@ -188,7 +188,7 @@ export default function Navbar() {
             </IconButton>
            <Box className={styles.createVrLine}></Box>
         
-            <Avatar src='/ddd/dd.png' alt="Remy Sharp" className={styles.windowFullWidthAvatar} />
+            <Avatar src='/' alt="Remy Sharp" className={styles.windowFullWidthAvatar} />
               <Typography variant='body2' className={styles.windowFullWidthNameAlign}>{capitalizeFirstLetter(userData?.first_name)} {capitalizeFirstLetter(userData?.last_name)}</Typography>
             
           <IconButton

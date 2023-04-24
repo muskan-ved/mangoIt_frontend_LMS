@@ -12,7 +12,7 @@ import GoogleIcon from "@mui/icons-material/Google";
 import AuthSidebar from "../../common/LayoutNavigations/authSideLayout";
 import CircularProgressBar from "@/common/CircularProcess/circularProgressBar";
 import { LoadingButton } from "@mui/lab";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { userLoginValidations } from "@/validation_schema/authValidation";
 import { useForm } from "react-hook-form";
@@ -29,9 +29,10 @@ const theme = createTheme();
 export default function Login() {
 
   const { register,	handleSubmit,formState: { errors } } = useForm<loginType>({resolver: yupResolver(userLoginValidations)});
-  const router = useRouter();
+  const router:any = useRouter();
   const [loading,setLoading] = React.useState<boolean>(false);
   const [showPassword, setShowPassword] = React.useState(false);
+  const [googleLoading, setGoogleLoading] = React.useState(false);
 
 const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -62,7 +63,18 @@ const responseFacebook = (response:any) => {
   const googleLogin = useGoogleLogin({
     onSuccess: async(tokenResponse) => {
   await HandleLoginByGoogle(tokenResponse)
-                    .then((res) => {
+                    .then(async(res) => {
+                      setGoogleLoading(true)
+                          await HandleLogin(event).then((res) => {
+                            if(res.status === 200){
+                              router.push('/profile')
+                              localStorage.setItem('loginToken',res.data.loginToken)
+                              localStorage.setItem('userData',JSON.stringify(res.data.userDetails))
+                            }
+                            setGoogleLoading(false)
+                          }).catch(() => {
+                            setGoogleLoading(false)
+                          })
 
                         console.log(res.data,"resss");
                     })
@@ -72,11 +84,16 @@ const responseFacebook = (response:any) => {
   });
 
   React.useEffect(() => {
-    GenerateToken()
-    if (typeof window !== "undefined" && window.localStorage.getItem('loginToken')) {
-      // If token exists, redirect user to dashboard page
-      router.back();
-    }
+    GenerateToken()      
+      if (typeof window !== "undefined" && window.localStorage.getItem('loginToken')) {
+        // If token exists, redirect user to dashboard page
+        if(window.location.pathname === '/' || window.location.pathname === '/login' ){
+          router.push('/profile');
+        }else{
+          router.back()
+        }
+      }
+      
   }, [])
   
 
@@ -200,17 +217,17 @@ const responseFacebook = (response:any) => {
                   Continue with Facebook
                 </Button>
                 <FacebookLogin
-  appId="902443271035407"
-  onSuccess={(response) => {
-    console.log('Login Success!', response);
-  }}
-  onFail={(error) => {
-    console.log('Login Failed!', error);
-  }}
-  onProfileSuccess={(response) => {
-    console.log('Get Profile Success!', response);
-  }}
-/>
+                    appId="902443271035407"
+                    onSuccess={(response) => {
+                      console.log('Login Success!', response);
+                    }}
+                    onFail={(error) => {
+                      console.log('Login Failed!', error);
+                    }}
+                    onProfileSuccess={(response) => {
+                      console.log('Get Profile Success!', response);
+                    }}
+                  />
                 
                 <Button
                   type="button"

@@ -8,7 +8,7 @@ import FooterIllustrations from "@/common/ServerPagesFooter/footerIllustrations"
 import { useRouter } from "next/navigation";
 
 // ** Styled Components
-import { BoxWrapper, Img } from "./errorCodePagesDesign";
+import { BoxWrapper, Img } from "../lib/errorCodePagesDesign";
 import styles from "../styles/errorCodePages.module.css";
 
 const Error404 = () => {
