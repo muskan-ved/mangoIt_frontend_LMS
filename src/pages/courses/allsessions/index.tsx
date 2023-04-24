@@ -1,10 +1,10 @@
-import { Box, Button, Card, CardContent, Fade, MenuItem, FormControl, IconButton, InputLabel, Modal, NativeSelect, Popper, Select, SelectChangeEvent, TextField, Typography } from "@mui/material";
+import { Box, Button, Card, CardContent, Fade, MenuItem, FormControl, IconButton, InputLabel, Modal, NativeSelect, Popper, Select, SelectChangeEvent, TextField, Typography, Popover } from "@mui/material";
 import Navbar from "@/common/LayoutNavigations/navbar";
 import SideBar from "@/common/LayoutNavigations/sideBar";
-import styles from "../../styles/sidebar.module.css";
+import styles from "../../../styles/sidebar.module.css";
 import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
 import Footer from "@/common/LayoutNavigations/footer";
-import PopupState, { bindToggle, bindPopper } from 'material-ui-popup-state';
+import PopupState, { bindToggle, bindPopper, bindPopover } from 'material-ui-popup-state';
 
 
 import * as React from 'react';
@@ -16,7 +16,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { Padding, SearchOutlined } from "@mui/icons-material";
+import { SearchOutlined } from "@mui/icons-material";
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 
 interface Column {
@@ -93,6 +93,9 @@ const rows = [
 export default function AllSession() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [module, setModule] = React.useState<string | any>('');
+  const [course, setCourse] = React.useState<string | any>('');
+  const [status, setStatus] = React.useState<string | any>('');
 
   React.useEffect(() => {
     let localData: any;
@@ -115,15 +118,13 @@ export default function AllSession() {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-  const [module, setModule] = React.useState<string | any>('');
-  const [course, setCourse] = React.useState<string | any>('');
-  const [status, setStatus] = React.useState<number | any>(0);
 
-  const handleChange = (event: SelectChangeEvent) => {
-    event.preventDefault()
+  const handleChange = (event: SelectChangeEvent,identifier:string) => {
+    // event.preventDefault()
+    // setModule(event.target.value as string);
+    // setCourse(event.target.value as string);
+    // setStatus(event.target.value as string);
 
-    setModule(event.target.value as string);
-    console.log(event)
   };
 
   return (
@@ -142,11 +143,10 @@ export default function AllSession() {
           />
 
           {/* main content */}
-          <Box> All session</Box>
+       
           <Card>
             <CardContent>
               <TextField
-
                 id="standard-bare"
                 variant="outlined"
                 placeholder="Search"
@@ -159,8 +159,8 @@ export default function AllSession() {
                 }}
                 sx={{ marginBottom: 3 }}
               />
-              <Box sx={{ float: "right", display: "flex" }}>
 
+              <Box sx={{ float: "right", display: "flex" }}>
                 <PopupState variant="popper" popupId="demo-popup-popper">
                   {(popupState) => (
                     <Box>
@@ -168,63 +168,72 @@ export default function AllSession() {
                         <FilterAltOutlinedIcon />
                         FILTER
                       </Button>
-                      <Popper {...bindPopper(popupState)} transition>
-                        {({ TransitionProps }) => (
-                          <Fade {...TransitionProps} timeout={350}>
-                            <Paper>
-                              {/* <Typography sx={{ p: 2 }}>The content of the Popper.</Typography> */}
-                              <Box sx={{ display: "flex" }}>
-                                <Box sx={{ minWidth: 120 }}>
-                                  <FormControl fullWidth>
-                                    Module
-                                    <Select
-                                      labelId="demo-simple-select-label"
-                                      id="demo-simple-select"                                
-                                      onChange={handleChange}
-                                      value= {module}
-                                    >
-                                      <MenuItem value={'html'}>HTML</MenuItem>
-                                      <MenuItem value={'css'}>CSS</MenuItem>
-                                      <MenuItem value={'js'}>JS</MenuItem>
-                                    </Select>
-                                  </FormControl>
-                                </Box>
-                                <Box sx={{ minWidth: 120 }}>
-                                  <FormControl fullWidth>
-                                    Course
-                                    <Select
-                                      labelId="demo-simple-select-label"
-                                      id="demo-simple-select"
-                                      value={'course'}
-                                      onChange={handleChange}
-                                    >
-                                      <MenuItem value={'html'}>HTML</MenuItem>
-                                      <MenuItem value={'css'}>CSS</MenuItem>
-                                      <MenuItem value={'js'}>JS</MenuItem>
-                                    </Select>
-                                  </FormControl>
-                                </Box>
-                                <Box sx={{ minWidth: 120 }}>
-                                  <FormControl fullWidth>
-                                    Status
-                                    <Select
-                                      labelId="demo-simple-select-label"
-                                      id="demo-simple-select"
-                                      value={'status'}
-                                      onChange={handleChange}
-                                    >
-                                      <MenuItem value={0}>In-Active</MenuItem>
-                                      <MenuItem value={1}>Active</MenuItem>
+                      <Popover
+                        {...bindPopover(popupState)}
+                        anchorOrigin={{
+                          vertical: 'bottom',
+                          horizontal: 'center',
+                        }}
+                        transformOrigin={{
+                          vertical: 'top',
+                          horizontal: 'center',
+                        }}
+                      >
 
-                                    </Select>
-                                  </FormControl>
-                                </Box>
-                              </Box>
-                            </Paper>
+                        <Paper>
+                          {/* <Typography sx={{ p: 2 }}>The content of the Popper.</Typography> */}
+                          <Box sx={{ display: "flex" }}>
+                            <Box sx={{ minWidth: 120 }}>
+                              <FormControl fullWidth>
+                                Module
+                                <Select
+                                  labelId="demo-simple-select-label"
+                                  id="demo-simple-select"
+                                  onChange={e => handleChange(e.target.value,"module")}
+                                  value={module}
+                                >
+                                  <MenuItem value={'html'}>HTML</MenuItem>
+                                  <MenuItem value={'css'}>CSS</MenuItem>
+                                  <MenuItem value={'js'}>JS</MenuItem>
+                                </Select>
+                              </FormControl>
+                            </Box>
 
-                          </Fade>
-                        )}
-                      </Popper>
+                            <Box sx={{ minWidth: 120 }}>
+                              <FormControl fullWidth>
+                                Course
+                                <Select
+                                  labelId="demo-simple-select-label"
+                                  id="demo-simple-select"
+                                  value={course}
+                                  onChange={e => handleChange(e.target.value,"course")}
+                                >
+                                  <MenuItem value={'html'}>HTML</MenuItem>
+                                  <MenuItem value={'css'}>CSS</MenuItem>
+                                  <MenuItem value={'js'}>JS</MenuItem>
+                                </Select>
+                              </FormControl>
+                            </Box>
+                            
+                            <Box sx={{ minWidth: 120 }}>
+                              <FormControl fullWidth>
+                                Status
+                                <Select
+                                  labelId="demo-simple-select-label"
+                                  id="demo-simple-select"
+                                  value={status}
+                                  onChange={e => handleChange(e.target.value,"status")}
+                                >
+                                  <MenuItem value={0}>In-Active</MenuItem>
+                                  <MenuItem value={1}>Active</MenuItem>
+
+                                </Select>
+                              </FormControl>
+                            </Box>
+                          </Box>
+                        </Paper>
+
+                      </Popover>
                     </Box>
                   )}
                 </PopupState>
@@ -234,19 +243,7 @@ export default function AllSession() {
               <Paper sx={{ width: '100%' }}>
                 <TableContainer >
                   <Table stickyHeader aria-label="sticky table">
-                    <TableHead>
-                      <TableRow>
-                        {columns.map((column) => (
-                          <TableCell
-                            key={column.id}
-                            align={column.align}
-                            style={{ minWidth: column.minWidth }}
-                          >
-                            {column.label}
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    </TableHead>
+
                     <TableBody>
                       {rows
                         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -280,9 +277,9 @@ export default function AllSession() {
                 />
               </Paper>
             </CardContent>
-          </Card>
-        </Box>
-      </Box>
+          </Card >
+        </Box >
+      </Box >
       {/* <Footer /> */}
     </>
   );
