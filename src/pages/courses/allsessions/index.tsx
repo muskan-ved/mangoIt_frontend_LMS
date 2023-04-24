@@ -136,9 +136,9 @@ const AllSession = () => {
           {/* breadcumbs */}
           <BreadcrumbsHeading
             First="Home"
-            Middle="Courses"
-            Text="COURSES"
-            Link="/courses/allcourses"
+            Middle="Session"
+            Text="SESSION"
+            Link="/session/allsessions"
           />
 
           {/* main content */}
@@ -161,9 +161,9 @@ const AllSession = () => {
               >
                 <PopupState variant="popover" popupId="demo-popup-popover" >
                   {(popupState) => (
-						
-						
-						<Box>
+
+
+                    <Box>
                       <Button
                         sx={{ display: "inline-flex", color: "#1976d2" }}
                         {...bindTrigger(popupState)}
@@ -173,7 +173,7 @@ const AllSession = () => {
                       </Button>
                       <Popover
                         {...bindPopover(popupState)}
-						style={{width:'35% !important'}}
+                        style={{ width: '35% !important' }}
                         anchorOrigin={{
                           vertical: "bottom",
                           horizontal: "left",
@@ -186,24 +186,24 @@ const AllSession = () => {
                         <Box>
                           <Container
                             className="filter-box"
-                            style={{ padding: "15px"}}
+                            style={{ padding: "15px" }}
                           >
                             <Grid>
-                              <Typography variant="h5" sx={{fontWeight:'bold'}}>
+                              <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
                                 Filter
                               </Typography>
-                              <Box  component="form"
-              noValidate
-            //   onSubmit={handleSubmit(onSubmit)}
-              sx={{ mt:1 }}>
+                              <Box component="form"
+                                noValidate
+                                //   onSubmit={handleSubmit(onSubmit)}
+                                sx={{ mt: 1 }}>
                                 <Stack
-                                  style={{ marginTop: "10px"}}
+                                  style={{ marginTop: "10px" }}
                                   className="form-filter"
                                 >
                                   <Grid container spacing={2}>
                                     <Grid item xs={12} md={6} lg={6} >
                                       <Stack spacing={2}>
-                                        <InputLabel htmlFor="name" sx={{fontWeight:'bold'}}>
+                                        <InputLabel htmlFor="name" sx={{ fontWeight: 'bold' }}>
                                           Type
                                         </InputLabel>
                                         <FormControl fullWidth>
@@ -214,7 +214,7 @@ const AllSession = () => {
                                               (e: any) => null
                                               // setCustType(e.target.value)
                                             }
-                                            // value={custType}
+                                          // value={custType}
                                           >
                                             <MenuItem value={0}>All</MenuItem>
                                             {/* {custtype &&
@@ -236,7 +236,7 @@ const AllSession = () => {
                                     </Grid>
                                     <Grid item xs={12} md={6} lg={6}>
                                       <Stack spacing={2}>
-                                        <InputLabel htmlFor="enddate" sx={{fontWeight:'bold'}}>
+                                        <InputLabel htmlFor="enddate" sx={{ fontWeight: 'bold' }}>
                                           Status
                                         </InputLabel>
                                         <FormControl fullWidth>
@@ -247,7 +247,7 @@ const AllSession = () => {
                                               (e: any) => null
                                               // setcustStatus(e.target.value)
                                             }
-                                            // value={custStatus}
+                                          // value={custStatus}
                                           >
                                             <MenuItem value={2}>All</MenuItem>
                                             <MenuItem value={1}>
@@ -264,19 +264,19 @@ const AllSession = () => {
                                     <Grid
                                       item
                                       xs={12}
-									  lg={12}
+                                      lg={12}
                                     >
                                       <Button
                                         size="medium"
                                         type="submit"
                                         variant="contained"
                                         color="primary"
-                                        sx={{ float:'right' }}
+                                        sx={{ float: 'right' }}
 
                                         onClick={popupState.close}
                                       >
                                         Apply Filter
-                                        
+
                                       </Button>
                                     </Grid>
                                   </Grid>
@@ -290,7 +290,7 @@ const AllSession = () => {
                   )}
                 </PopupState>
                 &nbsp;
-                <Button variant="contained" onClick={() => router.push('/courses/allcourses/addcourse')}>Add New Course</Button>
+                <Button variant="contained" onClick={() => router.push('/courses/allsessions/addsession')}>Add Session</Button>
               </Box>
               <Paper sx={{ width: "100%" }}>
                 <TableContainer sx={{ mt: 3 }}>
