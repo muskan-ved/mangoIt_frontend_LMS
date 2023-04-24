@@ -52,11 +52,11 @@ import { LoadingButton } from "@mui/lab";
 
 export default function Profile() {
 
-	const [previewProfile, setPreviewProfile] = useState('')
-	const [file, setFile] = useState('')
-	const [isLoading, setLoading] = useState(false);
-	const [isLoadingButton, setLoadingButton] = useState(false);
-	const [getUserData, setUserData] = useState<any>('');
+	const [previewProfile, setPreviewProfile] = useState<string | any>('')
+	const [file, setFile] = useState<string | any>('')
+	const [isLoading, setLoading] = useState<boolean>(false);
+	const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
+	const [getUserData, setUserData] = useState<userType | null>(null);
 	const [toggle, setToggle] = useState<boolean>(false);
 
 	const {

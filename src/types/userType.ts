@@ -5,6 +5,6 @@ export type userType = {
     password?: string,
     confirm_password?: string,
     profile?: string,
-    role:number,
+    role_id:number,
     profile_pic:string
 }
