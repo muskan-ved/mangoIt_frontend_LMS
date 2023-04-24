@@ -9,7 +9,7 @@ const SideBar = () => {
   const NavItem = VerticalMenuItems();
 
   const navigateURL = (path: string) => {
-    router.replace(path);
+    router.push(path);
   };
 
   return (

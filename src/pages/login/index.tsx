@@ -19,7 +19,7 @@ import { useForm } from "react-hook-form";
 import { loginType } from "../../types/authType";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { GenerateToken, HandleLogin, HandleLoginByGoogle } from "@/services/auth";
+import { GenerateToken, HandleLogin, HandleLoginByGoogle, HandleRegister } from "@/services/auth";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useGoogleLogin } from "@react-oauth/google";
 import FacebookLogin from '@greatsumini/react-facebook-login';
@@ -64,19 +64,25 @@ const responseFacebook = (response:any) => {
     onSuccess: async(tokenResponse) => {
   await HandleLoginByGoogle(tokenResponse)
                     .then(async(res) => {
+console.log(res,"333333333333333")
+                      const reqData = {
+                          first_name: res.data.given_name,
+                          last_name: res.data.family_name,
+                          profile_pic: res.data.picture,
+                          email: res.data.email,
+                          loggedin_by: 'google',
+                      }
                       setGoogleLoading(true)
-                          await HandleLogin(event).then((res) => {
-                            if(res.status === 200){
-                              router.push('/profile')
-                              localStorage.setItem('loginToken',res.data.loginToken)
-                              localStorage.setItem('userData',JSON.stringify(res.data.userDetails))
+                          await HandleRegister(reqData).then((res) => {
+                            if(res.status === 201){
+                              // router.push('/profile')
+                              // localStorage.setItem('loginToken',res.data.loginToken)
+                              // localStorage.setItem('userData',JSON.stringify(res.data.userDetails))
                             }
                             setGoogleLoading(false)
                           }).catch(() => {
                             setGoogleLoading(false)
                           })
-
-                        console.log(res.data,"resss");
                     })
                     .catch((err) => console.log(err));
         },
@@ -234,6 +240,7 @@ const responseFacebook = (response:any) => {
                   fullWidth
                   variant="outlined"
                   startIcon={<GoogleIcon />}
+                  disabled={googleLoading}
                   onClick={() => googleLogin()}
                   sx={{ mt: 1 }}
                 >

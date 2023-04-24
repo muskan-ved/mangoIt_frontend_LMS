@@ -1,4 +1,3 @@
-import Login from './login'
 import { useEffect } from 'react'
 import { GenerateToken } from '@/services/auth'
 import {useRouter} from 'next/router'
@@ -9,12 +8,14 @@ export const getHomeRoute = (role: number) => {
   else return '/profile'
 }
 
-
 export default function Home() {
 
   const router:any = useRouter()
 
   
+  useEffect(() => {
+    // getHomeRoute(2)
+    console.log("index js")
     if (typeof window !== "undefined") {
         if(window.location.pathname === '/' && !window.localStorage.getItem('loginToken') || !window.localStorage.getItem('loginToken'))
         {
@@ -24,14 +25,8 @@ export default function Home() {
           router.push('/profile')
         }
       }
-      useEffect(() => {
-        // getHomeRoute(2)
     GenerateToken()
   },[])
 
-  return (
-    <>
-<SpinnerProgress/>
-    </>
-  )
+  return (<SpinnerProgress/>)
 }
