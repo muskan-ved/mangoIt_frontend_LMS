@@ -1,10 +1,10 @@
 import Navbar from "@/common/LayoutNavigations/navbar";
 import SideBar from "@/common/LayoutNavigations/sideBar";
 import { Box } from "@mui/material";
-import styles from "../../styles/sidebar.module.css";
+import styles from "../../../styles/sidebar.module.css";
 import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
 
-const AllModules = () => {
+const AddCourse = () => {
   return (
     <>
       <Navbar />
@@ -15,17 +15,17 @@ const AllModules = () => {
           {/* breadcumbs */}
           <BreadcrumbsHeading
             First="Home"
-            Middle="Module"
-            Text="MODULE"
-            Link="/courses/allmodules"
+            Middle="Courses"
+            Text="Courses"
+            Link="/courses/allcourses/addcourse"
           />
 
           {/* main content */}
-          <Box> All Module</Box>
+          <Box> Add Course</Box>
         </Box>
       </Box>
     </>
   );
 };
 
-export default AllModules;
+export default AddCourse;

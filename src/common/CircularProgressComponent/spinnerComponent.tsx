@@ -1,7 +1,7 @@
-import { CircularProgress } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 
 const SpinnerProgress = () => {
-    return (<CircularProgress color="inherit" size={'1.6rem'}/> );
+    return ( <Box textAlign={'center'}><CircularProgress color="inherit" size={'1.6rem'}/></Box> );
 }
  
 export default SpinnerProgress;

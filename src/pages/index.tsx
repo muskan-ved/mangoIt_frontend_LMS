@@ -1,9 +1,7 @@
-import Login from './login'
 import { useEffect } from 'react'
 import { GenerateToken } from '@/services/auth'
 import {useRouter} from 'next/router'
 import SpinnerProgress from '@/common/CircularProgressComponent/spinnerComponent'
-import { Box } from '@mui/material'
 
 export const getHomeRoute = (role: number) => {
   if (role === 1) return '/dashboard'
@@ -30,10 +28,5 @@ export default function Home() {
     GenerateToken()
   },[])
 
-  return (
-<> <Box textAlign={'center'}>
-<SpinnerProgress/>
-</Box>
-    </>
-  )
+  return (<SpinnerProgress/>)
 }
