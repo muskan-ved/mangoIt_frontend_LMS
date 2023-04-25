@@ -1,0 +1,19 @@
+.subbox{
+    border: 1px dashed grey;
+    margin: 20px;
+}
+.sessionAttachments{
+    padding: 10px 33px;
+    width: fit-content;
+    margin: 10px;
+    background: #f1f1f1;
+    border-radius: 50px;
+}
+.sessionNameGride{
+    display: flex; 
+    margin-bottom: 16px ;
+}
+.sessionAttachmentBox{
+    border: 1px solid grey;
+    text-align: -webkit-center;
+}

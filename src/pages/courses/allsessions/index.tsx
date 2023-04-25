@@ -204,7 +204,7 @@ const AllSession = () => {
                                     <Grid item xs={12} md={6} lg={6} >
                                       <Stack spacing={2}>
                                         <InputLabel htmlFor="name" sx={{ fontWeight: 'bold' }}>
-                                          Type
+                                          Module
                                         </InputLabel>
                                         <FormControl fullWidth>
                                           <Select
@@ -234,6 +234,41 @@ const AllSession = () => {
                                         </FormControl>
                                       </Stack>
                                     </Grid>
+
+                                   <Grid item xs={12} md={6} lg={6} >
+                                      <Stack spacing={2}>
+                                        <InputLabel htmlFor="name" sx={{ fontWeight: 'bold' }}>
+                                          Course
+                                        </InputLabel>
+                                        <FormControl fullWidth>
+                                          <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            onChange={
+                                              (e: any) => null
+                                              // setCustType(e.target.value)
+                                            }
+                                          // value={custType}
+                                          >
+                                            <MenuItem value={0}>All</MenuItem>
+                                            {/* {custtype &&
+                                                  custtype.map(
+                                                    (data: any, key: any) => {
+                                                      return (
+                                                        <MenuItem
+                                                          key={key}
+                                                          value={data.id}
+                                                        >
+                                                          {data.name}
+                                                        </MenuItem>
+                                                      );
+                                                    }
+                                                  )} */}
+                                          </Select>
+                                        </FormControl>
+                                      </Stack>
+                                    </Grid>
+
                                     <Grid item xs={12} md={6} lg={6}>
                                       <Stack spacing={2}>
                                         <InputLabel htmlFor="enddate" sx={{ fontWeight: 'bold' }}>
