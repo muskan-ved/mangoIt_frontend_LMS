@@ -24,7 +24,7 @@ import { courseType } from "@/types/courseType";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { courseValidations } from "@/validation_schema/courseValidation";
 
-const AddCourse = () => {
+const EditCourse = () => {
   const [shortDespcriptionContent, setShortDespcriptionContent] = useState("");
   const [despcriptionContent, setdespcriptionContent] = useState("");
 
@@ -196,4 +196,4 @@ const AddCourse = () => {
   );
 };
 
-export default AddCourse;
+export default EditCourse;
