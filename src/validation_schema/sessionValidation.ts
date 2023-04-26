@@ -2,13 +2,13 @@ import * as Yup from 'yup';
 
 
 export const sessionValidations = Yup.object().shape({
-    first_name: 
-        Yup.string().required('First name is a required field')
-        .min(3,"First name must be at least 3 characters")
-        .matches(/^[A-Za-z ]*$/, 'Please enter valid name'),
-    last_name: 
-        Yup.string().required('Last name is a required field')
-        .min(3,"Last name must be at least 3 characters")
-        .matches(/^[A-Za-z ]*$/, 'Please enter valid name'),
+    title: 
+    Yup.string().required('Course name is a required field')
+    .min(3,"Course name must be at least 3 characters"),
+    status: 
+    Yup.string().required('Status is a required field'), 
+    long_description:
+    Yup.string().required('Long description is a required field')
+    .min(20,"Long description must be at least 20 characters"),
         
 });

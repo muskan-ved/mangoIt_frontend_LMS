@@ -44,72 +44,81 @@ export default function addSession() {
                     {/* main content */}
                     <Card>
                         <CardContent>
-                            <Grid container spacing={2}>
-                                <Grid item xs={12} sm={12} md={12} lg={6} >
-                                    <Box component="img" src="/Images/pages/addFeature.jpg" width={'100%'} />
-                                </Grid>
+                            <Box
+                                component="form"
+                                method="POST"
+                                noValidate
+                                autoComplete="off"
+                                // onSubmit={handleSubmit(onSubmit)}
+                                // onReset={reset}
+                            >
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12} sm={12} md={12} lg={6} >
+                                        <Box component="img" src="/Images/pages/addFeature.jpg" width={'100%'} />
+                                    </Grid>
 
-                                <Grid item xs={12} sm={12} md={12} lg={6} >
-                                    <Typography>ADD SESSION</Typography>
-                                    <Grid item xs={12} sm={12} md={12} lg={12} className={Sessions.sessionNameGride} >
+                                    <Grid item xs={12} sm={12} md={12} lg={6} >
+                                        <Typography>ADD SESSION</Typography>
+                                        <Grid item xs={12} sm={12} md={12} lg={12} className={Sessions.sessionNameGride} >
 
-                                        <Grid item xs={12} sm={12} md={6} lg={6}>
-                                            <InputLabel>
-                                                Session Name
-                                            </InputLabel>
-                                            <TextField
-                                                placeholder="Session Name"
-                                            />
+                                            <Grid item xs={12} sm={12} md={6} lg={6}>
+                                                <InputLabel>
+                                                    Session Name
+                                                </InputLabel>
+                                                <TextField
+                                                    placeholder="Session Name"
+                                                />
+                                            </Grid>
+
+                                            <Grid item xs={12} sm={12} md={6} lg={6}>
+                                                <InputLabel>Course of session</InputLabel>
+                                                <FormControl fullWidth>
+                                                    <Select>
+
+                                                        <MenuItem value={1}>Course</MenuItem>
+                                                    </Select>
+                                                </FormControl>
+                                            </Grid>
                                         </Grid>
 
-                                        <Grid item xs={12} sm={12} md={6} lg={6}>
-                                            <InputLabel>Course of session</InputLabel>
+                                        <Grid item xs={12} sm={12} md={12} lg={12} mb={2} >
+                                            <InputLabel>Module of session</InputLabel>
                                             <FormControl fullWidth>
                                                 <Select>
-
-                                                    <MenuItem value={1}>Course</MenuItem>
+                                                    <MenuItem value={1}></MenuItem>
                                                 </Select>
                                             </FormControl>
                                         </Grid>
+
+                                        <Grid item xs={12} sm={12} md={12} lg={12} mb={2}>
+                                            <InputLabel>Description</InputLabel>
+                                            <RichEditor
+                                                value={content}
+                                                onChange={handleContentChange}
+                                            />
+                                        </Grid>
+
+                                        <Grid item xs={12} sm={12} md={12} lg={12} mb={2}>
+                                            <InputLabel>Attachment</InputLabel>
+                                            <Box className={Sessions.sessionAttachmentBox}>
+                                                <InputLabel className={Sessions.subbox} >
+                                                    <input
+                                                        type="file"
+
+                                                        hidden
+                                                    /><Typography className={Sessions.sessionAttachments}> Upload</Typography></InputLabel>
+                                            </Box>
+
+                                        </Grid>
+                                        <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"right"} >
+                                            <Button type="submit" size="large" variant="contained">
+                                                ADD NEW SESSION
+                                            </Button>
+                                        </Grid>
                                     </Grid>
 
-                                    <Grid item xs={12} sm={12} md={12} lg={12} mb={2} >
-                                        <InputLabel>Module of session</InputLabel>
-                                        <FormControl fullWidth>
-                                            <Select>
-                                                <MenuItem value={1}></MenuItem>
-                                            </Select>
-                                        </FormControl>
-                                    </Grid>
-
-                                    <Grid item xs={12} sm={12} md={12} lg={12} mb={2}>
-                                        <InputLabel>Long Description</InputLabel>
-                                        <RichEditor
-                                            value={content}
-                                            onChange={handleContentChange}
-                                        />
-                                    </Grid>
-
-                                    <Grid item xs={12} sm={12} md={12} lg={12} mb={2}>
-                                        <InputLabel>Attachment</InputLabel>
-                                        <Box className={Sessions.sessionAttachmentBox}>
-                                            <InputLabel className={Sessions.subbox} >
-                                                <input
-                                                    type="file"
-
-                                                    hidden
-                                                /><Typography className={Sessions.sessionAttachments}> Upload</Typography></InputLabel>
-                                        </Box>
-
-                                    </Grid>
-                                    <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"right"} >
-                                        <Button type="submit" size="large" variant="contained">
-                                            ADD NEW SESSION
-                                        </Button>
-                                    </Grid>
                                 </Grid>
-
-                            </Grid>
+                            </Box>
                         </CardContent>
                     </Card>
                 </Box>
