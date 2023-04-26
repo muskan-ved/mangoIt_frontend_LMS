@@ -9,11 +9,7 @@ import "react-quill/dist/quill.snow.css";
 const modules = {
   toolbar: [
     [
-<<<<<<< HEAD
-      {'header':[1,2,3,4,5,6,false]},
-=======
 	{'header': [1,2,3,4,5,6,false]},
->>>>>>> 96a4995d245094e020cbcfe2c5c406feda300689
       { font: [] },
       { size: [] },
       "bold",
