@@ -9,7 +9,11 @@ import "react-quill/dist/quill.snow.css";
 const modules = {
   toolbar: [
     [
+<<<<<<< HEAD
       {'header':[1,2,3,4,5,6,false]},
+=======
+	{'header': [1,2,3,4,5,6,false]},
+>>>>>>> 96a4995d245094e020cbcfe2c5c406feda300689
       { font: [] },
       { size: [] },
       "bold",
@@ -59,12 +63,12 @@ const formats = [
   "clean",
 ];
 
-interface RichEditorProps {
+interface RichEditor {
   value: string;
   onChange: (value: string) => void;
 }
 
-const RichEditor: React.FC<RichEditorProps> = ({ value, onChange }) => {
+const RichEditor: React.FC<RichEditor> = ({ value, onChange }) => {
   return (
     <div>
       <QuillNoSSRWrapper
