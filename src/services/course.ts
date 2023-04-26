@@ -6,23 +6,20 @@ import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css";
 import { HandleLogout } from "./auth"
 
-export const HandleSessionCreate = async(reqData:any) =>{
+export const HandleCourse = async() =>{
   
     return await axios({
-      method: "POST",
-      url: `${API.createSession}`,
+      method: "GET",
+      url: `${API.getAllCourses}`,
       headers: LoginHeader(),
-      data:reqData,
     }).then((request) => {
-      toast.success("Session Created")
         return request;
       }).catch((error) => {
         if(error.response.status === 401){
           HandleLogout()
         }else{
-          toast.error("Session added failed")
+          toast.error("Something went wrong")
         }
         return error;
       })
   }
-

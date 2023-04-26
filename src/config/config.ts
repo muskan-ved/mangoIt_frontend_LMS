@@ -14,4 +14,8 @@ export const API = {
 
  userInfoById:`${BASE_URL}/${process.env.NEXT_PUBLIC_GET_USER_BY_ID}`,
  userUpdateById: `${BASE_URL}/${process.env.NEXT_PUBLIC_UPDATE_USER_BY_ID}`,
+
+ getAllCourses: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_ALL_COURSES}`,
+ getAllModules: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_ALL_MODULES}`,
+ createSession: `${BASE_URL}/${process.env.NEXT_PUBLIC_CREATE_SESSION}`,
 };
