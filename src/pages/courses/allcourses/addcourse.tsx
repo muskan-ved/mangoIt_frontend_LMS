@@ -123,22 +123,23 @@ const AddCourse = () => {
                         Type
                       </InputLabel>
                       <FormControl fullWidth>
-                        <Select value={1} {...register("is_chargeable")}>
-                          <MenuItem value={1}>Type</MenuItem>
+                        <Select value={'true'} {...register("is_chargeable")}>
+                          <MenuItem value={'true'}>Paid</MenuItem>
+                          <MenuItem value={'false'}>Unpaid</MenuItem>
                         </Select>
                       </FormControl>
                       {errors && errors.is_chargeable
                         ? ErrorShowing(errors?.is_chargeable?.message)
                         : ""}
                     </Grid>
-
                     <Grid item mb={2}>
                       <InputLabel className={styles.CourseInputLabelFont}>
                         Status
                       </InputLabel>
                       <FormControl fullWidth>
-                        <Select value={1} {...register("status")}>
-                          <MenuItem value={1}>status</MenuItem>
+                        <Select value={'true'} {...register("status")}>
+                          <MenuItem value={'true'}>Display</MenuItem>
+                          <MenuItem value={'false'}>Hide</MenuItem>
                         </Select>
                       </FormControl>
                       {errors && errors.status
