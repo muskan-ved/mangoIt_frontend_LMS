@@ -9,7 +9,7 @@ import { HandleLogout } from "./auth"
 export const HandleSessionCreate = async(reqData:any) =>{
   
     return await axios({
-      method: "POST",
+      method: "post",
       url: `${API.createSession}`,
       headers: LoginHeader(),
       data:reqData,

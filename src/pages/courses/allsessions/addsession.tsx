@@ -1,5 +1,6 @@
 // ***** React Import
 import React, { useState, useEffect } from 'react';
+import { useRouter } from "next/router";
 
 // MUI Import
 import { Box, Button, Card, CardContent, FormControl, Grid, IconButton, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
@@ -17,6 +18,9 @@ import RichEditor from "@/common/RichTextEditor/textEditor";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { sessionValidations } from '@/validation_schema/sessionValidation';
+import { LoadingButton } from "@mui/lab";
+import CircularProgressBar from '@/common/CircularProcess/circularProgressBar';
+import SpinnerProgress from '@/common/CircularProgressComponent/spinnerComponent';
 
 // Types Import
 import { sessionType } from '@/types/sessionType';
@@ -25,6 +29,7 @@ import { moduleType } from '@/types/moduleType';
 // CSS Import
 import styles from "../../../styles/sidebar.module.css";
 import Sessions from "../../../styles/session.module.css"
+import { ToastContainer } from 'react-toastify';
 
 // API services
 import { HandleCourse } from '@/services/course';
@@ -35,9 +40,13 @@ import { HandleSessionCreate } from '@/services/session';
 export default function addSession() {
 
    const [despcriptionContent, setdespcriptionContent] = useState("");
+   const router:any = useRouter();
    const [getCourses, setCourses] = useState<courseType | any>();
+   const [getSession, setSession] = useState<sessionType | any>();
    const [getModules, setModules] = useState<moduleType | any>();
    const [file, setFile] = useState<string | any>('')
+   const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
+   const [isLoading, setLoading] = useState<boolean>(false);
 
    const {
       register,
@@ -50,24 +59,46 @@ export default function addSession() {
    });
 
    const handleContentChange = (value: string, identifier: string) => {
+     
       setdespcriptionContent(value);
       setValue(identifier, value);
 
    };
 
-   const onSubmit = (event: any) => {
-      const reqData = { ...event, 'profile_pic': file }
+    
+// console.log(errors)
+   const onSubmit = async (event: any) => {
+      const reqData = { ...event, 'attachment': file }
       const formData = new FormData()
       for (var key in reqData) {
-			formData.append(key, reqData[key]);
-		}
-
-      HandleSessionCreate(formData).then((res)=>{
-         console.log(res)
-      })
+         formData.append(key, reqData[key]);
+      }
+      setLoading(true);
+      setLoadingButton(false)
+      try {
+        const res =  await HandleSessionCreate(formData)
+        setSession(res.data)
+        const fields = [
+           "id",
+           "course_id",
+           "module_id",
+           "description",
+           "attachment",
+        ];
+        fields.forEach((field) => setValue(field, res.data[field]));
+        setLoading(false);
+  
+         // setTimeout(()=>{
+         //    router.push('/courses/allsessions/')
+         // }, 1000)
+      } catch (e) {
+         console.log(e)
+         setLoadingButton(true)
+      }
       // console.log("session submit", event);
    };
 
+   
    const getCourseData = () => {
       HandleCourse().then((courses) => {
          setCourses(courses.data)
@@ -100,18 +131,24 @@ export default function addSession() {
          </Typography>
       );
    }
-  
+  const errorFunction = () =>{
+   // return ("error")
+  }
+
    const handleChange = (e: any) => {
-		const file = e.target.files[0];
-		if (e.target.name === "attachment") {
-			const reader = new FileReader();
-			reader.onload = (e: any) => {
-				setFile(file)
-			}
-			reader.readAsDataURL(file);
-		}
-	}
-   //  console.log(file)
+      const file = e.target.files[0];
+      if (e.target.name === "attachment") {
+         const reader = new FileReader();
+         reader.onload = (e: any) => {
+            setFile(file);
+         }
+         if(file){
+         reader.readAsDataURL(file);
+         }
+      }
+   }
+ 
+   console.log(errors)
    return (
       <>
          <Navbar />
@@ -129,6 +166,7 @@ export default function addSession() {
                {/* main content */}
                <Card>
                   <CardContent>
+                  {!isLoading ?
                      <Box
                         component="form"
                         method="POST"
@@ -162,6 +200,7 @@ export default function addSession() {
                                  <Grid item xs={12} sm={12} md={6} lg={6}>
                                     <InputLabel>Course of session</InputLabel>
                                     <FormControl fullWidth>
+                                       
                                        <Select {...register("course_id")}>
                                           {getCourses?.map((course: any) => {
                                              return (<MenuItem value={course.id}>{course.title}</MenuItem>)
@@ -190,44 +229,55 @@ export default function addSession() {
 
                               <Grid item xs={12} sm={12} md={12} lg={12} mb={2}>
                                  <InputLabel>Description</InputLabel>
+                                 
                                  <RichEditor
                                     {...register("description")}
-                                    value={despcriptionContent}
+                                    value={despcriptionContent}                                   
                                     onChange={(e) =>
                                        handleContentChange(e, "description")
                                     }
                                  />
-                                 {errors && errors.description ? ErrorShowing(errors?.description?.message) : ""}
+                              
+                                 {despcriptionContent ? '' : errors && errors.description ? ErrorShowing(errors?.description?.message) : ""}
                               </Grid>
 
                               <Grid item xs={12} sm={12} md={12} lg={12} mb={2}>
                                  <InputLabel>Attachment</InputLabel>
                                  <Box className={Sessions.sessionAttachmentBox}>
                                     <InputLabel className={Sessions.subbox} >
+                                
                                        <input
                                           type="file"
-                                          {...register("attachment")}
+                                          {...register('attachment')}
                                           onChange={handleChange}
                                           hidden
                                        />
-                                       <Typography className={Sessions.sessionAttachments}> Upload</Typography></InputLabel>
+                                      
+                                       <Typography className={Sessions.sessionAttachments}>  {!file.name ? "Upload" : file.name}</Typography></InputLabel>
                                  </Box>
-                                 {errors && errors.attachment ? ErrorShowing(errors?.attachment?.message) : ""}
+                                 {errors.myFile && <span>This field is required</span>}
+                                  {/* {(getSession && getSession.attachment) ? '' : errorFunction()} */}
+                                 {errors && errors.file ? ErrorShowing(errors?.file?.message) : ""}
                               </Grid>
                               <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"right"} >
-                                 <Button type="submit" size="large" variant="contained">
+                                 {!isLoadingButton ? <Button type="submit" size="large" variant="contained">
                                     ADD NEW SESSION
-                                 </Button>
+                                 </Button> :  <LoadingButton loading={isLoadingButton} className={Sessions.updateLoadingButton}
+													size="large"  variant="contained" disabled >
+													<CircularProgressBar />
+												</LoadingButton>}
                               </Grid>
                            </Grid>
 
                         </Grid>
                      </Box>
+                     : <SpinnerProgress />}
                   </CardContent>
                </Card>
             </Box>
          </Box>
          {/* <Footer/> */}
+         <ToastContainer />
       </>
    );
 };

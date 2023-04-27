@@ -17,3 +17,6 @@
     border: 1px solid grey;
     text-align: -webkit-center;
 }
+.updateLoadingButton {
+    width: 178px;
+}

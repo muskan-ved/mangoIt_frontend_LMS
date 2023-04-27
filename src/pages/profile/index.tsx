@@ -18,6 +18,7 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import { LoadingButton } from "@mui/lab";
 
 // validation import
 import { userProfileValidations } from "@/validation_schema/profileValidation";
@@ -48,7 +49,7 @@ import styles from "../../styles/sidebar.module.css";
 import { HandleProfile } from "@/services/user";
 import { HandleUpdateProfile } from "@/services/user";
 import { BASE_URL } from "@/config/config";
-import { LoadingButton } from "@mui/lab";
+
 
 export default function Profile() {
 

@@ -9,11 +9,8 @@ export const sessionValidations = Yup.object().shape({
     Yup.string().required('Course is required field'),
     module_id:
     Yup.string().required('Module is required field'),
-    // status: 
-    // Yup.string().required('Status is a required field'), 
-    // description:
-    // Yup.string().required('description is a required field'),
-    // attachment:
-    // Yup.string().required('attachment is a required field')
-        
+    description:
+    Yup.string().required('description is a required field'),
+    file:
+    Yup.mixed().required('attachment is a required field'),
 });
