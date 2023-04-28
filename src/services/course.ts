@@ -6,8 +6,7 @@ import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css";
 import { HandleLogout } from "./auth"
 
-export const HandleCourse = async() =>{
-  
+export const HandleCourseGet = async() =>{ 
     return await axios({
       method: "GET",
       url: `${API.getAllCourses}`,

@@ -35,9 +35,20 @@ import TableRow from "@mui/material/TableRow";
 import { SearchOutlined } from "@mui/icons-material";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import { useRouter } from "next/router";
+//Extra Imports
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
+//Tpe Import
+import { sessionType } from "@/types/sessionType";
+// API Service
+import { HandleSessionGet } from "@/services/session";
+import { HandleCourseGet } from "@/services/course";
+import { HandleModuleGet } from "@/services/module";
+import { courseType } from "@/types/courseType";
+import { moduleType } from "@/types/moduleType";
 
 interface Column {
-  id: "name" | "code" | "population" | "size" | "density";
+  id: "id" | "title" | "module_id" | "course_id" | "is_deleted"| "action";
   label: string;
   minWidth?: number;
   align?: "right";
@@ -45,68 +56,27 @@ interface Column {
 }
 
 const columns: Column[] = [
-  { id: "name", label: "Name", minWidth: 170 },
-  { id: "code", label: "ISO\u00a0Code", minWidth: 100 },
-  {
-    id: "population",
-    label: "Population",
-    minWidth: 170,
-    align: "right",
-    format: (value: number) => value.toLocaleString("en-US"),
-  },
-  {
-    id: "size",
-    label: "Size\u00a0(km\u00b2)",
-    minWidth: 170,
-    align: "right",
-    format: (value: number) => value.toLocaleString("en-US"),
-  },
-  {
-    id: "density",
-    label: "Density",
-    minWidth: 170,
-    align: "right",
-    format: (value: number) => value.toFixed(2),
-  },
-];
+  { id: "id", label: "ID",},
+  { id: "title", label: "SESSION NAME", minWidth: 170 },
+  { id: "module_id", label: "MODULE NAME", minWidth: 100 },
+  { id: "course_id", label: "COURSE NAME", minWidth: 100 },
+  { id: "is_deleted", label: "STATUS", minWidth: 100 },
+  { id: "action", label: "ACTION", minWidth: 100 },
+  // {
+  //   id: "population",
+  //   label: "Population",
+  //   minWidth: 170,
+  //   align: "right",
+  //   format: (value: number) => value.toLocaleString("en-US"),
+  // },
 
-interface Data {
-  name: string;
-  code: string;
-  population: number;
-  size: number;
-  density: number;
-}
-
-function createData(
-  name: string,
-  code: string,
-  population: number,
-  size: number
-): Data {
-  const density = population / size;
-  return { name, code, population, size, density };
-}
-
-const rows = [
-  createData("India", "IN", 1324171354, 3287263),
-  createData("China", "CN", 1403500365, 9596961),
-  createData("Italy", "IT", 60483973, 301340),
-  createData("United States", "US", 327167434, 9833520),
-  createData("Canada", "CA", 37602103, 9984670),
-  createData("Australia", "AU", 25475400, 7692024),
-  createData("Germany", "DE", 83019200, 357578),
-  createData("Ireland", "IE", 4857000, 70273),
-  createData("Mexico", "MX", 126577691, 1972550),
-  createData("Japan", "JP", 126317000, 377973),
-  createData("France", "FR", 67022000, 640679),
-  createData("United Kingdom", "GB", 67545757, 242495),
-  createData("Russia", "RU", 146793744, 17098246),
-  createData("Nigeria", "NG", 200962417, 923768),
-  createData("Brazil", "BR", 210147125, 8515767),
 ];
 
 const AllSession = () => {
+
+  const [getCourse, setCourse] = React.useState<courseType | any>([]);
+  const [getModule, setModule] = React.useState<moduleType | any>([]);
+  const [rows, setRows] = React.useState<sessionType | any>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -126,6 +96,34 @@ const AllSession = () => {
     console.log("first");
   };
 
+  const getSessionData = () =>{
+    HandleSessionGet().then((sessions) =>{
+      setRows(sessions.data);
+    })
+  }
+
+  // const getCourseData = () =>{
+  //   HandleCourseGet().then((course)=>{
+  //     setCourse(course.data);
+  //   })
+  // }
+
+  // const getModuleData = () =>{
+  //   HandleModuleGet().then((module)=>{
+  //     setModule(module.data)
+  //   })
+  // }
+  // const chanegModuleIdToName = (moduleId:any) =>{
+  
+  // }
+
+  React.useEffect(() =>{
+    getSessionData();
+    // getCourseData();
+    // getModuleData();
+    },[]);
+
+    console.log("resultttttt", getModule)
   return (
     <>
       <Navbar />
@@ -345,31 +343,26 @@ const AllSession = () => {
                     </TableHead>
                     <TableBody>
                       {rows
-                        .slice(
+                       .slice(
                           page * rowsPerPage,
                           page * rowsPerPage + rowsPerPage
                         )
-                        .map((row) => {
+                        .map((row:any) => {
+
+                          const statusColor = (row.status === "active" ? "green" :row.status === "inactive" ? "blue" : "red")
                           return (
                             <TableRow
                               hover
                               role="checkbox"
                               tabIndex={-1}
-                              key={row.code}
+                              key={row.id}
                             >
-                              {columns.map((column) => {
-                                const value = row[column.id];
-                                return (
-                                  <TableCell
-                                    key={column.id}
-                                    align={column.align}
-                                  >
-                                    {column.format && typeof value === "number"
-                                      ? column.format(value)
-                                      : value}
-                                  </TableCell>
-                                );
-                              })}
+                            <TableCell>{row.id}</TableCell>
+                            <TableCell>{row.title}</TableCell>
+                            <TableCell>{row.module_id}</TableCell>
+                            <TableCell>{row.course_id}</TableCell>
+                            <TableCell sx={{color:statusColor}}>{row.status}</TableCell>
+                            <TableCell><Button variant="outlined" color="success"><ModeEditOutlineIcon /></Button><Button variant="outlined" color="error"><DeleteOutlineIcon /></Button></TableCell>
                             </TableRow>
                           );
                         })}
@@ -377,15 +370,15 @@ const AllSession = () => {
                   </Table>
                 </TableContainer>
               </Paper>
-              <TablePagination
+              {/* <TablePagination
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
-                count={rows.length}
+                // count={rows.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
-              />
+              /> */}
             </CardContent>
           </Card>
         </Box>

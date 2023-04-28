@@ -17,5 +17,7 @@ export const API = {
 
  getAllCourses: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_ALL_COURSES}`,
  getAllModules: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_ALL_MODULES}`,
+ getAllSessions: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_ALL_SESSIONS}`,
  createSession: `${BASE_URL}/${process.env.NEXT_PUBLIC_CREATE_SESSION}`,
+
 };
