@@ -38,10 +38,10 @@ import { HandleSessionCreate } from '@/services/session';
 import { capitalizeFirstLetter } from '@/common/CapitalFirstLetter/capitalizeFirstLetter';
 
 
-export default function addSession() {
+export default function AddSession() {
 
-   const [despcriptionContent, setdespcriptionContent] = useState("");
    const router: any = useRouter();
+   const [despcriptionContent, setdespcriptionContent] = useState("");
    const [getCourses, setCourses] = useState<courseType | any>();
    const [getSession, setSession] = useState<sessionType | any>();
    const [getModules, setModules] = useState<moduleType | any>();
