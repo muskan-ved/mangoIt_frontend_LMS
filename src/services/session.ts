@@ -42,3 +42,22 @@ export const HandleSessionCreate = async(reqData:any) =>{
       })
   }
 
+  export const HandleSessionBySearch = async(reqData:any) =>{
+// console.log("daaataaaa",reqData)
+    return await axios({
+      method: "GET",
+      url: `${API.getSessionBySearch}`,
+      headers: LoginHeader(),
+      data:reqData  
+    }).then((request) => {
+        return request;
+      }).catch((error) => {
+        if(error.response.status === 401){
+          HandleLogout()
+        }else{
+          toast.error("Something went wrong")
+        }
+        return error;
+      })
+  }
+

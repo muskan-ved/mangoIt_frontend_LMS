@@ -11,8 +11,6 @@ import {
   IconButton,
   InputLabel,
   MenuItem,
-  OutlinedInput,
-  Pagination,
   Popover,
   Select,
   Stack,
@@ -41,14 +39,13 @@ import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 //Tpe Import
 import { sessionType } from "@/types/sessionType";
 // API Service
-import { HandleSessionGet } from "@/services/session";
-import { HandleCourseGet } from "@/services/course";
-import { HandleModuleGet } from "@/services/module";
+import { HandleSessionBySearch, HandleSessionGet } from "@/services/session";
 import { courseType } from "@/types/courseType";
 import { moduleType } from "@/types/moduleType";
+import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
 
 interface Column {
-  id: "id" | "title" | "module_id" | "course_id" | "is_deleted"| "action";
+  id: "id" | "title" | "module_id" | "course_id" | "is_deleted" | "action";
   label: string;
   minWidth?: number;
   align?: "right";
@@ -56,19 +53,12 @@ interface Column {
 }
 
 const columns: Column[] = [
-  { id: "id", label: "ID",},
+  { id: "id", label: "ID", },
   { id: "title", label: "SESSION NAME", minWidth: 170 },
   { id: "module_id", label: "MODULE NAME", minWidth: 100 },
   { id: "course_id", label: "COURSE NAME", minWidth: 100 },
   { id: "is_deleted", label: "STATUS", minWidth: 100 },
   { id: "action", label: "ACTION", minWidth: 100 },
-  // {
-  //   id: "population",
-  //   label: "Population",
-  //   minWidth: 170,
-  //   align: "right",
-  //   format: (value: number) => value.toLocaleString("en-US"),
-  // },
 
 ];
 
@@ -92,38 +82,27 @@ const AllSession = () => {
     setPage(0);
   };
 
-  const handleFilterChange = () => {
-    console.log("first");
-  };
 
-  const getSessionData = () =>{
-    HandleSessionGet().then((sessions) =>{
+  const handleSearch = (e: any) => {
+    // console.log(e.nativeEvent.data)
+    const search = e.nativeEvent.data;
+    HandleSessionBySearch(search).then((iteamSeached)=>{
+      console.log(iteamSeached)
+    })
+  }
+
+  const getSessionData = () => {
+    HandleSessionGet().then((sessions) => {
       setRows(sessions.data);
     })
   }
 
-  // const getCourseData = () =>{
-  //   HandleCourseGet().then((course)=>{
-  //     setCourse(course.data);
-  //   })
-  // }
 
-  // const getModuleData = () =>{
-  //   HandleModuleGet().then((module)=>{
-  //     setModule(module.data)
-  //   })
-  // }
-  // const chanegModuleIdToName = (moduleId:any) =>{
-  
-  // }
-
-  React.useEffect(() =>{
+  React.useEffect(() => {
     getSessionData();
-    // getCourseData();
-    // getModuleData();
-    },[]);
+  }, []);
 
-    console.log("resultttttt", getModule)
+
   return (
     <>
       <Navbar />
@@ -146,6 +125,8 @@ const AllSession = () => {
                 id="standard-bare"
                 variant="outlined"
                 placeholder="Search"
+               
+                onChange={(e) => handleSearch(e)}
                 InputProps={{
                   endAdornment: (
                     <IconButton>
@@ -233,7 +214,7 @@ const AllSession = () => {
                                       </Stack>
                                     </Grid>
 
-                                   <Grid item xs={12} md={6} lg={6} >
+                                    <Grid item xs={12} md={6} lg={6} >
                                       <Stack spacing={2}>
                                         <InputLabel htmlFor="name" sx={{ fontWeight: 'bold' }}>
                                           Course
@@ -343,13 +324,13 @@ const AllSession = () => {
                     </TableHead>
                     <TableBody>
                       {rows
-                       .slice(
+                        .slice(
                           page * rowsPerPage,
                           page * rowsPerPage + rowsPerPage
                         )
-                        .map((row:any) => {
+                        .map((row: any) => {
 
-                          const statusColor = (row.status === "active" ? "green" :row.status === "inactive" ? "blue" : "red")
+                          const statusColor = (row.status === "active" ? "green" : row.status === "inactive" ? "red" : "orange")
                           return (
                             <TableRow
                               hover
@@ -357,12 +338,12 @@ const AllSession = () => {
                               tabIndex={-1}
                               key={row.id}
                             >
-                            <TableCell>{row.id}</TableCell>
-                            <TableCell>{row.title}</TableCell>
-                            <TableCell>{row.module_id}</TableCell>
-                            <TableCell>{row.course_id}</TableCell>
-                            <TableCell sx={{color:statusColor}}>{row.status}</TableCell>
-                            <TableCell><Button variant="outlined" color="success"><ModeEditOutlineIcon /></Button><Button variant="outlined" color="error"><DeleteOutlineIcon /></Button></TableCell>
+                              <TableCell>{row.id}</TableCell>
+                              <TableCell>{capitalizeFirstLetter(row.title)}</TableCell>
+                              <TableCell>{capitalizeFirstLetter(row.module && row.module.title)}</TableCell>
+                              <TableCell>{capitalizeFirstLetter(row.course && row.course.title)}</TableCell>
+                              <TableCell sx={{ color: statusColor }}>{capitalizeFirstLetter(row.status)}</TableCell>
+                              <TableCell><Button variant="outlined" color="success"><ModeEditOutlineIcon /></Button><Button variant="outlined" color="error"><DeleteOutlineIcon /></Button></TableCell>
                             </TableRow>
                           );
                         })}
@@ -370,15 +351,16 @@ const AllSession = () => {
                   </Table>
                 </TableContainer>
               </Paper>
-              {/* <TablePagination
+              <TablePagination
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
-                // count={rows.length}
+                count={rows.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
-              /> */}
+              />
+
             </CardContent>
           </Card>
         </Box>
