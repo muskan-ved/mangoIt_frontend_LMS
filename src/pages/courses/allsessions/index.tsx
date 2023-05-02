@@ -11,8 +11,6 @@ import {
   IconButton,
   InputLabel,
   MenuItem,
-  OutlinedInput,
-  Pagination,
   Popover,
   Select,
   Stack,
@@ -35,9 +33,19 @@ import TableRow from "@mui/material/TableRow";
 import { SearchOutlined } from "@mui/icons-material";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import { useRouter } from "next/router";
+//Extra Imports
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
+//Tpe Import
+import { sessionType } from "@/types/sessionType";
+// API Service
+import { HandleSessionBySearch, HandleSessionGet } from "@/services/session";
+import { courseType } from "@/types/courseType";
+import { moduleType } from "@/types/moduleType";
+import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
 
 interface Column {
-  id: "name" | "code" | "population" | "size" | "density";
+  id: "id" | "title" | "module_id" | "course_id" | "is_deleted" | "action";
   label: string;
   minWidth?: number;
   align?: "right";
@@ -45,68 +53,20 @@ interface Column {
 }
 
 const columns: Column[] = [
-  { id: "name", label: "Name", minWidth: 170 },
-  { id: "code", label: "ISO\u00a0Code", minWidth: 100 },
-  {
-    id: "population",
-    label: "Population",
-    minWidth: 170,
-    align: "right",
-    format: (value: number) => value.toLocaleString("en-US"),
-  },
-  {
-    id: "size",
-    label: "Size\u00a0(km\u00b2)",
-    minWidth: 170,
-    align: "right",
-    format: (value: number) => value.toLocaleString("en-US"),
-  },
-  {
-    id: "density",
-    label: "Density",
-    minWidth: 170,
-    align: "right",
-    format: (value: number) => value.toFixed(2),
-  },
-];
+  { id: "id", label: "ID", },
+  { id: "title", label: "SESSION NAME", minWidth: 170 },
+  { id: "module_id", label: "MODULE NAME", minWidth: 100 },
+  { id: "course_id", label: "COURSE NAME", minWidth: 100 },
+  { id: "is_deleted", label: "STATUS", minWidth: 100 },
+  { id: "action", label: "ACTION", minWidth: 100 },
 
-interface Data {
-  name: string;
-  code: string;
-  population: number;
-  size: number;
-  density: number;
-}
-
-function createData(
-  name: string,
-  code: string,
-  population: number,
-  size: number
-): Data {
-  const density = population / size;
-  return { name, code, population, size, density };
-}
-
-const rows = [
-  createData("India", "IN", 1324171354, 3287263),
-  createData("China", "CN", 1403500365, 9596961),
-  createData("Italy", "IT", 60483973, 301340),
-  createData("United States", "US", 327167434, 9833520),
-  createData("Canada", "CA", 37602103, 9984670),
-  createData("Australia", "AU", 25475400, 7692024),
-  createData("Germany", "DE", 83019200, 357578),
-  createData("Ireland", "IE", 4857000, 70273),
-  createData("Mexico", "MX", 126577691, 1972550),
-  createData("Japan", "JP", 126317000, 377973),
-  createData("France", "FR", 67022000, 640679),
-  createData("United Kingdom", "GB", 67545757, 242495),
-  createData("Russia", "RU", 146793744, 17098246),
-  createData("Nigeria", "NG", 200962417, 923768),
-  createData("Brazil", "BR", 210147125, 8515767),
 ];
 
 const AllSession = () => {
+
+  const [getCourse, setCourse] = React.useState<courseType | any>([]);
+  const [getModule, setModule] = React.useState<moduleType | any>([]);
+  const [rows, setRows] = React.useState<sessionType | any>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -122,9 +82,26 @@ const AllSession = () => {
     setPage(0);
   };
 
-  const handleFilterChange = () => {
-    console.log("first");
-  };
+
+  const handleSearch = (e: any) => {
+    // console.log(e.nativeEvent.data)
+    const search = e.nativeEvent.data;
+    HandleSessionBySearch(search).then((iteamSeached)=>{
+      console.log(iteamSeached)
+    })
+  }
+
+  const getSessionData = () => {
+    HandleSessionGet().then((sessions) => {
+      setRows(sessions.data);
+    })
+  }
+
+
+  React.useEffect(() => {
+    getSessionData();
+  }, []);
+
 
   return (
     <>
@@ -148,6 +125,8 @@ const AllSession = () => {
                 id="standard-bare"
                 variant="outlined"
                 placeholder="Search"
+               
+                onChange={(e) => handleSearch(e)}
                 InputProps={{
                   endAdornment: (
                     <IconButton>
@@ -204,7 +183,7 @@ const AllSession = () => {
                                     <Grid item xs={12} md={6} lg={6} >
                                       <Stack spacing={2}>
                                         <InputLabel htmlFor="name" sx={{ fontWeight: 'bold' }}>
-                                          Type
+                                          Module
                                         </InputLabel>
                                         <FormControl fullWidth>
                                           <Select
@@ -234,6 +213,41 @@ const AllSession = () => {
                                         </FormControl>
                                       </Stack>
                                     </Grid>
+
+                                    <Grid item xs={12} md={6} lg={6} >
+                                      <Stack spacing={2}>
+                                        <InputLabel htmlFor="name" sx={{ fontWeight: 'bold' }}>
+                                          Course
+                                        </InputLabel>
+                                        <FormControl fullWidth>
+                                          <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            onChange={
+                                              (e: any) => null
+                                              // setCustType(e.target.value)
+                                            }
+                                          // value={custType}
+                                          >
+                                            <MenuItem value={0}>All</MenuItem>
+                                            {/* {custtype &&
+                                                  custtype.map(
+                                                    (data: any, key: any) => {
+                                                      return (
+                                                        <MenuItem
+                                                          key={key}
+                                                          value={data.id}
+                                                        >
+                                                          {data.name}
+                                                        </MenuItem>
+                                                      );
+                                                    }
+                                                  )} */}
+                                          </Select>
+                                        </FormControl>
+                                      </Stack>
+                                    </Grid>
+
                                     <Grid item xs={12} md={6} lg={6}>
                                       <Stack spacing={2}>
                                         <InputLabel htmlFor="enddate" sx={{ fontWeight: 'bold' }}>
@@ -314,27 +328,22 @@ const AllSession = () => {
                           page * rowsPerPage,
                           page * rowsPerPage + rowsPerPage
                         )
-                        .map((row) => {
+                        .map((row: any) => {
+
+                          const statusColor = (row.status === "active" ? "green" : row.status === "inactive" ? "red" : "orange")
                           return (
                             <TableRow
                               hover
                               role="checkbox"
                               tabIndex={-1}
-                              key={row.code}
+                              key={row.id}
                             >
-                              {columns.map((column) => {
-                                const value = row[column.id];
-                                return (
-                                  <TableCell
-                                    key={column.id}
-                                    align={column.align}
-                                  >
-                                    {column.format && typeof value === "number"
-                                      ? column.format(value)
-                                      : value}
-                                  </TableCell>
-                                );
-                              })}
+                              <TableCell>{row.id}</TableCell>
+                              <TableCell>{capitalizeFirstLetter(row.title)}</TableCell>
+                              <TableCell>{capitalizeFirstLetter(row.module && row.module.title)}</TableCell>
+                              <TableCell>{capitalizeFirstLetter(row.course && row.course.title)}</TableCell>
+                              <TableCell sx={{ color: statusColor }}>{capitalizeFirstLetter(row.status)}</TableCell>
+                              <TableCell><Button variant="outlined" color="success"><ModeEditOutlineIcon /></Button><Button variant="outlined" color="error"><DeleteOutlineIcon /></Button></TableCell>
                             </TableRow>
                           );
                         })}
@@ -351,6 +360,7 @@ const AllSession = () => {
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
               />
+
             </CardContent>
           </Card>
         </Box>
