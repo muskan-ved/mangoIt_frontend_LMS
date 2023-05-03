@@ -1,8 +1,8 @@
 //client work
-export const BASE_URL = "https://api-mangoit-lms.mangoitsol.com";
+// export const BASE_URL = "https://api-mangoit-lms.mangoitsol.com";
 
 // local server
-// export const BASE_URL = "http://localhost:6030";
+export const BASE_URL = "http://localhost:6030";
 
 export const API = {
 

@@ -1,4 +1,4 @@
-// ***** React Import
+// React Import
 import { useState, useEffect } from "react";
 
 // MUI Import

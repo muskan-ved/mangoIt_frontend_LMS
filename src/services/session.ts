@@ -25,10 +25,11 @@ export const HandleSessionCreate = async(reqData:any) =>{
       })
   }
 
-  export const HandleSessionGet = async() =>{
+  export const HandleSessionGetData = async(searchData:any) =>{
+    // console.log("sercDaTa",searchData)
     return await axios({
-      method: "GET",
-      url: `${API.getAllSessions}`,
+      method: "POST",
+      url: `${API.getAllSessions}/${searchData}`,
       headers: LoginHeader(),
     }).then((request) => {
         return request;
@@ -42,13 +43,13 @@ export const HandleSessionCreate = async(reqData:any) =>{
       })
   }
 
-  export const HandleSessionBySearch = async(reqData:any) =>{
-// console.log("daaataaaa",reqData)
+  export const HandleSessionGetFilterData = async(searchData:any) =>{
+    console.log("sercDaTa",searchData)
     return await axios({
-      method: "GET",
-      url: `${API.getSessionBySearch}`,
+      method: "POST",
+      url: `${API.getAllSessions}`,
       headers: LoginHeader(),
-      data:reqData  
+      data: searchData,
     }).then((request) => {
         return request;
       }).catch((error) => {
@@ -60,4 +61,5 @@ export const HandleSessionCreate = async(reqData:any) =>{
         return error;
       })
   }
+
 
