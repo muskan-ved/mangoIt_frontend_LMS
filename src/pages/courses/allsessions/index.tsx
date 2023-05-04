@@ -31,6 +31,8 @@ import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
+import ArrowDownwardOutlinedIcon from '@mui/icons-material/ArrowDownwardOutlined';
+import ArrowUpwardOutlinedIcon from '@mui/icons-material/ArrowUpwardOutlined';
 // External Components
 import Navbar from "@/common/LayoutNavigations/navbar";
 import SideBar from "@/common/LayoutNavigations/sideBar";
@@ -46,7 +48,10 @@ import { Controller, useForm } from "react-hook-form";
 // CSS Import
 import styles from "../../../styles/sidebar.module.css";
 // API Service
-import { HandleSessionGetData, HandleSessionGetFilterData } from "@/services/session";
+import { HandleSessionGet } from "@/services/session";
+import { HandleCourseGet } from "@/services/course";
+import { HandleModuleGet } from "@/services/module";
+import { handleSortData } from "@/common/Sorting/sorting";
 
 interface Column {
   id: "id" | "title" | "module_id" | "course_id" | "is_deleted" | "action";
@@ -73,6 +78,7 @@ const AllSession = () => {
   const [rows, setRows] = React.useState<sessionType | any>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [sortDirection, setSortDirection] = React.useState("asc");
 
   const router = useRouter()
 
@@ -98,44 +104,57 @@ const AllSession = () => {
 
   const onSubmit = (event: any) => {
     // console.log("evveeen", event)
-    const reqData: any = {
+    const filterData: any = {
       module_id: event.module,
       course_id: event.course,
       status: event.status,
-
     }
-    // console.log("evveeen", reqData)
-
-    HandleSessionGetFilterData(reqData).then((itemFiltered) => {
-      // console.log("dataFilter", itemFiltered)
+    HandleSessionGet('', filterData).then((itemFiltered) => {
+      // console.log("dataFilter", itemFiltered.data.length)
       setRows(itemFiltered.data)
-
     })
 
   }
 
-
+  const handleSort = (rowsData: any) => {
+    const sortData = handleSortData(rowsData, sortDirection)
+    setRows(sortData)
+  }
 
   const handleSearch = (e: any) => {
     const search = e.target.value;
-    HandleSessionGetData(search).then((itemSeached) => {
+    HandleSessionGet(search, '').then((itemSeached) => {
       // console.log("ddddaata",itemSeached.data.length)
       setRows(itemSeached.data);
     })
   }
 
   const getSessionData = () => {
-    HandleSessionGetData('').then((sessions) => {
+    HandleSessionGet('', '').then((sessions) => {
       setRows(sessions.data);
+      // console.log(sessions.data)
     })
   }
 
+  const getModuleData = () => {
+    HandleModuleGet().then((moduleSearched) => {
+      setModule(moduleSearched.data)
+    })
+  }
+
+  const getCourseData = () => {
+    HandleCourseGet().then((courseSearched) => {
+      setCourse(courseSearched.data)
+    })
+  }
 
   React.useEffect(() => {
     getSessionData();
+    getModuleData();
+    getCourseData();
   }, []);
 
-  // console.log("rowww", rows)
+  // console.log("rowww", sortDirection)
   return (
     <>
       <Navbar />
@@ -158,7 +177,6 @@ const AllSession = () => {
                 id="standard-bare"
                 variant="outlined"
                 placeholder="Search"
-
                 onChange={(e) => handleSearch(e)}
                 InputProps={{
                   endAdornment: (
@@ -194,7 +212,7 @@ const AllSession = () => {
                           vertical: "top",
                           horizontal: "center",
                         }}
-                       
+
                       >
                         <Box>
                           <Container
@@ -207,7 +225,7 @@ const AllSession = () => {
                               </Typography>
                               <Box component="form"
                                 noValidate
-                            
+
                                 onSubmit={handleSubmit(onSubmit)}
                                 sx={{ mt: 1 }}>
                                 <Stack
@@ -227,11 +245,11 @@ const AllSession = () => {
                                           render={({ field }) => (
                                             <FormControl fullWidth>
                                               <Select {...field} displayEmpty>
-                                              <MenuItem value={0}>
+                                                <MenuItem value={0}>
                                                   All module
                                                 </MenuItem>
-                                                {rows?.map((data: any) => {                                      
-                                                  return (<MenuItem key={data.id} value={data.module.id}>{capitalizeFirstLetter(data?.module.title)}</MenuItem>)
+                                                {getModule?.map((data: any) => {
+                                                  return (<MenuItem key={data.id} value={data.id}>{capitalizeFirstLetter(data?.title)}</MenuItem>)
                                                 })}
                                               </Select>
                                             </FormControl>
@@ -255,8 +273,8 @@ const AllSession = () => {
                                                 <MenuItem value={0}>
                                                   All course
                                                 </MenuItem>
-                                                {rows?.map((data: any) => {
-                                                  return (<MenuItem key={data.id} value={data.course.id}>{capitalizeFirstLetter(data?.course.title)}</MenuItem>)
+                                                {getCourse?.map((data: any) => {
+                                                  return (<MenuItem key={data.id} value={data.id}>{capitalizeFirstLetter(data?.title)}</MenuItem>)
                                                 })}
                                               </Select>
                                             </FormControl>
@@ -302,9 +320,8 @@ const AllSession = () => {
                                         variant="contained"
                                         color="primary"
                                         sx={{ float: 'right' }}
-                                        // onReset={reset}
                                         onClick={popupState.close}
-                                        
+
                                       >
                                         Apply Filter
 
@@ -329,25 +346,31 @@ const AllSession = () => {
                     <TableHead>
                       <TableRow>
                         {columns.map((column) => (
+
                           <TableCell
+
                             key={column.id}
                             align={column.align}
                             style={{ top: 0, minWidth: column.minWidth }}
-
+                            onClick={() => {
+                              column.label === 'ID' ?
+                                handleSort(rows) :
+                                ''
+                            }}
                           >
-                            {column.label}
+
+                            {column.label === 'ID' ? <Typography>ID <ArrowDownwardOutlinedIcon fontSize="small" /> </Typography> : column.label}
                           </TableCell>
                         ))}
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {rows
+                      {rows?.length > 0 ? rows
                         .slice(
                           page * rowsPerPage,
                           page * rowsPerPage + rowsPerPage
                         )
                         .map((row: any) => {
-
                           const statusColor = (row.status === "active" ? "green" : row.status === "inactive" ? "red" : "orange")
                           return (
                             <TableRow
@@ -362,9 +385,11 @@ const AllSession = () => {
                               <TableCell>{capitalizeFirstLetter(row.course && row.course.title)}</TableCell>
                               <TableCell sx={{ color: statusColor }}>{capitalizeFirstLetter(row.status)}</TableCell>
                               <TableCell><Button variant="outlined" color="success"><ModeEditOutlineIcon /></Button><Button variant="outlined" color="error"><DeleteOutlineIcon /></Button></TableCell>
+
                             </TableRow>
                           );
-                        })}
+                        }) : <TableRow><TableCell>Record not Found</TableCell></TableRow>}
+
                     </TableBody>
                   </Table>
                 </TableContainer>
