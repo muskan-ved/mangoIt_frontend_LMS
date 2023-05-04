@@ -25,11 +25,14 @@ export const HandleSessionCreate = async(reqData:any) =>{
       })
   }
 
-  export const HandleSessionGet = async() =>{
+  export const HandleSessionGet = async(searchData:any,filterData:any) =>{
+    // console.log("sercDaTa",searchData)
+    const API_URL = searchData ? `${API.getAllSessions}/${searchData}` : `${API.getAllSessions}`
     return await axios({
-      method: "GET",
-      url: `${API.getAllSessions}`,
+      method: "POST",
+      url: API_URL,
       headers: LoginHeader(),
+      data: filterData,
     }).then((request) => {
         return request;
       }).catch((error) => {
@@ -42,22 +45,23 @@ export const HandleSessionCreate = async(reqData:any) =>{
       })
   }
 
-  export const HandleSessionBySearch = async(reqData:any) =>{
-// console.log("daaataaaa",reqData)
-    return await axios({
-      method: "GET",
-      url: `${API.getSessionBySearch}`,
-      headers: LoginHeader(),
-      data:reqData  
-    }).then((request) => {
-        return request;
-      }).catch((error) => {
-        if(error.response.status === 401){
-          HandleLogout()
-        }else{
-          toast.error("Something went wrong")
-        }
-        return error;
-      })
-  }
+  // export const HandleSessionGetFilterData = async(searchData:any) =>{
+  //   console.log("sercDaTa",searchData)
+  //   return await axios({
+  //     method: "POST",
+  //     url: `${API.getAllSessions}`,
+  //     headers: LoginHeader(),
+  //     data: searchData,
+  //   }).then((request) => {
+  //       return request;
+  //     }).catch((error) => {
+  //       if(error.response.status === 401){
+  //         HandleLogout()
+  //       }else{
+  //         toast.error("Something went wrong")
+  //       }
+  //       return error;
+  //     })
+  // }
+
 

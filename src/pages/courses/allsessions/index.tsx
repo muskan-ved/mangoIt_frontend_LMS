@@ -1,5 +1,6 @@
-import Navbar from "@/common/LayoutNavigations/navbar";
-import SideBar from "@/common/LayoutNavigations/sideBar";
+// React Import
+import * as React from "react";
+// MUI Import
 import {
   Box,
   Button,
@@ -17,11 +18,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import styles from "../../../styles/sidebar.module.css";
-import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
-import Footer from "@/common/LayoutNavigations/footer";
-import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
-import * as React from "react";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -32,17 +28,30 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { SearchOutlined } from "@mui/icons-material";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
-import { useRouter } from "next/router";
-//Extra Imports
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
-//Tpe Import
+import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
+import ArrowDownwardOutlinedIcon from '@mui/icons-material/ArrowDownwardOutlined';
+import ArrowUpwardOutlinedIcon from '@mui/icons-material/ArrowUpwardOutlined';
+// External Components
+import Navbar from "@/common/LayoutNavigations/navbar";
+import SideBar from "@/common/LayoutNavigations/sideBar";
+import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
+import Footer from "@/common/LayoutNavigations/footer";
+import { useRouter } from "next/router";
+import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
+//Type Import
 import { sessionType } from "@/types/sessionType";
-// API Service
-import { HandleSessionBySearch, HandleSessionGet } from "@/services/session";
 import { courseType } from "@/types/courseType";
 import { moduleType } from "@/types/moduleType";
-import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
+import { Controller, useForm } from "react-hook-form";
+// CSS Import
+import styles from "../../../styles/sidebar.module.css";
+// API Service
+import { HandleSessionGet } from "@/services/session";
+import { HandleCourseGet } from "@/services/course";
+import { HandleModuleGet } from "@/services/module";
+import { handleSortData } from "@/common/Sorting/sorting";
 
 interface Column {
   id: "id" | "title" | "module_id" | "course_id" | "is_deleted" | "action";
@@ -68,9 +77,11 @@ const AllSession = () => {
   const [getModule, setModule] = React.useState<moduleType | any>([]);
   const [rows, setRows] = React.useState<sessionType | any>([]);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [sortDirection, setSortDirection] = React.useState("asc");
 
   const router = useRouter()
+
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -82,27 +93,68 @@ const AllSession = () => {
     setPage(0);
   };
 
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    control,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (event: any) => {
+    // console.log("evveeen", event)
+    const filterData: any = {
+      module_id: event.module,
+      course_id: event.course,
+      status: event.status,
+    }
+    HandleSessionGet('', filterData).then((itemFiltered) => {
+      // console.log("dataFilter", itemFiltered.data.length)
+      setRows(itemFiltered.data)
+    })
+
+  }
+
+  const handleSort = (rowsData: any) => {
+    const sortData = handleSortData(rowsData, sortDirection)
+    setRows(sortData)
+  }
 
   const handleSearch = (e: any) => {
-    // console.log(e.nativeEvent.data)
-    const search = e.nativeEvent.data;
-    HandleSessionBySearch(search).then((iteamSeached)=>{
-      console.log(iteamSeached)
+    const search = e.target.value;
+    HandleSessionGet(search, '').then((itemSeached) => {
+      // console.log("ddddaata",itemSeached.data.length)
+      setRows(itemSeached.data);
     })
   }
 
   const getSessionData = () => {
-    HandleSessionGet().then((sessions) => {
+    HandleSessionGet('', '').then((sessions) => {
       setRows(sessions.data);
+      // console.log(sessions.data)
     })
   }
 
+  const getModuleData = () => {
+    HandleModuleGet().then((moduleSearched) => {
+      setModule(moduleSearched.data)
+    })
+  }
+
+  const getCourseData = () => {
+    HandleCourseGet().then((courseSearched) => {
+      setCourse(courseSearched.data)
+    })
+  }
 
   React.useEffect(() => {
     getSessionData();
+    getModuleData();
+    getCourseData();
   }, []);
 
-
+  // console.log("rowww", sortDirection)
   return (
     <>
       <Navbar />
@@ -125,7 +177,6 @@ const AllSession = () => {
                 id="standard-bare"
                 variant="outlined"
                 placeholder="Search"
-               
                 onChange={(e) => handleSearch(e)}
                 InputProps={{
                   endAdornment: (
@@ -161,6 +212,7 @@ const AllSession = () => {
                           vertical: "top",
                           horizontal: "center",
                         }}
+
                       >
                         <Box>
                           <Container
@@ -173,7 +225,8 @@ const AllSession = () => {
                               </Typography>
                               <Box component="form"
                                 noValidate
-                                //   onSubmit={handleSubmit(onSubmit)}
+
+                                onSubmit={handleSubmit(onSubmit)}
                                 sx={{ mt: 1 }}>
                                 <Stack
                                   style={{ marginTop: "10px" }}
@@ -185,32 +238,23 @@ const AllSession = () => {
                                         <InputLabel htmlFor="name" sx={{ fontWeight: 'bold' }}>
                                           Module
                                         </InputLabel>
-                                        <FormControl fullWidth>
-                                          <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            onChange={
-                                              (e: any) => null
-                                              // setCustType(e.target.value)
-                                            }
-                                          // value={custType}
-                                          >
-                                            <MenuItem value={0}>All</MenuItem>
-                                            {/* {custtype &&
-                                                  custtype.map(
-                                                    (data: any, key: any) => {
-                                                      return (
-                                                        <MenuItem
-                                                          key={key}
-                                                          value={data.id}
-                                                        >
-                                                          {data.name}
-                                                        </MenuItem>
-                                                      );
-                                                    }
-                                                  )} */}
-                                          </Select>
-                                        </FormControl>
+                                        <Controller
+                                          name="module"
+                                          control={control}
+                                          defaultValue=""
+                                          render={({ field }) => (
+                                            <FormControl fullWidth>
+                                              <Select {...field} displayEmpty>
+                                                <MenuItem value={0}>
+                                                  All module
+                                                </MenuItem>
+                                                {getModule?.map((data: any) => {
+                                                  return (<MenuItem key={data.id} value={data.id}>{capitalizeFirstLetter(data?.title)}</MenuItem>)
+                                                })}
+                                              </Select>
+                                            </FormControl>
+                                          )}
+                                        />
                                       </Stack>
                                     </Grid>
 
@@ -219,32 +263,23 @@ const AllSession = () => {
                                         <InputLabel htmlFor="name" sx={{ fontWeight: 'bold' }}>
                                           Course
                                         </InputLabel>
-                                        <FormControl fullWidth>
-                                          <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            onChange={
-                                              (e: any) => null
-                                              // setCustType(e.target.value)
-                                            }
-                                          // value={custType}
-                                          >
-                                            <MenuItem value={0}>All</MenuItem>
-                                            {/* {custtype &&
-                                                  custtype.map(
-                                                    (data: any, key: any) => {
-                                                      return (
-                                                        <MenuItem
-                                                          key={key}
-                                                          value={data.id}
-                                                        >
-                                                          {data.name}
-                                                        </MenuItem>
-                                                      );
-                                                    }
-                                                  )} */}
-                                          </Select>
-                                        </FormControl>
+                                        <Controller
+                                          name="course"
+                                          control={control}
+                                          defaultValue=""
+                                          render={({ field }) => (
+                                            <FormControl fullWidth>
+                                              <Select {...field} displayEmpty>
+                                                <MenuItem value={0}>
+                                                  All course
+                                                </MenuItem>
+                                                {getCourse?.map((data: any) => {
+                                                  return (<MenuItem key={data.id} value={data.id}>{capitalizeFirstLetter(data?.title)}</MenuItem>)
+                                                })}
+                                              </Select>
+                                            </FormControl>
+                                          )}
+                                        />
                                       </Stack>
                                     </Grid>
 
@@ -253,25 +288,24 @@ const AllSession = () => {
                                         <InputLabel htmlFor="enddate" sx={{ fontWeight: 'bold' }}>
                                           Status
                                         </InputLabel>
-                                        <FormControl fullWidth>
-                                          <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            onChange={
-                                              (e: any) => null
-                                              // setcustStatus(e.target.value)
-                                            }
-                                          // value={custStatus}
-                                          >
-                                            <MenuItem value={2}>All</MenuItem>
-                                            <MenuItem value={1}>
-                                              Active
-                                            </MenuItem>
-                                            <MenuItem value={0}>
-                                              InActive
-                                            </MenuItem>
-                                          </Select>
-                                        </FormControl>
+                                        <Controller
+                                          name="status"
+                                          control={control}
+                                          defaultValue=""
+                                          render={({ field }) => (
+                                            <FormControl fullWidth>
+                                              <Select {...field} displayEmpty>
+                                                <MenuItem value={0}>All</MenuItem>
+                                                <MenuItem value={'active'}>
+                                                  Active
+                                                </MenuItem>
+                                                <MenuItem value={'inactive'}>
+                                                  In-active
+                                                </MenuItem>
+                                              </Select>
+                                            </FormControl>
+                                          )}
+                                        />
                                       </Stack>
                                     </Grid>
 
@@ -286,8 +320,8 @@ const AllSession = () => {
                                         variant="contained"
                                         color="primary"
                                         sx={{ float: 'right' }}
-
                                         onClick={popupState.close}
+
                                       >
                                         Apply Filter
 
@@ -312,24 +346,31 @@ const AllSession = () => {
                     <TableHead>
                       <TableRow>
                         {columns.map((column) => (
+
                           <TableCell
+
                             key={column.id}
                             align={column.align}
                             style={{ top: 0, minWidth: column.minWidth }}
+                            onClick={() => {
+                              column.label === 'ID' ?
+                                handleSort(rows) :
+                                ''
+                            }}
                           >
-                            {column.label}
+
+                            {column.label === 'ID' ? <Typography>ID <ArrowDownwardOutlinedIcon fontSize="small" /> </Typography> : column.label}
                           </TableCell>
                         ))}
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {rows
+                      {rows?.length > 0 ? rows
                         .slice(
                           page * rowsPerPage,
                           page * rowsPerPage + rowsPerPage
                         )
                         .map((row: any) => {
-
                           const statusColor = (row.status === "active" ? "green" : row.status === "inactive" ? "red" : "orange")
                           return (
                             <TableRow
@@ -344,15 +385,17 @@ const AllSession = () => {
                               <TableCell>{capitalizeFirstLetter(row.course && row.course.title)}</TableCell>
                               <TableCell sx={{ color: statusColor }}>{capitalizeFirstLetter(row.status)}</TableCell>
                               <TableCell><Button variant="outlined" color="success"><ModeEditOutlineIcon /></Button><Button variant="outlined" color="error"><DeleteOutlineIcon /></Button></TableCell>
+
                             </TableRow>
                           );
-                        })}
+                        }) : <TableRow><TableCell>Record not Found</TableCell></TableRow>}
+
                     </TableBody>
                   </Table>
                 </TableContainer>
               </Paper>
               <TablePagination
-                rowsPerPageOptions={[10, 25, 100]}
+                rowsPerPageOptions={[5, 10, 25, 100]}
                 component="div"
                 count={rows.length}
                 rowsPerPage={rowsPerPage}
