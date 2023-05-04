@@ -1,5 +1,7 @@
 // React Import
 import * as React from "react";
+import { Controller, useForm } from "react-hook-form";
+import { useRouter } from "next/router";
 // MUI Import
 import {
   Box,
@@ -38,20 +40,19 @@ import Navbar from "@/common/LayoutNavigations/navbar";
 import SideBar from "@/common/LayoutNavigations/sideBar";
 import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
 import Footer from "@/common/LayoutNavigations/footer";
-import { useRouter } from "next/router";
+import { handleSortData } from "@/common/Sorting/sorting";
 import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
 //Type Import
 import { sessionType } from "@/types/sessionType";
 import { courseType } from "@/types/courseType";
 import { moduleType } from "@/types/moduleType";
-import { Controller, useForm } from "react-hook-form";
 // CSS Import
 import styles from "../../../styles/sidebar.module.css";
+import Sessions from "../../../styles/session.module.css"
 // API Service
 import { HandleSessionGet } from "@/services/session";
 import { HandleCourseGet } from "@/services/course";
 import { HandleModuleGet } from "@/services/module";
-import { handleSortData } from "@/common/Sorting/sorting";
 
 interface Column {
   id: "id" | "title" | "module_id" | "course_id" | "is_deleted" | "action";
@@ -68,7 +69,6 @@ const columns: Column[] = [
   { id: "course_id", label: "COURSE NAME", minWidth: 100 },
   { id: "is_deleted", label: "STATUS", minWidth: 100 },
   { id: "action", label: "ACTION", minWidth: 100 },
-
 ];
 
 const AllSession = () => {
@@ -78,14 +78,12 @@ const AllSession = () => {
   const [rows, setRows] = React.useState<sessionType | any>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [sortDirection, setSortDirection] = React.useState("asc");
-
+  const [toggle, setToggle] = React.useState<boolean>(false);
   const router = useRouter()
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
-
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -94,37 +92,31 @@ const AllSession = () => {
   };
 
   const {
-    register,
     handleSubmit,
-    reset,
-    setValue,
     control,
-    formState: { errors },
   } = useForm();
 
   const onSubmit = (event: any) => {
-    // console.log("evveeen", event)
     const filterData: any = {
       module_id: event.module,
       course_id: event.course,
       status: event.status,
     }
     HandleSessionGet('', filterData).then((itemFiltered) => {
-      // console.log("dataFilter", itemFiltered.data.length)
       setRows(itemFiltered.data)
     })
 
   }
 
   const handleSort = (rowsData: any) => {
-    const sortData = handleSortData(rowsData, sortDirection)
+    const sortData = handleSortData(rowsData)
     setRows(sortData)
+    setToggle(!toggle)
   }
 
   const handleSearch = (e: any) => {
     const search = e.target.value;
     HandleSessionGet(search, '').then((itemSeached) => {
-      // console.log("ddddaata",itemSeached.data.length)
       setRows(itemSeached.data);
     })
   }
@@ -132,7 +124,6 @@ const AllSession = () => {
   const getSessionData = () => {
     HandleSessionGet('', '').then((sessions) => {
       setRows(sessions.data);
-      // console.log(sessions.data)
     })
   }
 
@@ -154,7 +145,7 @@ const AllSession = () => {
     getCourseData();
   }, []);
 
-  // console.log("rowww", sortDirection)
+
   return (
     <>
       <Navbar />
@@ -187,12 +178,10 @@ const AllSession = () => {
                 }}
               />
               <Box
-                sx={{ float: "right", display: "flex", alignItems: "center" }}
+              className = {Sessions.mainFilterBox}              
               >
                 <PopupState variant="popover" popupId="demo-popup-popover" >
                   {(popupState) => (
-
-
                     <Box>
                       <Button
                         sx={{ display: "inline-flex", color: "#1976d2" }}
@@ -212,7 +201,6 @@ const AllSession = () => {
                           vertical: "top",
                           horizontal: "center",
                         }}
-
                       >
                         <Box>
                           <Container
@@ -220,7 +208,7 @@ const AllSession = () => {
                             style={{ padding: "15px" }}
                           >
                             <Grid>
-                              <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+                              <Typography variant="h5" className={Sessions.filterBox}>
                                 Filter
                               </Typography>
                               <Box component="form"
@@ -321,10 +309,8 @@ const AllSession = () => {
                                         color="primary"
                                         sx={{ float: 'right' }}
                                         onClick={popupState.close}
-
                                       >
                                         Apply Filter
-
                                       </Button>
                                     </Grid>
                                   </Grid>
@@ -346,9 +332,7 @@ const AllSession = () => {
                     <TableHead>
                       <TableRow>
                         {columns.map((column) => (
-
                           <TableCell
-
                             key={column.id}
                             align={column.align}
                             style={{ top: 0, minWidth: column.minWidth }}
@@ -358,8 +342,7 @@ const AllSession = () => {
                                 ''
                             }}
                           >
-
-                            {column.label === 'ID' ? <Typography>ID <ArrowDownwardOutlinedIcon fontSize="small" /> </Typography> : column.label}
+                            {toggle ? column.label === 'ID' ? <Typography>ID <ArrowUpwardOutlinedIcon fontSize="small" /> </Typography> : column.label : column.label === 'ID' ? <Typography>ID <ArrowDownwardOutlinedIcon fontSize="small" /> </Typography> : column.label}
                           </TableCell>
                         ))}
                       </TableRow>
@@ -385,11 +368,9 @@ const AllSession = () => {
                               <TableCell>{capitalizeFirstLetter(row.course && row.course.title)}</TableCell>
                               <TableCell sx={{ color: statusColor }}>{capitalizeFirstLetter(row.status)}</TableCell>
                               <TableCell><Button variant="outlined" color="success"><ModeEditOutlineIcon /></Button><Button variant="outlined" color="error"><DeleteOutlineIcon /></Button></TableCell>
-
                             </TableRow>
                           );
                         }) : <TableRow><TableCell>Record not Found</TableCell></TableRow>}
-
                     </TableBody>
                   </Table>
                 </TableContainer>
@@ -403,7 +384,6 @@ const AllSession = () => {
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
               />
-
             </CardContent>
           </Card>
         </Box>
