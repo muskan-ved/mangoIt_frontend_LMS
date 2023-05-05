@@ -9,6 +9,11 @@ import {
   Card,
   CardContent,
   Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   FormControl,
   Grid,
   IconButton,
@@ -50,12 +55,12 @@ import { moduleType } from "@/types/moduleType";
 import styles from "../../../styles/sidebar.module.css";
 import Sessions from "../../../styles/session.module.css"
 // API Service
-import { HandleSessionGet } from "@/services/session";
+import { HandleSessionDelete, HandleSessionGet } from "@/services/session";
 import { HandleCourseGet } from "@/services/course";
 import { HandleModuleGet } from "@/services/module";
 
 interface Column {
-  id: "id" | "title" | "module_id" | "course_id" | "is_deleted" | "action";
+  id: "id" | "title" | "course_id" | "module_id" | "is_deleted" | "action";
   label: string;
   minWidth?: number;
   align?: "right";
@@ -65,8 +70,9 @@ interface Column {
 const columns: Column[] = [
   { id: "id", label: "ID", },
   { id: "title", label: "SESSION NAME", minWidth: 170 },
-  { id: "module_id", label: "MODULE NAME", minWidth: 100 },
   { id: "course_id", label: "COURSE NAME", minWidth: 100 },
+  { id: "module_id", label: "MODULE NAME", minWidth: 100 },
+
   { id: "is_deleted", label: "STATUS", minWidth: 100 },
   { id: "action", label: "ACTION", minWidth: 100 },
 ];
@@ -79,8 +85,10 @@ const AllSession = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [toggle, setToggle] = React.useState<boolean>(false);
-  const router = useRouter()
+  const [open, setOpen] = React.useState(false);
+  const [deleteRow, setDeleteRow] = React.useState<sessionType | any>([])
 
+  const router = useRouter()
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -107,6 +115,26 @@ const AllSession = () => {
     })
 
   }
+  const handleClickOpen = (row: any) => {
+    setDeleteRow(row)
+    setOpen(!open);
+
+  };
+
+  const handleDeletesRow = () => {
+      HandleSessionDelete(deleteRow.id).then((deletedRow)=>{
+        HandleSessionGet('', '').then((newRows) => {
+          setRows(newRows.data)
+        })
+      })
+      setOpen(!open);
+  }
+
+  const handleEditRow = (e: any) => {
+    console.log(e)
+  }
+
+
 
   const handleSort = (rowsData: any) => {
     const sortData = handleSortData(rowsData)
@@ -145,7 +173,7 @@ const AllSession = () => {
     getCourseData();
   }, []);
 
-
+  // console.log("oopp", deleteRow)
   return (
     <>
       <Navbar />
@@ -178,7 +206,7 @@ const AllSession = () => {
                 }}
               />
               <Box
-              className = {Sessions.mainFilterBox}              
+                className={Sessions.mainFilterBox}
               >
                 <PopupState variant="popover" popupId="demo-popup-popover" >
                   {(popupState) => (
@@ -224,31 +252,6 @@ const AllSession = () => {
                                     <Grid item xs={12} md={6} lg={6} >
                                       <Stack spacing={2}>
                                         <InputLabel htmlFor="name" sx={{ fontWeight: 'bold' }}>
-                                          Module
-                                        </InputLabel>
-                                        <Controller
-                                          name="module"
-                                          control={control}
-                                          defaultValue=""
-                                          render={({ field }) => (
-                                            <FormControl fullWidth>
-                                              <Select {...field} displayEmpty>
-                                                <MenuItem value={0}>
-                                                  All module
-                                                </MenuItem>
-                                                {getModule?.map((data: any) => {
-                                                  return (<MenuItem key={data.id} value={data.id}>{capitalizeFirstLetter(data?.title)}</MenuItem>)
-                                                })}
-                                              </Select>
-                                            </FormControl>
-                                          )}
-                                        />
-                                      </Stack>
-                                    </Grid>
-
-                                    <Grid item xs={12} md={6} lg={6} >
-                                      <Stack spacing={2}>
-                                        <InputLabel htmlFor="name" sx={{ fontWeight: 'bold' }}>
                                           Course
                                         </InputLabel>
                                         <Controller
@@ -262,6 +265,31 @@ const AllSession = () => {
                                                   All course
                                                 </MenuItem>
                                                 {getCourse?.map((data: any) => {
+                                                  return (<MenuItem key={data.id} value={data.id}>{capitalizeFirstLetter(data?.title)}</MenuItem>)
+                                                })}
+                                              </Select>
+                                            </FormControl>
+                                          )}
+                                        />
+                                      </Stack>
+                                    </Grid>
+
+                                    <Grid item xs={12} md={6} lg={6} >
+                                      <Stack spacing={2}>
+                                        <InputLabel htmlFor="name" sx={{ fontWeight: 'bold' }}>
+                                          Module
+                                        </InputLabel>
+                                        <Controller
+                                          name="module"
+                                          control={control}
+                                          defaultValue=""
+                                          render={({ field }) => (
+                                            <FormControl fullWidth>
+                                              <Select {...field} displayEmpty>
+                                                <MenuItem value={0}>
+                                                  All module
+                                                </MenuItem>
+                                                {getModule?.map((data: any) => {
                                                   return (<MenuItem key={data.id} value={data.id}>{capitalizeFirstLetter(data?.title)}</MenuItem>)
                                                 })}
                                               </Select>
@@ -364,10 +392,12 @@ const AllSession = () => {
                             >
                               <TableCell>{row.id}</TableCell>
                               <TableCell>{capitalizeFirstLetter(row.title)}</TableCell>
-                              <TableCell>{capitalizeFirstLetter(row.module && row.module.title)}</TableCell>
                               <TableCell>{capitalizeFirstLetter(row.course && row.course.title)}</TableCell>
+                              <TableCell>{capitalizeFirstLetter(row.module && row.module.title)}</TableCell>
                               <TableCell sx={{ color: statusColor }}>{capitalizeFirstLetter(row.status)}</TableCell>
-                              <TableCell><Button variant="outlined" color="success"><ModeEditOutlineIcon /></Button><Button variant="outlined" color="error"><DeleteOutlineIcon /></Button></TableCell>
+                              <TableCell><Button onClick={() => handleEditRow(row)} variant="outlined" color="success" sx={{margin:'5px'}}><ModeEditOutlineIcon /></Button>
+                                <Button variant="outlined" color="error" onClick={() => handleClickOpen(row)}><DeleteOutlineIcon /></Button>
+                              </TableCell>
                             </TableRow>
                           );
                         }) : <TableRow><TableCell>Record not Found</TableCell></TableRow>}
@@ -384,6 +414,27 @@ const AllSession = () => {
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
               />
+              <Dialog
+                open={open}
+                onClose={handleClickOpen}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <DialogTitle id="alert-dialog-title">
+                  {"Delete Session"}
+                </DialogTitle>
+                <DialogContent >
+                  <DialogContentText id="alert-dialog-description" >
+                    Are you sure want to delete <Typography component={'span'} sx={{fontWeight: 'bold'}}>{capitalizeFirstLetter(deleteRow.title)}</Typography>
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClickOpen} color="error">No</Button>
+                  <Button onClick={handleDeletesRow} autoFocus color="success">
+                    Yes
+                  </Button>
+                </DialogActions>
+              </Dialog>
             </CardContent>
           </Card>
         </Box>
