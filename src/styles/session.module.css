@@ -20,3 +20,13 @@
 .updateLoadingButton {
     width: 178px;
 }
+
+/* CSS for Listing Page  */
+.filterBox {
+    font-weight: bold;
+}
+.mainFilterBox {
+    float: right;
+    display: flex;
+    align-items: center;
+}

@@ -1,5 +1,7 @@
 // React Import
 import * as React from "react";
+import { Controller, useForm } from "react-hook-form";
+import { useRouter } from "next/router";
 // MUI Import
 import {
   Box,
@@ -7,6 +9,11 @@ import {
   Card,
   CardContent,
   Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   FormControl,
   Grid,
   IconButton,
@@ -38,23 +45,22 @@ import Navbar from "@/common/LayoutNavigations/navbar";
 import SideBar from "@/common/LayoutNavigations/sideBar";
 import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
 import Footer from "@/common/LayoutNavigations/footer";
-import { useRouter } from "next/router";
+import { handleSortData } from "@/common/Sorting/sorting";
 import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
 //Type Import
 import { sessionType } from "@/types/sessionType";
 import { courseType } from "@/types/courseType";
 import { moduleType } from "@/types/moduleType";
-import { Controller, useForm } from "react-hook-form";
 // CSS Import
 import styles from "../../../styles/sidebar.module.css";
+import Sessions from "../../../styles/session.module.css"
 // API Service
-import { HandleSessionGet } from "@/services/session";
+import { HandleSessionDelete, HandleSessionGet } from "@/services/session";
 import { HandleCourseGet } from "@/services/course";
 import { HandleModuleGet } from "@/services/module";
-import { handleSortData } from "@/common/Sorting/sorting";
 
 interface Column {
-  id: "id" | "title" | "module_id" | "course_id" | "is_deleted" | "action";
+  id: "id" | "title" | "course_id" | "module_id" | "is_deleted" | "action";
   label: string;
   minWidth?: number;
   align?: "right";
@@ -64,11 +70,11 @@ interface Column {
 const columns: Column[] = [
   { id: "id", label: "ID", },
   { id: "title", label: "SESSION NAME", minWidth: 170 },
-  { id: "module_id", label: "MODULE NAME", minWidth: 100 },
   { id: "course_id", label: "COURSE NAME", minWidth: 100 },
+  { id: "module_id", label: "MODULE NAME", minWidth: 100 },
+
   { id: "is_deleted", label: "STATUS", minWidth: 100 },
   { id: "action", label: "ACTION", minWidth: 100 },
-
 ];
 
 const AllSession = () => {
@@ -78,14 +84,14 @@ const AllSession = () => {
   const [rows, setRows] = React.useState<sessionType | any>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [sortDirection, setSortDirection] = React.useState("asc");
+  const [toggle, setToggle] = React.useState<boolean>(false);
+  const [open, setOpen] = React.useState(false);
+  const [deleteRow, setDeleteRow] = React.useState<sessionType | any>([])
 
   const router = useRouter()
-
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
-
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -94,37 +100,51 @@ const AllSession = () => {
   };
 
   const {
-    register,
     handleSubmit,
-    reset,
-    setValue,
     control,
-    formState: { errors },
   } = useForm();
 
   const onSubmit = (event: any) => {
-    // console.log("evveeen", event)
     const filterData: any = {
       module_id: event.module,
       course_id: event.course,
       status: event.status,
     }
     HandleSessionGet('', filterData).then((itemFiltered) => {
-      // console.log("dataFilter", itemFiltered.data.length)
       setRows(itemFiltered.data)
     })
 
   }
+  const handleClickOpen = (row: any) => {
+    setDeleteRow(row)
+    setOpen(!open);
+
+  };
+
+  const handleDeletesRow = () => {
+      HandleSessionDelete(deleteRow.id).then((deletedRow)=>{
+        HandleSessionGet('', '').then((newRows) => {
+          setRows(newRows.data)
+        })
+      })
+      setOpen(!open);
+  }
+
+  const handleEditRow = (e: any) => {
+    console.log(e)
+  }
+
+
 
   const handleSort = (rowsData: any) => {
-    const sortData = handleSortData(rowsData, sortDirection)
+    const sortData = handleSortData(rowsData)
     setRows(sortData)
+    setToggle(!toggle)
   }
 
   const handleSearch = (e: any) => {
     const search = e.target.value;
     HandleSessionGet(search, '').then((itemSeached) => {
-      // console.log("ddddaata",itemSeached.data.length)
       setRows(itemSeached.data);
     })
   }
@@ -132,7 +152,6 @@ const AllSession = () => {
   const getSessionData = () => {
     HandleSessionGet('', '').then((sessions) => {
       setRows(sessions.data);
-      // console.log(sessions.data)
     })
   }
 
@@ -154,7 +173,7 @@ const AllSession = () => {
     getCourseData();
   }, []);
 
-  // console.log("rowww", sortDirection)
+  // console.log("oopp", deleteRow)
   return (
     <>
       <Navbar />
@@ -187,12 +206,10 @@ const AllSession = () => {
                 }}
               />
               <Box
-                sx={{ float: "right", display: "flex", alignItems: "center" }}
+                className={Sessions.mainFilterBox}
               >
                 <PopupState variant="popover" popupId="demo-popup-popover" >
                   {(popupState) => (
-
-
                     <Box>
                       <Button
                         sx={{ display: "inline-flex", color: "#1976d2" }}
@@ -212,7 +229,6 @@ const AllSession = () => {
                           vertical: "top",
                           horizontal: "center",
                         }}
-
                       >
                         <Box>
                           <Container
@@ -220,7 +236,7 @@ const AllSession = () => {
                             style={{ padding: "15px" }}
                           >
                             <Grid>
-                              <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+                              <Typography variant="h5" className={Sessions.filterBox}>
                                 Filter
                               </Typography>
                               <Box component="form"
@@ -233,31 +249,6 @@ const AllSession = () => {
                                   className="form-filter"
                                 >
                                   <Grid container spacing={2}>
-                                    <Grid item xs={12} md={6} lg={6} >
-                                      <Stack spacing={2}>
-                                        <InputLabel htmlFor="name" sx={{ fontWeight: 'bold' }}>
-                                          Module
-                                        </InputLabel>
-                                        <Controller
-                                          name="module"
-                                          control={control}
-                                          defaultValue=""
-                                          render={({ field }) => (
-                                            <FormControl fullWidth>
-                                              <Select {...field} displayEmpty>
-                                                <MenuItem value={0}>
-                                                  All module
-                                                </MenuItem>
-                                                {getModule?.map((data: any) => {
-                                                  return (<MenuItem key={data.id} value={data.id}>{capitalizeFirstLetter(data?.title)}</MenuItem>)
-                                                })}
-                                              </Select>
-                                            </FormControl>
-                                          )}
-                                        />
-                                      </Stack>
-                                    </Grid>
-
                                     <Grid item xs={12} md={6} lg={6} >
                                       <Stack spacing={2}>
                                         <InputLabel htmlFor="name" sx={{ fontWeight: 'bold' }}>
@@ -274,6 +265,31 @@ const AllSession = () => {
                                                   All course
                                                 </MenuItem>
                                                 {getCourse?.map((data: any) => {
+                                                  return (<MenuItem key={data.id} value={data.id}>{capitalizeFirstLetter(data?.title)}</MenuItem>)
+                                                })}
+                                              </Select>
+                                            </FormControl>
+                                          )}
+                                        />
+                                      </Stack>
+                                    </Grid>
+
+                                    <Grid item xs={12} md={6} lg={6} >
+                                      <Stack spacing={2}>
+                                        <InputLabel htmlFor="name" sx={{ fontWeight: 'bold' }}>
+                                          Module
+                                        </InputLabel>
+                                        <Controller
+                                          name="module"
+                                          control={control}
+                                          defaultValue=""
+                                          render={({ field }) => (
+                                            <FormControl fullWidth>
+                                              <Select {...field} displayEmpty>
+                                                <MenuItem value={0}>
+                                                  All module
+                                                </MenuItem>
+                                                {getModule?.map((data: any) => {
                                                   return (<MenuItem key={data.id} value={data.id}>{capitalizeFirstLetter(data?.title)}</MenuItem>)
                                                 })}
                                               </Select>
@@ -321,10 +337,8 @@ const AllSession = () => {
                                         color="primary"
                                         sx={{ float: 'right' }}
                                         onClick={popupState.close}
-
                                       >
                                         Apply Filter
-
                                       </Button>
                                     </Grid>
                                   </Grid>
@@ -346,9 +360,7 @@ const AllSession = () => {
                     <TableHead>
                       <TableRow>
                         {columns.map((column) => (
-
                           <TableCell
-
                             key={column.id}
                             align={column.align}
                             style={{ top: 0, minWidth: column.minWidth }}
@@ -358,8 +370,7 @@ const AllSession = () => {
                                 ''
                             }}
                           >
-
-                            {column.label === 'ID' ? <Typography>ID <ArrowDownwardOutlinedIcon fontSize="small" /> </Typography> : column.label}
+                            {toggle ? column.label === 'ID' ? <Typography>ID <ArrowUpwardOutlinedIcon fontSize="small" /> </Typography> : column.label : column.label === 'ID' ? <Typography>ID <ArrowDownwardOutlinedIcon fontSize="small" /> </Typography> : column.label}
                           </TableCell>
                         ))}
                       </TableRow>
@@ -381,15 +392,15 @@ const AllSession = () => {
                             >
                               <TableCell>{row.id}</TableCell>
                               <TableCell>{capitalizeFirstLetter(row.title)}</TableCell>
-                              <TableCell>{capitalizeFirstLetter(row.module && row.module.title)}</TableCell>
                               <TableCell>{capitalizeFirstLetter(row.course && row.course.title)}</TableCell>
+                              <TableCell>{capitalizeFirstLetter(row.module && row.module.title)}</TableCell>
                               <TableCell sx={{ color: statusColor }}>{capitalizeFirstLetter(row.status)}</TableCell>
-                              <TableCell><Button variant="outlined" color="success"><ModeEditOutlineIcon /></Button><Button variant="outlined" color="error"><DeleteOutlineIcon /></Button></TableCell>
-
+                              <TableCell><Button onClick={() => handleEditRow(row)} variant="outlined" color="success" sx={{margin:'5px'}}><ModeEditOutlineIcon /></Button>
+                                <Button variant="outlined" color="error" onClick={() => handleClickOpen(row)}><DeleteOutlineIcon /></Button>
+                              </TableCell>
                             </TableRow>
                           );
                         }) : <TableRow><TableCell>Record not Found</TableCell></TableRow>}
-
                     </TableBody>
                   </Table>
                 </TableContainer>
@@ -403,7 +414,27 @@ const AllSession = () => {
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
               />
-
+              <Dialog
+                open={open}
+                onClose={handleClickOpen}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <DialogTitle id="alert-dialog-title">
+                  {"Delete Session"}
+                </DialogTitle>
+                <DialogContent >
+                  <DialogContentText id="alert-dialog-description" >
+                    Are you sure want to delete <Typography component={'span'} sx={{fontWeight: 'bold'}}>{capitalizeFirstLetter(deleteRow.title)}</Typography>
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClickOpen} color="error">No</Button>
+                  <Button onClick={handleDeletesRow} autoFocus color="success">
+                    Yes
+                  </Button>
+                </DialogActions>
+              </Dialog>
             </CardContent>
           </Card>
         </Box>

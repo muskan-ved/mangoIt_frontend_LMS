@@ -19,5 +19,5 @@ export const API = {
  getAllModules: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_ALL_MODULES}`,
  getAllSessions: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_ALL_SESSIONS}`,
  createSession: `${BASE_URL}/${process.env.NEXT_PUBLIC_CREATE_SESSION}`,
- getSessionBySearch: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_SESSION_BY_SEARCH}`,
+ deleteSession: `${BASE_URL}/${process.env.NEXT_PUBLIC_DELETE_SESSION}`,
 };
