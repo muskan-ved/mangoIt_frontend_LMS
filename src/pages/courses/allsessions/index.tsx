@@ -2,6 +2,7 @@
 import * as React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useRouter } from "next/router";
+
 // MUI Import
 import {
   Box,
@@ -58,6 +59,9 @@ import Sessions from "../../../styles/session.module.css"
 import { HandleSessionDelete, HandleSessionGet } from "@/services/session";
 import { HandleCourseGet } from "@/services/course";
 import { HandleModuleGet } from "@/services/module";
+// import { AlertDialog } from "@/common/DeleteListRow/deleteRow";
+
+
 
 interface Column {
   id: "id" | "title" | "course_id" | "module_id" | "is_deleted" | "action";
@@ -116,18 +120,20 @@ const AllSession = () => {
 
   }
   const handleClickOpen = (row: any) => {
+    // AlertDialog(row, deleteRow, open)
     setDeleteRow(row)
     setOpen(!open);
 
   };
 
+
   const handleDeletesRow = () => {
-      HandleSessionDelete(deleteRow.id).then((deletedRow)=>{
-        HandleSessionGet('', '').then((newRows) => {
-          setRows(newRows.data)
-        })
+    HandleSessionDelete(deleteRow.id).then((deletedRow) => {
+      HandleSessionGet('', '').then((newRows) => {
+        setRows(newRows.data)
       })
-      setOpen(!open);
+    })
+    setOpen(!open);
   }
 
   const handleEditRow = (e: any) => {
@@ -370,7 +376,7 @@ const AllSession = () => {
                                 ''
                             }}
                           >
-                            {toggle ? column.label === 'ID' ? <Typography>ID <ArrowUpwardOutlinedIcon fontSize="small" /> </Typography> : column.label : column.label === 'ID' ? <Typography>ID <ArrowDownwardOutlinedIcon fontSize="small" /> </Typography> : column.label}
+                            {toggle ? column.label === 'ID' ? <Typography>ID <ArrowDownwardOutlinedIcon fontSize="small" /> </Typography> : column.label : column.label === 'ID' ? <Typography>ID <ArrowUpwardOutlinedIcon fontSize="small" /> </Typography> : column.label}
                           </TableCell>
                         ))}
                       </TableRow>
@@ -395,12 +401,12 @@ const AllSession = () => {
                               <TableCell>{capitalizeFirstLetter(row.course && row.course.title)}</TableCell>
                               <TableCell>{capitalizeFirstLetter(row.module && row.module.title)}</TableCell>
                               <TableCell sx={{ color: statusColor }}>{capitalizeFirstLetter(row.status)}</TableCell>
-                              <TableCell><Button onClick={() => handleEditRow(row)} variant="outlined" color="success" sx={{margin:'5px'}}><ModeEditOutlineIcon /></Button>
+                              <TableCell><Button onClick={() => router.push(`/courses/allsessions/updatesession/${row.id}`)} variant="outlined" color="success" sx={{ margin: '5px' }}><ModeEditOutlineIcon /></Button>
                                 <Button variant="outlined" color="error" onClick={() => handleClickOpen(row)}><DeleteOutlineIcon /></Button>
                               </TableCell>
                             </TableRow>
                           );
-                        }) : <TableRow><TableCell>Record not Found</TableCell></TableRow>}
+                        }) : <TableRow><TableCell colSpan={6} sx={{textAlign : 'center'}}> <Typography>Record not Found</Typography> </TableCell></TableRow>}
                     </TableBody>
                   </Table>
                 </TableContainer>
@@ -425,7 +431,7 @@ const AllSession = () => {
                 </DialogTitle>
                 <DialogContent >
                   <DialogContentText id="alert-dialog-description" >
-                    Are you sure want to delete <Typography component={'span'} sx={{fontWeight: 'bold'}}>{capitalizeFirstLetter(deleteRow.title)}</Typography>
+                    Are you sure want to delete <Typography component={'span'} sx={{ fontWeight: 'bold' }}>{capitalizeFirstLetter(deleteRow.title)}</Typography>
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
@@ -435,6 +441,7 @@ const AllSession = () => {
                   </Button>
                 </DialogActions>
               </Dialog>
+              {/* <AlertDialog /> */}
             </CardContent>
           </Card>
         </Box>
