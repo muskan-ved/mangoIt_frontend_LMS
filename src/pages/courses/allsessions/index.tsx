@@ -10,11 +10,6 @@ import {
   Card,
   CardContent,
   Container,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   FormControl,
   Grid,
   IconButton,
@@ -34,13 +29,14 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { SearchOutlined } from "@mui/icons-material";
+import { Margin, SearchOutlined } from "@mui/icons-material";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
 import ArrowDownwardOutlinedIcon from '@mui/icons-material/ArrowDownwardOutlined';
 import ArrowUpwardOutlinedIcon from '@mui/icons-material/ArrowUpwardOutlined';
+import CloseIcon from '@mui/icons-material/Close';
 // External Components
 import Navbar from "@/common/LayoutNavigations/navbar";
 import SideBar from "@/common/LayoutNavigations/sideBar";
@@ -59,7 +55,7 @@ import Sessions from "../../../styles/session.module.css"
 import { HandleSessionDelete, HandleSessionGet } from "@/services/session";
 import { HandleCourseGet } from "@/services/course";
 import { HandleModuleGet } from "@/services/module";
-// import { AlertDialog } from "@/common/DeleteListRow/deleteRow";
+import { AlertDialog } from "@/common/DeleteListRow/deleteRow";
 
 
 
@@ -90,6 +86,11 @@ const AllSession = () => {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [toggle, setToggle] = React.useState<boolean>(false);
   const [open, setOpen] = React.useState(false);
+  const [search, setSearch] = React.useState('');
+  const [getFilter, setFilter] = React.useState<number>(0);
+
+
+
   const [deleteRow, setDeleteRow] = React.useState<sessionType | any>([])
 
   const router = useRouter()
@@ -120,11 +121,15 @@ const AllSession = () => {
 
   }
   const handleClickOpen = (row: any) => {
-    // AlertDialog(row, deleteRow, open)
     setDeleteRow(row)
     setOpen(!open);
 
   };
+
+  const resetFilterValue = () =>{
+    console.log('sfdsf')
+    setFilter(0)
+  }
 
 
   const handleDeletesRow = () => {
@@ -136,23 +141,25 @@ const AllSession = () => {
     setOpen(!open);
   }
 
-  const handleEditRow = (e: any) => {
-    console.log(e)
-  }
-
-
-
   const handleSort = (rowsData: any) => {
     const sortData = handleSortData(rowsData)
     setRows(sortData)
     setToggle(!toggle)
   }
 
-  const handleSearch = (e: any) => {
-    const search = e.target.value;
-    HandleSessionGet(search, '').then((itemSeached) => {
-      setRows(itemSeached.data);
-    })
+  const handleSearch = (e: any, identifier: any) => {
+    if (identifier === 'reset') {
+      HandleSessionGet('', '').then((itemSeached) => {
+        setRows(itemSeached.data);
+      })
+      setSearch(e)
+    } else {
+      const search = e.target.value;
+      setSearch(e.target.value)
+      HandleSessionGet(search, '').then((itemSeached) => {
+        setRows(itemSeached.data);
+      })
+    }
   }
 
   const getSessionData = () => {
@@ -179,7 +186,7 @@ const AllSession = () => {
     getCourseData();
   }, []);
 
-  // console.log("oopp", deleteRow)
+  console.log("oopps", getFilter)
   return (
     <>
       <Navbar />
@@ -192,22 +199,23 @@ const AllSession = () => {
             First="Home"
             Middle="Session"
             Text="SESSION"
-            Link="/session/allsessions"
+            Link="/courses/allsessions"
           />
 
           {/* main content */}
           <Card>
             <CardContent>
               <TextField
-                id="standard-bare"
+                id="standard-search"
+                value={search}
                 variant="outlined"
                 placeholder="Search"
-                onChange={(e) => handleSearch(e)}
+                onChange={(e) => handleSearch(e, '')}
                 InputProps={{
                   endAdornment: (
-                    <IconButton>
+                    !search ? <IconButton>
                       <SearchOutlined />
-                    </IconButton>
+                    </IconButton> : <IconButton onClick={(e) => handleSearch('', 'reset')}> <CloseIcon /></IconButton>
                   ),
                 }}
               />
@@ -239,7 +247,7 @@ const AllSession = () => {
                         <Box>
                           <Container
                             className="filter-box"
-                            style={{ padding: "15px" }}
+                            style={{ padding: "15px", width: '100%' }}
                           >
                             <Grid>
                               <Typography variant="h5" className={Sessions.filterBox}>
@@ -255,7 +263,7 @@ const AllSession = () => {
                                   className="form-filter"
                                 >
                                   <Grid container spacing={2}>
-                                    <Grid item xs={12} md={6} lg={6} >
+                                    <Grid item xs={12} md={4} lg={4} >
                                       <Stack spacing={2}>
                                         <InputLabel htmlFor="name" sx={{ fontWeight: 'bold' }}>
                                           Course
@@ -263,7 +271,7 @@ const AllSession = () => {
                                         <Controller
                                           name="course"
                                           control={control}
-                                          defaultValue=""
+                                          defaultValue={getFilter}
                                           render={({ field }) => (
                                             <FormControl fullWidth>
                                               <Select {...field} displayEmpty>
@@ -280,7 +288,7 @@ const AllSession = () => {
                                       </Stack>
                                     </Grid>
 
-                                    <Grid item xs={12} md={6} lg={6} >
+                                    <Grid item xs={12} md={4} lg={4} >
                                       <Stack spacing={2}>
                                         <InputLabel htmlFor="name" sx={{ fontWeight: 'bold' }}>
                                           Module
@@ -288,7 +296,7 @@ const AllSession = () => {
                                         <Controller
                                           name="module"
                                           control={control}
-                                          defaultValue=""
+                                          defaultValue={getFilter}
                                           render={({ field }) => (
                                             <FormControl fullWidth>
                                               <Select {...field} displayEmpty>
@@ -305,7 +313,7 @@ const AllSession = () => {
                                       </Stack>
                                     </Grid>
 
-                                    <Grid item xs={12} md={6} lg={6}>
+                                    <Grid item xs={12} md={4} lg={4}>
                                       <Stack spacing={2}>
                                         <InputLabel htmlFor="enddate" sx={{ fontWeight: 'bold' }}>
                                           Status
@@ -313,7 +321,7 @@ const AllSession = () => {
                                         <Controller
                                           name="status"
                                           control={control}
-                                          defaultValue=""
+                                          defaultValue={getFilter}
                                           render={({ field }) => (
                                             <FormControl fullWidth>
                                               <Select {...field} displayEmpty>
@@ -331,6 +339,7 @@ const AllSession = () => {
                                       </Stack>
                                     </Grid>
 
+
                                     <Grid
                                       item
                                       xs={12}
@@ -341,10 +350,20 @@ const AllSession = () => {
                                         type="submit"
                                         variant="contained"
                                         color="primary"
-                                        sx={{ float: 'right' }}
+                                        sx={{ float: 'right', marginLeft: '10px' }}
                                         onClick={popupState.close}
                                       >
-                                        Apply Filter
+                                        Apply
+                                      </Button>
+                                      <Button
+                                        size="medium"                               
+                                        variant="contained"
+                                        color="primary"
+                                        type="button"
+                                        sx={{ float: 'right' }}
+                                        onClick={resetFilterValue}
+                                      >
+                                        Reset
                                       </Button>
                                     </Grid>
                                   </Grid>
@@ -406,7 +425,7 @@ const AllSession = () => {
                               </TableCell>
                             </TableRow>
                           );
-                        }) : <TableRow><TableCell colSpan={6} sx={{textAlign : 'center'}}> <Typography>Record not Found</Typography> </TableCell></TableRow>}
+                        }) : <TableRow><TableCell colSpan={6} sx={{ textAlign: 'center' }}> <Typography>Record not Found</Typography> </TableCell></TableRow>}
                     </TableBody>
                   </Table>
                 </TableContainer>
@@ -420,7 +439,7 @@ const AllSession = () => {
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
               />
-              <Dialog
+              {/* <Dialog
                 open={open}
                 onClose={handleClickOpen}
                 aria-labelledby="alert-dialog-title"
@@ -440,8 +459,14 @@ const AllSession = () => {
                     Yes
                   </Button>
                 </DialogActions>
-              </Dialog>
-              {/* <AlertDialog /> */}
+              </Dialog> */}
+              <AlertDialog
+                open={open}
+                onClose={handleClickOpen}
+                onSubmit={handleDeletesRow}
+                title={deleteRow.title}
+                whatYouDelete='Session'
+              />
             </CardContent>
           </Card>
         </Box>

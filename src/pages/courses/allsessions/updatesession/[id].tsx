@@ -12,8 +12,6 @@ import Footer from "@/common/LayoutNavigations/footer";
 import Navbar from "../../../../common/LayoutNavigations/navbar";
 import RichEditor from "@/common/RichTextEditor/textEditor";
 
-// validation import
-
 // Helper Import
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -38,15 +36,12 @@ import { HandleSessionUpdate, HandleSessionCreate, HandleSessionGetByID } from '
 import { capitalizeFirstLetter } from '@/common/CapitalFirstLetter/capitalizeFirstLetter';
 
 
-export default function AddSession() {
-
+export default function UpdateSession() {
    const router: any = useRouter();
    const [despcriptionContent, setdespcriptionContent] = useState("");
    const [updateSession, setUpdateSession] = useState<sessionType | any>([]);
    const [getCourses, setCourses] = useState<courseType | any>();
-   // const [getSession, setSession] = useState<sessionType | any>('7');
-   const [getSessionName, setSessionName] = useState<sessionType | any>();
-   // const [Value, setValue] = useState("1");
+   const [getSession, setSession] = useState<sessionType | any>();
    const [getModules, setModules] = useState<moduleType | any>();
    const [file, setFile] = useState<string | any>('')
    const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
@@ -68,7 +63,7 @@ export default function AddSession() {
       setValue(identifier, value);
 
    };
-
+   console.log("vfd", despcriptionContent)
    const onSubmit = async (event: any) => {
       const id = router.query.id
       // const reqData = { ...event, 'attachment': file }
@@ -85,7 +80,6 @@ export default function AddSession() {
       for (var key in reqData) {
          formData.append(key, reqData[key]);
       }
-      // console.log('dfd',reqData)
 
 
       setLoading(true);
@@ -105,23 +99,21 @@ export default function AddSession() {
    };
 
    const handleUpdate = (e: any) => {
-      // setSessionName(e.target.value);
       setUpdateSession(e.target.value)
-      console.log('fef', updateSession)
-
    }
 
    const getSessionData = async () => {
       const id = router.query.id
       HandleSessionGetByID(id).then((session) => {
-         setUpdateSession(session.data)
-         // const fields = [
-         //    "title",
-         //    "module_id",
-         //    "course_id",
-         //    "description",
-         // ];
-         // fields.forEach((field) => setValue(field, session.data[field]));
+         setSession(session.data)
+         const fields = [
+            "title",
+            "module_id",
+            "course_id",
+            "description",
+         ];
+         // setdespcriptionContent(session.data.description)
+         fields.forEach((field) => setValue(field, session.data[field]));
 
       })
 
@@ -144,7 +136,6 @@ export default function AddSession() {
       let localData: any;
       if (typeof window !== "undefined") {
          localData = window.localStorage.getItem("userData");
-         // console.log('ddsds',localData)
       }
       if (localData) {
          getSessionData();
@@ -159,9 +150,6 @@ export default function AddSession() {
             {errorMessage}{" "}
          </Typography>
       );
-   }
-   const errorFunction = () => {
-      // return ("error")
    }
 
    const handleChange = (e: any) => {
@@ -178,8 +166,8 @@ export default function AddSession() {
          }
       }
    }
+   // console.log('checkDataaa', getSession.description)
 
-   console.log('checkDataaa', updateSession.course?.id)
    return (
       <>
          <Navbar />
@@ -225,9 +213,6 @@ export default function AddSession() {
                                           onChange={handleUpdate}
                                        // defaultValue={updateSession.title}
                                        />
-
-
-
                                        {errors && errors.title
                                           ? ErrorShowing(errors?.title?.message)
                                           : ""}
@@ -238,13 +223,10 @@ export default function AddSession() {
                                        <Controller
                                           name="course_id"
                                           control={control}
-                                          defaultValue={updateSession.course?.id}
+                                          defaultValue=''
                                           render={({ field }) => (
                                              <FormControl fullWidth>
-                                                <Select {...field}  displayEmpty>
-                                                   {/* <MenuItem value=''>
-                                                      {updateSession.course?.title}
-                                                   </MenuItem> */}
+                                                <Select {...field} displayEmpty>
                                                    {getCourses?.map((course: any) => {
                                                       return (<MenuItem key={course.id} value={course.id}>{capitalizeFirstLetter(course?.title)}</MenuItem>)
                                                    })}
@@ -252,58 +234,6 @@ export default function AddSession() {
                                              </FormControl>
                                           )}
                                        />
-                                       {/* <InputLabel>Course of session</InputLabel>
-                                       <Controller
-                                          name="course_id"
-                                          control={control}
-                                          defaultValue=''
-                                          render={({ field }) => (
-                                             <FormControl fullWidth>
-                                                <Select {...field} displayEmpty>
-                                                   {/* <MenuItem value=''>
-                                                      {updateSession.course?.title}
-                                                   </MenuItem> */}
-
-                                       {/* {getCourses?.map((course: any) => {
-                                                      return (<MenuItem key={course.id}  value={course.id}>{capitalizeFirstLetter(course?.title)}</MenuItem>)
-                                                   })} */}
-
-                                       {/* <FormControl fullWidth>
-                                          <InputLabel id="Input label">Course of session</InputLabel>
-                                          <Select
-                                             labelId="Input label"
-                                             id="Select"
-                                             // value={updateSession.course?.id}
-                                             defaultValue={course?.id}
-                                             onChange={handleValueChange}
-                                          >
-                                              {getCourses?.map((course: any) => {
-                                                      return (<MenuItem key={course.id}  value={course.id}>{capitalizeFirstLetter(course?.title)}</MenuItem>)
-                                                   })}
-                                          </Select>
-                                       </FormControl> */}
-
-
-                                       {/* <option value={10}>Ten</option>
-                                                   <option value={20}>Twenty</option>
-                                                   <option value={30}>Thirty</option>
-                                       {/* <FormControl fullWidth>
-                                          {getCourses?.map((course: any) => {
-                                              <NativeSelect
-                                                defaultValue={course.id}
-                                                inputProps={{
-                                                   name: 'course_id',
-                                                   id: 'uncontrolled-native',
-                                                }}
-                                             >
-
-                                                <option key={course.id} value={course.id}> {capitalizeFirstLetter(course?.title)}</option>
-
-                                             </NativeSelect>
-                                          })}
-                                       </FormControl> }
-                                       */}
-
                                        {errors && errors.course_id
                                           ? ErrorShowing(errors?.course_id?.message)
                                           : ""}
@@ -319,9 +249,9 @@ export default function AddSession() {
                                        render={({ field }) => (
                                           <FormControl fullWidth>
                                              <Select {...field} displayEmpty>
-                                                <MenuItem value="">
+                                                {/* <MenuItem value="">
                                                    {updateSession.module?.title}
-                                                </MenuItem>
+                                                </MenuItem> */}
                                                 {getModules?.map((module: any) => {
                                                    return (<MenuItem key={module.id} value={module.id}>{capitalizeFirstLetter(module?.title)}</MenuItem>)
                                                 })}
@@ -337,12 +267,11 @@ export default function AddSession() {
 
                                     <RichEditor
                                        {...register("description")}
-                                       value={despcriptionContent}
+                                       value={despcriptionContent ? despcriptionContent : getSession?.description}
                                        onChange={(e) =>
                                           handleContentChange(e, "description")
                                        }
                                     />
-
 
                                     {despcriptionContent ? '' : errors && errors.description ? ErrorShowing(errors?.description?.message) : ""}
                                  </Grid>

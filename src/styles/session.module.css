@@ -30,3 +30,7 @@
     display: flex;
     align-items: center;
 }
+
+.MuiPaper-root .MuiPaper-elevation .MuiPaper-rounded .MuiPaper-elevation8 .MuiPopover-paper .css-3bmhjh-MuiPaper-root-MuiPopover-paper{
+width: 70% !important;
+}
