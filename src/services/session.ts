@@ -8,7 +8,7 @@ import { HandleLogout } from "./auth"
 
 export const HandleSessionCreate = async(reqData:any) =>{
     return await axios({
-      method: "post",
+      method: "POST",
       url: `${API.createSession}`,
       headers: LoginHeader(),
       data:reqData,
@@ -40,6 +40,42 @@ export const HandleSessionCreate = async(reqData:any) =>{
           HandleLogout()
         }else{
           toast.error("Something went wrong")
+        }
+        return error;
+      })
+  }
+
+  export const HandleSessionGetByID = async(sessionId:any) =>{
+    return await axios({
+      method: "GET",
+      url: `${API.getSessionBYID}/${sessionId}`,
+      headers: LoginHeader(),
+    }).then((request) => {
+        return request;
+      }).catch((error) => {
+        if(error.response.status === 401){
+          HandleLogout()
+        }else{
+          toast.error("Session added failed")
+        }
+        return error;
+      })
+  }
+
+  export const HandleSessionUpdate = async(sessionId:any, updateData:any) =>{
+    return await axios({
+      method: "PUT",
+      url: `${API.updateSession}/${sessionId}`,
+      headers: LoginHeader(),
+      data: updateData,
+    }).then((request) => {
+      toast.success("Session Updated Successfully")
+        return request;
+      }).catch((error) => {
+        if(error.response.status === 401){
+          HandleLogout()
+        }else{
+          toast.error("Session added failed")
         }
         return error;
       })

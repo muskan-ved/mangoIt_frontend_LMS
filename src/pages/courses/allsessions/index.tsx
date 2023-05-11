@@ -9,11 +9,6 @@ import {
   Card,
   CardContent,
   Container,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   FormControl,
   Grid,
   IconButton,
@@ -33,13 +28,14 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { SearchOutlined } from "@mui/icons-material";
+import { Margin, SearchOutlined } from "@mui/icons-material";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
 import ArrowDownwardOutlinedIcon from '@mui/icons-material/ArrowDownwardOutlined';
 import ArrowUpwardOutlinedIcon from '@mui/icons-material/ArrowUpwardOutlined';
+import CloseIcon from '@mui/icons-material/Close';
 // External Components
 import Navbar from "@/common/LayoutNavigations/navbar";
 import SideBar from "@/common/LayoutNavigations/sideBar";
@@ -58,6 +54,7 @@ import Sessions from "../../../styles/session.module.css"
 import { HandleSessionDelete, HandleSessionGet } from "@/services/session";
 import { HandleCourseGet } from "@/services/course";
 import { HandleModuleGet } from "@/services/module";
+import { AlertDialog } from "@/common/DeleteListRow/deleteRow";
 
 interface Column {
   id: "id" | "title" | "course_id" | "module_id" | "is_deleted" | "action";
@@ -72,7 +69,6 @@ const columns: Column[] = [
   { id: "title", label: "SESSION NAME", minWidth: 170 },
   { id: "course_id", label: "COURSE NAME", minWidth: 100 },
   { id: "module_id", label: "MODULE NAME", minWidth: 100 },
-
   { id: "is_deleted", label: "STATUS", minWidth: 100 },
   { id: "action", label: "ACTION", minWidth: 100 },
 ];
@@ -86,6 +82,8 @@ const AllSession = () => {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [toggle, setToggle] = React.useState<boolean>(false);
   const [open, setOpen] = React.useState(false);
+  const [search, setSearch] = React.useState('');
+  const [getFilter, setFilter] = React.useState<number>(0);
   const [deleteRow, setDeleteRow] = React.useState<sessionType | any>([])
 
   const router = useRouter()
@@ -102,6 +100,7 @@ const AllSession = () => {
   const {
     handleSubmit,
     control,
+    reset,
   } = useForm();
 
   const onSubmit = (event: any) => {
@@ -121,20 +120,19 @@ const AllSession = () => {
 
   };
 
+  const resetFilterValue = () => {
+    setFilter(0)
+    reset();
+  }
+
   const handleDeletesRow = () => {
-      HandleSessionDelete(deleteRow.id).then((deletedRow)=>{
-        HandleSessionGet('', '').then((newRows) => {
-          setRows(newRows.data)
-        })
+    HandleSessionDelete(deleteRow.id).then((deletedRow) => {
+      HandleSessionGet('', '').then((newRows) => {
+        setRows(newRows.data)
       })
-      setOpen(!open);
+    })
+    setOpen(!open);
   }
-
-  const handleEditRow = (e: any) => {
-    console.log(e)
-  }
-
-
 
   const handleSort = (rowsData: any) => {
     const sortData = handleSortData(rowsData)
@@ -142,11 +140,19 @@ const AllSession = () => {
     setToggle(!toggle)
   }
 
-  const handleSearch = (e: any) => {
-    const search = e.target.value;
-    HandleSessionGet(search, '').then((itemSeached) => {
-      setRows(itemSeached.data);
-    })
+  const handleSearch = (e: any, identifier: any) => {
+    if (identifier === 'reset') {
+      HandleSessionGet('', '').then((itemSeached) => {
+        setRows(itemSeached.data);
+      })
+      setSearch(e)
+    } else {
+      const search = e.target.value;
+      setSearch(e.target.value)
+      HandleSessionGet(search, '').then((itemSeached) => {
+        setRows(itemSeached.data);
+      })
+    }
   }
 
   const getSessionData = () => {
@@ -173,7 +179,7 @@ const AllSession = () => {
     getCourseData();
   }, []);
 
-  // console.log("oopp", deleteRow)
+  console.log("oopps", getFilter)
   return (
     <>
       <Navbar />
@@ -186,22 +192,23 @@ const AllSession = () => {
             First="Home"
             Middle="Session"
             Text="SESSION"
-            Link="/session/allsessions"
+            Link="/courses/allsessions"
           />
 
           {/* main content */}
           <Card>
             <CardContent>
               <TextField
-                id="standard-bare"
+                id="standard-search"
+                value={search}
                 variant="outlined"
                 placeholder="Search"
-                onChange={(e) => handleSearch(e)}
+                onChange={(e) => handleSearch(e, '')}
                 InputProps={{
                   endAdornment: (
-                    <IconButton>
+                    !search ? <IconButton>
                       <SearchOutlined />
-                    </IconButton>
+                    </IconButton> : <IconButton onClick={(e) => handleSearch('', 'reset')}> <CloseIcon /></IconButton>
                   ),
                 }}
               />
@@ -212,7 +219,7 @@ const AllSession = () => {
                   {(popupState) => (
                     <Box>
                       <Button
-                        sx={{ display: "inline-flex", color: "#1976d2" }}
+                        className={Sessions.popStateFilterButton}
                         {...bindTrigger(popupState)}
                       >
                         <FilterAltOutlinedIcon />
@@ -233,36 +240,35 @@ const AllSession = () => {
                         <Box>
                           <Container
                             className="filter-box"
-                            style={{ padding: "15px" }}
+                            style={{ padding: "15px", width: '100%' }}
                           >
                             <Grid>
                               <Typography variant="h5" className={Sessions.filterBox}>
                                 Filter
                               </Typography>
                               <Box component="form"
-                                noValidate
-
+                                // noValidate
                                 onSubmit={handleSubmit(onSubmit)}
-                                sx={{ mt: 1 }}>
+                                className={Sessions.filterForm}>
                                 <Stack
                                   style={{ marginTop: "10px" }}
                                   className="form-filter"
                                 >
                                   <Grid container spacing={2}>
-                                    <Grid item xs={12} md={6} lg={6} >
+                                    <Grid item xs={12} md={4} lg={4} >
                                       <Stack spacing={2}>
-                                        <InputLabel htmlFor="name" sx={{ fontWeight: 'bold' }}>
+                                        <InputLabel htmlFor="name" className={Sessions.courseInFilter}>
                                           Course
                                         </InputLabel>
                                         <Controller
                                           name="course"
                                           control={control}
-                                          defaultValue=""
+                                          defaultValue={getFilter}
                                           render={({ field }) => (
                                             <FormControl fullWidth>
                                               <Select {...field} displayEmpty>
                                                 <MenuItem value={0}>
-                                                  All course
+                                                  All
                                                 </MenuItem>
                                                 {getCourse?.map((data: any) => {
                                                   return (<MenuItem key={data.id} value={data.id}>{capitalizeFirstLetter(data?.title)}</MenuItem>)
@@ -274,20 +280,20 @@ const AllSession = () => {
                                       </Stack>
                                     </Grid>
 
-                                    <Grid item xs={12} md={6} lg={6} >
+                                    <Grid item xs={12} md={4} lg={4} >
                                       <Stack spacing={2}>
-                                        <InputLabel htmlFor="name" sx={{ fontWeight: 'bold' }}>
+                                        <InputLabel htmlFor="name" className={Sessions.moduleInFilter}>
                                           Module
                                         </InputLabel>
                                         <Controller
                                           name="module"
                                           control={control}
-                                          defaultValue=""
+                                          defaultValue={getFilter}
                                           render={({ field }) => (
                                             <FormControl fullWidth>
                                               <Select {...field} displayEmpty>
                                                 <MenuItem value={0}>
-                                                  All module
+                                                  All
                                                 </MenuItem>
                                                 {getModule?.map((data: any) => {
                                                   return (<MenuItem key={data.id} value={data.id}>{capitalizeFirstLetter(data?.title)}</MenuItem>)
@@ -299,15 +305,15 @@ const AllSession = () => {
                                       </Stack>
                                     </Grid>
 
-                                    <Grid item xs={12} md={6} lg={6}>
+                                    <Grid item xs={12} md={4} lg={4}>
                                       <Stack spacing={2}>
-                                        <InputLabel htmlFor="enddate" sx={{ fontWeight: 'bold' }}>
+                                        <InputLabel htmlFor="enddate" className={Sessions.statusInFilter} >
                                           Status
                                         </InputLabel>
                                         <Controller
                                           name="status"
                                           control={control}
-                                          defaultValue=""
+                                          defaultValue={getFilter}
                                           render={({ field }) => (
                                             <FormControl fullWidth>
                                               <Select {...field} displayEmpty>
@@ -324,22 +330,32 @@ const AllSession = () => {
                                         />
                                       </Stack>
                                     </Grid>
-
                                     <Grid
                                       item
                                       xs={12}
                                       lg={12}
                                     >
-                                      <Button
-                                        size="medium"
-                                        type="submit"
-                                        variant="contained"
-                                        color="primary"
-                                        sx={{ float: 'right' }}
-                                        onClick={popupState.close}
-                                      >
-                                        Apply Filter
-                                      </Button>
+                                      <Box className={Sessions.boxInFilter}>
+                                        <Button
+                                          size="medium"
+                                          variant="contained"
+                                          color="primary"
+                                          type="button"
+                                          onClick={resetFilterValue}
+                                        >
+                                          Reset
+                                        </Button>
+                                        <Button
+                                          size="medium"
+                                          type="submit"
+                                          variant="contained"
+                                          color="primary"
+                                          className={Sessions.applyButtonInFiltter}
+                                          onClick={popupState.close}
+                                        >
+                                          Apply
+                                        </Button>
+                                      </Box>
                                     </Grid>
                                   </Grid>
                                 </Stack>
@@ -354,8 +370,8 @@ const AllSession = () => {
                 &nbsp;
                 <Button variant="contained" onClick={() => router.push('/courses/allsessions/addsession')}>Add Session</Button>
               </Box>
-              <Paper sx={{ width: "100%" }}>
-                <TableContainer sx={{ mt: 3 }}>
+              <Paper className={Sessions.papperForTable}>
+                <TableContainer className={Sessions.tableContainer}>
                   <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                       <TableRow>
@@ -370,7 +386,7 @@ const AllSession = () => {
                                 ''
                             }}
                           >
-                            {toggle ? column.label === 'ID' ? <Typography>ID <ArrowUpwardOutlinedIcon fontSize="small" /> </Typography> : column.label : column.label === 'ID' ? <Typography>ID <ArrowDownwardOutlinedIcon fontSize="small" /> </Typography> : column.label}
+                            {toggle ? column.label === 'ID' ? <Typography>ID <ArrowDownwardOutlinedIcon fontSize="small" /> </Typography> : column.label : column.label === 'ID' ? <Typography>ID <ArrowUpwardOutlinedIcon fontSize="small" /> </Typography> : column.label}
                           </TableCell>
                         ))}
                       </TableRow>
@@ -382,7 +398,7 @@ const AllSession = () => {
                           page * rowsPerPage + rowsPerPage
                         )
                         .map((row: any) => {
-                          const statusColor = (row.status === "active" ? "green" : row.status === "inactive" ? "red" : "orange")
+                          const statusColor = (row.status === "active" ? Sessions.activeClassColor : row.status === "inactive" ? Sessions.inactiveClassColor : Sessions.draftClassColor)
                           return (
                             <TableRow
                               hover
@@ -394,13 +410,13 @@ const AllSession = () => {
                               <TableCell>{capitalizeFirstLetter(row.title)}</TableCell>
                               <TableCell>{capitalizeFirstLetter(row.course && row.course.title)}</TableCell>
                               <TableCell>{capitalizeFirstLetter(row.module && row.module.title)}</TableCell>
-                              <TableCell sx={{ color: statusColor }}>{capitalizeFirstLetter(row.status)}</TableCell>
-                              <TableCell><Button onClick={() => handleEditRow(row)} variant="outlined" color="success" sx={{margin:'5px'}}><ModeEditOutlineIcon /></Button>
-                                <Button variant="outlined" color="error" onClick={() => handleClickOpen(row)}><DeleteOutlineIcon /></Button>
+                              <TableCell className={statusColor}>{capitalizeFirstLetter(row.status)}</TableCell>
+                              <TableCell><Button onClick={() => router.push(`/courses/allsessions/updatesession/${row.id}`)} variant="outlined" color="success" className={Sessions.editDeleteButton}><ModeEditOutlineIcon /></Button>
+                                <Button className={Sessions.editDeleteButton} variant="outlined" color="error" onClick={() => handleClickOpen(row)}><DeleteOutlineIcon /></Button>
                               </TableCell>
                             </TableRow>
                           );
-                        }) : <TableRow><TableCell>Record not Found</TableCell></TableRow>}
+                        }) : <TableRow><TableCell colSpan={6} className={Sessions.tableLastCell}> <Typography>Record not Found</Typography> </TableCell></TableRow>}
                     </TableBody>
                   </Table>
                 </TableContainer>
@@ -414,27 +430,13 @@ const AllSession = () => {
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
               />
-              <Dialog
+              <AlertDialog
                 open={open}
                 onClose={handleClickOpen}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-              >
-                <DialogTitle id="alert-dialog-title">
-                  {"Delete Session"}
-                </DialogTitle>
-                <DialogContent >
-                  <DialogContentText id="alert-dialog-description" >
-                    Are you sure want to delete <Typography component={'span'} sx={{fontWeight: 'bold'}}>{capitalizeFirstLetter(deleteRow.title)}</Typography>
-                  </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleClickOpen} color="error">No</Button>
-                  <Button onClick={handleDeletesRow} autoFocus color="success">
-                    Yes
-                  </Button>
-                </DialogActions>
-              </Dialog>
+                onSubmit={handleDeletesRow}
+                title={deleteRow.title}
+                whatYouDelete='Session'
+              />
             </CardContent>
           </Card>
         </Box>
