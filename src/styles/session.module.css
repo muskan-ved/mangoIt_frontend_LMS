@@ -25,12 +25,60 @@
 .filterBox {
     font-weight: bold;
 }
+.filterForm{
+    margin-top: 8px;
+}
 .mainFilterBox {
     float: right;
     display: flex;
     align-items: center;
 }
+.popStateFilterButton{
+    display: inline-flex;
+    color: #1976d2;
+}
+.editDeleteButton{
+    padding: 5px 9px !important;
+    min-width: 30px;
+    margin: 3px;
+}
 
 .MuiPaper-root .MuiPaper-elevation .MuiPaper-rounded .MuiPaper-elevation8 .MuiPopover-paper .css-3bmhjh-MuiPaper-root-MuiPopover-paper{
 width: 70% !important;
+}
+.courseInFilter{
+    font-weight: bold;
+}
+.moduleInFilter{
+    font-weight: bold;
+}
+.statusInFilter{
+    font-weight: bold;
+}
+.boxInFilter{
+    float: right;
+}
+.applyButtonInFiltter{
+    margin-left: 10px;
+}
+.papperForTable{
+    width: 100%;
+}
+.tableContainer{
+    margin-top: 24px;
+}
+.tableCellMargin{
+    margin: 5px;
+}
+.tableLastCell{
+    text-align: center;
+}
+.activeClassColor{
+    color: green;
+}
+.inactiveClassColor{
+    color:red;
+}
+.draftClassColor{
+    color: orange;
 }

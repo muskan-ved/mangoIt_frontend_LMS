@@ -2,7 +2,6 @@
 import * as React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useRouter } from "next/router";
-
 // MUI Import
 import {
   Box,
@@ -57,8 +56,6 @@ import { HandleCourseGet } from "@/services/course";
 import { HandleModuleGet } from "@/services/module";
 import { AlertDialog } from "@/common/DeleteListRow/deleteRow";
 
-
-
 interface Column {
   id: "id" | "title" | "course_id" | "module_id" | "is_deleted" | "action";
   label: string;
@@ -72,7 +69,6 @@ const columns: Column[] = [
   { id: "title", label: "SESSION NAME", minWidth: 170 },
   { id: "course_id", label: "COURSE NAME", minWidth: 100 },
   { id: "module_id", label: "MODULE NAME", minWidth: 100 },
-
   { id: "is_deleted", label: "STATUS", minWidth: 100 },
   { id: "action", label: "ACTION", minWidth: 100 },
 ];
@@ -88,9 +84,6 @@ const AllSession = () => {
   const [open, setOpen] = React.useState(false);
   const [search, setSearch] = React.useState('');
   const [getFilter, setFilter] = React.useState<number>(0);
-
-
-
   const [deleteRow, setDeleteRow] = React.useState<sessionType | any>([])
 
   const router = useRouter()
@@ -107,6 +100,7 @@ const AllSession = () => {
   const {
     handleSubmit,
     control,
+    reset,
   } = useForm();
 
   const onSubmit = (event: any) => {
@@ -126,11 +120,10 @@ const AllSession = () => {
 
   };
 
-  const resetFilterValue = () =>{
-    console.log('sfdsf')
+  const resetFilterValue = () => {
     setFilter(0)
+    reset();
   }
-
 
   const handleDeletesRow = () => {
     HandleSessionDelete(deleteRow.id).then((deletedRow) => {
@@ -226,7 +219,7 @@ const AllSession = () => {
                   {(popupState) => (
                     <Box>
                       <Button
-                        sx={{ display: "inline-flex", color: "#1976d2" }}
+                        className={Sessions.popStateFilterButton}
                         {...bindTrigger(popupState)}
                       >
                         <FilterAltOutlinedIcon />
@@ -254,10 +247,9 @@ const AllSession = () => {
                                 Filter
                               </Typography>
                               <Box component="form"
-                                noValidate
-
+                                // noValidate
                                 onSubmit={handleSubmit(onSubmit)}
-                                sx={{ mt: 1 }}>
+                                className={Sessions.filterForm}>
                                 <Stack
                                   style={{ marginTop: "10px" }}
                                   className="form-filter"
@@ -265,7 +257,7 @@ const AllSession = () => {
                                   <Grid container spacing={2}>
                                     <Grid item xs={12} md={4} lg={4} >
                                       <Stack spacing={2}>
-                                        <InputLabel htmlFor="name" sx={{ fontWeight: 'bold' }}>
+                                        <InputLabel htmlFor="name" className={Sessions.courseInFilter}>
                                           Course
                                         </InputLabel>
                                         <Controller
@@ -276,7 +268,7 @@ const AllSession = () => {
                                             <FormControl fullWidth>
                                               <Select {...field} displayEmpty>
                                                 <MenuItem value={0}>
-                                                  All course
+                                                  All
                                                 </MenuItem>
                                                 {getCourse?.map((data: any) => {
                                                   return (<MenuItem key={data.id} value={data.id}>{capitalizeFirstLetter(data?.title)}</MenuItem>)
@@ -290,7 +282,7 @@ const AllSession = () => {
 
                                     <Grid item xs={12} md={4} lg={4} >
                                       <Stack spacing={2}>
-                                        <InputLabel htmlFor="name" sx={{ fontWeight: 'bold' }}>
+                                        <InputLabel htmlFor="name" className={Sessions.moduleInFilter}>
                                           Module
                                         </InputLabel>
                                         <Controller
@@ -301,7 +293,7 @@ const AllSession = () => {
                                             <FormControl fullWidth>
                                               <Select {...field} displayEmpty>
                                                 <MenuItem value={0}>
-                                                  All module
+                                                  All
                                                 </MenuItem>
                                                 {getModule?.map((data: any) => {
                                                   return (<MenuItem key={data.id} value={data.id}>{capitalizeFirstLetter(data?.title)}</MenuItem>)
@@ -315,7 +307,7 @@ const AllSession = () => {
 
                                     <Grid item xs={12} md={4} lg={4}>
                                       <Stack spacing={2}>
-                                        <InputLabel htmlFor="enddate" sx={{ fontWeight: 'bold' }}>
+                                        <InputLabel htmlFor="enddate" className={Sessions.statusInFilter} >
                                           Status
                                         </InputLabel>
                                         <Controller
@@ -338,33 +330,32 @@ const AllSession = () => {
                                         />
                                       </Stack>
                                     </Grid>
-
-
                                     <Grid
                                       item
                                       xs={12}
                                       lg={12}
                                     >
-                                      <Button
-                                        size="medium"
-                                        type="submit"
-                                        variant="contained"
-                                        color="primary"
-                                        sx={{ float: 'right', marginLeft: '10px' }}
-                                        onClick={popupState.close}
-                                      >
-                                        Apply
-                                      </Button>
-                                      <Button
-                                        size="medium"                               
-                                        variant="contained"
-                                        color="primary"
-                                        type="button"
-                                        sx={{ float: 'right' }}
-                                        onClick={resetFilterValue}
-                                      >
-                                        Reset
-                                      </Button>
+                                      <Box className={Sessions.boxInFilter}>
+                                        <Button
+                                          size="medium"
+                                          variant="contained"
+                                          color="primary"
+                                          type="button"
+                                          onClick={resetFilterValue}
+                                        >
+                                          Reset
+                                        </Button>
+                                        <Button
+                                          size="medium"
+                                          type="submit"
+                                          variant="contained"
+                                          color="primary"
+                                          className={Sessions.applyButtonInFiltter}
+                                          onClick={popupState.close}
+                                        >
+                                          Apply
+                                        </Button>
+                                      </Box>
                                     </Grid>
                                   </Grid>
                                 </Stack>
@@ -379,8 +370,8 @@ const AllSession = () => {
                 &nbsp;
                 <Button variant="contained" onClick={() => router.push('/courses/allsessions/addsession')}>Add Session</Button>
               </Box>
-              <Paper sx={{ width: "100%" }}>
-                <TableContainer sx={{ mt: 3 }}>
+              <Paper className={Sessions.papperForTable}>
+                <TableContainer className={Sessions.tableContainer}>
                   <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                       <TableRow>
@@ -407,7 +398,7 @@ const AllSession = () => {
                           page * rowsPerPage + rowsPerPage
                         )
                         .map((row: any) => {
-                          const statusColor = (row.status === "active" ? "green" : row.status === "inactive" ? "red" : "orange")
+                          const statusColor = (row.status === "active" ? Sessions.activeClassColor : row.status === "inactive" ? Sessions.inactiveClassColor : Sessions.draftClassColor)
                           return (
                             <TableRow
                               hover
@@ -419,13 +410,13 @@ const AllSession = () => {
                               <TableCell>{capitalizeFirstLetter(row.title)}</TableCell>
                               <TableCell>{capitalizeFirstLetter(row.course && row.course.title)}</TableCell>
                               <TableCell>{capitalizeFirstLetter(row.module && row.module.title)}</TableCell>
-                              <TableCell sx={{ color: statusColor }}>{capitalizeFirstLetter(row.status)}</TableCell>
-                              <TableCell><Button onClick={() => router.push(`/courses/allsessions/updatesession/${row.id}`)} variant="outlined" color="success" sx={{ margin: '5px' }}><ModeEditOutlineIcon /></Button>
-                                <Button variant="outlined" color="error" onClick={() => handleClickOpen(row)}><DeleteOutlineIcon /></Button>
+                              <TableCell className={statusColor}>{capitalizeFirstLetter(row.status)}</TableCell>
+                              <TableCell><Button onClick={() => router.push(`/courses/allsessions/updatesession/${row.id}`)} variant="outlined" color="success" className={Sessions.editDeleteButton}><ModeEditOutlineIcon /></Button>
+                                <Button className={Sessions.editDeleteButton} variant="outlined" color="error" onClick={() => handleClickOpen(row)}><DeleteOutlineIcon /></Button>
                               </TableCell>
                             </TableRow>
                           );
-                        }) : <TableRow><TableCell colSpan={6} sx={{ textAlign: 'center' }}> <Typography>Record not Found</Typography> </TableCell></TableRow>}
+                        }) : <TableRow><TableCell colSpan={6} className={Sessions.tableLastCell}> <Typography>Record not Found</Typography> </TableCell></TableRow>}
                     </TableBody>
                   </Table>
                 </TableContainer>
@@ -439,27 +430,6 @@ const AllSession = () => {
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
               />
-              {/* <Dialog
-                open={open}
-                onClose={handleClickOpen}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-              >
-                <DialogTitle id="alert-dialog-title">
-                  {"Delete Session"}
-                </DialogTitle>
-                <DialogContent >
-                  <DialogContentText id="alert-dialog-description" >
-                    Are you sure want to delete <Typography component={'span'} sx={{ fontWeight: 'bold' }}>{capitalizeFirstLetter(deleteRow.title)}</Typography>
-                  </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleClickOpen} color="error">No</Button>
-                  <Button onClick={handleDeletesRow} autoFocus color="success">
-                    Yes
-                  </Button>
-                </DialogActions>
-              </Dialog> */}
               <AlertDialog
                 open={open}
                 onClose={handleClickOpen}
