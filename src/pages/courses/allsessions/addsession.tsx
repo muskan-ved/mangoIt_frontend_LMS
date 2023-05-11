@@ -135,6 +135,7 @@ export default function AddSession() {
       }
    }
 
+   console.log("oopps", despcriptionContent)
    return (
       <>
          <Navbar />

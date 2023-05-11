@@ -179,7 +179,6 @@ const AllSession = () => {
     getCourseData();
   }, []);
 
-  console.log("oopps", getFilter)
   return (
     <>
       <Navbar />

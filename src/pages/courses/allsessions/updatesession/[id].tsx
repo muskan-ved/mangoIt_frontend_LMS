@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from "next/router";
 // MUI Import
+// import { Attachment, Description, Image, Movie, PictureAsPdf } from '@material-ui/icons';
 import { Box, Button, Card, CardContent, FormControl, Grid, IconButton, InputLabel, MenuItem, NativeSelect, Select, TextField, Typography } from "@mui/material";
 // External Components
 import SideBar from "@/common/LayoutNavigations/sideBar";
@@ -29,6 +30,8 @@ import { ToastContainer } from 'react-toastify';
 import { HandleCourseGet } from '@/services/course';
 import { HandleModuleGet } from '@/services/module';
 import { HandleSessionUpdate, HandleSessionGetByID } from '@/services/session';
+import { Attachment, Description, Image, Movie, PictureAsPdf } from '@mui/icons-material';
+import Preview from '@/common/previewAttachment';
 
 
 export default function UpdateSession() {
@@ -39,6 +42,7 @@ export default function UpdateSession() {
    const [getSession, setSession] = useState<sessionType | any>();
    const [getModules, setModules] = useState<moduleType | any>();
    const [file, setFile] = useState<string | any>('')
+   const [attachmentType, setAttachmentType] = useState('');
    const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
    const [isLoading, setLoading] = useState<boolean>(false);
 
@@ -58,7 +62,7 @@ export default function UpdateSession() {
       setValue(identifier, value);
 
    };
-   console.log("vfd", despcriptionContent)
+
    const onSubmit = async (event: any) => {
       const id = router.query.id
       // const reqData = { ...event, 'attachment': file }
@@ -147,6 +151,21 @@ export default function UpdateSession() {
          const reader = new FileReader();
          reader.onload = (e: any) => {
             setFile(file);
+            // Determine the file type based on the extension
+            const extension = file.name.split('.').pop();
+            if (extension === 'jpg' || extension === 'gif' || extension === 'png' || extension === 'jpeg') {
+               setAttachmentType('image');
+            } else if (extension === 'mp4') {
+               setAttachmentType('video');
+            } else if (extension === 'txt') {
+               setAttachmentType('text');
+            } else if (extension === 'pdf') {
+               setAttachmentType('pdf');
+            } else {
+               setAttachmentType('');
+            }
+
+ 
             setValue("file", file);
          }
          if (file) {
@@ -154,6 +173,24 @@ export default function UpdateSession() {
          }
       }
    }
+
+     const getAttachmentIcon = (attachmentType:any) => {
+    switch (attachmentType) {
+      case 'image':
+        return <Image />;
+      case 'video':
+        return <Movie />;
+      case 'text':
+        return <Description />;
+      case 'pdf':
+        return <PictureAsPdf />;
+      default:
+        return <Attachment />;
+    }
+  };
+
+  //  console.log('oopps', attachmentType)
+   console.log('oopp',getSession)
 
    return (
       <>
@@ -267,7 +304,43 @@ export default function UpdateSession() {
                                              onChange={handleChange}
                                              hidden
                                           />
-                                          <Typography className={Sessions.sessionAttachments}>  {!file.name ? "Upload" : file.name}</Typography></InputLabel>
+                                          {getSession !== undefined && <Preview name={getSession.attachment} />}
+                                          {attachmentType === 'image' && file && (
+                                             <Box>
+                                                <p>Selected image: {file.name}</p>
+                                                <img src={URL.createObjectURL(file)} alt="Selected image" width='80px' height='80px' />
+                                             </Box>
+                                          )}
+                                          {attachmentType === 'video' && file && (
+                                             <Box>
+                                                <p>Selected video: {file.name}</p>
+                                                <video controls width='80px' height='80px'>
+                                                   <source src={URL.createObjectURL(file)} type={file.type} />
+                                                </video>
+                                             </Box>
+                                          )}
+                                          {attachmentType === 'text' && file && (
+                                             <Box>
+                                                <p>Selected text file: {file.name}</p>
+                                                <pre>{file.name}</pre>
+                                             </Box>
+                                          )}
+                                          {attachmentType === 'pdf' && file && (
+                                             <Box>
+                                                <p>Selected PDF file: {file.name}</p>
+                                                <embed src={URL.createObjectURL(file)} type="application/pdf" />
+                                             </Box>
+                                          )}
+                                          {/* {file && (
+                                             <Box>
+                                                <button onClick={() => window.open(URL.createObjectURL(file))}>
+                                                   Download file
+                                                </button>
+                                             </Box>
+                                          )} */}
+
+                                          {/* <Typography className={Sessions.sessionAttachments}>  {!file.name ? "Upload" : file.name}</Typography> */}
+                                          </InputLabel>
                                     </Box>
                                     {file ? '' : errors && errors.file ? ErrorShowing(errors?.file?.message) : ""}
                                  </Grid>
