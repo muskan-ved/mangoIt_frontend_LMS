@@ -17,9 +17,9 @@ const Preview = ({ name }: any) => {
         return (
             <Box className={Sessions.updateSessionAttachments}>
                 {/* <img src={`${BASE_URL}/${name}`} width='80px' height='80px'/> */}
-                <Typography><a href={`${BASE_URL}/${name}`} download={name} target= '_blank'>
-                    <ImageIcon /> Preview
-                </a></Typography>
+                <a href={`${BASE_URL}/${name}`} download={name} target= '_blank'>
+                    <ImageIcon /> <Typography>Preview</Typography>
+                </a>
             </Box>
         )
     } else if (extension === 'mp4') {
@@ -27,27 +27,24 @@ const Preview = ({ name }: any) => {
             <Box className={Sessions.updateSessionAttachments}>
                 {/* <ReactPlayer url={`${BASE_URL}/${name}`} controls={true} width='80px' height='80px' /> */}
                 <a href={`${BASE_URL}/${name}`} download={name} target= '_blank'>
-                   <VideoLibraryIcon/> Preview
+                   <VideoLibraryIcon/><Typography>Preview</Typography>
                 </a>
             </Box>
         );
     } else if (extension === 'txt') {
         return (
-            <Box>
+            <Box className={Sessions.updateSessionAttachments}>
                  <a href={`${BASE_URL}/${name}`} download={name} target= '_blank'>
-                 <DescriptionIcon /> Preview
+                 <DescriptionIcon /><Typography>Preview</Typography>
                 </a>
                 
             </Box>
         )
     } else if (extension === 'pdf') {
         return (
-            <Box className={Sessions.updateSessionAttachments}>
-                {/* <Document file={`${BASE_URL}/${name}`}>
-                    <Page pageNumber={1} />
-                </Document> */}
+            <Box className={Sessions.updateSessionAttachments}>          
                 <a href={`${BASE_URL}/${name}`} download={name} target= '_blank'>
-                <PictureAsPdfIcon/> Preview
+                <PictureAsPdfIcon/><Typography>Preview</Typography>
                 </a>
             </Box>
         );

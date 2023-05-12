@@ -252,7 +252,8 @@ export default function AddSession() {
                                              onChange={handleChange}
                                              hidden
                                           />
-                                          <Typography className={Sessions.sessionAttachments}>  {!file.name ? "Upload" : file.name}</Typography></InputLabel>
+                                          <Typography className={Sessions.sessionAttachments}>  {!file.name ? "Upload" : file.name}</Typography>
+                                       </InputLabel>
                                     </Box>
                                     {file ? '' : errors && errors.file ? ErrorShowing(errors?.file?.message) : ""}
                                  </Grid>
