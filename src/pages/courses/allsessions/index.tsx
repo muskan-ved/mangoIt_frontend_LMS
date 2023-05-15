@@ -113,6 +113,8 @@ const AllSession = () => {
     }
     HandleSessionGet('', filterData).then((itemFiltered) => {
       setRows(itemFiltered.data)
+      setFilter(0)
+      reset();
     })
 
   }
@@ -125,6 +127,7 @@ const AllSession = () => {
   const resetFilterValue = () => {
     setFilter(0)
     reset();
+
   }
 
   const handleDeletesRow = () => {
