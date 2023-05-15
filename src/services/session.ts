@@ -87,6 +87,7 @@ export const HandleSessionCreate = async(reqData:any) =>{
       url: `${API.deleteSession}/${rowID}`,
       headers: LoginHeader(),
     }).then((request) => {
+      toast.success("Session Deleted Successfully")
         return request;
       }).catch((error) => {
         if(error.response.status === 401){
