@@ -10,6 +10,7 @@ import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
 import Footer from "@/common/LayoutNavigations/footer";
 import Navbar from "../../../../common/LayoutNavigations/navbar";
 import RichEditor from "@/common/RichTextEditor/textEditor";
+import Preview from '@/common/previewAttachment';
 // Helper Import
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -31,7 +32,7 @@ import { HandleCourseGet } from '@/services/course';
 import { HandleModuleGet } from '@/services/module';
 import { HandleSessionUpdate, HandleSessionGetByID } from '@/services/session';
 import { Attachment, Description, Image, Movie, PictureAsPdf } from '@mui/icons-material';
-import Preview from '@/common/previewAttachment';
+
 
 
 export default function UpdateSession() {
@@ -45,6 +46,7 @@ export default function UpdateSession() {
    const [attachmentType, setAttachmentType] = useState('');
    const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
    const [isLoading, setLoading] = useState<boolean>(false);
+   const [error, setError] = useState<string>();
 
    const {
       register,
@@ -100,6 +102,7 @@ export default function UpdateSession() {
 
    const getSessionData = async () => {
       const id = router.query.id
+      if(id){
       HandleSessionGetByID(id).then((session) => {
          setSession(session.data)
          const fields = [
@@ -111,6 +114,18 @@ export default function UpdateSession() {
          ];
          fields.forEach((field) => setValue(field, session.data[field]));
       })
+      .catch((error) => {
+         setError(error.message);
+       });
+      }
+
+      if (error) {
+         return <Typography >{error}</Typography >;
+       }
+
+       if (!getSession) {
+         return <Typography >Loading...</Typography >;
+       }
    }
 
    const getCourseData = () => {
@@ -135,7 +150,7 @@ export default function UpdateSession() {
          getCourseData();
          getModuleData();
       }
-   }, []);
+   }, [router.query]);
 
    function ErrorShowing(errorMessage: any) {
       return (
