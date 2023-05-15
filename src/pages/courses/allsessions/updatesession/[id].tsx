@@ -110,7 +110,6 @@ export default function UpdateSession() {
             "attachment"
          ];
          fields.forEach((field) => setValue(field, session.data[field]));
-
       })
    }
 
