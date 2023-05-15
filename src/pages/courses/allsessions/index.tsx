@@ -50,11 +50,13 @@ import { moduleType } from "@/types/moduleType";
 // CSS Import
 import styles from "../../../styles/sidebar.module.css";
 import Sessions from "../../../styles/session.module.css"
+import { ToastContainer } from "react-toastify";
 // API Service
 import { HandleSessionDelete, HandleSessionGet } from "@/services/session";
 import { HandleCourseGet } from "@/services/course";
 import { HandleModuleGet } from "@/services/module";
 import { AlertDialog } from "@/common/DeleteListRow/deleteRow";
+
 
 interface Column {
   id: "id" | "title" | "course_id" | "module_id" | "is_deleted" | "action";
@@ -441,6 +443,7 @@ const AllSession = () => {
         </Box>
       </Box>
       {/* <Footer/> */}
+      <ToastContainer />
     </>
   );
 };

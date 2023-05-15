@@ -35,7 +35,9 @@ const handleClickShowConfirmPassword = () => setShowConfirmPassword((show) => !s
     setLoading(true)
       await HandleRegister(event).then((res) => {
         if(res.status === 201){
-          router.push('/login')
+          setTimeout(() => {          
+            router.push('/login')
+          }, 1000);
         }
         setLoading(false)
       }).catch(() => {
