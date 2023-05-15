@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from "next/router";
 // MUI Import
+// import { Attachment, Description, Image, Movie, PictureAsPdf } from '@material-ui/icons';
 import { Box, Button, Card, CardContent, FormControl, Grid, IconButton, InputLabel, MenuItem, NativeSelect, Select, TextField, Typography } from "@mui/material";
 // External Components
 import SideBar from "@/common/LayoutNavigations/sideBar";
@@ -12,7 +13,7 @@ import RichEditor from "@/common/RichTextEditor/textEditor";
 // Helper Import
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { sessionValidations } from '@/validation_schema/sessionValidation';
+import { sessionUpdateValidation } from '@/validation_schema/sessionValidation';
 import { LoadingButton } from "@mui/lab";
 import CircularProgressBar from '@/common/CircularProcess/circularProgressBar';
 import SpinnerProgress from '@/common/CircularProgressComponent/spinnerComponent';
@@ -29,6 +30,8 @@ import { ToastContainer } from 'react-toastify';
 import { HandleCourseGet } from '@/services/course';
 import { HandleModuleGet } from '@/services/module';
 import { HandleSessionUpdate, HandleSessionGetByID } from '@/services/session';
+import { Attachment, Description, Image, Movie, PictureAsPdf } from '@mui/icons-material';
+import Preview from '@/common/previewAttachment';
 
 
 export default function UpdateSession() {
@@ -39,6 +42,7 @@ export default function UpdateSession() {
    const [getSession, setSession] = useState<sessionType | any>();
    const [getModules, setModules] = useState<moduleType | any>();
    const [file, setFile] = useState<string | any>('')
+   const [attachmentType, setAttachmentType] = useState('');
    const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
    const [isLoading, setLoading] = useState<boolean>(false);
 
@@ -50,7 +54,7 @@ export default function UpdateSession() {
       control,
       formState: { errors },
    } = useForm<sessionType | any>({
-      resolver: yupResolver(sessionValidations),
+      resolver: yupResolver(sessionUpdateValidation),
    });
 
    const handleContentChange = (value: string, identifier: string) => {
@@ -58,7 +62,7 @@ export default function UpdateSession() {
       setValue(identifier, value);
 
    };
-   console.log("vfd", despcriptionContent)
+
    const onSubmit = async (event: any) => {
       const id = router.query.id
       // const reqData = { ...event, 'attachment': file }
@@ -103,9 +107,9 @@ export default function UpdateSession() {
             "module_id",
             "course_id",
             "description",
+            "attachment"
          ];
          fields.forEach((field) => setValue(field, session.data[field]));
-
       })
    }
 
@@ -154,6 +158,7 @@ export default function UpdateSession() {
          }
       }
    }
+
 
    return (
       <>
@@ -257,18 +262,26 @@ export default function UpdateSession() {
                                     {despcriptionContent ? '' : errors && errors.description ? ErrorShowing(errors?.description?.message) : ""}
                                  </Grid>
 
-                                 <Grid item xs={12} sm={12} md={12} lg={12} mb={2}>
+                                 <Grid item xs={12} sm={12} md={12} lg={12} mb={2} >
                                     <InputLabel>Attachment</InputLabel>
                                     <Box className={Sessions.sessionAttachmentBox}>
-                                       <InputLabel className={Sessions.subbox} >
+                                    <Box component='span'>
+                                    {getSession !== undefined && <Preview name={getSession.attachment}/>}
+                                   
+                                    </Box>
+                                    <Box component='span'>
+                                       <InputLabel className={Sessions.updateSessionAttachments}>
                                           <input
                                              type="file"
                                              {...register('attachment')}
                                              onChange={handleChange}
                                              hidden
                                           />
-                                          <Typography className={Sessions.sessionAttachments}>  {!file.name ? "Upload" : file.name}</Typography></InputLabel>
-                                    </Box>
+                                          <Typography>  {!file.name ? "Upload" : file.name}</Typography>
+                                       </InputLabel>
+                                                                                                        
+                                       </Box>
+                                       </Box>
                                     {file ? '' : errors && errors.file ? ErrorShowing(errors?.file?.message) : ""}
                                  </Grid>
                                  <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"right"} >

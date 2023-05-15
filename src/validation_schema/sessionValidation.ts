@@ -1,6 +1,5 @@
 import * as Yup from 'yup';
 
-
 export const sessionValidations = Yup.object().shape({
     title: 
     Yup.string().required('Session name is a required field')
@@ -14,3 +13,9 @@ export const sessionValidations = Yup.object().shape({
     file:
     Yup.mixed().required('Attachment is a required field'),
 });
+
+export const sessionUpdateValidation = Yup.object().shape({
+    title: 
+    Yup.string().required('Session name is a required field')
+    .min(3,"Session name must be at least 3 characters"),
+});  
