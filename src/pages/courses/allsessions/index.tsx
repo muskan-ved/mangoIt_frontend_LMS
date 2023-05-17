@@ -86,11 +86,6 @@ const AllSession = () => {
   const [open, setOpen] = React.useState(false);
   const [search, setSearch] = React.useState('');
   const [getFilter, setFilter] = React.useState<number>(0);
-  const [formData, setFormData] = React.useState({
-    name: '',
-    email: '',
-    // other fields
-  });
   const [deleteRow, setDeleteRow] = React.useState<sessionType | any>([])
 
   const router = useRouter()
@@ -129,7 +124,7 @@ const AllSession = () => {
 
   const resetFilterValue = () => {
     setFilter(0)
-    reset({ course: 0, module: 0, status: 0 });
+    reset({ course: 0, module, status: 0 });
 
   }
 

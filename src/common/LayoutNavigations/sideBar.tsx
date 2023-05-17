@@ -12,6 +12,8 @@ const SideBar = () => {
     router.push(path);
   };
 
+
+
   return (
     <>
       <Sidebar
@@ -22,6 +24,7 @@ const SideBar = () => {
       >
         <Menu>
           {NavItem.map((item: any, index: number) => {
+            // console.log('dfd',router.pathname ,item)
             const pathnameMatch =
               router.pathname === item?.path
                 ? styles.activeMenuItem
@@ -38,7 +41,7 @@ const SideBar = () => {
                   >
                     {item?.children.map((subItem: any, idx: number) => {
                       const subPathnameMatch =
-                        router.pathname === subItem.path
+                        router.pathname.includes(subItem.path)
                           ? styles.activeMenuItem
                           : styles.nonActiveMenuItem;
 
@@ -47,7 +50,7 @@ const SideBar = () => {
                           key={idx}
                           icon={<subItem.icon />}
                           onClick={() => navigateURL(subItem.path)}
-                          active={router.pathname === subItem.path}
+                          active={router.pathname.includes(subItem.path)}
                           className={subPathnameMatch}
                         >
                           {subItem.title}
