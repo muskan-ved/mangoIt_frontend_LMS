@@ -41,15 +41,6 @@ import ArrowUpwardOutlinedIcon from '@mui/icons-material/ArrowUpwardOutlined';
 import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
 import { HandleModuleGet } from "@/services/module";
 
-
-interface Column {
-  id: "id" | "title" | "course_id" | "module_id" | "is_deleted" | "action";
-  label: string;
-  minWidth?: number;
-  align?: "right";
-  format?: (value: number) => string;
-}
-
 interface Column {
   id: "id" | "title" | "course_id" | "module_id" | "is_deleted" | "action";
   label: string;
@@ -62,7 +53,7 @@ const columns: Column[] = [
   { id: "id", label: "ID", },
   { id: "title", label: "MODULE NAME", minWidth: 170 },
   { id: "course_id", label: "COURSE NAME", minWidth: 100 },
-  { id: "module_id", label: "MODULE NAME", minWidth: 100 },
+  { id: "module_id", label: "NO. SESSION", minWidth: 100 },
   { id: "is_deleted", label: "STATUS", minWidth: 100 },
   { id: "action", label: "ACTION", minWidth: 100 },
 ];
@@ -84,15 +75,15 @@ const AllModules = () => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-  const handleClickOpen = (data:any) =>{
+  const handleClickOpen = (data: any) => {
 
   }
-  const handleSort = (data:any) =>{
+  const handleSort = (data: any) => {
 
   }
 
-  const getModuleData = () =>{
-    HandleModuleGet().then((modules)=>{
+  const getModuleData = () => {
+    HandleModuleGet('', '').then((modules) => {
       setRows(modules.data);
     })
   }
@@ -100,7 +91,7 @@ const AllModules = () => {
   React.useEffect(() => {
     getModuleData();
   }, []);
-console.log('oops',rows)
+  console.log('oops', rows)
   return (
     <>
       <Navbar />
@@ -303,13 +294,13 @@ console.log('oops',rows)
                               tabIndex={-1}
                               key={row.id}
                             >
-                              <TableCell>{row.id}</TableCell>
-                              <TableCell>{capitalizeFirstLetter(row.title)}</TableCell>
-                              <TableCell>{capitalizeFirstLetter(row.course && row.course.title)}</TableCell>
-                              <TableCell>{capitalizeFirstLetter(row.module && row.module.title)}</TableCell>
-                              <TableCell >{capitalizeFirstLetter(row.status)}</TableCell>
+                              <TableCell>{row.module.id}</TableCell>
+                              <TableCell>{capitalizeFirstLetter(row.module.title)}</TableCell>
+                              <TableCell>{capitalizeFirstLetter(row.module.course && row.module.course.title)}</TableCell>
+                              <TableCell>{(row.sessionCount.sessionCount)}</TableCell>
+                              <TableCell >{capitalizeFirstLetter(row.module.status)}</TableCell>
                               <TableCell><Button onClick={() => router.push(`/courses/allsessions/updatesession/${row.id}`)} variant="outlined" color="success" ><ModeEditOutlineIcon /></Button>
-                                <Button  variant="outlined" color="error" onClick={() => handleClickOpen(row)}><DeleteOutlineIcon /></Button>
+                                <Button variant="outlined" color="error" onClick={() => handleClickOpen(row)}><DeleteOutlineIcon /></Button>
                               </TableCell>
                             </TableRow>
                           );

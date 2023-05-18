@@ -165,7 +165,7 @@ const AllSession = () => {
   }
 
   const getModuleData = () => {
-    HandleModuleGet().then((moduleSearched) => {
+    HandleModuleGet('','').then((moduleSearched) => {
       setModule(moduleSearched.data)
     })
   }

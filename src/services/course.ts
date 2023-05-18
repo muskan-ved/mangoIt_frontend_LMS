@@ -8,7 +8,7 @@ import { HandleLogout } from "./auth"
 
 export const HandleCourseGet = async() =>{ 
     return await axios({
-      method: "GET",
+      method: "POST",
       url: `${API.getAllCourses}`,
       headers: LoginHeader(),
     }).then((request) => {

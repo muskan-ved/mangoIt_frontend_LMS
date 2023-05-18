@@ -95,7 +95,7 @@ export default function AddSession() {
    };
 
    const getModuleData = () => {
-      HandleModuleGet().then((modules) => {
+      HandleModuleGet('','').then((modules) => {
          setModules(modules.data)
       })
    }
