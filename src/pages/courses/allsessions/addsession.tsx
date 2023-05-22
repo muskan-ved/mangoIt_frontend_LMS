@@ -47,18 +47,24 @@ export default function AddSession() {
       reset,
       setValue,
       control,
-      formState: { errors },
+      formState: { errors }, setError
    } = useForm<sessionType | any>({
       resolver: yupResolver(sessionValidations),
    });
 
-   const handleContentChange = (value: string, identifier: string) => {
+   const handleContentChange = (value: any, identifier: string) => {
+      // console.log(value, "identifier", identifier, value === '<p><br></p>', value === `<p><br></p>`)
+      if (value === '<p><br></p>') {
+         setError(identifier, { message: 'Description is a required field' });
+      } else {
+         setError(identifier, { message: '' })
+         setValue(identifier, value);
+      }
       setdespcriptionContent(value);
-      setValue(identifier, value);
-
    };
 
    const onSubmit = async (event: any) => {
+      if (errors.description?.message === '') {
       const reqData: any = {
          description: event.description,
          module_id: event.module_id,
@@ -71,31 +77,35 @@ export default function AddSession() {
       for (var key in reqData) {
          formData.append(key, reqData[key]);
       }
-      console.log('errors', reqData)
-
-      setLoading(true);
-      setLoadingButton(false)
+    
+         setLoading(true);
+         setLoadingButton(false)
       try {
-         const res = await HandleSessionCreate(formData)
-         setSession(res.data)
-         setLoading(false);
-         setTimeout(() => {
-            router.push('/courses/allsessions/')
-         }, 1000)
-      } catch (e) {
+            const res = await HandleSessionCreate(formData)
+            setSession(res.data)
+            setLoading(false);
+            setTimeout(() => {
+               router.push('/courses/allsessions/')
+            }, 1000)
+         } 
+         
+      catch (e) {
          console.log(e)
          setLoadingButton(true)
       }
+   }else {
+      setError('description', { message: 'Description is a required field' });
+   }
    };
 
    const getCourseData = () => {
-      HandleCourseGet().then((courses) => {
+      HandleCourseGet('', '').then((courses) => {
          setCourses(courses.data)
       })
    };
 
    const getModuleData = () => {
-      HandleModuleGet('','').then((modules) => {
+      HandleModuleGet('', '').then((modules) => {
          setModules(modules.data)
       })
    }
@@ -135,7 +145,7 @@ export default function AddSession() {
       }
    }
 
-   // console.log("oopps", despcriptionContent)
+   // console.log("oopps", errors)
    return (
       <>
          <Navbar />
@@ -196,7 +206,7 @@ export default function AddSession() {
                                                       Select Course
                                                    </MenuItem>
                                                    {getCourses?.map((course: any) => {
-                                                      return (<MenuItem key={course.id} value={course.id}>{capitalizeFirstLetter(course?.title)}</MenuItem>)
+                                                      return (<MenuItem key={course.course.id} value={course.course.id}>{capitalizeFirstLetter(course?.course.title)}</MenuItem>)
                                                    })}
                                                 </Select>
                                              </FormControl>
@@ -221,7 +231,7 @@ export default function AddSession() {
                                                    Select Module
                                                 </MenuItem>
                                                 {getModules?.map((module: any) => {
-                                                   return (<MenuItem key={module.id} value={module.id}>{capitalizeFirstLetter(module?.title)}</MenuItem>)
+                                                   return (<MenuItem key={module.module.id} value={module.module.id}>{capitalizeFirstLetter(module?.module.title)}</MenuItem>)
                                                 })}
                                              </Select>
                                           </FormControl>
@@ -239,7 +249,8 @@ export default function AddSession() {
                                           handleContentChange(e, "description")
                                        }
                                     />
-                                    {despcriptionContent ? '' : errors && errors.description ? ErrorShowing(errors?.description?.message) : ""}
+                                    {errors && errors.description ? ErrorShowing(errors?.description?.message) : ""}
+                                    {/* {despcriptionContent ? '' : errors && errors.description ? ErrorShowing(errors?.description?.message) : ""} */}
                                  </Grid>
 
                                  <Grid item xs={12} sm={12} md={12} lg={12} mb={2}>

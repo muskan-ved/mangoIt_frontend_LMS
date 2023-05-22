@@ -14,6 +14,7 @@ import {
   IconButton,
   InputLabel,
   MenuItem,
+  Pagination,
   Popover,
   Select,
   Stack,
@@ -74,13 +75,34 @@ const columns: Column[] = [
   { id: "is_deleted", label: "STATUS", minWidth: 100 },
   { id: "action", label: "ACTION", minWidth: 100 },
 ];
+//pagination function
+function usePagination(data: any, itemsPerPage: any) {
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const maxPage = Math.ceil(data.length / itemsPerPage);
+  function currentData() {
+    const begin = (currentPage - 1) * itemsPerPage;
+    const end = begin + itemsPerPage;
+    return data.slice(begin, end);
+  }
 
+  function next() {
+    setCurrentPage((currentPage:any) => Math.min(currentPage + 1, maxPage));
+  }
+  function prev() {
+    setCurrentPage((currentPage:any) => Math.max(currentPage - 1, 1));
+  }
+  function jump(page: any) {
+    const pageNumber = Math.max(1, page);
+    setCurrentPage((currentPage:any) => Math.min(pageNumber, maxPage));
+  }
+  return { next, prev, jump, currentData, currentPage, maxPage };
+}
 const AllSession = () => {
 
   const [getCourse, setCourse] = React.useState<courseType | any>([]);
   const [getModule, setModule] = React.useState<moduleType | any>([]);
   const [rows, setRows] = React.useState<sessionType | any>([]);
-  const [page, setPage] = React.useState(0);
+  // const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [toggle, setToggle] = React.useState<boolean>(false);
   const [open, setOpen] = React.useState(false);
@@ -97,6 +119,20 @@ const AllSession = () => {
   ) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
+  };
+
+  //pagination
+  const [row_per_page, set_row_per_page] = React.useState(5);
+  let [page, setPage] = React.useState<any>(1);
+  function handlerowchange(e: any) {
+    set_row_per_page(e.target.value);
+  }
+  const PER_PAGE = row_per_page;
+  const count = Math.ceil(rows.length / PER_PAGE);
+  const DATA = usePagination(rows, PER_PAGE);
+  const handlePageChange = (e: any, p: any) => {
+    setPage(p);
+    DATA.jump(p);
   };
 
   const {
@@ -124,10 +160,11 @@ const AllSession = () => {
 
   const resetFilterValue = () => {
     setFilter(0)
-    reset({ course: 0, module, status: 0 });
+    reset({ course: 0, module: 0, status: 0 });
 
   }
 
+  // to delete a row
   const handleDeletesRow = () => {
     HandleSessionDelete(deleteRow.id).then((deletedRow) => {
       HandleSessionGet('', '').then((newRows) => {
@@ -144,6 +181,8 @@ const AllSession = () => {
   }
 
   const handleSearch = (e: any, identifier: any) => {
+    setPage(1);
+    DATA.jump(1);
     if (identifier === 'reset') {
       HandleSessionGet('', '').then((itemSeached) => {
         setRows(itemSeached.data);
@@ -171,7 +210,7 @@ const AllSession = () => {
   }
 
   const getCourseData = () => {
-    HandleCourseGet().then((courseSearched) => {
+    HandleCourseGet('','').then((courseSearched) => {
       setCourse(courseSearched.data)
     })
   }
@@ -181,7 +220,7 @@ const AllSession = () => {
     getModuleData();
     getCourseData();
   }, []);
-
+console.log(' session rowss',rows)
   return (
     <>
       <Navbar />
@@ -273,7 +312,7 @@ const AllSession = () => {
                                                   All
                                                 </MenuItem>
                                                 {getCourse?.map((data: any) => {
-                                                  return (<MenuItem key={data.id} value={data.id}>{capitalizeFirstLetter(data?.title)}</MenuItem>)
+                                                  return (<MenuItem key={data.course.id} value={data.course.id}>{capitalizeFirstLetter(data?.course.title)}</MenuItem>)
                                                 })}
                                               </Select>
                                             </FormControl>
@@ -298,7 +337,7 @@ const AllSession = () => {
                                                   All
                                                 </MenuItem>
                                                 {getModule?.map((data: any) => {
-                                                  return (<MenuItem key={data.id} value={data.id}>{capitalizeFirstLetter(data?.title)}</MenuItem>)
+                                                  return (<MenuItem key={data.module.id} value={data.module.id}>{capitalizeFirstLetter(data?.module.title)}</MenuItem>)
                                                 })}
                                               </Select>
                                             </FormControl>
@@ -393,19 +432,17 @@ const AllSession = () => {
                         ))}
                       </TableRow>
                     </TableHead>
-                    <TableBody>
-                      {rows?.length > 0 ? rows
-                        .slice(
-                          page * rowsPerPage,
-                          page * rowsPerPage + rowsPerPage
-                        )
+                    <TableBody>{console.log('row',DATA)}
+                      {rows && rows.length>0 ?DATA.currentData() &&
+                            DATA.currentData()
                         .map((row: any) => {
+                          
                           const statusColor = (row.status === "active" ? Sessions.activeClassColor : row.status === "inactive" ? Sessions.inactiveClassColor : Sessions.draftClassColor)
                           return (
                             <TableRow
                               hover
-                              role="checkbox"
-                              tabIndex={-1}
+                              // role="checkbox"
+                              // tabIndex={-1}
                               key={row.id}
                             >
                               <TableCell>{row.id}</TableCell>
@@ -418,20 +455,41 @@ const AllSession = () => {
                               </TableCell>
                             </TableRow>
                           );
-                        }) : <TableRow><TableCell colSpan={6} className={Sessions.tableLastCell}> <Typography>Record not Found</Typography> </TableCell></TableRow>}
-                    </TableBody>
+                        }) 
+                        : <TableRow><TableCell colSpan={6} className={Sessions.tableLastCell}> <Typography>Record not Found</Typography> </TableCell></TableRow>}
+                        </TableBody>
                   </Table>
+                  <Stack
+                       style={{ marginBottom: "10px", marginTop: "10px" }}
+                       direction="row"
+                       alignItems="right"
+                       justifyContent="space-between"
+                      >
+                        <Pagination
+                          className="pagination"
+                          count={count}
+                          page={page}
+                          color="primary"
+                          onChange={handlePageChange}
+                        />
+                        <FormControl>
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            defaultValue={5}
+                            onChange={handlerowchange}
+                            size="small"
+                            style={{ width: "50px", height: "40px", padding:"5px" }}
+                          >
+                            <MenuItem value={5}>5</MenuItem>
+                            <MenuItem value={20}>20</MenuItem>
+                            <MenuItem value={50}>50</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </Stack>
                 </TableContainer>
               </Paper>
-              <TablePagination
-                rowsPerPageOptions={[5, 10, 25, 100]}
-                component="div"
-                count={rows.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-              />
+              
               <AlertDialog
                 open={open}
                 onClose={handleClickOpen}

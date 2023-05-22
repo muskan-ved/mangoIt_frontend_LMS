@@ -69,7 +69,7 @@ export default function AddSession() {
    };
 
    const getCourseData = () => {
-      HandleCourseGet().then((courses) => {
+      HandleCourseGet('','').then((courses) => {
          setCourses(courses.data)
       })
    };

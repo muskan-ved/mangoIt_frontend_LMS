@@ -91,7 +91,8 @@ const AllModules = () => {
   React.useEffect(() => {
     getModuleData();
   }, []);
-  console.log('oops', rows)
+  
+  // console.log('oops', rows)
   return (
     <>
       <Navbar />

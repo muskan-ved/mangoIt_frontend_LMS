@@ -46,7 +46,7 @@ export default function UpdateSession() {
    const [attachmentType, setAttachmentType] = useState('');
    const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
    const [isLoading, setLoading] = useState<boolean>(false);
-   const [error, setError] = useState<string>();
+   const [error, setErrors] = useState<string>();
 
    const {
       register,
@@ -54,45 +54,55 @@ export default function UpdateSession() {
       reset,
       setValue,
       control,
-      formState: { errors },
+      formState: { errors }, setError
    } = useForm<sessionType | any>({
       resolver: yupResolver(sessionUpdateValidation),
    });
 
    const handleContentChange = (value: string, identifier: string) => {
+      if (value === '<p><br></p>') {
+         setError(identifier, { message: 'Description is a required field' });
+      } else {
+         setError(identifier, { message: '' })
+         setValue(identifier, value);
+      }
       setdespcriptionContent(value);
-      setValue(identifier, value);
+
 
    };
 
    const onSubmit = async (event: any) => {
       const id = router.query.id
       // const reqData = { ...event, 'attachment': file }
-      const reqData: any = {
-         description: event.description,
-         module_id: event.module_id,
-         course_id: event.course_id,
-         title: event.title,
-         attachment: file
-      }
+      if (errors.description?.message === '') {
+         const reqData: any = {
+            description: event.description,
+            module_id: event.module_id,
+            course_id: event.course_id,
+            title: event.title,
+            attachment: file
+         }
 
-      const formData = new FormData()
-      for (var key in reqData) {
-         formData.append(key, reqData[key]);
-      }
+         const formData = new FormData()
+         for (var key in reqData) {
+            formData.append(key, reqData[key]);
+         }
 
-      setLoading(true);
-      setLoadingButton(false)
-      try {
-         const res = await HandleSessionUpdate(id, formData)
-         getSessionData()
-         setLoading(false);
-         setTimeout(() => {
-            router.push('/courses/allsessions/')
-         }, 1000)
-      } catch (e) {
-         console.log(e)
-         setLoadingButton(true)
+         setLoading(true);
+         setLoadingButton(false)
+         try {
+            const res = await HandleSessionUpdate(id, formData)
+            getSessionData()
+            setLoading(false);
+            setTimeout(() => {
+               router.push('/courses/allsessions/')
+            }, 1000)
+         } catch (e) {
+            console.log(e)
+            setLoadingButton(true)
+         }
+      } else {
+         setError('description', { message: 'Description is a required field' });
       }
    };
 
@@ -102,40 +112,40 @@ export default function UpdateSession() {
 
    const getSessionData = async () => {
       const id = router.query.id
-      if(id){
-      HandleSessionGetByID(id).then((session) => {
-         setSession(session.data)
-         const fields = [
-            "title",
-            "module_id",
-            "course_id",
-            "description",
-            "attachment"
-         ];
-         fields.forEach((field) => setValue(field, session.data[field]));
-      })
-      .catch((error) => {
-         setError(error.message);
-       });
+      if (id) {
+         HandleSessionGetByID(id).then((session) => {
+            setSession(session.data)
+            const fields = [
+               "title",
+               "module_id",
+               "course_id",
+               "description",
+               "attachment"
+            ];
+            fields.forEach((field) => setValue(field, session.data[field]));
+         })
+            .catch((error) => {
+               setErrors(error.message);
+            });
       }
 
       if (error) {
          return <Typography >{error}</Typography >;
-       }
+      }
 
-       if (!getSession) {
+      if (!getSession) {
          return <Typography >Loading...</Typography >;
-       }
+      }
    }
 
    const getCourseData = () => {
-      HandleCourseGet().then((courses) => {
+      HandleCourseGet('', '').then((courses) => {
          setCourses(courses.data)
       })
    };
 
    const getModuleData = () => {
-      HandleModuleGet().then((modules) => {
+      HandleModuleGet('', '').then((modules) => {
          setModules(modules.data)
       })
    }
@@ -174,7 +184,7 @@ export default function UpdateSession() {
       }
    }
 
-
+   console.log("errors", errors)
    return (
       <>
          <Navbar />
@@ -234,7 +244,7 @@ export default function UpdateSession() {
                                              <FormControl fullWidth>
                                                 <Select {...field} displayEmpty>
                                                    {getCourses?.map((course: any) => {
-                                                      return (<MenuItem key={course.id} value={course.id}>{capitalizeFirstLetter(course?.title)}</MenuItem>)
+                                                      return (<MenuItem key={course.course.id} value={course.course.id}>{capitalizeFirstLetter(course?.course.title)}</MenuItem>)
                                                    })}
                                                 </Select>
                                              </FormControl>
@@ -256,7 +266,7 @@ export default function UpdateSession() {
                                           <FormControl fullWidth>
                                              <Select {...field} displayEmpty>
                                                 {getModules?.map((module: any) => {
-                                                   return (<MenuItem key={module.id} value={module.id}>{capitalizeFirstLetter(module?.title)}</MenuItem>)
+                                                   return (<MenuItem key={module.module.id} value={module.module.id}>{capitalizeFirstLetter(module?.module.title)}</MenuItem>)
                                                 })}
                                              </Select>
                                           </FormControl>
@@ -266,7 +276,6 @@ export default function UpdateSession() {
                                  </Grid>
                                  <Grid item xs={12} sm={12} md={12} lg={12} mb={2}>
                                     <InputLabel>Description</InputLabel>
-
                                     <RichEditor
                                        {...register("description")}
                                        value={despcriptionContent ? despcriptionContent : getSession?.description}
@@ -274,29 +283,30 @@ export default function UpdateSession() {
                                           handleContentChange(e, "description")
                                        }
                                     />
-                                    {despcriptionContent ? '' : errors && errors.description ? ErrorShowing(errors?.description?.message) : ""}
+                                    {errors && errors.description ? ErrorShowing(errors?.description?.message) : ""}
+                                    {/* {despcriptionContent ? '' : errors && errors.description ? ErrorShowing(errors?.description?.message) : ""} */}
                                  </Grid>
 
                                  <Grid item xs={12} sm={12} md={12} lg={12} mb={2} >
                                     <InputLabel>Attachment</InputLabel>
                                     <Box className={Sessions.sessionAttachmentBox}>
-                                    <Box component='span'>
-                                    {getSession !== undefined && <Preview name={getSession.attachment}/>}
-                                   
+                                       <Box component='span'>
+                                          {getSession !== undefined && <Preview name={getSession.attachment} />}
+
+                                       </Box>
+                                       <Box component='span'>
+                                          <InputLabel className={Sessions.updateSessionAttachments}>
+                                             <input
+                                                type="file"
+                                                {...register('attachment')}
+                                                onChange={handleChange}
+                                                hidden
+                                             />
+                                             <Typography>  {!file.name ? "Upload" : file.name}</Typography>
+                                          </InputLabel>
+
+                                       </Box>
                                     </Box>
-                                    <Box component='span'>
-                                       <InputLabel className={Sessions.updateSessionAttachments}>
-                                          <input
-                                             type="file"
-                                             {...register('attachment')}
-                                             onChange={handleChange}
-                                             hidden
-                                          />
-                                          <Typography>  {!file.name ? "Upload" : file.name}</Typography>
-                                       </InputLabel>
-                                                                                                        
-                                       </Box>
-                                       </Box>
                                     {file ? '' : errors && errors.file ? ErrorShowing(errors?.file?.message) : ""}
                                  </Grid>
                                  <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"right"} >
