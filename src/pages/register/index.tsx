@@ -3,7 +3,6 @@ import { Button, Divider,TextField,Link,Box,Grid,Typography, IconButton, } from 
 import LoadingButton from '@mui/lab/LoadingButton';
 import styles from "../../styles/login.module.css";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import FacebookIcon from "@mui/icons-material/Facebook";
 import GoogleIcon from "@mui/icons-material/Google";
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -59,8 +58,9 @@ const handleClickShowConfirmPassword = () => setShowConfirmPassword((show) => !s
         <Grid item xs={12} sm={7} md={5} lg={5}>
           <Box
             sx={{
-              my: 1,
+              my: 6,
               mx: 13,
+
               display: "flex",
               flexDirection: "column",
             }}
@@ -192,18 +192,8 @@ const handleClickShowConfirmPassword = () => setShowConfirmPassword((show) => !s
                   type="button"
                   fullWidth
                   variant="outlined"
-                  startIcon={<FacebookIcon />}
-                  sx={{ mt: 3, mb: 2 }}
-                >
-                  Continue with Facebook
-                </Button>
-
-                <Button
-                  type="button"
-                  fullWidth
-                  variant="outlined"
                   startIcon={<GoogleIcon />}
-                  sx={{ mt: 1 }}
+                  sx={{ mt: 3 }}
                 >
                   Continue with Google
                 </Button>

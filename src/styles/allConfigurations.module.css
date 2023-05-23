@@ -1,0 +1,41 @@
+/* Site Configuration */
+
+.imageComponent {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+.siteCameraIcon {
+    right: 17px !important;
+    color: white !important;
+    position: relative !important;
+    background: #1a73e8 !important;
+    padding: 5px !important;
+    border-radius: 50% !important;
+}
+
+.siteAttachmentBox{
+    border: 1px solid grey;
+    text-align: -webkit-center;
+}
+
+.subbox{
+    border: 1px dashed grey;
+    margin: 5px;
+}
+
+.siteAttachments{
+    padding: 10px 33px;
+    width: 190px;
+    margin: 10px;
+    background: #f1f1f1;
+    border-radius: 50px;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.inputLabels{
+    font-size: 21px;
+    font-weight: 600;
+}

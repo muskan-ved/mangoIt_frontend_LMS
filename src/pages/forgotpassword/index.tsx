@@ -3,7 +3,6 @@ import { Button, Divider,Link,Box,Typography,Grid,TextField } from "@mui/materia
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import FacebookIcon from "@mui/icons-material/Facebook";
 import GoogleIcon from "@mui/icons-material/Google";
 import AuthSidebar from "../../common/LayoutNavigations/authSideLayout";
 import { useForm } from "react-hook-form";
@@ -52,7 +51,7 @@ export default function ForgotPassword() {
         <Grid item xs={12} sm={7} md={5} lg={5}>
           <Box
             sx={{
-              my: 20,
+              my: 24,
               mx: 13,
               display: "flex",
               flexDirection: "column",
@@ -127,18 +126,8 @@ export default function ForgotPassword() {
                   type="submit"
                   fullWidth
                   variant="outlined"
-                  startIcon={<FacebookIcon />}
-                  sx={{ mt: 3, mb: 2 }}
-                >
-                  Continue with Facebook
-                </Button>
-
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="outlined"
                   startIcon={<GoogleIcon />}
-                  sx={{ mt: 1 }}
+                  sx={{ mt: 3 }}
                 >
                   Continue with Google
                 </Button>

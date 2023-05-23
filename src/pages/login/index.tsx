@@ -7,7 +7,6 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import styles from "../../styles/login.module.css";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import FacebookIcon from "@mui/icons-material/Facebook";
 import GoogleIcon from "@mui/icons-material/Google";
 import AuthSidebar from "../../common/LayoutNavigations/authSideLayout";
 import CircularProgressBar from "@/common/CircularProcess/circularProgressBar";
@@ -22,7 +21,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { GenerateToken, HandleLogin, HandleLoginByGoogle, HandleRegister } from "@/services/auth";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useGoogleLogin } from "@react-oauth/google";
-import FacebookLogin from '@greatsumini/react-facebook-login';
 
 const theme = createTheme();
 
@@ -51,10 +49,6 @@ const handleClickShowPassword = () => setShowPassword((show) => !show);
     })
 
 };
-
-const responseFacebook = (response:any) => {
-  console.log(response,"facebook");
-}
 
   function ErrorShowing (errorMessage:any){
     return ( <Typography variant="body2" color={'error'} gutterBottom>{errorMessage} </Typography> );
@@ -110,7 +104,7 @@ const responseFacebook = (response:any) => {
         <Grid item xs={12} sm={6} md={6} lg={5}>
           <Box
             sx={{
-              my: 12,
+              my: 17,
               mx: 13,
               display: "flex",
               flexDirection: "column",
@@ -216,32 +210,10 @@ const responseFacebook = (response:any) => {
                   type="button"
                   fullWidth
                   variant="outlined"
-                  startIcon={<FacebookIcon />}
-                  sx={{ mt: 3, mb: 2 }}
-                >
-                  Continue with Facebook
-                </Button>
-                <FacebookLogin
-                    appId="902443271035407"
-                    onSuccess={(response) => {
-                      console.log('Login Success!', response);
-                    }}
-                    onFail={(error) => {
-                      console.log('Login Failed!', error);
-                    }}
-                    onProfileSuccess={(response) => {
-                      console.log('Get Profile Success!', response);
-                    }}
-                  />
-                
-                <Button
-                  type="button"
-                  fullWidth
-                  variant="outlined"
                   startIcon={<GoogleIcon />}
                   disabled={googleLoading}
                   onClick={() => googleLogin()}
-                  sx={{ mt: 1 }}
+                  sx={{ mt: 3 }}
                 >
                   Continue with Google
                 </Button>

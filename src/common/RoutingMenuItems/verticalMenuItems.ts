@@ -8,6 +8,11 @@ import QueryStatsOutlinedIcon from '@mui/icons-material/QueryStatsOutlined';
 import PowerSettingsNewOutlinedIcon from '@mui/icons-material/PowerSettingsNewOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import ViewModuleOutlinedIcon from '@mui/icons-material/ViewModuleOutlined';
+import SubscriptionsOutlinedIcon from '@mui/icons-material/SubscriptionsOutlined';
+import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
+import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
+import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined';
+import PaymentOutlinedIcon from '@mui/icons-material/PaymentOutlined';
 
 export const VerticalMenuItems = () => {
     return (
@@ -39,19 +44,45 @@ export const VerticalMenuItems = () => {
       ]
   },
   {
-    title: 'User',
-    icon: PeopleAltOutlinedIcon,
+    title: 'Profile',
+    icon: ManageAccountsOutlinedIcon,
     path: '/profile'
+  },
+  {
+    title: 'Users',
+    icon: PeopleAltOutlinedIcon,
+    path: '/users'
+  },
+  {
+    title: 'Subscriptions',
+    icon: SubscriptionsOutlinedIcon,
+    path: '/subscriptions'
+  },
+  {
+    title: 'Configurations',
+    icon: QueryStatsOutlinedIcon,
+    children: [
+        {
+          title: 'Email Config',
+          icon: EmailOutlinedIcon,
+          path: '/configurations/emailconfiguration'
+        },
+        {
+          title: 'Site Config',
+          icon: LanguageOutlinedIcon,
+          path: '/configurations/siteconfiguration'
+        },
+        {
+          title: 'Stripe Config',
+          icon: PaymentOutlinedIcon,
+          path: '/configurations/stripeconfiguration'
+        }
+      ]
   },
   {
     title: 'Invoices',
     icon: InsertDriveFileOutlinedIcon,
     path: '/invoices'
-  },
-  {
-    title: 'Configuration',
-    icon: QueryStatsOutlinedIcon,
-    path: '/configuration'
   },
   {
     title: 'Settings',
