@@ -86,14 +86,14 @@ function usePagination(data: any, itemsPerPage: any) {
   }
 
   function next() {
-    setCurrentPage((currentPage:any) => Math.min(currentPage + 1, maxPage));
+    setCurrentPage((currentPage: any) => Math.min(currentPage + 1, maxPage));
   }
   function prev() {
-    setCurrentPage((currentPage:any) => Math.max(currentPage - 1, 1));
+    setCurrentPage((currentPage: any) => Math.max(currentPage - 1, 1));
   }
   function jump(page: any) {
     const pageNumber = Math.max(1, page);
-    setCurrentPage((currentPage:any) => Math.min(pageNumber, maxPage));
+    setCurrentPage((currentPage: any) => Math.min(pageNumber, maxPage));
   }
   return { next, prev, jump, currentData, currentPage, maxPage };
 }
@@ -204,13 +204,13 @@ const AllSession = () => {
   }
 
   const getModuleData = () => {
-    HandleModuleGet('','').then((moduleSearched) => {
+    HandleModuleGet('', '').then((moduleSearched) => {
       setModule(moduleSearched.data)
     })
   }
 
   const getCourseData = () => {
-    HandleCourseGet('','').then((courseSearched) => {
+    HandleCourseGet('', '').then((courseSearched) => {
       setCourse(courseSearched.data)
     })
   }
@@ -220,7 +220,7 @@ const AllSession = () => {
     getModuleData();
     getCourseData();
   }, []);
-console.log(' session rowss',rows)
+  console.log(' session rowss', rows)
   return (
     <>
       <Navbar />
@@ -432,64 +432,64 @@ console.log(' session rowss',rows)
                         ))}
                       </TableRow>
                     </TableHead>
-                    <TableBody>{console.log('row',DATA)}
-                      {rows && rows.length>0 ?DATA.currentData() &&
-                            DATA.currentData()
-                        .map((row: any) => {
-                          
-                          const statusColor = (row.status === "active" ? Sessions.activeClassColor : row.status === "inactive" ? Sessions.inactiveClassColor : Sessions.draftClassColor)
-                          return (
-                            <TableRow
-                              hover
-                              // role="checkbox"
-                              // tabIndex={-1}
-                              key={row.id}
-                            >
-                              <TableCell>{row.id}</TableCell>
-                              <TableCell>{capitalizeFirstLetter(row.title)}</TableCell>
-                              <TableCell>{capitalizeFirstLetter(row.course && row.course.title)}</TableCell>
-                              <TableCell>{capitalizeFirstLetter(row.module && row.module.title)}</TableCell>
-                              <TableCell className={statusColor}>{capitalizeFirstLetter(row.status)}</TableCell>
-                              <TableCell><Button onClick={() => router.push(`/courses/allsessions/updatesession/${row.id}`)} variant="outlined" color="success" className={Sessions.editDeleteButton}><ModeEditOutlineIcon /></Button>
-                                <Button className={Sessions.editDeleteButton} variant="outlined" color="error" onClick={() => handleClickOpen(row)}><DeleteOutlineIcon /></Button>
-                              </TableCell>
-                            </TableRow>
-                          );
-                        }) 
+                    <TableBody>{console.log('row', DATA)}
+                      {rows && rows.length > 0 ? DATA.currentData() &&
+                        DATA.currentData()
+                          .map((row: any) => {
+
+                            const statusColor = (row.status === "active" ? Sessions.activeClassColor : row.status === "inactive" ? Sessions.inactiveClassColor : Sessions.draftClassColor)
+                            return (
+                              <TableRow
+                                hover
+                                // role="checkbox"
+                                // tabIndex={-1}
+                                key={row.id}
+                              >
+                                <TableCell>{row.id}</TableCell>
+                                <TableCell>{capitalizeFirstLetter(row.title)}</TableCell>
+                                <TableCell>{capitalizeFirstLetter(row.course && row.course.title)}</TableCell>
+                                <TableCell>{capitalizeFirstLetter(row.module && row.module.title)}</TableCell>
+                                <TableCell className={statusColor}>{capitalizeFirstLetter(row.status)}</TableCell>
+                                <TableCell><Button onClick={() => router.push(`/courses/allsessions/updatesession/${row.id}`)} variant="outlined" color="success" className={Sessions.editDeleteButton}><ModeEditOutlineIcon /></Button>
+                                  <Button className={Sessions.editDeleteButton} variant="outlined" color="error" onClick={() => handleClickOpen(row)}><DeleteOutlineIcon /></Button>
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })
                         : <TableRow><TableCell colSpan={6} className={Sessions.tableLastCell}> <Typography>Record not Found</Typography> </TableCell></TableRow>}
-                        </TableBody>
+                    </TableBody>
                   </Table>
                   <Stack
-                       style={{ marginBottom: "10px", marginTop: "10px" }}
-                       direction="row"
-                       alignItems="right"
-                       justifyContent="space-between"
+                    style={{ marginBottom: "10px", marginTop: "10px" }}
+                    direction="row"
+                    alignItems="right"
+                    justifyContent="space-between"
+                  >
+                    <Pagination
+                      className="pagination"
+                      count={count}
+                      page={page}
+                      color="primary"
+                      onChange={handlePageChange}
+                    />
+                    <FormControl>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        defaultValue={5}
+                        onChange={handlerowchange}
+                        size="small"
+                        style={{  height: "40px",     marginRight: '11px' }}
                       >
-                        <Pagination
-                          className="pagination"
-                          count={count}
-                          page={page}
-                          color="primary"
-                          onChange={handlePageChange}
-                        />
-                        <FormControl>
-                          <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            defaultValue={5}
-                            onChange={handlerowchange}
-                            size="small"
-                            style={{ width: "50px", height: "40px", padding:"5px" }}
-                          >
-                            <MenuItem value={5}>5</MenuItem>
-                            <MenuItem value={20}>20</MenuItem>
-                            <MenuItem value={50}>50</MenuItem>
-                          </Select>
-                        </FormControl>
-                      </Stack>
+                        <MenuItem value={5}>5</MenuItem>
+                        <MenuItem value={20}>20</MenuItem>
+                        <MenuItem value={50}>50</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Stack>
                 </TableContainer>
               </Paper>
-              
+
               <AlertDialog
                 open={open}
                 onClose={handleClickOpen}
