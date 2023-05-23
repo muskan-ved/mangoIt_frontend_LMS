@@ -1,5 +1,8 @@
-import Navbar from "@/common/LayoutNavigations/navbar";
-import SideBar from "@/common/LayoutNavigations/sideBar";
+// React Import
+import * as React from "react";
+import { Controller, useForm } from "react-hook-form";
+import { useRouter } from "next/router";
+// MUI Import
 import {
   Box,
   Button,
@@ -11,7 +14,6 @@ import {
   IconButton,
   InputLabel,
   MenuItem,
-  OutlinedInput,
   Pagination,
   Popover,
   Select,
@@ -19,11 +21,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import styles from "../../../styles/sidebar.module.css";
-import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
-import Footer from "@/common/LayoutNavigations/footer";
-import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
-import * as React from "react";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -32,12 +29,38 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { SearchOutlined } from "@mui/icons-material";
+import { Margin, SearchOutlined } from "@mui/icons-material";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
-import { useRouter } from "next/router";
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
+import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
+import ArrowDownwardOutlinedIcon from '@mui/icons-material/ArrowDownwardOutlined';
+import ArrowUpwardOutlinedIcon from '@mui/icons-material/ArrowUpwardOutlined';
+import CloseIcon from '@mui/icons-material/Close';
+// External Components
+import Navbar from "@/common/LayoutNavigations/navbar";
+import SideBar from "@/common/LayoutNavigations/sideBar";
+import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
+import Footer from "@/common/LayoutNavigations/footer";
+import { handleSortData } from "@/common/Sorting/sorting";
+import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
+//Type Import
+import { sessionType } from "@/types/sessionType";
+import { courseType } from "@/types/courseType";
+import { moduleType } from "@/types/moduleType";
+// CSS Import
+import styles from "../../../styles/sidebar.module.css";
+import Sessions from "../../../styles/session.module.css"
+import { ToastContainer } from "react-toastify";
+// API Service
+import { HandleSessionDelete, HandleSessionGet } from "@/services/session";
+import { HandleCourseGet } from "@/services/course";
+import { HandleModuleGet } from "@/services/module";
+import { AlertDialog } from "@/common/DeleteListRow/deleteRow";
+
 
 interface Column {
-  id: "name" | "code" | "population" | "size" | "density";
+  id: "id" | "title" | "course_id" | "module_id" | "is_deleted" | "action";
   label: string;
   minWidth?: number;
   align?: "right";
@@ -45,76 +68,52 @@ interface Column {
 }
 
 const columns: Column[] = [
-  { id: "name", label: "Name", minWidth: 170 },
-  { id: "code", label: "ISO\u00a0Code", minWidth: 100 },
-  {
-    id: "population",
-    label: "Population",
-    minWidth: 170,
-    align: "right",
-    format: (value: number) => value.toLocaleString("en-US"),
-  },
-  {
-    id: "size",
-    label: "Size\u00a0(km\u00b2)",
-    minWidth: 170,
-    align: "right",
-    format: (value: number) => value.toLocaleString("en-US"),
-  },
-  {
-    id: "density",
-    label: "Density",
-    minWidth: 170,
-    align: "right",
-    format: (value: number) => value.toFixed(2),
-  },
+  { id: "id", label: "ID", },
+  { id: "title", label: "SESSION NAME", minWidth: 170 },
+  { id: "course_id", label: "COURSE NAME", minWidth: 100 },
+  { id: "module_id", label: "MODULE NAME", minWidth: 100 },
+  { id: "is_deleted", label: "STATUS", minWidth: 100 },
+  { id: "action", label: "ACTION", minWidth: 100 },
 ];
+//pagination function
+function usePagination(data: any, itemsPerPage: any) {
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const maxPage = Math.ceil(data.length / itemsPerPage);
+  function currentData() {
+    const begin = (currentPage - 1) * itemsPerPage;
+    const end = begin + itemsPerPage;
+    return data.slice(begin, end);
+  }
 
-interface Data {
-  name: string;
-  code: string;
-  population: number;
-  size: number;
-  density: number;
+  function next() {
+    setCurrentPage((currentPage: any) => Math.min(currentPage + 1, maxPage));
+  }
+  function prev() {
+    setCurrentPage((currentPage: any) => Math.max(currentPage - 1, 1));
+  }
+  function jump(page: any) {
+    const pageNumber = Math.max(1, page);
+    setCurrentPage((currentPage: any) => Math.min(pageNumber, maxPage));
+  }
+  return { next, prev, jump, currentData, currentPage, maxPage };
 }
-
-function createData(
-  name: string,
-  code: string,
-  population: number,
-  size: number
-): Data {
-  const density = population / size;
-  return { name, code, population, size, density };
-}
-
-const rows = [
-  createData("India", "IN", 1324171354, 3287263),
-  createData("China", "CN", 1403500365, 9596961),
-  createData("Italy", "IT", 60483973, 301340),
-  createData("United States", "US", 327167434, 9833520),
-  createData("Canada", "CA", 37602103, 9984670),
-  createData("Australia", "AU", 25475400, 7692024),
-  createData("Germany", "DE", 83019200, 357578),
-  createData("Ireland", "IE", 4857000, 70273),
-  createData("Mexico", "MX", 126577691, 1972550),
-  createData("Japan", "JP", 126317000, 377973),
-  createData("France", "FR", 67022000, 640679),
-  createData("United Kingdom", "GB", 67545757, 242495),
-  createData("Russia", "RU", 146793744, 17098246),
-  createData("Nigeria", "NG", 200962417, 923768),
-  createData("Brazil", "BR", 210147125, 8515767),
-];
-
 const AllSession = () => {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  const [getCourse, setCourse] = React.useState<courseType | any>([]);
+  const [getModule, setModule] = React.useState<moduleType | any>([]);
+  const [rows, setRows] = React.useState<sessionType | any>([]);
+  // const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [toggle, setToggle] = React.useState<boolean>(false);
+  const [open, setOpen] = React.useState(false);
+  const [search, setSearch] = React.useState('');
+  const [getFilter, setFilter] = React.useState<number>(0);
+  const [deleteRow, setDeleteRow] = React.useState<sessionType | any>([])
 
   const router = useRouter()
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
-
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -122,10 +121,106 @@ const AllSession = () => {
     setPage(0);
   };
 
-  const handleFilterChange = () => {
-    console.log("first");
+  //pagination
+  const [row_per_page, set_row_per_page] = React.useState(5);
+  let [page, setPage] = React.useState<any>(1);
+  function handlerowchange(e: any) {
+    set_row_per_page(e.target.value);
+  }
+  const PER_PAGE = row_per_page;
+  const count = Math.ceil(rows.length / PER_PAGE);
+  const DATA = usePagination(rows, PER_PAGE);
+  const handlePageChange = (e: any, p: any) => {
+    setPage(p);
+    DATA.jump(p);
   };
 
+  const {
+    handleSubmit,
+    control,
+    reset,
+  } = useForm();
+
+  const onSubmit = (event: any) => {
+    const filterData: any = {
+      module_id: event.module,
+      course_id: event.course,
+      status: event.status,
+    }
+    HandleSessionGet('', filterData).then((itemFiltered) => {
+      setRows(itemFiltered.data)
+    })
+
+  }
+  const handleClickOpen = (row: any) => {
+    setDeleteRow(row)
+    setOpen(!open);
+
+  };
+
+  const resetFilterValue = () => {
+    setFilter(0)
+    reset({ course: 0, module: 0, status: 0 });
+
+  }
+
+  // to delete a row
+  const handleDeletesRow = () => {
+    HandleSessionDelete(deleteRow.id).then((deletedRow) => {
+      HandleSessionGet('', '').then((newRows) => {
+        setRows(newRows.data)
+      })
+    })
+    setOpen(!open);
+  }
+
+  const handleSort = (rowsData: any) => {
+    const sortData = handleSortData(rowsData)
+    setRows(sortData)
+    setToggle(!toggle)
+  }
+
+  const handleSearch = (e: any, identifier: any) => {
+    setPage(1);
+    DATA.jump(1);
+    if (identifier === 'reset') {
+      HandleSessionGet('', '').then((itemSeached) => {
+        setRows(itemSeached.data);
+      })
+      setSearch(e)
+    } else {
+      const search = e.target.value;
+      setSearch(e.target.value)
+      HandleSessionGet(search, '').then((itemSeached) => {
+        setRows(itemSeached.data);
+      })
+    }
+  }
+
+  const getSessionData = () => {
+    HandleSessionGet('', '').then((sessions) => {
+      setRows(sessions.data);
+    })
+  }
+
+  const getModuleData = () => {
+    HandleModuleGet('', '').then((moduleSearched) => {
+      setModule(moduleSearched.data)
+    })
+  }
+
+  const getCourseData = () => {
+    HandleCourseGet('', '').then((courseSearched) => {
+      setCourse(courseSearched.data)
+    })
+  }
+
+  React.useEffect(() => {
+    getSessionData();
+    getModuleData();
+    getCourseData();
+  }, []);
+  console.log(' session rowss', rows)
   return (
     <>
       <Navbar />
@@ -138,34 +233,34 @@ const AllSession = () => {
             First="Home"
             Middle="Session"
             Text="SESSION"
-            Link="/session/allsessions"
+            Link="/courses/allsessions"
           />
 
           {/* main content */}
           <Card>
             <CardContent>
               <TextField
-                id="standard-bare"
+                id="standard-search"
+                value={search}
                 variant="outlined"
                 placeholder="Search"
+                onChange={(e) => handleSearch(e, '')}
                 InputProps={{
                   endAdornment: (
-                    <IconButton>
+                    !search ? <IconButton>
                       <SearchOutlined />
-                    </IconButton>
+                    </IconButton> : <IconButton onClick={(e) => handleSearch('', 'reset')}> <CloseIcon /></IconButton>
                   ),
                 }}
               />
               <Box
-                sx={{ float: "right", display: "flex", alignItems: "center" }}
+                className={Sessions.mainFilterBox}
               >
                 <PopupState variant="popover" popupId="demo-popup-popover" >
                   {(popupState) => (
-
-
                     <Box>
                       <Button
-                        sx={{ display: "inline-flex", color: "#1976d2" }}
+                        className={Sessions.popStateFilterButton}
                         {...bindTrigger(popupState)}
                       >
                         <FilterAltOutlinedIcon />
@@ -186,98 +281,122 @@ const AllSession = () => {
                         <Box>
                           <Container
                             className="filter-box"
-                            style={{ padding: "15px" }}
+                            style={{ padding: "15px", width: '100%' }}
                           >
                             <Grid>
-                              <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+                              <Typography variant="h5" className={Sessions.filterBox}>
                                 Filter
                               </Typography>
                               <Box component="form"
-                                noValidate
-                                //   onSubmit={handleSubmit(onSubmit)}
-                                sx={{ mt: 1 }}>
+                                // noValidate
+                                onSubmit={handleSubmit(onSubmit)}
+                                className={Sessions.filterForm}>
                                 <Stack
                                   style={{ marginTop: "10px" }}
                                   className="form-filter"
                                 >
                                   <Grid container spacing={2}>
-                                    <Grid item xs={12} md={6} lg={6} >
+                                    <Grid item xs={12} md={4} lg={4} >
                                       <Stack spacing={2}>
-                                        <InputLabel htmlFor="name" sx={{ fontWeight: 'bold' }}>
-                                          Type
+                                        <InputLabel htmlFor="name" className={Sessions.courseInFilter}>
+                                          Course
                                         </InputLabel>
-                                        <FormControl fullWidth>
-                                          <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            onChange={
-                                              (e: any) => null
-                                              // setCustType(e.target.value)
-                                            }
-                                          // value={custType}
-                                          >
-                                            <MenuItem value={0}>All</MenuItem>
-                                            {/* {custtype &&
-                                                  custtype.map(
-                                                    (data: any, key: any) => {
-                                                      return (
-                                                        <MenuItem
-                                                          key={key}
-                                                          value={data.id}
-                                                        >
-                                                          {data.name}
-                                                        </MenuItem>
-                                                      );
-                                                    }
-                                                  )} */}
-                                          </Select>
-                                        </FormControl>
-                                      </Stack>
-                                    </Grid>
-                                    <Grid item xs={12} md={6} lg={6}>
-                                      <Stack spacing={2}>
-                                        <InputLabel htmlFor="enddate" sx={{ fontWeight: 'bold' }}>
-                                          Status
-                                        </InputLabel>
-                                        <FormControl fullWidth>
-                                          <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            onChange={
-                                              (e: any) => null
-                                              // setcustStatus(e.target.value)
-                                            }
-                                          // value={custStatus}
-                                          >
-                                            <MenuItem value={2}>All</MenuItem>
-                                            <MenuItem value={1}>
-                                              Active
-                                            </MenuItem>
-                                            <MenuItem value={0}>
-                                              InActive
-                                            </MenuItem>
-                                          </Select>
-                                        </FormControl>
+                                        <Controller
+                                          name="course"
+                                          control={control}
+                                          defaultValue={getFilter}
+                                          render={({ field }) => (
+                                            <FormControl fullWidth>
+                                              <Select {...field} displayEmpty>
+                                                <MenuItem value={0}>
+                                                  All
+                                                </MenuItem>
+                                                {getCourse?.map((data: any) => {
+                                                  return (<MenuItem key={data.course.id} value={data.course.id}>{capitalizeFirstLetter(data?.course.title)}</MenuItem>)
+                                                })}
+                                              </Select>
+                                            </FormControl>
+                                          )}
+                                        />
                                       </Stack>
                                     </Grid>
 
+                                    <Grid item xs={12} md={4} lg={4} >
+                                      <Stack spacing={2}>
+                                        <InputLabel htmlFor="name" className={Sessions.moduleInFilter}>
+                                          Module
+                                        </InputLabel>
+                                        <Controller
+                                          name="module"
+                                          control={control}
+                                          defaultValue={getFilter}
+                                          render={({ field }) => (
+                                            <FormControl fullWidth>
+                                              <Select {...field} displayEmpty>
+                                                <MenuItem value={0}>
+                                                  All
+                                                </MenuItem>
+                                                {getModule?.map((data: any) => {
+                                                  return (<MenuItem key={data.module.id} value={data.module.id}>{capitalizeFirstLetter(data?.module.title)}</MenuItem>)
+                                                })}
+                                              </Select>
+                                            </FormControl>
+                                          )}
+                                        />
+                                      </Stack>
+                                    </Grid>
+
+                                    <Grid item xs={12} md={4} lg={4}>
+                                      <Stack spacing={2}>
+                                        <InputLabel htmlFor="enddate" className={Sessions.statusInFilter} >
+                                          Status
+                                        </InputLabel>
+                                        <Controller
+                                          name="status"
+                                          control={control}
+                                          defaultValue={getFilter}
+                                          render={({ field }) => (
+                                            <FormControl fullWidth>
+                                              <Select {...field} displayEmpty>
+                                                <MenuItem value={0}>All</MenuItem>
+                                                <MenuItem value={'active'}>
+                                                  Active
+                                                </MenuItem>
+                                                <MenuItem value={'inactive'}>
+                                                  In-active
+                                                </MenuItem>
+                                              </Select>
+                                            </FormControl>
+                                          )}
+                                        />
+                                      </Stack>
+                                    </Grid>
                                     <Grid
                                       item
                                       xs={12}
                                       lg={12}
                                     >
-                                      <Button
-                                        size="medium"
-                                        type="submit"
-                                        variant="contained"
-                                        color="primary"
-                                        sx={{ float: 'right' }}
-
-                                        onClick={popupState.close}
-                                      >
-                                        Apply Filter
-
-                                      </Button>
+                                      <Box className={Sessions.boxInFilter}>
+                                        <Button
+                                          size="medium"
+                                          variant="contained"
+                                          color="primary"
+                                          type="button"
+                                          onClick={resetFilterValue}
+                                        >
+                                          Reset
+                                        </Button>
+                                        <Button
+                                          size="medium"
+                                          type="submit"
+                                          variant="contained"
+                                          color="primary"
+                                          className={Sessions.applyButtonInFiltter}
+                                          onClick={popupState.close}
+                                        >
+                                          Apply
+                                        </Button>
+                                      </Box>
                                     </Grid>
                                   </Grid>
                                 </Stack>
@@ -292,8 +411,8 @@ const AllSession = () => {
                 &nbsp;
                 <Button variant="contained" onClick={() => router.push('/courses/allsessions/addsession')}>Add Session</Button>
               </Box>
-              <Paper sx={{ width: "100%" }}>
-                <TableContainer sx={{ mt: 3 }}>
+              <Paper className={Sessions.papperForTable}>
+                <TableContainer className={Sessions.tableContainer}>
                   <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                       <TableRow>
@@ -302,60 +421,88 @@ const AllSession = () => {
                             key={column.id}
                             align={column.align}
                             style={{ top: 0, minWidth: column.minWidth }}
+                            onClick={() => {
+                              column.label === 'ID' ?
+                                handleSort(rows) :
+                                ''
+                            }}
                           >
-                            {column.label}
+                            {toggle ? column.label === 'ID' ? <Typography>ID <ArrowDownwardOutlinedIcon fontSize="small" /> </Typography> : column.label : column.label === 'ID' ? <Typography>ID <ArrowUpwardOutlinedIcon fontSize="small" /> </Typography> : column.label}
                           </TableCell>
                         ))}
                       </TableRow>
                     </TableHead>
-                    <TableBody>
-                      {rows
-                        .slice(
-                          page * rowsPerPage,
-                          page * rowsPerPage + rowsPerPage
-                        )
-                        .map((row) => {
-                          return (
-                            <TableRow
-                              hover
-                              role="checkbox"
-                              tabIndex={-1}
-                              key={row.code}
-                            >
-                              {columns.map((column) => {
-                                const value = row[column.id];
-                                return (
-                                  <TableCell
-                                    key={column.id}
-                                    align={column.align}
-                                  >
-                                    {column.format && typeof value === "number"
-                                      ? column.format(value)
-                                      : value}
-                                  </TableCell>
-                                );
-                              })}
-                            </TableRow>
-                          );
-                        })}
+                    <TableBody>{console.log('row', DATA)}
+                      {rows && rows.length > 0 ? DATA.currentData() &&
+                        DATA.currentData()
+                          .map((row: any) => {
+
+                            const statusColor = (row.status === "active" ? Sessions.activeClassColor : row.status === "inactive" ? Sessions.inactiveClassColor : Sessions.draftClassColor)
+                            return (
+                              <TableRow
+                                hover
+                                // role="checkbox"
+                                // tabIndex={-1}
+                                key={row.id}
+                              >
+                                <TableCell>{row.id}</TableCell>
+                                <TableCell>{capitalizeFirstLetter(row.title)}</TableCell>
+                                <TableCell>{capitalizeFirstLetter(row.course && row.course.title)}</TableCell>
+                                <TableCell>{capitalizeFirstLetter(row.module && row.module.title)}</TableCell>
+                                <TableCell className={statusColor}>{capitalizeFirstLetter(row.status)}</TableCell>
+                                <TableCell><Button onClick={() => router.push(`/courses/allsessions/updatesession/${row.id}`)} variant="outlined" color="success" className={Sessions.editDeleteButton}><ModeEditOutlineIcon /></Button>
+                                  <Button className={Sessions.editDeleteButton} variant="outlined" color="error" onClick={() => handleClickOpen(row)}><DeleteOutlineIcon /></Button>
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })
+                        : <TableRow><TableCell colSpan={6} className={Sessions.tableLastCell}> <Typography>Record not Found</Typography> </TableCell></TableRow>}
                     </TableBody>
                   </Table>
+                  <Stack
+                    style={{ marginBottom: "10px", marginTop: "10px" }}
+                    direction="row"
+                    alignItems="right"
+                    justifyContent="space-between"
+                  >
+                    <Pagination
+                      className="pagination"
+                      count={count}
+                      page={page}
+                      color="primary"
+                      onChange={handlePageChange}
+                    />
+                    <FormControl>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        defaultValue={5}
+                        onChange={handlerowchange}
+                        size="small"
+                        style={{  height: "40px",     marginRight: '11px' }}
+                      >
+                        <MenuItem value={5}>5</MenuItem>
+                        <MenuItem value={20}>20</MenuItem>
+                        <MenuItem value={50}>50</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Stack>
                 </TableContainer>
               </Paper>
-              <TablePagination
-                rowsPerPageOptions={[10, 25, 100]}
-                component="div"
-                count={rows.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
+
+              <AlertDialog
+                open={open}
+                onClose={handleClickOpen}
+                onSubmit={handleDeletesRow}
+                title={deleteRow.title}
+                whatYouDelete='Session'
               />
             </CardContent>
           </Card>
         </Box>
       </Box>
       {/* <Footer/> */}
+      <ToastContainer />
     </>
   );
 };

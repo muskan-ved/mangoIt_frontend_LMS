@@ -7,7 +7,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { HandleLogout } from "./auth"
 
 export const HandleProfile = async(userId:any) =>{
-  
     return await axios({
       method: "GET",
       url: `${API.userInfoById}/${userId}`,
@@ -25,9 +24,8 @@ export const HandleProfile = async(userId:any) =>{
   }
 
   export const HandleUpdateProfile = async(userId:number,reqData:any) =>{
-  
     return await axios({
-      method: "put",
+      method: "PUT",
       url: `${API.userUpdateById}/${userId}`,
       headers: LoginHeader(),
       data:reqData,

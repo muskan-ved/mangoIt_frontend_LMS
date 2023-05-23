@@ -1,7 +1,6 @@
-export type courseType = {
+export type moduleType = {
     id : string,
     title: string,
-    is_chargeable: string,
     status: string,
     short_description: string,
     long_description: string,
