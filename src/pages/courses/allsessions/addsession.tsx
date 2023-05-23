@@ -157,7 +157,7 @@ export default function AddSession() {
                   First="Home"
                   Middle="Session"
                   Text="SESSION"
-                  Link="/sessions/addsession"
+                  Link="/courses/allsessions"
                />
                {/* main content */}
                <Card>

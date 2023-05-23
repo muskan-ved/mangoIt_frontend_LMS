@@ -44,6 +44,7 @@ import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
 import Footer from "@/common/LayoutNavigations/footer";
 import { handleSortData } from "@/common/Sorting/sorting";
 import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
+import { usePagination } from "@/common/Pagination/paginations";
 //Type Import
 import { sessionType } from "@/types/sessionType";
 import { courseType } from "@/types/courseType";
@@ -57,7 +58,6 @@ import { HandleSessionDelete, HandleSessionGet } from "@/services/session";
 import { HandleCourseGet } from "@/services/course";
 import { HandleModuleGet } from "@/services/module";
 import { AlertDialog } from "@/common/DeleteListRow/deleteRow";
-
 
 interface Column {
   id: "id" | "title" | "course_id" | "module_id" | "is_deleted" | "action";
@@ -75,35 +75,12 @@ const columns: Column[] = [
   { id: "is_deleted", label: "STATUS", minWidth: 100 },
   { id: "action", label: "ACTION", minWidth: 100 },
 ];
-//pagination function
-function usePagination(data: any, itemsPerPage: any) {
-  const [currentPage, setCurrentPage] = React.useState(1);
-  const maxPage = Math.ceil(data.length / itemsPerPage);
-  function currentData() {
-    const begin = (currentPage - 1) * itemsPerPage;
-    const end = begin + itemsPerPage;
-    return data.slice(begin, end);
-  }
 
-  function next() {
-    setCurrentPage((currentPage: any) => Math.min(currentPage + 1, maxPage));
-  }
-  function prev() {
-    setCurrentPage((currentPage: any) => Math.max(currentPage - 1, 1));
-  }
-  function jump(page: any) {
-    const pageNumber = Math.max(1, page);
-    setCurrentPage((currentPage: any) => Math.min(pageNumber, maxPage));
-  }
-  return { next, prev, jump, currentData, currentPage, maxPage };
-}
 const AllSession = () => {
 
   const [getCourse, setCourse] = React.useState<courseType | any>([]);
   const [getModule, setModule] = React.useState<moduleType | any>([]);
   const [rows, setRows] = React.useState<sessionType | any>([]);
-  // const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [toggle, setToggle] = React.useState<boolean>(false);
   const [open, setOpen] = React.useState(false);
   const [search, setSearch] = React.useState('');
@@ -111,16 +88,6 @@ const AllSession = () => {
   const [deleteRow, setDeleteRow] = React.useState<sessionType | any>([])
 
   const router = useRouter()
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
-
   //pagination
   const [row_per_page, set_row_per_page] = React.useState(5);
   let [page, setPage] = React.useState<any>(1);
@@ -150,20 +117,13 @@ const AllSession = () => {
     HandleSessionGet('', filterData).then((itemFiltered) => {
       setRows(itemFiltered.data)
     })
-
   }
+  
   const handleClickOpen = (row: any) => {
     setDeleteRow(row)
     setOpen(!open);
 
   };
-
-  const resetFilterValue = () => {
-    setFilter(0)
-    reset({ course: 0, module: 0, status: 0 });
-
-  }
-
   // to delete a row
   const handleDeletesRow = () => {
     HandleSessionDelete(deleteRow.id).then((deletedRow) => {
@@ -172,6 +132,11 @@ const AllSession = () => {
       })
     })
     setOpen(!open);
+  }
+
+  const resetFilterValue = () => {
+    setFilter(0)
+    reset({ course: 0, module: 0, status: 0 });
   }
 
   const handleSort = (rowsData: any) => {
@@ -243,7 +208,7 @@ const AllSession = () => {
                 id="standard-search"
                 value={search}
                 variant="outlined"
-                placeholder="Search"
+                placeholder="Search by session"
                 onChange={(e) => handleSearch(e, '')}
                 InputProps={{
                   endAdornment: (
@@ -290,7 +255,8 @@ const AllSession = () => {
                               <Box component="form"
                                 // noValidate
                                 onSubmit={handleSubmit(onSubmit)}
-                                className={Sessions.filterForm}>
+                                className={Sessions.filterForm}
+                              >
                                 <Stack
                                   style={{ marginTop: "10px" }}
                                   className="form-filter"
@@ -460,7 +426,7 @@ const AllSession = () => {
                     </TableBody>
                   </Table>
                   <Stack
-                    style={{ marginBottom: "10px", marginTop: "10px" }}
+                    className={Sessions.stackStyle}
                     direction="row"
                     alignItems="right"
                     justifyContent="space-between"
@@ -479,7 +445,7 @@ const AllSession = () => {
                         defaultValue={5}
                         onChange={handlerowchange}
                         size="small"
-                        style={{  height: "40px",     marginRight: '11px' }}
+                        style={{ height: "40px", marginRight: '11px' }}
                       >
                         <MenuItem value={5}>5</MenuItem>
                         <MenuItem value={20}>20</MenuItem>
