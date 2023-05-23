@@ -19,6 +19,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
 import styles from "../../../styles/sidebar.module.css";
 import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
 import Footer from "@/common/LayoutNavigations/footer";
@@ -65,6 +66,7 @@ const AllCourses = () => {
   const [page, setPage] = React.useState(0);
   const [toggle, setToggle] = React.useState<boolean>(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [search, setSearch] = React.useState('');
 
   const router = useRouter()
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -82,6 +84,9 @@ const AllCourses = () => {
 
   }
   const handleSort = (data: any) => {
+
+  }
+  const handleSearch = (e: any, identifier: any) =>{
 
   }
 
@@ -114,15 +119,17 @@ const AllCourses = () => {
           {/* main content */}
           <Card>
             <CardContent>
-              <TextField
-                id="standard-bare"
+            <TextField
+                id="standard-search"
+                value={search}
                 variant="outlined"
                 placeholder="Search"
+                onChange={(e) => handleSearch(e, '')}
                 InputProps={{
                   endAdornment: (
-                    <IconButton>
+                    !search ? <IconButton>
                       <SearchOutlined />
-                    </IconButton>
+                    </IconButton> : <IconButton onClick={(e) => handleSearch('', 'reset')}> <CloseIcon /></IconButton>
                   ),
                 }}
               />
