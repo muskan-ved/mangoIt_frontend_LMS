@@ -15,7 +15,6 @@ export default function Home() {
   
   useEffect(() => {
     // getHomeRoute(2)
-    console.log("index js")
     if (typeof window !== "undefined") {
         if(window.location.pathname === '/' && !window.localStorage.getItem('loginToken') || !window.localStorage.getItem('loginToken'))
         {

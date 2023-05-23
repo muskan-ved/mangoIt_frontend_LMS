@@ -64,7 +64,6 @@ const responseFacebook = (response:any) => {
     onSuccess: async(tokenResponse) => {
   await HandleLoginByGoogle(tokenResponse)
                     .then(async(res) => {
-console.log(res,"333333333333333")
                       const reqData = {
                           first_name: res.data.given_name,
                           last_name: res.data.family_name,
