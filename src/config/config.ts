@@ -1,11 +1,13 @@
-
-//client work
+// SERVER API URL
 export const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
-// local server
-// export const BASE_URL = `${process.env.NEXT_PUBLIC_LOCAL_BASE_URL}`;
+// LOCAL API URL
+// export const BASE_URL = `${process.env.NEXT_PUBLIC_LOCAL_FRONTEND_BASE_URL}`;
 
-// fronend local server
+// FRONTEND LOCAL URL
+// export const FRONTEND_BASE_URL = `${process.env.NEXT_PUBLIC_FRONTEND_BASE_URL}`;
+
+// FRONTEND SERVER URL
 export const FRONTEND_BASE_URL = `${process.env.NEXT_PUBLIC_FRONTEND_BASE_URL}`;
 
 export const API = {
@@ -19,13 +21,13 @@ export const API = {
  userInfoById:`${BASE_URL}/${process.env.NEXT_PUBLIC_GET_USER_BY_ID}`,
  userUpdateById: `${BASE_URL}/${process.env.NEXT_PUBLIC_UPDATE_USER_BY_ID}`,
 
- getAllCourses: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_ALL_COURSES}`,
+ getCourses: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_COURSES}`,
  deleteCourse: `${BASE_URL}/${process.env.NEXT_PUBLIC_DELETE_COURSE}`,
 
  getAllModules: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_ALL_MODULES}`,
  createModule: `${BASE_URL}/${process.env.NEXT_PUBLIC_CREATE_MODULE}`,
 
- getSessions: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET}`,
+ getSessions: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_SESSION}`,
  createSession: `${BASE_URL}/${process.env.NEXT_PUBLIC_CREATE_SESSION}`,
  deleteSession: `${BASE_URL}/${process.env.NEXT_PUBLIC_DELETE_SESSION}`,
  updateSession: `${BASE_URL}/${process.env.NEXT_PUBLIC_UPDATE_SESSION}`,

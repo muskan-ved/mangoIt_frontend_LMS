@@ -47,6 +47,7 @@ import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFir
 import { usePagination } from "@/common/Pagination/paginations";
 import { AlertDialog } from "@/common/DeleteListRow/deleteRow";
 import { Controller,useForm } from "react-hook-form";
+import { handleSortData } from "@/common/Sorting/sorting";
 
 interface Column {
   id: "id" | "title" | "module" | "session" | "is_chargeable" | "status" | "action";
@@ -67,13 +68,14 @@ const columns: Column[] = [
 ];
 
 const AllCourses = () => {
-  const [rows, setRows] = React.useState([]);
+  const [rows, setRows] = React.useState<any>([]);
   const [toggle, setToggle] = React.useState<boolean>(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [search, setSearch] = React.useState('');
   const [deleteRow, setDeleteRow] = React.useState<any>([])
   const [open, setOpen] = React.useState(false);
   const [getFilter, setFilter] = React.useState<number>(0);
+  const [filterObject, setFilterObject] = React.useState<any>('');
+  
 
   const router = useRouter()
   //pagination
@@ -97,17 +99,12 @@ const AllCourses = () => {
   } = useForm();
 
   const onSubmit = (event: any) => {
-    // console.log('eventss', event)
-    // const filterData: any = {   
-    //   is_chargeable: event.type,
-    //   status: event.status,
-    // }
     HandleCourseGet('', event).then((itemFiltered) => {
-      // setRows(itemFiltered.data)
-      console.log(itemFiltered)
+      setRows(itemFiltered.data)
+      setFilterObject(event)
     })
   }
-
+  
 
   const handleClickOpen = (row: any) => {
     // console.log('row', row)
@@ -118,7 +115,7 @@ const AllCourses = () => {
   // to delete a row
   const handleDeletesRow = () => {
     HandleCourseDelete(deleteRow.id).then((deletedRow) => {
-      HandleCourseGet('', '').then((newRows) => {
+      HandleCourseGet('', filterObject).then((newRows) => {
         setRows(newRows.data)
       })
     })
@@ -129,28 +126,31 @@ const AllCourses = () => {
     setFilter(0)
     reset({ type: 0, status: 0 });
   }
-  const handleSort = (data: any) => {
-
+  const handleSort = (rowsData: any) => {
+    const sortData = handleSortData(rowsData)
+    setRows(sortData)
+    setToggle(!toggle)
   }
   const handleSearch = (e: any, identifier: any) => {
     setPage(1);
     DATA.jump(1);
     if (identifier === 'reset') {
-      HandleCourseGet('', '').then((itemSeached) => {
+      HandleCourseGet('', { type: 0, status: 0 }).then((itemSeached) => {
         setRows(itemSeached.data);
       })
       setSearch(e)
     } else {
       const search = e.target.value;
       setSearch(e.target.value)
-      HandleCourseGet(search, '').then((itemSeached) => {
+      HandleCourseGet(search, filterObject).then((itemSeached) => {
         setRows(itemSeached.data);
       })
     }
   }
 
   const getAllCourseData = () => {
-    HandleCourseGet('', '').then((courses) => {
+    HandleCourseGet('', filterObject).then((courses) => {
+      console.log(courses,"45")
       setRows(courses.data)
     })
   }
@@ -348,6 +348,7 @@ const AllCourses = () => {
                       </TableRow>
                     </TableHead>
                     <TableBody>
+                      {console.log(rows,rows?.length,DATA)}
                       {rows && rows.length > 0 ? DATA.currentData() &&
                         DATA.currentData()
                           .map((row: any) => {
@@ -360,17 +361,17 @@ const AllCourses = () => {
                                 key={row.id}
                               >
                                 <TableCell>{row.course.id}</TableCell>
-                                <TableCell>{capitalizeFirstLetter(row.course.title)}</TableCell>
-                                <TableCell>{row.moduleCount.length !== 0 ? row.moduleCount[0].moduleCount : 0}</TableCell>
-                                <TableCell>{row.sessionCount.length !== 0 ? row.sessionCount[0]?.sessionCount : 0}</TableCell>
-                                <TableCell>{capitalizeFirstLetter(row.course.is_chargeable)}</TableCell>
-                                <TableCell className={statusColor}>{capitalizeFirstLetter(row.course.status)}</TableCell>
+                                <TableCell>{capitalizeFirstLetter(row?.course?.title)}</TableCell>
+                                <TableCell>{row?.moduleCount?.length !== 0 ? row?.moduleCount[0]?.moduleCount : 0}</TableCell>
+                                <TableCell>{row?.sessionCount?.length !== 0 ? row?.sessionCount[0]?.sessionCount : 0}</TableCell>
+                                <TableCell>{capitalizeFirstLetter(row?.course?.is_chargeable)}</TableCell>
+                                <TableCell className={statusColor}>{capitalizeFirstLetter(row?.course?.status)}</TableCell>
                                 <TableCell><Button onClick={() => router.push(`/courses/allsessions/updatesession/${row.id}`)} variant="outlined" color="success" className={courseStyle.editDeleteButton}  ><ModeEditOutlineIcon /></Button>
-                                  <Button className={courseStyle.editDeleteButton} variant="outlined" color="error" onClick={() => handleClickOpen(row.course)}><DeleteOutlineIcon /></Button>
+                                  <Button className={courseStyle.editDeleteButton} variant="outlined" color="error" onClick={() => handleClickOpen(row?.course)}><DeleteOutlineIcon /></Button>
                                 </TableCell>
                               </TableRow>
                             );
-                          }) : <TableRow><TableCell colSpan={6} > <Typography>Record not Found</Typography> </TableCell></TableRow>}
+                          }) : <TableRow><TableCell colSpan={7} sx={{fontWeight:600,textAlign:'center'}}> Record not Found </TableCell></TableRow>}
                     </TableBody>
                   </Table>
                   <Stack

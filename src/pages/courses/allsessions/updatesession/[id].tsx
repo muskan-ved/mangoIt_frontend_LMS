@@ -43,7 +43,6 @@ export default function UpdateSession() {
    const [getSession, setSession] = useState<sessionType | any>();
    const [getModules, setModules] = useState<moduleType | any>();
    const [file, setFile] = useState<string | any>('')
-   const [attachmentType, setAttachmentType] = useState('');
    const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
    const [isLoading, setLoading] = useState<boolean>(false);
    const [error, setErrors] = useState<string>();

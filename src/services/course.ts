@@ -7,12 +7,16 @@ import "react-toastify/dist/ReactToastify.css";
 import { HandleLogout } from "./auth"
 
 export const HandleCourseGet = async(searchData:any,filterData:any) =>{ 
-    const API_URL = searchData ? `${API.getAllCourses}/${searchData}` : `${API.getAllCourses}`
+    const createFilterData = (filterData === null || filterData === '') ? {
+      type: 0,
+      status: 0
+  }: filterData
+    const API_URL = searchData ? `${API.getCourses}/${searchData}` : `${API.getCourses}`
     return await axios({
       method: "POST",
       url: API_URL,
       headers: LoginHeader(),
-      data: filterData,
+      data: createFilterData,
     }).then((request) => {
         return request;
       }).catch((error) => {
