@@ -2,10 +2,10 @@
 export const FRONTEND_BASE_URL = "http://localhost:3000";
 
 //client work
-// export const BASE_URL = "https://api-mangoit-lms.mangoitsol.com";
+export const BASE_URL = "https://api-mangoit-lms.mangoitsol.com";
 
 // local server
-export const BASE_URL = "http://localhost:6030";
+// export const BASE_URL = "http://localhost:6030";
 
 export const API = {
  authToken: `${BASE_URL}/${process.env.NEXT_PUBLIC_AUTH_TOKEN}`,
