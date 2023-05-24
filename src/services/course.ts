@@ -7,21 +7,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { HandleLogout } from "./auth"
 
 export const HandleCourseGet = async(searchData:any,filterData:any) =>{ 
-    // return await axios({
-    //   method: "POST",
-    //   url: `${API.getAllCourses}`,
-    //   headers: LoginHeader(),
-    // }).then((request) => {
-    //     return request;
-    //   }).catch((error) => {
-    //     if(error.response.status === 401){
-    //       HandleLogout()
-    //     }else{
-    //       toast.error("Something went wrong")
-    //     }
-    //     return error;
-    //   })
-
     const API_URL = searchData ? `${API.getAllCourses}/${searchData}` : `${API.getAllCourses}`
     return await axios({
       method: "POST",
@@ -29,6 +14,24 @@ export const HandleCourseGet = async(searchData:any,filterData:any) =>{
       headers: LoginHeader(),
       data: filterData,
     }).then((request) => {
+        return request;
+      }).catch((error) => {
+        if(error.response.status === 401){
+          HandleLogout()
+        }else{
+          toast.error("Something went wrong")
+        }
+        return error;
+      })
+  }
+
+  export const HandleCourseDelete = async(rowID:any) =>{
+    return await axios({
+      method: "DELETE",
+      url: `${API.deleteCourse}/${rowID}`,
+      headers: LoginHeader(),
+    }).then((request) => {
+      toast.success("Course Deleted Successfully")
         return request;
       }).catch((error) => {
         if(error.response.status === 401){
