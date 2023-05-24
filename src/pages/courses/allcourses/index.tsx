@@ -361,13 +361,13 @@ const AllCourses = () => {
                                 key={row.id}
                               >
                                 <TableCell>{row.course.id}</TableCell>
-                                <TableCell>{capitalizeFirstLetter(row.course.title)}</TableCell>
-                                <TableCell>{row.moduleCount.length !== 0 ? row.moduleCount[0].moduleCount : 0}</TableCell>
-                                <TableCell>{row.sessionCount.length !== 0 ? row.sessionCount[0]?.sessionCount : 0}</TableCell>
-                                <TableCell>{capitalizeFirstLetter(row.course.is_chargeable)}</TableCell>
-                                <TableCell className={statusColor}>{capitalizeFirstLetter(row.course.status)}</TableCell>
+                                <TableCell>{capitalizeFirstLetter(row?.course?.title)}</TableCell>
+                                <TableCell>{row?.moduleCount?.length !== 0 ? row?.moduleCount[0]?.moduleCount : 0}</TableCell>
+                                <TableCell>{row?.sessionCount?.length !== 0 ? row?.sessionCount[0]?.sessionCount : 0}</TableCell>
+                                <TableCell>{capitalizeFirstLetter(row?.course?.is_chargeable)}</TableCell>
+                                <TableCell className={statusColor}>{capitalizeFirstLetter(row?.course?.status)}</TableCell>
                                 <TableCell><Button onClick={() => router.push(`/courses/allsessions/updatesession/${row.id}`)} variant="outlined" color="success" className={courseStyle.editDeleteButton}  ><ModeEditOutlineIcon /></Button>
-                                  <Button className={courseStyle.editDeleteButton} variant="outlined" color="error" onClick={() => handleClickOpen(row.course)}><DeleteOutlineIcon /></Button>
+                                  <Button className={courseStyle.editDeleteButton} variant="outlined" color="error" onClick={() => handleClickOpen(row?.course)}><DeleteOutlineIcon /></Button>
                                 </TableCell>
                               </TableRow>
                             );

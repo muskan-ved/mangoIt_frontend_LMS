@@ -11,7 +11,7 @@ export const HandleCourseGet = async(searchData:any,filterData:any) =>{
       type: 0,
       status: 0
   }: filterData
-    const API_URL = searchData ? `${API.getAllCourses}/${searchData}` : `${API.getAllCourses}`
+    const API_URL = searchData ? `${API.getCourses}/${searchData}` : `${API.getCourses}`
     return await axios({
       method: "POST",
       url: API_URL,
