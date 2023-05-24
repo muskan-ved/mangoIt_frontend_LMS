@@ -199,7 +199,7 @@ console.log('getvalue', getValues())
                   First="Home"
                   Middle="Session"
                   Text="SESSION"
-                  Link="/sessions/updatesession"
+                  Link="courses/allsessions/updatesession"
                />
                {/* main content */}
                <Card>

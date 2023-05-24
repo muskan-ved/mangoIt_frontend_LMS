@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Breadcrumbs, Stack, Typography } from "@mui/material";
 import { FC } from "react";
 import { breadcrumbsVariableTypes } from "@/types/breadcrumbs";
+import { FRONTEND_BASE_URL } from "@/config/config";
 
 
 const BreadcrumbsHeading : FC<breadcrumbsVariableTypes> = (props): any => {
@@ -26,7 +27,7 @@ const BreadcrumbsHeading : FC<breadcrumbsVariableTypes> = (props): any => {
                         <Link
                           key="2"
                           color="inherit"
-                          href={props.Link}
+                          href={`${FRONTEND_BASE_URL}${props.Link}`}
                           style={{ color: "#7D86A5", textDecoration: "none" }}
                         >
                           {props.Middle}
