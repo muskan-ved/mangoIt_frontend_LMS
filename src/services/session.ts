@@ -1,5 +1,4 @@
 import { LoginHeader } from "@/common/Tokens/authToken"
-import { authHeader } from "@/common/Tokens/authToken"
 import { API } from "@/config/config"
 import axios from "axios"
 import { toast } from "react-toastify"
@@ -27,7 +26,7 @@ export const HandleSessionCreate = async(reqData:any) =>{
 
   export const HandleSessionGet = async(searchData:any,filterData:any) =>{
     // console.log("sercDaTa",searchData)
-    const API_URL = searchData ? `${API.getAllSessions}/${searchData}` : `${API.getAllSessions}`
+    const API_URL = searchData ? `${API.getSessions}/${searchData}` : `${API.getSessions}`
     return await axios({
       method: "POST",
       url: API_URL,
@@ -48,7 +47,7 @@ export const HandleSessionCreate = async(reqData:any) =>{
   export const HandleSessionGetByID = async(sessionId:any) =>{
     return await axios({
       method: "GET",
-      url: `${API.getSessionBYID}/${sessionId}`,
+      url: `${API.getSessions}/${sessionId}`,
       headers: LoginHeader(),
     }).then((request) => {
         return request;
