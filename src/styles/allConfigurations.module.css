@@ -39,3 +39,47 @@
     font-size: 21px;
     font-weight: 600;
 }
+
+.previewImage{
+    padding: 10px;
+    height: 64px;
+    display: flex;
+    justify-content: center;
+}
+
+.siteCameraIconFavicon {
+    right: 19px !important;
+    color: white !important;
+    height: 18px;
+    position: relative !important;
+    background: #1a73e8 !important;
+    padding: 3px !important;
+    border-radius: 50% !important;
+    top: 41px;
+}
+
+.cameraAltIconFavicon {
+    font-size: small !important;
+}
+
+.siteCameraIconLogo {
+    right: 25px !important;
+    color: white !important;
+    position: relative !important;
+    background: #1a73e8 !important;
+    padding: 5px !important;
+    border-radius: 50% !important;
+    top: 35px;
+    height: 23px;
+}
+
+.cameraAltIconLogo {
+    font-size: medium !important;
+}
+
+.cameraIconMain{
+    display: flex;
+    justify-content: center;
+}
+
+
