@@ -13,13 +13,14 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import Footer from "@/common/LayoutNavigations/footer";
 import { useState } from "react";
 import RichEditor from "@/common/RichTextEditor/textEditor";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { courseType } from "@/types/courseType";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { courseValidations } from "@/validation_schema/courseValidation";
@@ -31,6 +32,7 @@ const AddCourse = () => {
   const {
     register,
     handleSubmit,
+    control,
     reset,
     setValue,
     formState: { errors },
@@ -59,7 +61,7 @@ const AddCourse = () => {
       </Typography>
     );
   }
-
+console.log('err',errors)
   return (
     <>
       <Navbar />
@@ -119,15 +121,29 @@ const AddCourse = () => {
                     </Grid>
 
                     <Grid item mb={2}>
+          
                       <InputLabel className={styles.CourseInputLabelFont}>
                         Type
                       </InputLabel>
-                      <FormControl fullWidth>
-                        <Select value={'true'} {...register("is_chargeable")}>
-                          <MenuItem value={'true'}>Paid</MenuItem>
-                          <MenuItem value={'false'}>Unpaid</MenuItem>
-                        </Select>
-                      </FormControl>
+                      <Controller
+                        name="type"
+                        control={control}
+                        defaultValue={'free'}
+                        render={({ field }) => (
+                          <FormControl fullWidth>
+                            <Select {...field} displayEmpty>
+                              {/* <MenuItem value={0}>All</MenuItem> */}
+                              <MenuItem value={'free'}>
+                                Free
+                              </MenuItem>
+                              <MenuItem value={'paid'}>
+                                Paid
+                              </MenuItem>
+                            </Select>
+                          </FormControl>
+                        )}
+                      />
+                      
                       {errors && errors.is_chargeable
                         ? ErrorShowing(errors?.is_chargeable?.message)
                         : ""}
@@ -136,12 +152,24 @@ const AddCourse = () => {
                       <InputLabel className={styles.CourseInputLabelFont}>
                         Status
                       </InputLabel>
-                      <FormControl fullWidth>
-                        <Select value={'true'} {...register("status")}>
-                          <MenuItem value={'true'}>Display</MenuItem>
-                          <MenuItem value={'false'}>Hide</MenuItem>
-                        </Select>
-                      </FormControl>
+                      <Controller
+                        name="status"
+                        control={control}
+                        defaultValue={'active'}
+                        render={({ field }) => (
+                          <FormControl fullWidth>
+                            <Select {...field} displayEmpty>
+                              {/* <MenuItem value={0}>All</MenuItem> */}
+                              <MenuItem value={'active'}>
+                                Active
+                              </MenuItem>
+                              <MenuItem value={'inactive'}>
+                                In-active
+                              </MenuItem>
+                            </Select>
+                          </FormControl>
+                        )}
+                      />
                       {errors && errors.status
                         ? ErrorShowing(errors?.status?.message)
                         : ""}
