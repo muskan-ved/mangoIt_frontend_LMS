@@ -62,24 +62,24 @@
     font-size: small !important;
 }
 
-.siteCameraIconLogo {
+.cameraAltIconLogo {
     right: 25px !important;
     color: white !important;
     position: relative !important;
     background: #1a73e8 !important;
-    padding: 5px !important;
+    padding: 2px !important;
     border-radius: 50% !important;
     top: 35px;
     height: 23px;
 }
 
-.cameraAltIconLogo {
-    font-size: medium !important;
-}
-
 .cameraIconMain{
     display: flex;
     justify-content: center;
+}
+
+.siteLoadingButton {
+    width: 103px;
 }
 
 
