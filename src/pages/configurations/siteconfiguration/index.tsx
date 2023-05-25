@@ -35,6 +35,7 @@ import { siteType } from "@/types/siteType";
 import { siteConfigValidations } from "@/validation_schema/siteValidation";
 import { HandleSiteConfigCreate, HandleSiteConfigUpdate, HandleSiteGetByID } from "@/services/site";
 import { BASE_URL } from "@/config/config";
+import SpinnerProgress from "@/common/CircularProgressComponent/spinnerComponent";
 
 const SiteConfiguration = () => {
   const [previewProfile, setPreviewProfile] = useState<siteType>({
@@ -57,15 +58,15 @@ const SiteConfiguration = () => {
   });
 
   const onSubmit = async (event: any) => {
-    console.log(event, "event");
-    const reqData: any = {
-      title: event?.org_title,
-      org_logo: event?.org_logoo,
-      org_favicon: event?.org_favicoon,
-    };
 
-    const formData: any = new FormData();
+    const formData = new FormData();
 
+    const reqData:any ={
+      title: event.title,
+      org_logo: event.org_logoo,
+      org_favicon: event.org_favicoon
+    }
+    
     for (var key in reqData) {
       formData.append(key, reqData[key]);
     }
@@ -76,7 +77,7 @@ const SiteConfiguration = () => {
         setLoadingButton(false);
         handleGetDataById(res?.data?.user_id);
         setPortalData(res?.data);
-        setIsAddOrEdit(true);
+        setIsAddOrEdit(false);
       })
       .catch((err) => {
         console.log(err);
@@ -122,8 +123,7 @@ const SiteConfiguration = () => {
       .then((res) => {
         setLoading(false);
         if (res.data) {
-          console.log(res,"44444444444")
-          setIsAddOrEdit(true);
+          setIsAddOrEdit(false);
           setPortalData(res?.data);
           setValue("org_logoo",res?.data?.org_logo)
           setValue("org_favicoon",res?.data?.org_favicon)
@@ -145,16 +145,13 @@ const SiteConfiguration = () => {
   }, []);
 
   const onUpdate = async (event: any) => {
-    console.log(event, "event");
     const reqData: any = {
-      title: event?.org_title ? event?.org_title : portalData?.org_title,
+      title: event?.org_title,
       org_logo: event?.org_logoo ,
       org_favicon: event?.org_favicoon
     };
-    console.log(reqData,"reqdata")
 
     const formData: any = new FormData();
-
     for (var key in reqData) {
       formData.append(key, reqData[key]);
     }
@@ -162,19 +159,16 @@ const SiteConfiguration = () => {
     setLoadingButton(true);
     await HandleSiteConfigUpdate(portalData.id,formData)
       .then((res) => {
-        console.log(res,"update")
         setLoadingButton(false);
-        // handleGetDataById(portalData.id);
+        handleGetDataById(res.data.id);
         setPortalData(res?.data);
-        handleGetDataById(res.data?.id);
-        // setIsAddOrEdit(true)
       })
       .catch((err) => {
         console.log(err);
         setLoadingButton(false);
       });
   };
-console.log(portalData ,portalData!== '',"HandleSiteConfigUpdate")
+
   return (
     <>
       <Navbar />
@@ -191,10 +185,10 @@ console.log(portalData ,portalData!== '',"HandleSiteConfigUpdate")
           />
 
           {/* main content */}
-
           <Card>
             <CardContent>
-              {!isAddOrEdit ? (
+              {!isLoading ?
+              !isAddOrEdit ? (
                 // Save data in portal
                 <Box
                   component="form"
@@ -616,8 +610,8 @@ console.log(portalData ,portalData!== '',"HandleSiteConfigUpdate")
                     </Grid>
                   </Grid>
                 </Box>
-              )}
-              {/* : <SpinnerProgress />} */}
+              )
+              : <SpinnerProgress />}
             </CardContent>
           </Card>
         </Box>

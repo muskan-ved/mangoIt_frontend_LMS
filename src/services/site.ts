@@ -68,7 +68,7 @@ export const HandleSiteConfigCreate = async(reqData:any) =>{
   export const HandleSiteConfigUpdate = async(userId:any, updateData:any) =>{
     return await axios({
       method: "PUT",
-      url: `${API.updateSession}/${userId}`,
+      url: `${API.updateSite}/${userId}`,
       headers: LoginHeader(),
       data: updateData,
     }).then((request) => {
