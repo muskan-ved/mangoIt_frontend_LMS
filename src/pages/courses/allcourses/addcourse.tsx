@@ -18,16 +18,24 @@ import {
   Typography,
 } from "@mui/material";
 import Footer from "@/common/LayoutNavigations/footer";
+// CSS Import
+import { ToastContainer } from "react-toastify";
+
 import { useState } from "react";
 import RichEditor from "@/common/RichTextEditor/textEditor";
 import { Controller, useForm } from "react-hook-form";
 import { courseType } from "@/types/courseType";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { courseValidations } from "@/validation_schema/courseValidation";
+import { HandleCourseCreate } from "@/services/course";
+import { useRouter } from "next/router";
+
 
 const AddCourse = () => {
   const [shortDespcriptionContent, setShortDespcriptionContent] = useState("");
   const [despcriptionContent, setdespcriptionContent] = useState("");
+  const [isLoading, setLoading] = useState<boolean>(false);
+  const router: any = useRouter();
 
   const {
     register,
@@ -35,33 +43,71 @@ const AddCourse = () => {
     control,
     reset,
     setValue,
-    formState: { errors },
+    formState: { errors }, setError
   } = useForm<courseType | any>({
     resolver: yupResolver(courseValidations),
   });
 
   const handleContentChange = (value: string, identifier: string) => {
+    // if (identifier === "long_description") {
+    //   setdespcriptionContent(value);
+    //   setValue(identifier, value);
+    // } else if (identifier === "short_description") {
+    //   setShortDespcriptionContent(value);
+    //   setValue(identifier, value);
+    // }
     if (identifier === "long_description") {
+
+      if (value === '<p><br></p>') {
+        setError(identifier, { message: 'Long description is a required field' });
+      } else {
+        setError(identifier, { message: '' })
+        setValue(identifier, value)
+      }
       setdespcriptionContent(value);
-      setValue(identifier, value);
     } else if (identifier === "short_description") {
+      if (value === '<p><br></p>') {
+        setError(identifier, { message: 'Short description is a required field' });
+      } else {
+        setError(identifier, { message: '' })
+        setValue(identifier, value);
+      }
       setShortDespcriptionContent(value);
-      setValue(identifier, value);
     }
+
   };
 
-  const onSubmit = (value: any) => {
-    console.log(value, "course submit");
-  };
-
-  function ErrorShowing(errorMessage: any) {
-    return (
-      <Typography variant="body2" color={"error"} gutterBottom>
-        {errorMessage}{" "}
-      </Typography>
-    );
+  const onSubmit = async (value: any) => {
+    console.log("course submit", value);
+    try {
+      const courseCreated = await HandleCourseCreate(value)
+      setLoading(false);
+      setTimeout(() => {
+         router.push('/courses/allcourses/')
+      }, 1000)
+    }
+    catch (e) {
+      console.log(e);
+    };
   }
-console.log('err',errors)
+
+  function ErrorShowing(errorMessage: any, identifier: string = '') {
+    if (identifier === "long_description") {
+      return (
+        <Typography variant="body2" color={"error"} mt='67px' gutterBottom>
+          {errorMessage}{" "}
+        </Typography>
+      );
+    }
+    else {
+      return (
+        <Typography variant="body2" color={"error"} gutterBottom>
+          {errorMessage}{" "}
+        </Typography>
+      );
+    }
+  }
+  // console.log('err', errors)
   return (
     <>
       <Navbar />
@@ -121,7 +167,7 @@ console.log('err',errors)
                     </Grid>
 
                     <Grid item mb={2}>
-          
+
                       <InputLabel className={styles.CourseInputLabelFont}>
                         Type
                       </InputLabel>
@@ -143,9 +189,9 @@ console.log('err',errors)
                           </FormControl>
                         )}
                       />
-                      
-                      {errors && errors.is_chargeable
-                        ? ErrorShowing(errors?.is_chargeable?.message)
+
+                      {errors && errors.type
+                        ? ErrorShowing(errors?.type?.message)
                         : ""}
                     </Grid>
                     <Grid item mb={2}>
@@ -175,24 +221,26 @@ console.log('err',errors)
                         : ""}
                     </Grid>
                     <Box className={styles.wrapShortAndLongDescription}>
-                      <Grid item mb={5}>
+                      <Grid item mb={2}>
                         <InputLabel className={styles.CourseInputLabelFont}>
                           Short Description
                         </InputLabel>
                         <Box className={styles.quillShortDescription}>
                           <RichEditor
+                            {...register("short_description")}
                             value={shortDespcriptionContent}
                             onChange={(e) =>
                               handleContentChange(e, "short_description")
                             }
                           />
                         </Box>
-                        {errors && errors.short_description
+                        {errors && errors.short_description ? ErrorShowing(errors?.short_description?.message) : ""}
+                        {/* {errors && errors.short_description
                           ? ErrorShowing(errors?.short_description?.message)
-                          : ""}
+                          : ""} */}
                       </Grid>
 
-                      <Grid item className={styles.quillDescriptionTop} mt={4}>
+                      <Grid item className={styles.quillDescriptionTop} >
                         <InputLabel className={styles.CourseInputLabelFont}>
                           Description
                         </InputLabel>
@@ -205,11 +253,13 @@ console.log('err',errors)
                           />
                         </Box>
                         {errors && errors.long_description
-                          ? ErrorShowing(errors?.long_description?.message)
+                          ? ErrorShowing(errors?.long_description?.message, 'long_description')
                           : ""}
                       </Grid>
                     </Box>
-                    <Grid item mt={3} className={styles.SubmitButton}>
+                    {/* {const showErrorMessage = errors?.long_description?.message ? className={styles.addNewCourseButton} : className={styles.SubmitButton}}
+                    <Grid item mt={3} className={showErrorMessage}> */}
+                    <Grid item mt={3}  className={!errors?.long_description?.message ? styles.addNewCourseButton : styles.SubmitButton} >
                       <Button type="submit" variant="contained">
                         ADD NEW COURSE
                       </Button>
@@ -221,6 +271,7 @@ console.log('err',errors)
           </Card>
         </Box>
       </Box>
+      <ToastContainer />
     </>
   );
 };

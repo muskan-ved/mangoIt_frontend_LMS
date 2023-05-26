@@ -292,7 +292,7 @@ const AllCourses = () => {
                                       lg={12}
                                     >
                                   <Box >
-                                        <Button
+                                        <Button className={courseStyle.boxInFilter}
                                           size="medium"
                                           variant="contained"
                                           color="primary"
@@ -306,7 +306,7 @@ const AllCourses = () => {
                                           type="submit"
                                           variant="contained"
                                           color="primary"
-                                        
+                                          className={courseStyle.applyButtonInFiltter}
                                           onClick={popupState.close}
                                         >
                                           Apply
@@ -366,7 +366,7 @@ const AllCourses = () => {
                                 <TableCell>{row?.sessionCount?.length !== 0 ? row?.sessionCount[0]?.sessionCount : 0}</TableCell>
                                 <TableCell>{capitalizeFirstLetter(row?.course?.is_chargeable)}</TableCell>
                                 <TableCell className={statusColor}>{capitalizeFirstLetter(row?.course?.status)}</TableCell>
-                                <TableCell><Button onClick={() => router.push(`/courses/allsessions/updatesession/${row.id}`)} variant="outlined" color="success" className={courseStyle.editDeleteButton}  ><ModeEditOutlineIcon /></Button>
+                                <TableCell><Button onClick={() => router.push(`/courses/allcourses/updatecourse/${row.course.id}`)} variant="outlined" color="success" className={courseStyle.editDeleteButton}  ><ModeEditOutlineIcon /></Button>
                                   <Button className={courseStyle.editDeleteButton} variant="outlined" color="error" onClick={() => handleClickOpen(row?.course)}><DeleteOutlineIcon /></Button>
                                 </TableCell>
                               </TableRow>

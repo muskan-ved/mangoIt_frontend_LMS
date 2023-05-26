@@ -1,51 +1,46 @@
 import React, { useEffect } from "react";
-import { useRouter } from "next/router";
-import { CircularProgress, Typography } from "@mui/material";
+//import { useRouter } from "next/router";
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
+import styles from "../../../styles/payment.module.css";
 import axios from "axios";
 
 
-export default function cancelpayment() {
-    const router = useRouter();
+export default function PaymentCancel() {
+    //const router = useRouter();
     const [spinner, setShowspinner] = React.useState(false);
     const [btnDisabled, setBtnDisabled] = React.useState(false);
     const [load, setLoad] = React.useState<any>(false);
 
-    useEffect(() => { }, []);
+    //useEffect(() => { }, []);
 
     return (
-        <div>
+        <Box>
             {/* {load ? (
                 <Loader />
             ) : ( */}
-            <div className="content">
-                <div className="wrapper-1">
-                    <div className="wrapper-2">
-                        <h1 style={{ color: "red" }}>
+            <Box className={styles.content}>
+                <Box className={styles.wrapper1}>
+                    <Box className={styles.wrapper2}>
+                        <Typography variant="h3" color={"error"}>
                             Payment failed due to some reason.
-                        </h1>
-                        <button
+                        </Typography>
+                        <Button
                             disabled={btnDisabled}
-                            className="go-home"
+                            className={styles.gohome}
                         // onClick={() => {
                         //     redirectAfterCBQpay();
                         // }}
                         >
                             go to dashboard
                             <Typography
-                                style={{
-                                    fontSize: "2px",
-                                    padding: "10px 50px",
-                                    position: "relative",
-                                    top: "-35px",
-                                }}
                             >
                                 {spinner === true ? <CircularProgress color="warning" /> : ""}
                             </Typography>
-                        </button>
-                    </div>
-                </div>
-            </div>
+                        </Button>
+                    </Box>
+                </Box>
+            </Box>
             {/* )} */}
-        </div>
+        </Box>
     );
 }
