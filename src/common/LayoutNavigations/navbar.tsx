@@ -18,9 +18,13 @@ import { HandleLogout } from '@/services/auth';
 import PowerSettingsNewOutlinedIcon from '@mui/icons-material/PowerSettingsNewOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import { capitalizeFirstLetter } from '../CapitalFirstLetter/capitalizeFirstLetter';
+import { BASE_URL } from '@/config/config';
 
+interface appbar{
+  portalData ?: any;
+}
 
-export default function Navbar() {
+export default function Navbar({portalData}:appbar) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =  React.useState<null | HTMLElement>(null);
   const [userData, setUserData] =  React.useState<any>('');
@@ -28,6 +32,8 @@ export default function Navbar() {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const router = useRouter()
+
+  console.log(portalData,"3333333333333333333")
 
   React.useEffect(()=>{
     let localData:any;
@@ -174,7 +180,7 @@ export default function Navbar() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" className={styles.appBarCss}>
         <Toolbar>      
-           <Box component='img' src='/Images/company_logo.png' width={'180px'} height={'50px'}  sx={{ display: { xs: 'block', sm: 'block' } }} alt="Company logo"/>
+           <Box component='img' src={portalData?BASE_URL+"/"+portalData?.org_logo:'/Images/company_logo.png'} width={'180px'} height={'50px'}  sx={{ display: { xs: 'block', sm: 'block' } }} alt="Company logo"/>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <IconButton

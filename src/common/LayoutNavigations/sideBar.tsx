@@ -12,8 +12,6 @@ const SideBar = () => {
     router.push(path);
   };
 
-
-
   return (
     <>
       <Sidebar
@@ -38,6 +36,7 @@ const SideBar = () => {
                     label={item.title}
                     defaultOpen={router.pathname.includes("all")}
                     className={pathnameMatch}
+                    disabled={item.disable}
                   >
                     {item?.children.map((subItem: any, idx: number) => {
                       const subPathnameMatch =
@@ -50,8 +49,10 @@ const SideBar = () => {
                           key={idx}
                           icon={<subItem.icon />}
                           onClick={() => navigateURL(subItem.path)}
-                          active={router.pathname.includes(subItem.path)}
+                          active={router.pathname.includes(subItem.path) ? true : false}
                           className={subPathnameMatch}
+                          disabled={subItem.disable}
+
                         >
                           {subItem.title}
                         </MenuItem>
@@ -65,6 +66,9 @@ const SideBar = () => {
                     onClick={() => navigateURL(item.path)}
                     active={router.pathname === item.path}
                     className={pathnameMatch}
+                    disabled={item.disable}
+
+
                   >
                     {item.title}
                   </MenuItem>
@@ -77,6 +81,7 @@ const SideBar = () => {
                       HandleLogout();
                     }}
                     className={pathnameMatch}
+                    disabled={item.disable}
                   >
                     {item.title}
                   </MenuItem>

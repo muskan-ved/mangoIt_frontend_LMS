@@ -10,7 +10,6 @@ export const FRONTEND_BASE_URL = `${process.env.NEXT_PUBLIC_FRONTEND_BASE_URL}`;
 // // LOCAL API URL
 // export const BASE_URL = `${process.env.NEXT_PUBLIC_LOCAL_BASE_URL}`;
 
-console.log(BASE_URL,"BASE_URL")
 export const API = {
   authToken: `${BASE_URL}/${process.env.NEXT_PUBLIC_AUTH_TOKEN}`,
   register: `${BASE_URL}/${process.env.NEXT_PUBLIC_REGISTER}`,
