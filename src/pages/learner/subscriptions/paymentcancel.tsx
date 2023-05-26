@@ -1,16 +1,16 @@
 import React, { useEffect } from "react";
-import { useRouter } from "next/router";
+//import { useRouter } from "next/router";
 import { CircularProgress, Typography } from "@mui/material";
 import axios from "axios";
 
 
-export default function cancelpayment() {
-    const router = useRouter();
+export default function PaymentCancel() {
+    //const router = useRouter();
     const [spinner, setShowspinner] = React.useState(false);
     const [btnDisabled, setBtnDisabled] = React.useState(false);
     const [load, setLoad] = React.useState<any>(false);
 
-    useEffect(() => { }, []);
+    //useEffect(() => { }, []);
 
     return (
         <div>
