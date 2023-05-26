@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 //import { useRouter } from "next/router";
 import axios from "axios";
+import { Box, Button, Typography } from "@mui/material";
+import styles from "../../../styles/payment.module.css";
 
 export default function PaymentSuccess() {
     //const router = useRouter();
@@ -17,30 +19,25 @@ export default function PaymentSuccess() {
     // }, 5000);
 
     return (
-        <div>
+        <Box>
             {/* {load ? (
                 <Loader />
             ) : ( */}
-            <div className="content">
-                <div className="wrapper-1">
-                    <div className="wrapper-2">
-                        <h1>Thank you !</h1>
-                        <p>Thanks for Payment. </p>
-                        <p>you should receive a confirmation email soon </p>
-
-                        <button className="go-home"
+            <Box className={styles.content}>
+                <Box className={styles.wrapper1}>
+                    <Box className={styles.wrapper2}>
+                        <Typography variant="h3" className={styles.h1}>Thank you !</Typography>
+                        <Typography className={styles.p}>Thanks for Payment. </Typography>
+                        <Typography className={styles.p}>you should receive a confirmation email soon </Typography>
+                        <Button className={styles.gohome}
                         //onClick={redirectAfterpay}
                         >
                             go to dashboard
-                        </button>
-                    </div>
-                </div>
-            </div>
+                        </Button>
+                    </Box>
+                </Box>
+            </Box>
             {/* )} */}
-            <link
-                href="https://fonts.googleapis.com/css?family=Kaushan+Script|Source+Sans+Pro"
-                rel="stylesheet"
-            ></link>
-        </div>
+        </Box >
     );
 }
