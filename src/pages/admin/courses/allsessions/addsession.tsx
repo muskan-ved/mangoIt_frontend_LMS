@@ -7,32 +7,37 @@ import { Box, Button, Card, CardContent, FormControl, Grid, IconButton, InputLab
 import SideBar from "@/common/LayoutNavigations/sideBar";
 import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
 import Footer from "@/common/LayoutNavigations/footer";
-import Navbar from "../../../common/LayoutNavigations/navbar";
+import Navbar from "../../../../common/LayoutNavigations/navbar";
 import RichEditor from "@/common/RichTextEditor/textEditor";
 // Helper Import
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { moduleValidations } from '@/validation_schema/moduleValidation';
+import { sessionValidations } from '@/validation_schema/sessionValidation';
 import { LoadingButton } from "@mui/lab";
 import CircularProgressBar from '@/common/CircularProcess/circularProgressBar';
 import SpinnerProgress from '@/common/CircularProgressComponent/spinnerComponent';
 import { capitalizeFirstLetter } from '@/common/CapitalFirstLetter/capitalizeFirstLetter';
 // Types Import
+import { sessionType } from '@/types/sessionType';
 import { courseType } from '@/types/courseType';
 import { moduleType } from '@/types/moduleType';
 // CSS Import
-import styles from "../../../styles/sidebar.module.css";
-import ModuleCss from "../../../styles/modules.module.css"
+import styles from "../../../../styles/sidebar.module.css";
+import Sessions from "../../../../styles/session.module.css"
 import { ToastContainer } from 'react-toastify';
 // API services
 import { HandleCourseGet } from '@/services/course';
-import { HandleModuleCreate } from '@/services/module';
-
+import { HandleModuleGet } from '@/services/module';
+import { HandleSessionCreate } from '@/services/session';
 
 export default function AddSession() {
+
    const router: any = useRouter();
    const [despcriptionContent, setdespcriptionContent] = useState("");
    const [getCourses, setCourses] = useState<courseType | any>();
+   const [getSession, setSession] = useState<sessionType | any>();
+   const [getModules, setModules] = useState<moduleType | any>();
+   const [file, setFile] = useState<string | any>('')
    const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
    const [isLoading, setLoading] = useState<boolean>(false);
 
@@ -42,37 +47,68 @@ export default function AddSession() {
       reset,
       setValue,
       control,
-      formState: { errors },
-   } = useForm<moduleType | any>({
-      resolver: yupResolver(moduleValidations),
+      formState: { errors }, setError
+   } = useForm<sessionType | any>({
+      resolver: yupResolver(sessionValidations),
    });
 
-   const handleContentChange = (value: string, identifier: string) => {
+   const handleContentChange = (value: any, identifier: string) => {
+      // console.log(value, "identifier", identifier, value === '<p><br></p>', value === `<p><br></p>`)
+      if (value === '<p><br></p>') {
+         setError(identifier, { message: 'Description is a required field' });
+      } else {
+         setError(identifier, { message: '' })
+         setValue(identifier, value);
+      }
       setdespcriptionContent(value);
-      setValue(identifier, value);
-
    };
 
    const onSubmit = async (event: any) => {
-      setLoading(true);
-      setLoadingButton(false)
-      try {
-         const res = await HandleModuleCreate(event)
-         setLoading(false);
-         setTimeout(() => {
-            router.push('/courses/allmodules/')
-         }, 1000)
-      } catch (e) {
-         console.log(e)
-         setLoadingButton(true)
+      if (errors.description?.message === '') {
+         const reqData: any = {
+            description: event.description,
+            module_id: event.module_id,
+            course_id: event.course_id,
+            title: event.title,
+            attachment: file
+         }
+
+         const formData = new FormData()
+         for (var key in reqData) {
+            formData.append(key, reqData[key]);
+         }
+
+         setLoading(true);
+         setLoadingButton(false)
+         try {
+            const res = await HandleSessionCreate(formData)
+            setSession(res.data)
+            setLoading(false);
+            setTimeout(() => {
+               router.push('/courses/allsessions/')
+            }, 1000)
+         }
+
+         catch (e) {
+            console.log(e)
+            setLoadingButton(true)
+         }
+      } else {
+         setError('description', { message: 'Description is a required field' });
       }
    };
 
    const getCourseData = () => {
-      HandleCourseGet('','').then((courses) => {
+      HandleCourseGet('', '').then((courses) => {
          setCourses(courses.data)
       })
    };
+
+   const getModuleData = () => {
+      HandleModuleGet('', '').then((modules) => {
+         setModules(modules.data)
+      })
+   }
 
    useEffect(() => {
       let localData: any;
@@ -82,7 +118,7 @@ export default function AddSession() {
       if (localData) {
          const userId = JSON.parse(localData);
          getCourseData();
-
+         getModuleData();
       }
    }, []);
 
@@ -94,7 +130,22 @@ export default function AddSession() {
       );
    }
 
-   // console.log("oopps", getModules)
+   const handleChange = (e: any) => {
+      const file = e.target.files[0];
+
+      if (e.target.name === "attachment") {
+         const reader = new FileReader();
+         reader.onload = (e: any) => {
+            setFile(file);
+            setValue("file", file);
+         }
+         if (file) {
+            reader.readAsDataURL(file);
+         }
+      }
+   }
+
+   // console.log("oopps", errors)
    return (
       <>
          <Navbar />
@@ -104,9 +155,9 @@ export default function AddSession() {
                {/* breadcumbs */}
                <BreadcrumbsHeading
                   First="Home"
-                  Middle="Module"
-                  Text="MODULE"
-                  Link="/modules/addmodule"
+                  Middle="Session"
+                  Text="SESSION"
+                  Link="/courses/allsessions"
                />
                {/* main content */}
                <Card>
@@ -126,15 +177,15 @@ export default function AddSession() {
                               </Grid>
 
                               <Grid item xs={12} sm={12} md={12} lg={6} >
-                                 <Typography>ADD MODULE</Typography>
-                                 <Grid item xs={12} sm={12} md={12} lg={12} className={ModuleCss.sessionNameGride} >
+                                 <Typography>ADD SESSION</Typography>
+                                 <Grid item xs={12} sm={12} md={12} lg={12} className={Sessions.sessionNameGride} >
 
                                     <Grid item xs={12} sm={12} md={6} lg={6}>
                                        <InputLabel>
-                                          Module Name
+                                          Session Name
                                        </InputLabel>
                                        <TextField
-                                          placeholder="Module Name"
+                                          placeholder="Session Name"
                                           {...register("title")}
                                        />
                                        {errors && errors.title
@@ -143,7 +194,7 @@ export default function AddSession() {
                                     </Grid>
 
                                     <Grid item xs={12} sm={12} md={6} lg={6}>
-                                       <InputLabel>Course of Module</InputLabel>
+                                       <InputLabel>Course of session</InputLabel>
                                        <Controller
                                           name="course_id"
                                           control={control}
@@ -155,7 +206,7 @@ export default function AddSession() {
                                                       Select Course
                                                    </MenuItem>
                                                    {getCourses?.map((course: any) => {
-                                                      return (<MenuItem key={course.id} value={course.id}>{capitalizeFirstLetter(course?.title)}</MenuItem>)
+                                                      return (<MenuItem key={course.course.id} value={course.course.id}>{capitalizeFirstLetter(course?.course.title)}</MenuItem>)
                                                    })}
                                                 </Select>
                                              </FormControl>
@@ -168,47 +219,59 @@ export default function AddSession() {
                                  </Grid>
 
                                  <Grid item xs={12} sm={12} md={12} lg={12} mb={2} >
-                                    <InputLabel>Status</InputLabel>
+                                    <InputLabel>Module of session</InputLabel>
                                     <Controller
-                                       name="status"
+                                       name="module_id"
                                        control={control}
                                        defaultValue=""
                                        render={({ field }) => (
                                           <FormControl fullWidth>
                                              <Select {...field} displayEmpty>
                                                 <MenuItem disabled value="">
-                                                   Status
+                                                   Select Module
                                                 </MenuItem>
-                                                <MenuItem value={'active'} >
-                                                   Active
-                                                </MenuItem>
-                                                <MenuItem value={'inactive'}>
-                                                   In-active
-                                                </MenuItem>
+                                                {getModules?.map((module: any) => {
+                                                   return (<MenuItem key={module.module.id} value={module.module.id}>{capitalizeFirstLetter(module?.module.title)}</MenuItem>)
+                                                })}
                                              </Select>
                                           </FormControl>
                                        )}
                                     />
-                                    {errors && errors.status ? ErrorShowing(errors?.status?.message) : ""}
+                                    {errors && errors.module_id ? ErrorShowing(errors?.module_id?.message) : ""}
                                  </Grid>
 
-                                 <Grid item xs={12} sm={12} md={12} lg={12} mb={2} >
+                                 <Grid item xs={12} sm={12} md={12} lg={12} mb={2}>
                                     <InputLabel>Description</InputLabel>
-                                    <RichEditor 
+                                    <RichEditor
                                        {...register("description")}
                                        value={despcriptionContent}
                                        onChange={(e) =>
                                           handleContentChange(e, "description")
                                        }
                                     />
-                                    {despcriptionContent ? '' : errors && errors.description ? ErrorShowing(errors?.description?.message) : ""}
+                                    {errors && errors.description ? ErrorShowing(errors?.description?.message) : ""}
+                                    {/* {despcriptionContent ? '' : errors && errors.description ? ErrorShowing(errors?.description?.message) : ""} */}
                                  </Grid>
 
-
+                                 <Grid item xs={12} sm={12} md={12} lg={12} mb={2}>
+                                    <InputLabel>Attachment</InputLabel>
+                                    <Box className={Sessions.sessionAttachmentBox}>
+                                       <InputLabel className={Sessions.subbox} >
+                                          <input
+                                             type="file"
+                                             {...register('attachment')}
+                                             onChange={handleChange}
+                                             hidden
+                                          />
+                                          <Typography className={Sessions.sessionAttachments}>  {!file.name ? "Upload" : file.name}</Typography>
+                                       </InputLabel>
+                                    </Box>
+                                    {file ? '' : errors && errors.file ? ErrorShowing(errors?.file?.message) : ""}
+                                 </Grid>
                                  <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"right"} >
                                     {!isLoadingButton ? <Button type="submit" size="large" variant="contained">
-                                       ADD NEW MODULE
-                                    </Button> : <LoadingButton loading={isLoadingButton} className={ModuleCss.updateLoadingButton}
+                                       ADD NEW SESSION
+                                    </Button> : <LoadingButton loading={isLoadingButton} className={Sessions.updateLoadingButton}
                                        size="large" variant="contained" disabled >
                                        <CircularProgressBar />
                                     </LoadingButton>}

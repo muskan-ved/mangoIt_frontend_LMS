@@ -37,7 +37,7 @@ import SideBar from "@/common/LayoutNavigations/sideBar";
 import SpinnerProgress from "@/common/CircularProgressComponent/spinnerComponent";
 import CircularProgressBar from "@/common/CircularProcess/circularProgressBar";
 import CloseIcon from "@mui/icons-material/Close";
-import courseStyle from "../../../../styles/course.module.css";
+import courseStyle from "../../../../../styles/course.module.css";
 import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -65,9 +65,9 @@ import { AlertDialog } from "@/common/DeleteListRow/deleteRow";
 import { handleSortData } from "@/common/Sorting/sorting";
 
 // CSS Import
-import profiles from "../../../../styles/profile.module.css";
-import styles from "../../../../styles/sidebar.module.css";
-import subs from "../../../../styles/subsciption.module.css";
+import profiles from "../../../../../styles/profile.module.css";
+import styles from "../../../../../styles/sidebar.module.css";
+import subs from "../../../../../styles/subsciption.module.css";
 
 // API services
 

@@ -60,7 +60,7 @@ export const VerticalMenuItems = () => {
       {
         title: "Dashboard",
         icon: HomeOutlinedIcon,
-        path: "/dashboard",
+        path: "admin/dashboard",
       },
       {
         title: "Courses",
@@ -69,17 +69,17 @@ export const VerticalMenuItems = () => {
           {
             title: "All Courses",
             icon: ContentPasteOutlinedIcon,
-            path: "/courses/allcourses",
+            path: "/admin/courses/allcourses",
           },
           {
             title: "All Modules",
             icon: ViewModuleOutlinedIcon,
-            path: "/courses/allmodules",
+            path: "/admin/courses/allmodules",
           },
           {
             title: "All Sessions",
             icon: CalendarTodayOutlinedIcon,
-            path: "/courses/allsessions",
+            path: "/admin/courses/allsessions",
           },
         ],
       },
@@ -105,29 +105,29 @@ export const VerticalMenuItems = () => {
           {
             title: "Email Config",
             icon: EmailOutlinedIcon,
-            path: "/configurations/emailconfiguration",
+            path: "/admin/configurations/emailconfiguration",
           },
           {
             title: "Site Config",
             icon: LanguageOutlinedIcon,
-            path: "/configurations/siteconfiguration",
+            path: "/admin/configurations/siteconfiguration",
           },
           {
             title: "Stripe Config",
             icon: PaymentOutlinedIcon,
-            path: "/configurations/stripeconfiguration",
+            path: "/admin/configurations/stripeconfiguration",
           },
         ],
       },
       {
         title: "Invoices",
         icon: InsertDriveFileOutlinedIcon,
-        path: "/invoices",
+        path: "/admin/invoices",
       },
       {
         title: "Settings",
         icon: SettingsOutlinedIcon,
-        path: "/settings",
+        path: "admin/settings",
       },
       {
         title: "Logout",
