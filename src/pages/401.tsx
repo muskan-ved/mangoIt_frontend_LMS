@@ -12,7 +12,7 @@ import { BoxWrapper, Img } from '../lib/errorCodePagesDesign'
 import styles from '../styles/errorCodePages.module.css'
 
 const Error401 = () => {
-    const router = useRouter()
+    const router = useRouter()     
 
   return (
     <Box>

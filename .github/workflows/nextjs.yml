@@ -17,6 +17,7 @@ jobs:
         run: |
          npm install
          npm run build
+         npm run export
          
       - name: Setup Node
         uses: actions/setup-node@v3
