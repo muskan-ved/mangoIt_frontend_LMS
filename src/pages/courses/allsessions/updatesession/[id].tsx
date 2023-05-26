@@ -57,7 +57,7 @@ export default function UpdateSession() {
    } = useForm<sessionType | any>({
       resolver: yupResolver(sessionUpdateValidation),
    });
-console.log('getvalue', getValues())
+// console.log('getvalue', getValues())
    const handleContentChange = (value: string, identifier: string) => {
       if (value === '<p><br></p>') {
          setError(identifier, { message: 'Description is a required field' });
@@ -66,14 +66,10 @@ console.log('getvalue', getValues())
          setValue(identifier, value);
       }
       setdespcriptionContent(value);
-
-
    };
 
-   const onSubmit = async (event: any) => {
-     
-      const id = router.query.id 
-   
+   const onSubmit = async (event: any) => {   
+      const id = router.query.id   
       // const reqData = { ...event, 'attachment': file }
       if (errors.description?.message === '' || ( typeof errors === 'object' && errors !== null)) {
          const reqData: any = {

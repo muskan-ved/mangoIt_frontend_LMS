@@ -1,204 +1,319 @@
-// import Navbar from "@/common/LayoutNavigations/navbar";
-// import SideBar from "@/common/LayoutNavigations/sideBar";
-// import SidebarStyles from "../../../../sidebar.module.css";
-// import styles from "../../../styles/course.module.css";
-// import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
-// import {
-//   Box,
-//   Button,
-//   Card,
-//   CardContent,
-//   FormControl,
-//   Grid,
-//   InputLabel,
-//   MenuItem,
-//   Select,
-//   TextField,
-//   Typography,
-// } from "@mui/material";
-// import Footer from "@/common/LayoutNavigations/footer";
-// import { useState } from "react";
-// import RichEditor from "@/common/RichTextEditor/textEditor";
-// import { useForm } from "react-hook-form";
-// import { courseType } from "@/types/courseType";
-// import { yupResolver } from "@hookform/resolvers/yup";
-// import { courseValidations } from "@/validation_schema/courseValidation";
+// ***** React Import
+import React, { useState, useEffect } from 'react';
+import { useRouter } from "next/router";
+// MUI Import
+// import { Attachment, Description, Image, Movie, PictureAsPdf } from '@material-ui/icons';
+import { Box, Button, Card, CardContent, FormControl, Grid, IconButton, InputLabel, MenuItem, NativeSelect, Select, TextField, Typography } from "@mui/material";
+// External Components
+import SideBar from "@/common/LayoutNavigations/sideBar";
+import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
+import Footer from "@/common/LayoutNavigations/footer";
+import Navbar from "../../../../common/LayoutNavigations/navbar";
+import RichEditor from "@/common/RichTextEditor/textEditor";
+import Preview from '@/common/previewAttachment';
+// Helper Import
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { courseValidations } from '@/validation_schema/courseValidation';
+import { LoadingButton } from "@mui/lab";
+import CircularProgressBar from '@/common/CircularProcess/circularProgressBar';
+import SpinnerProgress from '@/common/CircularProgressComponent/spinnerComponent';
+import { capitalizeFirstLetter } from '@/common/CapitalFirstLetter/capitalizeFirstLetter';
+// Types Import
+import { sessionType } from '@/types/sessionType';
+import { courseType } from '@/types/courseType';
+import { moduleType } from '@/types/moduleType';
+// CSS Import
+import styles from "../../../../styles/sidebar.module.css";
+import Sessions from "../../../../styles/session.module.css";
+import courseStyle from "../../../../styles/course.module.css";
+import { ToastContainer } from 'react-toastify';
+// API services
+import { HandleCourseGet, HandleCourseGetByID, HandleCourseUpdate } from '@/services/course';
+import { Attachment, Description, Image, Movie, PictureAsPdf } from '@mui/icons-material';
+import { type } from 'os';
 
-// const EditCourse = () => {
-//   const [shortDespcriptionContent, setShortDespcriptionContent] = useState("");
-//   const [despcriptionContent, setdespcriptionContent] = useState("");
 
-//   const {
-//     register,
-//     handleSubmit,
-//     reset,
-//     setValue,
-//     formState: { errors },
-//   } = useForm<courseType | any>({
-//     resolver: yupResolver(courseValidations),
-//   });
 
-//   const handleContentChange = (value: string, identifier: string) => {
-//     if (identifier === "long_description") {
-//       setdespcriptionContent(value);
-//       setValue(identifier, value);
-//     } else if (identifier === "short_description") {
-//       setShortDespcriptionContent(value);
-//       setValue(identifier, value);
-//     }
-//   };
 
-//   const onSubmit = (value: any) => {
-//     console.log(value, "course submit");
-//   };
+export default function UpdateCourse() {
+  const router: any = useRouter();
+  const [getLongDespcriptionContent, setLongDespcriptionContent] = useState("");
+  const [getShortDespcriptionContent, setShortDespcriptionContent] = useState("");
+  const [getUpdateCourse, setUpdateCourse] = useState<courseType | any>([]);
+  const [getCourse, setCourse] = useState<courseType | any>();
+  const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
+  const [isLoading, setLoading] = useState<boolean>(false);
+  const [error, setErrors] = useState<string>();
 
-//   function ErrorShowing(errorMessage: any) {
-//     return (
-//       <Typography variant="body2" color={"error"} gutterBottom>
-//         {errorMessage}{" "}
-//       </Typography>
-//     );
-//   }
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue, getValues,
+    control,
+    formState: { errors }, setError
+  } = useForm<courseType | any>({
+    resolver: yupResolver(courseValidations),
+  });
+  // console.log('getvalue', getValues())
+  const handleContentChange = (value: string, identifier: string) => {
+    if(identifier === 'short_description'){
+    if (value === '<p><br></p>') {
+      setError(identifier, { message: 'Short Description is a required field' });
+    } else {
+      setError(identifier, { message: '' })
+      setValue(identifier, value);
+    }
+    setShortDespcriptionContent(value);
+  }
 
-//   return (
-//     <>
-//       <Navbar />
-//       <Box className={SidebarStyles.combineContentAndSidebar}>
-//         <SideBar />
+  if(identifier === 'long_description'){
+    if (value === '<p><br></p>') {
+      setError(identifier, { message: 'Long Description is a required field' });
+    } else {
+      setError(identifier, { message: '' })
+      setValue(identifier, value);
+    }
+    setLongDespcriptionContent(value);
+  }
 
-//         <Box className={SidebarStyles.siteBodyContainer}>
-//           {/* breadcumbs */}
-//           <BreadcrumbsHeading
-//             First="Home"
-//             Middle="Courses"
-//             Text="Courses"
-//             Link="/courses/allcourses/addcourse"
-//           />
+  };
 
-//           {/* main content */}
-//           <Card>
-//             <CardContent>
-//               <Box
-//                 component="form"
-//                 method="POST"
-//                 noValidate
-//                 autoComplete="off"
-//                 onSubmit={handleSubmit(onSubmit)}
-//                 onReset={reset}
-//               >
-//                 <Grid container spacing={5}>
-//                   <Grid item xs={12} sm={12} md={12} lg={6}>
-//                     <Box
-//                       component="img"
-//                       src="/Images/pages/addFeature.jpg"
-//                       width={"100%"}
-//                       height={"100%"}
-//                     />
-//                   </Grid>
+  const onSubmit = async (event: any) => {
+    const id = router.query.id
+    // const reqData = { ...event }
+    if (errors.description?.message === '' || (typeof errors === 'object' && errors !== null)) {
+      // const reqData: any = {
+      //   description: event.description,
+      //   title: event.title,
 
-//                   <Grid item xs={12} sm={12} md={12} lg={6}>
-//                     <Typography
-//                       variant="subtitle1"
-//                       className={styles.CourseInputLabelFont}
-//                       mb={2}
-//                     >
-//                       ADD COURSE
-//                     </Typography>
-//                     <Grid item mb={2}>
-//                       <InputLabel className={styles.CourseInputLabelFont}>
-//                         Course Name
-//                       </InputLabel>
-//                       <TextField
-//                         placeholder="Course Name"
-//                         {...register("title")}
-//                         fullWidth
-//                       />
-//                       {errors && errors.title
-//                         ? ErrorShowing(errors?.title?.message)
-//                         : ""}
-//                     </Grid>
+      // }
 
-//                     <Grid item mb={2}>
-//                       <InputLabel className={styles.CourseInputLabelFont}>
-//                         Type
-//                       </InputLabel>
-//                       <FormControl fullWidth>
-//                         <Select value={1} {...register("is_chargeable")}>
-//                           <MenuItem value={1}>Type</MenuItem>
-//                         </Select>
-//                       </FormControl>
-//                       {errors && errors.is_chargeable
-//                         ? ErrorShowing(errors?.is_chargeable?.message)
-//                         : ""}
-//                     </Grid>
+      // const formData = new FormData()
+      // for (var key in reqData) {
+      //   formData.append(key, reqData[key]);
+      // }
 
-//                     <Grid item mb={2}>
-//                       <InputLabel className={styles.CourseInputLabelFont}>
-//                         Status
-//                       </InputLabel>
-//                       <FormControl fullWidth>
-//                         <Select value={1} {...register("status")}>
-//                           <MenuItem value={1}>status</MenuItem>
-//                         </Select>
-//                       </FormControl>
-//                       {errors && errors.status
-//                         ? ErrorShowing(errors?.status?.message)
-//                         : ""}
-//                     </Grid>
-//                     <Box className={styles.wrapShortAndLongDescription}>
-//                       <Grid item mb={5}>
-//                         <InputLabel className={styles.CourseInputLabelFont}>
-//                           Short Description
-//                         </InputLabel>
-//                         <Box className={styles.quillShortDescription}>
-//                           <RichEditor
-//                             value={shortDespcriptionContent}
-//                             onChange={(e) =>
-//                               handleContentChange(e, "short_description")
-//                             }
-//                           />
-//                         </Box>
-//                         {errors && errors.short_description
-//                           ? ErrorShowing(errors?.short_description?.message)
-//                           : ""}
-//                       </Grid>
+      setLoading(true);
+      setLoadingButton(false)
+      try {
+        const res = await HandleCourseUpdate(id, event)
+        getCourseData()
+        setLoading(false);
+        // setTimeout(() => {
+        //   router.push('/courses/allcourses/')
+        // }, 1000)
+      } catch (e) {
+        console.log(e)
+        setLoadingButton(true)
+      }
+    } else {
+      setError('description', { message: 'Description is a required field' });
+    }
+  };
 
-//                       <Grid item className={styles.quillDescriptionTop} mt={4}>
-//                         <InputLabel className={styles.CourseInputLabelFont}>
-//                           Description
-//                         </InputLabel>
-//                         <Box className={styles.quillDescription}>
-//                           <RichEditor
-//                             value={despcriptionContent}
-//                             onChange={(e) =>
-//                               handleContentChange(e, "long_description")
-//                             }
-//                           />
-//                         </Box>
-//                         {errors && errors.long_description
-//                           ? ErrorShowing(errors?.long_description?.message)
-//                           : ""}
-//                       </Grid>
-//                     </Box>
-//                     <Grid item mt={3} className={styles.SubmitButton}>
-//                       <Button type="submit" variant="contained">
-//                         ADD NEW COURSE
-//                       </Button>
-//                     </Grid>
-//                   </Grid>
-//                 </Grid>
-//               </Box>
-//             </CardContent>
-//           </Card>
-//         </Box>
-//       </Box>
-//     </>
-//   );
-// };
+  const handleUpdate = (e: any) => {
+    // setUpdateCourse(e.target.value)
+    setCourse(e.target.value)
+  }
 
-// export default EditCourse;
-const UpdateCourse = () => {
-  return ( <h1>Edit Course</h1>);
-}
- 
-export default UpdateCourse;
+  const handleChange = (e: any) => {
+    setCourse(e.target.value)
+  };
+
+  const getCourseData = async () => {
+    const id = router.query.id
+    if (id) {
+      HandleCourseGetByID(id).then((course) => {
+        // console.log('Course',course)
+        setCourse(course.data)
+        // const fields = [
+        //   "title",
+        //   "is_chargeable,",
+        //   "status",
+        //   "short_description",
+        //   "long_description",
+        // ];
+        // fields.forEach((field) => setValue(field, course.data[field]));
+      })
+        .catch((error) => {
+          setErrors(error.message);
+        });
+    }
+
+    if (error) {
+      return <Typography >{error}</Typography >;
+    }
+
+    if (!getCourse) {
+      return <Typography >Loading...</Typography >;
+    }
+  }
+
+  useEffect(() => {
+    let localData: any;
+    if (typeof window !== "undefined") {
+      localData = window.localStorage.getItem("userData");
+    }
+    if (localData) {
+      getCourseData();
+    }
+  }, [router.query]);
+
+  function ErrorShowing(errorMessage: any) {
+    return (
+      <Typography variant="body2" color={"error"} gutterBottom>
+        {errorMessage}{" "}
+      </Typography>
+    );
+  }
+  console.log("errors", getCourse)
+  return (
+    <>
+      <Navbar />
+      <Box className={styles.combineContentAndSidebar}>
+        <SideBar />
+
+        <Box className={styles.siteBodyContainer}>
+          {/* breadcumbs */}
+          <BreadcrumbsHeading
+            First="Home"
+            Middle="Course"
+            Text="COURSE"
+            Link="courses/allcourses/updatecourse"
+          />
+          {/* main content */}
+          <Card>
+            <CardContent>
+              {!isLoading ?
+                <Box
+                  component="form"
+                  method="POST"
+                  noValidate
+                  autoComplete="off"
+                  onSubmit={handleSubmit(onSubmit)}
+                  onReset={reset}
+                >
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} sm={12} md={12} lg={6} >
+                      <Box component="img" src="/Images/pages/addFeature.jpg" width={'100%'} />
+                    </Grid>
+
+                    <Grid item xs={12} sm={12} md={12} lg={6} >
+                      <Typography>EDIT COURSE</Typography>
+                      <Grid item xs={12} sm={12} md={12} lg={12} className={courseStyle.courseNameGride} >
+
+                        <Grid item xs={12} sm={12} md={6} lg={6}>
+                          <InputLabel>
+                            Course Name
+                          </InputLabel>
+                          <TextField
+                            {...register("title")}
+                            value={getCourse?.title}
+                            onChange={handleUpdate}
+                          />
+                          {errors && errors.title
+                            ? ErrorShowing(errors?.title?.message)
+                            : ""}
+                        </Grid>
+
+                        <Grid item xs={12} sm={12} md={6} lg={6}>
+                          <InputLabel>Type</InputLabel>
+                          <Controller
+                          name="type"
+                          control={control}                        
+                          defaultValue=''
+                          render={({ field }) => (
+                            <FormControl fullWidth>
+                              <Select {...field} displayEmpty>
+                                <MenuItem value={'free'}>
+                                  Free
+                                </MenuItem>
+                                <MenuItem value={'paid'}>
+                                  Paid
+                                </MenuItem>
+                              </Select>
+                            </FormControl>
+                          )}
+                        />
+                          {errors && errors.type
+                            ? ErrorShowing(errors?.type?.message)
+                            : ""}
+                        </Grid>
+                      </Grid>
+
+                      <Grid item xs={12} sm={12} md={12} lg={12} mb={2} >
+                        <InputLabel>Status</InputLabel>
+                        <Controller
+                          name="status"
+                          control={control}                        
+                          // defaultValue={getCourse?.status || ""}
+                          defaultValue=''
+                          render={({ field }) => (
+                            <FormControl fullWidth>
+                              <Select {...field} displayEmpty>
+                                <MenuItem value={'active'}>
+                                  Active
+                                </MenuItem>
+                                <MenuItem value={'inactive'}>
+                                  In-active
+                                </MenuItem>
+                              </Select>
+                            </FormControl>
+                          )}
+                        />
+                        {errors && errors.status
+                          ? ErrorShowing(errors?.status?.message)
+                          : ""}
+                      </Grid>
+                      <Grid item xs={12} sm={12} md={12} lg={12} mb={2}>
+                        <InputLabel>Description</InputLabel>
+                        <RichEditor
+                          {...register("short_description")}
+                          value={getShortDespcriptionContent ? getShortDespcriptionContent : getCourse?.short_description}
+                          onChange={(value) =>
+                            handleContentChange(value, "short_description")
+                          }
+                        />
+                        {errors && errors.short_description ? ErrorShowing(errors?.short_description?.message) : ""}
+                        {/* {getShortDespcriptionContent ? '' : errors && errors.description ? ErrorShowing(errors?.description?.message) : ""} */}
+                      </Grid>
+
+                      <Grid item xs={12} sm={12} md={12} lg={12} mb={2} >
+                        <InputLabel>Long Description</InputLabel>
+                        <Box >
+                          <RichEditor
+                            {...register("long_description")}
+                            value={getLongDespcriptionContent ? getLongDespcriptionContent : getCourse?.long_description}
+                            onChange={(value) =>
+                              handleContentChange(value, "long_description")
+                            }
+                          />
+                        </Box>
+                        {errors && errors.long_description ? ErrorShowing(errors?.long_description?.message) : ""}
+                      </Grid>
+                      <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"right"} >
+                        {!isLoadingButton ? <Button type="submit" size="large" variant="contained">
+                          UPDATE COURSE
+                        </Button> : <LoadingButton loading={isLoadingButton} className={courseStyle.updateLoadingButton}
+                          size="large" variant="contained" disabled >
+                          <CircularProgressBar />
+                        </LoadingButton>}
+                      </Grid>
+                    </Grid>
+
+                  </Grid>
+                </Box>
+                : <SpinnerProgress />}
+            </CardContent>
+          </Card>
+        </Box>
+      </Box>
+      {/* <Footer/> */}
+      <ToastContainer />
+    </>
+  );
+};
+
+
