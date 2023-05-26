@@ -197,3 +197,8 @@
 // };
 
 // export default EditCourse;
+const UpdateCourse = () => {
+  return ( <h1>Edit Course</h1>);
+}
+ 
+export default UpdateCourse;
