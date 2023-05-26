@@ -6,7 +6,7 @@ export const courseValidations = Yup.object().shape({
         .min(3,"Course name must be at least 3 characters"),
     status: 
         Yup.string().required('Status is a required field'), 
-    is_chargeable: 
+    type: 
         Yup.string().required('Type is a required field'),
     short_description:
         Yup.string().required('Short description is a required field')
