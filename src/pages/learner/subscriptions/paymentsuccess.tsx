@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+//import { useRouter } from "next/router";
 import axios from "axios";
 
 export default function PaymentSuccess() {
-    const router = useRouter();
-    useEffect(() => {
-        // if (router.isReady) {
-        //     router.replace("/thankyou");
-        // } else {
-        //     router.push("/thankyou");
-        // }
-    }, []);
+    //const router = useRouter();
+    // useEffect(() => {
+    //     // if (router.isReady) {
+    //     //     router.replace("/thankyou");
+    //     // } else {
+    //     //     router.push("/thankyou");
+    //     // }
+    // }, []);
 
     // setTimeout(() => {
     //   // setLoad(false);
