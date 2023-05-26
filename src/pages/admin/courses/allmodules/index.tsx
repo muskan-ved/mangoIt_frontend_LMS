@@ -29,7 +29,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import styles from "../../../styles/sidebar.module.css";
+import styles from "../../../../styles/sidebar.module.css";
 import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
 import { SearchOutlined } from "@mui/icons-material";
 import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
