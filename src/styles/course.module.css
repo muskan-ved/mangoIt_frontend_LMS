@@ -42,9 +42,9 @@ width: 70% !important;
 .statusInFilter{
     font-weight: bold;
 }
-.boxInFilter{
+/* .boxInFilter{
     float: right;
-}
+} */
 .applyButtonInFiltter{
     margin-left: 10px !important;
    
@@ -74,4 +74,11 @@ width: 70% !important;
     margin-top: 80px !important;
     float: right;
 }
-           
+/* ----------------- UPDATE COURSE CSS ----------------------- */         
+.courseNameGride{
+    display: flex; 
+    margin-bottom: 16px ;
+}
+.updateLoadingButton {
+    width: 178px;
+}

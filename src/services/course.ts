@@ -29,6 +29,46 @@ export const HandleCourseGet = async (searchData: any, filterData: any) => {
   })
 }
 
+export const HandleCourseGetByID = async (courseId: any) => {
+  return await axios({
+    method: "GET",
+    url: `${API.getCourses}/${courseId}`,
+    headers: LoginHeader(),
+  })
+    .then((request) => {
+      return request;
+    })
+    .catch((error) => {
+      if (error.response.status === 401) {
+        HandleLogout();
+      } else {
+        toast.error("Course added failed");
+      }
+      return error;
+    });
+};
+
+export const HandleCourseUpdate = async (courseId: any, updateData: any) => {
+  return await axios({
+    method: "PUT",
+    url: `${API.updateCourse}/${courseId}`,
+    headers: LoginHeader(),
+    data: updateData,
+  })
+    .then((request) => {
+      toast.success("Course Updated Successfully");
+      return request;
+    })
+    .catch((error) => {
+      if (error.response.status === 401) {
+        HandleLogout();
+      } else {
+        toast.error("Course added failed");
+      }
+      return error;
+    });
+};
+
 export const HandleCourseCreate = async (reqData: any) => {
   return await axios({
     method: "POST",
@@ -65,3 +105,4 @@ export const HandleCourseDelete = async (rowID: any) => {
     return error;
   })
 }
+
