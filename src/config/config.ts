@@ -30,7 +30,7 @@ export const API = {
 
   getSessions: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_SESSION}`,
   createSession: `${BASE_URL}/${process.env.NEXT_PUBLIC_CREATE_SESSION}`,
-  deleteSession: `${BASE_URL}/${process.env.NEXT_PUBLIC_DELETE_SESSION}`,
+  deleteSession: `${BASE_URL}/${process.env.NEXT_PUBLIC_DELETE_SESSION}`, 
   updateSession: `${BASE_URL}/${process.env.NEXT_PUBLIC_UPDATE_SESSION}`,
 
   getSite: `${BASE_URL}/${process.env.NEXT_PUBLIC_SITE_CONFIG_GET}`,
