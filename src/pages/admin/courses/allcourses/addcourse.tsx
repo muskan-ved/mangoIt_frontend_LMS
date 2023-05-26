@@ -1,7 +1,7 @@
 import Navbar from "@/common/LayoutNavigations/navbar";
 import SideBar from "@/common/LayoutNavigations/sideBar";
-import SidebarStyles from "../../../styles/sidebar.module.css";
-import styles from "../../../styles/course.module.css";
+import SidebarStyles from "../../../../styles/sidebar.module.css";
+import styles from "../../../../styles/course.module.css";
 import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
 import {
   Box,
@@ -83,7 +83,7 @@ const AddCourse = () => {
       const courseCreated = await HandleCourseCreate(value)
       setLoading(false);
       setTimeout(() => {
-         router.push('/courses/allcourses/')
+        router.push('/courses/allcourses/')
       }, 1000)
     }
     catch (e) {
@@ -259,7 +259,7 @@ const AddCourse = () => {
                     </Box>
                     {/* {const showErrorMessage = errors?.long_description?.message ? className={styles.addNewCourseButton} : className={styles.SubmitButton}}
                     <Grid item mt={3} className={showErrorMessage}> */}
-                    <Grid item mt={3}  className={!errors?.long_description?.message ? styles.addNewCourseButton : styles.SubmitButton} >
+                    <Grid item mt={3} className={!errors?.long_description?.message ? styles.addNewCourseButton : styles.SubmitButton} >
                       <Button type="submit" variant="contained">
                         ADD NEW COURSE
                       </Button>

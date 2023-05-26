@@ -8,7 +8,7 @@ import { Box, Button, Card, CardContent, FormControl, Grid, IconButton, InputLab
 import SideBar from "@/common/LayoutNavigations/sideBar";
 import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
 import Footer from "@/common/LayoutNavigations/footer";
-import Navbar from "../../../../common/LayoutNavigations/navbar";
+import Navbar from "../../../../../common/LayoutNavigations/navbar";
 import RichEditor from "@/common/RichTextEditor/textEditor";
 import Preview from '@/common/previewAttachment';
 // Helper Import
@@ -24,8 +24,8 @@ import { sessionType } from '@/types/sessionType';
 import { courseType } from '@/types/courseType';
 import { moduleType } from '@/types/moduleType';
 // CSS Import
-import styles from "../../../../styles/sidebar.module.css";
-import Sessions from "../../../../styles/session.module.css"
+import styles from "../../../../../styles/sidebar.module.css";
+import Sessions from "../../../../../styles/session.module.css"
 import { ToastContainer } from 'react-toastify';
 // API services
 import { HandleCourseGet } from '@/services/course';
@@ -51,7 +51,7 @@ export default function UpdateSession() {
       register,
       handleSubmit,
       reset,
-      setValue,getValues,
+      setValue, getValues,
       control,
       formState: { errors }, setError
    } = useForm<sessionType | any>({
@@ -71,7 +71,7 @@ export default function UpdateSession() {
    const onSubmit = async (event: any) => {   
       const id = router.query.id   
       // const reqData = { ...event, 'attachment': file }
-      if (errors.description?.message === '' || ( typeof errors === 'object' && errors !== null)) {
+      if (errors.description?.message === '' || (typeof errors === 'object' && errors !== null)) {
          const reqData: any = {
             description: event.description,
             module_id: event.module_id,

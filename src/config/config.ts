@@ -10,7 +10,6 @@ export const FRONTEND_BASE_URL = `${process.env.NEXT_PUBLIC_FRONTEND_BASE_URL}`;
 // // LOCAL API URL
 // export const BASE_URL = `${process.env.NEXT_PUBLIC_LOCAL_BASE_URL}`;
 
-console.log(BASE_URL,"BASE_URL")
 export const API = {
   authToken: `${BASE_URL}/${process.env.NEXT_PUBLIC_AUTH_TOKEN}`,
   register: `${BASE_URL}/${process.env.NEXT_PUBLIC_REGISTER}`,
@@ -38,6 +37,9 @@ export const API = {
   createSite: `${BASE_URL}/${process.env.NEXT_PUBLIC_SITE_CONFIG_CREATE}`,
   deleteSite: `${BASE_URL}/${process.env.NEXT_PUBLIC_SITE_CONFIG_DELETE}`,
   updateSite: `${BASE_URL}/${process.env.NEXT_PUBLIC_SITE_CONFIG_UPDATE}`,
+
+  getSubscription: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_SUBSCRIPTION}`,
+  getSubsById: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_SUBSCRIPTION_BY_ID}`,
 
   //accept payment
   acceptpayment: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_PAYMENT}`,

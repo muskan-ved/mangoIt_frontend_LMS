@@ -50,8 +50,8 @@ import { sessionType } from "@/types/sessionType";
 import { courseType } from "@/types/courseType";
 import { moduleType } from "@/types/moduleType";
 // CSS Import
-import styles from "../../../styles/sidebar.module.css";
-import Sessions from "../../../styles/session.module.css"
+import styles from "../../../../styles/sidebar.module.css";
+import Sessions from "../../../../styles/session.module.css"
 import { ToastContainer } from "react-toastify";
 // API Service
 import { HandleSessionDelete, HandleSessionGet } from "@/services/session";
