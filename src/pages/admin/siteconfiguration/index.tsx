@@ -23,8 +23,8 @@ import { LoadingButton } from "@mui/lab";
 import CircularProgressBar from "@/common/CircularProcess/circularProgressBar";
 
 // ** CSS Imports
-import styles from "../../styles/sidebar.module.css";
-import siteStyles from "../../styles/allConfigurations.module.css";
+import styles from "../../../styles/sidebar.module.css";
+import siteStyles from "../../../styles/allConfigurations.module.css";
 
 // ** React Imports
 import { useForm } from "react-hook-form";

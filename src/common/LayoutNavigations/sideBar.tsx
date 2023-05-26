@@ -22,9 +22,8 @@ const SideBar = () => {
       >
         <Menu>
           {NavItem.map((item: any, index: number) => {
-            // console.log('dfd',router.pathname ,item)
             const pathnameMatch =
-              router.pathname === item?.path
+              router.pathname === item?.path || router.pathname.includes(item.path)
                 ? styles.activeMenuItem
                 : styles.nonActiveMenuItem;
             return (
