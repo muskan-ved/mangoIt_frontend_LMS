@@ -277,7 +277,7 @@ const Subscription = () => {
                   )}
                 </PopupState>
                 &nbsp;
-                <Button variant="contained" onClick={() => router.push('/courses/allcourses/addcourse')}>Add New Course</Button>
+                <Button variant="contained" onClick={() => router.push('/admin/courses/allcourses/addcourse')}>Add New Course</Button>
               </Box> */}
               <Paper>
                 <TableContainer className={courseStyle.tableContainer}>

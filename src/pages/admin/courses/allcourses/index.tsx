@@ -172,7 +172,7 @@ const AllCourses = () => {
             First="Home"
             Middle="Courses"
             Text="COURSES"
-            Link="/courses/allcourses"
+            Link="/admin/courses/allcourses"
           />
 
           {/* main content */}
@@ -324,7 +324,7 @@ const AllCourses = () => {
                   )}
                 </PopupState>
                 &nbsp;
-                <Button variant="contained" onClick={() => router.push('/courses/allcourses/addcourse')}>Add New Course</Button>
+                <Button variant="contained" onClick={() => router.push('/admin/courses/allcourses/addcourse')}>Add New Course</Button>
               </Box>
               <Paper >
                 <TableContainer className={courseStyle.tableContainer}>
@@ -366,7 +366,7 @@ const AllCourses = () => {
                                 <TableCell>{row?.sessionCount?.length !== 0 ? row?.sessionCount[0]?.sessionCount : 0}</TableCell>
                                 <TableCell>{capitalizeFirstLetter(row?.course?.is_chargeable)}</TableCell>
                                 <TableCell className={statusColor}>{capitalizeFirstLetter(row?.course?.status)}</TableCell>
-                                <TableCell><Button onClick={() => router.push(`/courses/allcourses/updatecourse/${row.course.id}`)} variant="outlined" color="success" className={courseStyle.editDeleteButton}  ><ModeEditOutlineIcon /></Button>
+                                <TableCell><Button onClick={() => router.push(`/admin/courses/allcourses/updatecourse/${row.course.id}`)} variant="outlined" color="success" className={courseStyle.editDeleteButton}  ><ModeEditOutlineIcon /></Button>
                                   <Button className={courseStyle.editDeleteButton} variant="outlined" color="error" onClick={() => handleClickOpen(row?.course)}><DeleteOutlineIcon /></Button>
                                 </TableCell>
                               </TableRow>

@@ -85,7 +85,7 @@ export default function AddSession() {
             setSession(res.data)
             setLoading(false);
             setTimeout(() => {
-               router.push('/courses/allsessions/')
+               router.push('/admin/courses/allsessions/')
             }, 1000)
          }
 
@@ -157,7 +157,7 @@ export default function AddSession() {
                   First="Home"
                   Middle="Session"
                   Text="SESSION"
-                  Link="/courses/allsessions"
+                  Link="/admin/courses/allsessions"
                />
                {/* main content */}
                <Card>

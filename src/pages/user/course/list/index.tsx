@@ -109,34 +109,28 @@ const AllCourses = () => {
   };
 
   const handleClickOpen = (row: any) => {
-    // console.log('row', row)
-    setDeleteRow(row);
+    router.push(`/user/course/detail/${row}`);
     setOpen(!open);
   };
-  // to delete a row
-  const handleDeletesRow = () => {
-    HandleCourseDelete(deleteRow.id).then((deletedRow) => {
-      HandleCourseGet("", filterObject).then((newRows) => {
-        setRows(newRows.data);
-      });
-    });
-    setOpen(!open);
-  };
-
+ 
   const resetFilterValue = () => {
     setFilter(0);
-    reset({ type: 0, status: 0 });
+    reset({ is_chargeable: 0, status: 0 });
+    HandleCourseGet("", { is_chargeable: 0, status: 0 }).then((itemSeached) => {
+      setRows(itemSeached.data);
+    });
   };
   const handleSort = (rowsData: any) => {
     const sortData = handleSortData(rowsData);
     setRows(sortData);
     setToggle(!toggle);
   };
+
   const handleSearch = (e: any, identifier: any) => {
     setPage(1);
     DATA.jump(1);
     if (identifier === "reset") {
-      HandleCourseGet("", { type: 0, status: 0 }).then((itemSeached) => {
+      HandleCourseGet("", { is_chargeable: 0, status: 0 }).then((itemSeached) => {
         setRows(itemSeached.data);
       });
       setSearch(e);
@@ -151,7 +145,6 @@ const AllCourses = () => {
 
   const getAllCourseData = () => {
     HandleCourseGet("", filterObject).then((courses) => {
-      console.log(courses, "45");
       setRows(courses.data);
     });
   };
@@ -160,7 +153,6 @@ const AllCourses = () => {
     getAllCourseData();
   }, []);
 
-  // console.log('rowww', rows)
   return (
     <>
       <Navbar />
@@ -173,7 +165,7 @@ const AllCourses = () => {
             First="Home"
             Middle="Courses"
             Text="COURSES"
-            Link="/courses/allcourses"
+            Link="/admin/courses/allcourses"
           />
 
           {/* main content */}
@@ -309,16 +301,18 @@ const AllCourses = () => {
 
                                     <Grid item xs={12} lg={12}>
                                       <Box>
-                                        <Button
-                                          className={courseStyle.boxInFilter}
-                                          size="medium"
-                                          variant="contained"
-                                          color="primary"
-                                          type="button"
-                                          onClick={resetFilterValue}
-                                        >
-                                          Reset
-                                        </Button>
+                                        <div onClick={popupState.close} className={courseStyle.divcss}>
+                                          <Button
+                                            className={courseStyle.boxInFilter}
+                                            size="medium"
+                                            variant="contained"
+                                            color="primary"
+                                            type="button"
+                                            onClick={resetFilterValue}
+                                          >
+                                            Reset
+                                          </Button>
+                                        </div>
                                         <Button
                                           size="medium"
                                           type="submit"
@@ -380,7 +374,6 @@ const AllCourses = () => {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {console.log(rows, rows?.length, DATA)}
                       {rows && rows.length > 0 ? (
                         DATA.currentData() &&
                         DATA.currentData().map((row: any) => {
@@ -425,7 +418,7 @@ const AllCourses = () => {
                                   //   href="/user/subscription/view"
                                   variant="outlined"
                                   color="primary"
-                                  onClick={() => handleClickOpen(row?.id)}
+                                  onClick={() => handleClickOpen(row?.course?.id)}
                                 >
                                   <VisibilityIcon />
                                 </Button>

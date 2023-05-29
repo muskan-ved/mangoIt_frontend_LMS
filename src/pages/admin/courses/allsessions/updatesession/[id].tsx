@@ -92,7 +92,7 @@ export default function UpdateSession() {
             getSessionData()
             setLoading(false);
             setTimeout(() => {
-               router.push('/courses/allsessions/')
+               router.push('/admin/courses/allsessions/')
             }, 1000)
          } catch (e) {
             console.log(e)
@@ -194,7 +194,7 @@ export default function UpdateSession() {
                   First="Home"
                   Middle="Session"
                   Text="SESSION"
-                  Link="courses/allsessions/updatesession"
+                  Link="admin/courses/allsessions/updatesession"
                />
                {/* main content */}
                <Card>

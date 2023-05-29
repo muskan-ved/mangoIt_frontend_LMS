@@ -111,7 +111,6 @@ export default function View() {
     });
   };
 
-  console.log(rows, "subsData", subsData);
   return (
     <>
       <Navbar />
