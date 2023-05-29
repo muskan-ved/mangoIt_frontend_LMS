@@ -34,25 +34,30 @@ export const VerticalMenuItems = () => {
         title: "Dashboard",
         icon: HomeOutlinedIcon,
         path: "/user/dashboard",
+        disable: false,
       },
       {
         title: "Profile",
         icon: ManageAccountsOutlinedIcon,
         path: "/user/profile",
+        disable: false,
       },
       {
         title: "Subscriptions",
         icon: SubscriptionsOutlinedIcon,
         path: "/user/subscription",
+        disable: false,
       },
       {
         title: "Courses",
         icon: DescriptionOutlinedIcon,
         path: "/user/course",
+        disable: false,
       },
       {
         title: "Logout",
         icon: PowerSettingsNewOutlinedIcon,
+        disable: false,
       },
     ];
   } else {
@@ -60,7 +65,8 @@ export const VerticalMenuItems = () => {
       {
         title: "Dashboard",
         icon: HomeOutlinedIcon,
-        path: "/dashboard",
+        path: "admin/dashboard",
+        disable: false,
       },
       {
         title: "Courses",
@@ -69,148 +75,72 @@ export const VerticalMenuItems = () => {
           {
             title: "All Courses",
             icon: ContentPasteOutlinedIcon,
-            path: "/courses/allcourses",
+            path: "/admin/courses/allcourses",
+        disable: false,
           },
           {
             title: "All Modules",
             icon: ViewModuleOutlinedIcon,
-            path: "/courses/allmodules",
+            path: "/admin/courses/allmodules",
+        disable: false,
           },
           {
             title: "All Sessions",
             icon: CalendarTodayOutlinedIcon,
-            path: "/courses/allsessions",
+            path: "/admin/courses/allsessions",
+        disable: false,
           },
         ],
-      },
-      {
-        title: "Profile",
-        icon: ManageAccountsOutlinedIcon,
-        path: "/profile",
       },
       {
         title: "Users",
         icon: PeopleAltOutlinedIcon,
         path: "/users",
+        disable: true,
+
       },
       {
         title: "Subscriptions",
         icon: SubscriptionsOutlinedIcon,
         path: "/subscriptions",
+        disable: true,
+
       },
-      {
-        title: "Configurations",
-        icon: QueryStatsOutlinedIcon,
-        children: [
+
           {
             title: "Email Config",
             icon: EmailOutlinedIcon,
-            path: "/configurations/emailconfiguration",
+            path: "/admin/emailconfiguration",
+        disable: true,
+
           },
           {
             title: "Site Config",
             icon: LanguageOutlinedIcon,
-            path: "/configurations/siteconfiguration",
+            path: "/admin/siteconfiguration",
+        disable: false,
+
           },
-          {
-            title: "Stripe Config",
-            icon: PaymentOutlinedIcon,
-            path: "/configurations/stripeconfiguration",
-          },
-        ],
-      },
       {
         title: "Invoices",
         icon: InsertDriveFileOutlinedIcon,
-        path: "/invoices",
+        path: "/admin/invoices",
+        disable: true,
+
       },
       {
         title: "Settings",
         icon: SettingsOutlinedIcon,
-        path: "/settings",
+        path: "admin/settings",
+        disable: true,
+
       },
       {
         title: "Logout",
         icon: PowerSettingsNewOutlinedIcon,
+        disable: false,
+
       },
     ];
   }
-  return [
-    {
-      title: "Dashboard",
-      icon: HomeOutlinedIcon,
-      path: "/dashboard",
-    },
-    {
-      title: "Courses",
-      icon: DescriptionOutlinedIcon,
-      children: [
-        {
-          title: "All Courses",
-          icon: ContentPasteOutlinedIcon,
-          path: "/courses/allcourses",
-        },
-        {
-          title: "All Modules",
-          icon: ViewModuleOutlinedIcon,
-          path: "/courses/allmodules",
-        },
-        {
-          title: "All Sessions",
-          icon: CalendarTodayOutlinedIcon,
-          path: "/courses/allsessions",
-        },
-      ],
-    },
-    {
-      title: "Profile",
-      icon: ManageAccountsOutlinedIcon,
-      path: "/profile",
-    },
-    {
-      title: "Users",
-      icon: PeopleAltOutlinedIcon,
-      path: "/users",
-    },
-    {
-      title: "Subscriptions",
-      icon: SubscriptionsOutlinedIcon,
-      path: "/subscriptions",
-    },
-    {
-      title: "Configurations",
-      icon: QueryStatsOutlinedIcon,
-      children: [
-        {
-          title: "Email Config",
-          icon: EmailOutlinedIcon,
-          path: "/configurations/emailconfiguration",
-        },
-        {
-          title: "Site Config",
-          icon: LanguageOutlinedIcon,
-          path: "/configurations/siteconfiguration",
-        },
-        {
-          title: "Stripe Config",
-          icon: PaymentOutlinedIcon,
-          path: "/configurations/stripeconfiguration",
-        },
-      ],
-    },
-    {
-      title: "Invoices",
-      icon: InsertDriveFileOutlinedIcon,
-      path: "/invoices",
-    },
-    {
-      title: "Settings",
-      icon: SettingsOutlinedIcon,
-      path: "/settings",
-    },
-    {
-      title: "Logout",
-      icon: PowerSettingsNewOutlinedIcon,
-    },
-  ];
 };

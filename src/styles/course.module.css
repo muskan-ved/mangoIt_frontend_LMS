@@ -2,18 +2,15 @@
     font-weight:700
 }
 
-.quillDescriptionTop{
-    margin-top:50px;
-    margin-bottom: 60px;
-}
+
 
 .quillDescription > div > div {
-    height: 150px;
-}
-
-.quillShortDescription > div > div {
     height: 80px;
 }
+
+/* .quillShortDescription > div > div {
+    height: 80px;
+} */
 
 .wrapShortAndLongDescription {
     display: flex;
@@ -21,7 +18,7 @@
 }
 
 .SubmitButton{
-    float: right;
+    float: right;  
 }
 .stackStyle{
     margin-bottom: 10px;
@@ -33,9 +30,9 @@
     margin: 3px;
 }
 
-.MuiPaper-root .MuiPaper-elevation .MuiPaper-rounded .MuiPaper-elevation8 .MuiPopover-paper .css-3bmhjh-MuiPaper-root-MuiPopover-paper{
+/* .MuiPaper-root .MuiPaper-elevation .MuiPaper-rounded .MuiPaper-elevation8 .MuiPopover-paper .css-3bmhjh-MuiPaper-root-MuiPopover-paper{
 width: 70% !important;
-}
+} */
 .courseInFilter{
     font-weight: bold;
 }
@@ -45,11 +42,12 @@ width: 70% !important;
 .statusInFilter{
     font-weight: bold;
 }
-.boxInFilter{
+/* .boxInFilter{
     float: right;
-}
+} */
 .applyButtonInFiltter{
     margin-left: 10px !important;
+   
 }
 .papperForTable{
     width: 100%;
@@ -71,4 +69,16 @@ width: 70% !important;
 }
 .draftClassColor{
     color: orange !important;
+}
+.addNewCourseButton{
+    margin-top: 80px !important;
+    float: right;
+}
+/* ----------------- UPDATE COURSE CSS ----------------------- */         
+.courseNameGride{
+    display: flex; 
+    margin-bottom: 16px ;
+}
+.updateLoadingButton {
+    width: 178px;
 }
