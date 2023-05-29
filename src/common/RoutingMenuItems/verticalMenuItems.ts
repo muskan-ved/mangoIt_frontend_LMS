@@ -115,7 +115,7 @@ export const VerticalMenuItems = () => {
 
           },
           {
-            title: "Site Config",
+            title: "Configurations",
             icon: LanguageOutlinedIcon,
             path: "/admin/siteconfiguration",
         disable: false,
