@@ -8,7 +8,7 @@ import { Box, Button, Card, CardContent, FormControl, Grid, IconButton, InputLab
 import SideBar from "@/common/LayoutNavigations/sideBar";
 import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
 import Footer from "@/common/LayoutNavigations/footer";
-import Navbar from "../../../../common/LayoutNavigations/navbar";
+import Navbar from "../../../../../common/LayoutNavigations/navbar";
 import RichEditor from "@/common/RichTextEditor/textEditor";
 import Preview from '@/common/previewAttachment';
 // Helper Import
@@ -24,9 +24,9 @@ import { sessionType } from '@/types/sessionType';
 import { courseType } from '@/types/courseType';
 import { moduleType } from '@/types/moduleType';
 // CSS Import
-import styles from "../../../../styles/sidebar.module.css";
+import styles from "../../../../../styles/sidebar.module.css";
 import Sessions from "../../../../styles/session.module.css";
-import courseStyle from "../../../../styles/course.module.css";
+import courseStyle from "../../../../../styles/course.module.css";
 import { ToastContainer } from 'react-toastify';
 // API services
 import { HandleCourseGet, HandleCourseGetByID, HandleCourseUpdate } from '@/services/course';
