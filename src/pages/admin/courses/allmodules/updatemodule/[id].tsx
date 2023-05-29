@@ -31,15 +31,16 @@ import { ToastContainer } from 'react-toastify';
 import { HandleCourseGet, HandleCourseGetByID, HandleCourseUpdate } from '@/services/course';
 import { Attachment, Description, Image, Movie, PictureAsPdf } from '@mui/icons-material';
 import { type } from 'os';
+import { HandleModuleGetByID } from '@/services/module';
+import { moduleValidations } from '@/validation_schema/moduleValidation';
 
 
 
-export default function UpdateCourse() {
+export default function UpdateModule() {
   const router: any = useRouter();
-  const [getLongDespcriptionContent, setLongDespcriptionContent] = useState("");
   const [getShortDespcriptionContent, setShortDespcriptionContent] = useState("");
-  const [getUpdateCourse, setUpdateCourse] = useState<courseType | any>([]);
-  const [getCourse, setCourse] = useState<courseType | any>();
+  const [getUpdateModule, setUpdateModule] = useState<moduleType | any>([]);
+  const [getModule, setModule] = useState<moduleType | any>();
   const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [error, setErrors] = useState<string>();
@@ -52,28 +53,18 @@ export default function UpdateCourse() {
     control,
     formState: { errors }, setError
   } = useForm<courseType | any>({
-    resolver: yupResolver(courseValidations),
+    resolver: yupResolver(moduleValidations),
   });
   // console.log('getvalue', getValues())
   const handleContentChange = (value: string, identifier: string) => {
-    if(identifier === 'short_description'){
+    if(identifier === 'description'){
     if (value === '<p><br></p>') {
-      setError(identifier, { message: 'Short Description is a required field' });
+      setError(identifier, { message: 'Description is a required field' });
     } else {
       setError(identifier, { message: '' })
       setValue(identifier, value);
     }
     setShortDespcriptionContent(value);
-  }
-
-  if(identifier === 'long_description'){
-    if (value === '<p><br></p>') {
-      setError(identifier, { message: 'Long Description is a required field' });
-    } else {
-      setError(identifier, { message: '' })
-      setValue(identifier, value);
-    }
-    setLongDespcriptionContent(value);
   }
 
   };
@@ -97,11 +88,11 @@ export default function UpdateCourse() {
       setLoadingButton(false)
       try {
         const res = await HandleCourseUpdate(id, event)
-        getCourseData()
+        // getCourseData()
         setLoading(false);
-        setTimeout(() => {
-          router.push('/admin/courses/allcourses/')
-        }, 1000)
+        // setTimeout(() => {
+        //   router.push('/admin/courses/allmodules/')
+        // }, 1000)
       } catch (e) {
         console.log(e)
         setLoadingButton(true)
@@ -113,28 +104,27 @@ export default function UpdateCourse() {
 
   const handleUpdate = (e: any) => {
     // if(e.target.name === 'title'){
-      setCourse({...getCourse, title:e.target.value})
+      setModule({...getModule, title:e.target.value})
     // }
   }
 
   const handleChange = (e: any) => {
-    setCourse(e.target.value)
+    setModule(e.target.value)
   };
 
-  const getCourseData = async () => {
+  const getModuleData = async () => {
     const id = router.query.id
     if (id) {
-      HandleCourseGetByID(id).then((course) => {
-        // console.log('Course',course)
-        setCourse(course.data)
-        const fields = [
-          "title",
-          "is_chargeable",
-          "status",
-          "short_description",
-          "long_description",
-        ];
-        fields.forEach((field) => setValue(field, course.data[field]));
+      HandleModuleGetByID(id).then((module) => {
+        // console.log('module',module)
+        setModule(module.data)
+        // const fields = [
+        //   "title",
+        //   "is_chargeable",
+        //   "status",
+        //   "description",
+        // ];
+        // fields.forEach((field) => setValue(field, course.data[field]));
       })
         .catch((error) => {
           setErrors(error.message);
@@ -145,7 +135,7 @@ export default function UpdateCourse() {
       return <Typography >{error}</Typography >;
     }
 
-    if (!getCourse) {
+    if (!getModule) {
       return <Typography >Loading...</Typography >;
     }
   }
@@ -156,7 +146,7 @@ export default function UpdateCourse() {
       localData = window.localStorage.getItem("userData");
     }
     if (localData) {
-      getCourseData();
+      getModuleData();
     }
   }, [router.query]);
 
@@ -167,7 +157,7 @@ export default function UpdateCourse() {
       </Typography>
     );
   }
-  console.log("opps", errors)
+  // console.log("opps", getModule)
   return (
     <>
       <Navbar />
@@ -200,16 +190,16 @@ export default function UpdateCourse() {
                     </Grid>
 
                     <Grid item xs={12} sm={12} md={12} lg={6} >
-                      <Typography>EDIT COURSE</Typography>
+                      <Typography>EDIT MODULE</Typography>
                       <Grid item xs={12} sm={12} md={12} lg={12} className={courseStyle.courseNameGride} >
 
                         <Grid item xs={12} sm={12} md={6} lg={6}>
                           <InputLabel>
-                            Course Name
+                            Module Name
                           </InputLabel>
                           <TextField
                             {...register("title")}
-                            value={getCourse?.title}
+                            value={getModule?.title}
                             onChange={handleUpdate}
                           />
                           {errors && errors.title
@@ -218,11 +208,11 @@ export default function UpdateCourse() {
                         </Grid>
 
                         <Grid item xs={12} sm={12} md={6} lg={6}>
-                          <InputLabel>Type</InputLabel>
+                          <InputLabel>Course of Module</InputLabel>
                           <Controller
                           name="is_chargeable"
                           control={control}                        
-                          defaultValue={getCourse?.is_chargeable || ""}
+                          defaultValue={getModule?.is_chargeable || ""}
                           // defaultValue=''
                           render={({ field }) => (
                             <FormControl fullWidth>
@@ -248,7 +238,7 @@ export default function UpdateCourse() {
                         <Controller
                           name="status"
                           control={control}                        
-                          defaultValue={getCourse?.status || ""}
+                          defaultValue={getModule?.status || ""}
                           // defaultValue=''
                           render={({ field }) => (
                             <FormControl fullWidth>
@@ -270,32 +260,19 @@ export default function UpdateCourse() {
                       <Grid item xs={12} sm={12} md={12} lg={12} mb={2}>
                         <InputLabel>Description</InputLabel>
                         <RichEditor
-                          {...register("short_description")}
-                          value={getShortDespcriptionContent ? getShortDespcriptionContent : getCourse?.short_description}
+                          {...register("description")}
+                          value={getShortDespcriptionContent ? getShortDespcriptionContent : getModule?.description}
                           onChange={(value) =>
-                            handleContentChange(value, "short_description")
+                            handleContentChange(value, "description")
                           }
                         />
-                        {errors && errors.short_description ? ErrorShowing(errors?.short_description?.message) : ""}
+                        {errors && errors.description ? ErrorShowing(errors?.description?.message) : ""}
                         {/* {getShortDespcriptionContent ? '' : errors && errors.description ? ErrorShowing(errors?.description?.message) : ""} */}
                       </Grid>
 
-                      <Grid item xs={12} sm={12} md={12} lg={12} mb={2} >
-                        <InputLabel>Long Description</InputLabel>
-                        <Box >
-                          <RichEditor
-                            {...register("long_description")}
-                            value={getLongDespcriptionContent ? getLongDespcriptionContent : getCourse?.long_description}
-                            onChange={(value) =>
-                              handleContentChange(value, "long_description")
-                            }
-                          />
-                        </Box>
-                        {errors && errors.long_description ? ErrorShowing(errors?.long_description?.message) : ""}
-                      </Grid>
                       <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"right"} >
                         {!isLoadingButton ? <Button type="submit" size="large" variant="contained">
-                          UPDATE COURSE
+                          UPDATE MODULE
                         </Button> : <LoadingButton loading={isLoadingButton} className={courseStyle.updateLoadingButton}
                           size="large" variant="contained" disabled >
                           <CircularProgressBar />

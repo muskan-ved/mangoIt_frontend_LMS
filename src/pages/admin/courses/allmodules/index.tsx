@@ -40,6 +40,7 @@ import ArrowDownwardOutlinedIcon from '@mui/icons-material/ArrowDownwardOutlined
 import ArrowUpwardOutlinedIcon from '@mui/icons-material/ArrowUpwardOutlined';
 import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
 import { HandleModuleGet } from "@/services/module";
+import { handleSortData } from "@/common/Sorting/sorting";
 
 interface Column {
   id: "id" | "title" | "course_id" | "module_id" | "is_deleted" | "action";
@@ -59,7 +60,7 @@ const columns: Column[] = [
 ];
 
 const AllModules = () => {
-  const [rows, setRows] = React.useState([]);
+  const [rows, setRows] = React.useState<any>([]);
   const [page, setPage] = React.useState(0);
   const [toggle, setToggle] = React.useState<boolean>(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -78,8 +79,10 @@ const AllModules = () => {
   const handleClickOpen = (data: any) => {
 
   }
-  const handleSort = (data: any) => {
-
+  const handleSort = (rowsData: any) => {
+    const sortData = handleSortData(rowsData)
+    setRows(sortData)
+    setToggle(!toggle)
   }
 
   const getModuleData = () => {
@@ -92,7 +95,7 @@ const AllModules = () => {
     getModuleData();
   }, []);
   
-  // console.log('oops', rows)
+  console.log('oops', rows)
   return (
     <>
       <Navbar />
@@ -257,7 +260,7 @@ const AllModules = () => {
                   )}
                 </PopupState>
                 &nbsp;
-                <Button variant="contained" onClick={() => router.push('/courses/allmodules/addmodule')}>Add Module</Button>
+                <Button variant="contained" onClick={() => router.push('/admin/courses/allmodules/addmodule')}>Add Module</Button>
               </Box>
               <Paper >
                 <TableContainer >
@@ -300,7 +303,7 @@ const AllModules = () => {
                               <TableCell>{capitalizeFirstLetter(row.module.course && row.module.course.title)}</TableCell>
                               <TableCell>{(row.sessionCount.sessionCount)}</TableCell>
                               <TableCell >{capitalizeFirstLetter(row.module.status)}</TableCell>
-                              <TableCell><Button onClick={() => router.push(`/courses/allsessions/updatesession/${row.id}`)} variant="outlined" color="success" ><ModeEditOutlineIcon /></Button>
+                              <TableCell><Button onClick={() => router.push(`/admin/courses/allmodules/updatemodule/${row.module.id}`)} variant="outlined" color="success" ><ModeEditOutlineIcon /></Button>
                                 <Button variant="outlined" color="error" onClick={() => handleClickOpen(row)}><DeleteOutlineIcon /></Button>
                               </TableCell>
                             </TableRow>
