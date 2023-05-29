@@ -1,15 +1,14 @@
 import { AppBar, Box, Container, Toolbar, Typography } from "@mui/material";
 import * as React from "react";
-import { useRouter } from "next/navigation";
-import styles from "../../styles/appbar.module.css";
+import styles from "../../styles/webviewHeaderFooter.module.css";
 
 
 const WebViewFooter = () => {
     return (
         <Box sx={{ flexGrow: 1 }} >
-            <AppBar position="static" className={styles.appBarCss}>
+            <AppBar position="static" className={styles.appBarFooterCss}>
                 <Container maxWidth="lg">
-                    <Toolbar>
+                    <Toolbar className={styles.appBarFooterToolbarCss}>
                         <Box
                             component="img"
                             src="/Images/company_logo.png"
@@ -19,22 +18,22 @@ const WebViewFooter = () => {
                             alt="Company logo"
                         />
                         <Box sx={{ flexGrow: 1 }} />
-                        <Box sx={{ display: { xs: "none", md: "flex" } }}>
+                        <Box sx={{ display: { xs: "block", md: "flex" } }}>
                             <Typography
                                 variant="body2"
-                                className={styles.windowFullWidthNameAlign}
+                                className={styles.windowFullWidthNameAlignfooter}
                             >
                                 Term & Conditions
                             </Typography>
                             <Typography
                                 variant="body2"
-                                className={styles.windowFullWidthNameAlign}
+                                className={styles.windowFullWidthNameAlignfooter}
                             >
                                 Privacy Policy
                             </Typography>
                             <Typography
                                 variant="body2"
-                                className={styles.windowFullWidthNameAlign}
+                                className={styles.windowFullWidthNameAlignfooters}
                             >
                                 @2023 LMS. All Right Reserved
                             </Typography>

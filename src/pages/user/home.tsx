@@ -1,112 +1,164 @@
 import * as React from "react";
-import { AppBar, Button, Container, Divider, IconButton, Paper, Toolbar } from "@mui/material";
+import { Badge, Button, Container, Divider } from "@mui/material";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import WebViewNavbar from "@/common/LayoutNavigations/webviewnavbar";
 import WebViewFooter from "@/common/LayoutNavigations/webviewfooter";
 import styles from '../../styles/webview.module.css'
+import Carousel from 'react-material-ui-carousel'
+import LockIcon from '@mui/icons-material/Lock';
+import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
+import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
+import SchoolIcon from '@mui/icons-material/School';
 
+export default function HomePage() {
+    var items = [
+        {
+            name: "Random Name #1",
+            description: "Probably the most random thing you have ever seen!"
+        },
+        {
+            name: "Random Name #2",
+            description: "Hello World!"
+        },
+        {
+            name: "Random Name #2",
+            description: "Hello World!"
+        }
+    ]
 
-
-export default function Login() {
-
-
+    function Item(props: any) {
+        return (
+            <Box className={styles.gridcols2}>
+                <Box className={styles.griditem1}>
+                    <Typography className={styles.mainheading}>
+                        We Provide
+                        <Typography className={styles.span} component={'span'}> Smart</Typography>
+                    </Typography>
+                    <Typography className={styles.mainheading}>
+                        <Typography className={styles.span} component={'span'}>Solution </Typography>For Your
+                    </Typography>
+                    <Typography className={styles.mainheading}>
+                        Learning Skills
+                    </Typography>
+                    <Typography className={styles.infotext}>
+                        Build a beautiful, modern website with
+                        flexible components built
+                        from scratch.
+                        Build a beautiful,
+                        modern website with flexible components built
+                        modern website with flexible from scratch.
+                    </Typography>
+                    <Box className={styles.btnwrapper}>
+                        <Button className={styles.viewmorebtn}>
+                            View More
+                        </Button>
+                    </Box>
+                </Box>
+                <Box className={styles.griditem2}>
+                    <Box className={styles.teamimgwrapper}>
+                        <img src="https://picsum.photos/id/1011/800/450" alt="team-img" />
+                    </Box>
+                </Box>
+            </Box>
+        )
+    }
 
     return (
         <>
+            {/*header*/}
             <WebViewNavbar />
-            <Box>
+            {/*Landing page carousel*/}
+            <Box className={styles.landingpagecarousel}>
                 <Container maxWidth="lg">
-                    <Box className={styles.wrapper}>
-                        <Box className={styles.container}>
-                            <Box className={styles.gridcols2}>
-                                <Box className={styles.griditem1}>
-                                    <Typography className={styles.mainheading}>
-                                        We Provide
-                                        <Typography className={styles.span} component={'span'}> Smart</Typography>
-                                    </Typography>
-                                    <Typography className={styles.mainheading}>
-                                        <Typography className={styles.span} component={'span'}>Solution </Typography>For Your
-                                    </Typography>
-                                    <Typography className={styles.mainheading}>
-                                        Learning Skills
-                                    </Typography>
-                                    <Typography className={styles.infotext}>
-                                        Build a beautiful, modern website with
-                                        flexible components built
-                                        from scratch.
-                                        Build a beautiful,
-                                        modern website with flexible components built
-                                        from scratch.
-                                    </Typography>
-                                    <Box className={styles.btnwrapper}>
-                                        <Button className={styles.view_more_btn}>
-                                            View More
-                                        </Button>
-                                    </Box>
-                                </Box>
-                                <Box className={styles.griditem2}>
-                                    <Box className={styles.teamimgwrapper}>
-                                        <img src="https://picsum.photos/id/1011/800/450" alt="team-img" />
-                                    </Box>
-                                </Box>
-                            </Box>
-                        </Box>
-                    </Box>
+                    <Carousel
+                        IndicatorIcon={<HorizontalRuleIcon />}
+                        indicatorIconButtonProps={{
+                            style: {
+                                padding: '15px',
+                                color: 'black',
+                            }
+                        }}
+                        indicatorContainerProps={{
+                            style: {
+                                textAlign: 'center',
+                                position: "absolute",
+                                zIndex: 999999,
+                                right: "278px !important",
+                                top: "350px !important"
+                            }
+                        }}
+                    >
+                        {
+                            items.map((item, i) => <Item key={i} item={item} />)
+                        }
+                    </Carousel>
                 </Container>
             </Box>
-
-            <Box>
+            {/*how it works page*/}
+            <Box className={styles.howitworks}>
                 <Container maxWidth="lg">
-                    <Box className={styles.iconcard}>
-                        <Box className={styles.iconcardarticles}>
-                            <Box className={styles.article}>
-                                <Box className={styles.articlewrapper}>
-                                    <Box className={styles.figure}>
-                                        <img src="https://picsum.photos/id/1011/800/450" alt="" />
+                    <Box className={styles.headerbox}>
+                        <Typography variant="h6" gutterBottom className={styles.h6}>
+                            How It Works ?
+                        </Typography>
+                        <Divider className={styles.divders} />
+                    </Box>
+                    <Box className={styles.iconarticles}>
+                        <Box>
+                            <Box className={styles.iconarticle1}>
+                                <Badge badgeContent={1} color="warning">
+                                    <Box className={styles.iconarticle2}>
+                                        <Box className={styles.iconarticlewrapper}>
+                                            <Box className={styles.iconfigure}>
+                                                <LockIcon />
+                                            </Box>
+                                        </Box>
                                     </Box>
-                                    <Box className={styles.articlebody}>
-                                        <Typography className={styles.h2}>This is some title</Typography>
-
-                                        <Typography></Typography>
-                                    </Box>
-                                </Box>
+                                </Badge>
                             </Box>
-                            <Box className={styles.article}>
-                                <Box className={styles.article}>
-                                    <Box className={styles.articlewrapper}>
-                                        <Box className={styles.figure}>
-                                            <img src="https://picsum.photos/id/1011/800/450" alt="" />
-                                        </Box>
-                                        <Box className={styles.articlebody}>
-                                            <Typography className={styles.h2}>This is some title</Typography>
-
-                                            <Typography></Typography>
-                                        </Box>
-                                    </Box>
-                                </Box>
-                            </Box>
-                            <Box className={styles.article}>
-                                <Box className={styles.article}>
-                                    <Box className={styles.articlewrapper}>
-                                        <Box className={styles.figure}>
-                                            <img src="https://picsum.photos/id/1011/800/450" alt="" />
-                                        </Box>
-                                        <Box className={styles.articlebody}>
-                                            <Typography className={styles.h2}>This is some title</Typography>
-
-                                            <Typography></Typography>
+                            <Typography className={styles.h2}>Sign Up</Typography>
+                        </Box>
+                        <Box>
+                            <Box className={styles.iconarticle1}>
+                                <Badge badgeContent={2} color="warning">
+                                    <Box className={styles.iconarticle2}>
+                                        <Box className={styles.iconarticlewrapper}>
+                                            <Box className={styles.iconfigure}>
+                                                <SchoolIcon />
+                                            </Box>
                                         </Box>
                                     </Box>
-                                </Box>
+                                </Badge>
                             </Box>
+                            <Typography className={styles.h2}>Select Courses</Typography>
+                        </Box>
+                        <Box >
+                            <Box className={styles.iconarticle1}>
+                                <Badge badgeContent={3} color="warning">
+                                    <Box className={styles.iconarticle2}>
+                                        <Box className={styles.iconarticlewrapper}>
+                                            <Box className={styles.iconfigure}>
+                                                <LocalLibraryIcon />
+                                            </Box>
+                                        </Box>
+                                    </Box>
+                                </Badge>
+                            </Box>
+                            <Typography className={styles.h2}>Start Learning</Typography>
                         </Box>
                     </Box>
                 </Container >
             </Box >
-            <Box>
+            {/*top enrolled course*/}
+            <Box className={styles.enrolled}>
                 <Container maxWidth="lg">
+                    <Box className={styles.headerbox}>
+                        <Typography variant="h6" gutterBottom className={styles.h6}>
+                            Top Enrolled Courses
+                        </Typography>
+                        <Divider className={styles.divder} />
+                    </Box>
                     <Box className={styles.articles}>
                         <Box className={styles.article}>
                             <Box className={styles.articlewrapper}>
@@ -114,9 +166,8 @@ export default function Login() {
                                     <img src="https://picsum.photos/id/1011/800/450" alt="" />
                                 </Box>
                                 <Box className={styles.articlebody}>
-                                    <Typography className={styles.h2}>This is some title</Typography>
-
-                                    <Typography></Typography>
+                                    <Typography className={styles.h2}>HTML Course</Typography>
+                                    <Typography className={styles.h5}>Type : Free</Typography>
                                 </Box>
                             </Box>
                         </Box>
@@ -127,23 +178,8 @@ export default function Login() {
                                         <img src="https://picsum.photos/id/1011/800/450" alt="" />
                                     </Box>
                                     <Box className={styles.articlebody}>
-                                        <Typography className={styles.h2}>This is some title</Typography>
-
-                                        <Typography></Typography>
-                                    </Box>
-                                </Box>
-                            </Box>
-                        </Box>
-                        <Box className={styles.article}>
-                            <Box className={styles.article}>
-                                <Box className={styles.articlewrapper}>
-                                    <Box className={styles.figure}>
-                                        <img src="https://picsum.photos/id/1011/800/450" alt="" />
-                                    </Box>
-                                    <Box className={styles.articlebody}>
-                                        <Typography className={styles.h2}>This is some title</Typography>
-
-                                        <Typography></Typography>
+                                        <Typography className={styles.h2}>HTML Course</Typography>
+                                        <Typography className={styles.h5}>Type : Free</Typography>
                                     </Box>
                                 </Box>
                             </Box>
@@ -155,9 +191,21 @@ export default function Login() {
                                         <img src="https://picsum.photos/id/1011/800/450" alt="" />
                                     </Box>
                                     <Box className={styles.articlebody}>
-                                        <Typography className={styles.h2}>This is some title</Typography>
-
-                                        <Typography></Typography>
+                                        <Typography className={styles.h2}>HTML Course</Typography>
+                                        <Typography className={styles.h5}>Type : Free</Typography>
+                                    </Box>
+                                </Box>
+                            </Box>
+                        </Box>
+                        <Box className={styles.article}>
+                            <Box className={styles.article}>
+                                <Box className={styles.articlewrapper}>
+                                    <Box className={styles.figure}>
+                                        <img src="https://picsum.photos/id/1011/800/450" alt="" />
+                                    </Box>
+                                    <Box className={styles.articlebody}>
+                                        <Typography className={styles.h2}>HTML Course</Typography>
+                                        <Typography className={styles.h5}>Type : Free</Typography>
                                     </Box>
                                 </Box>
                             </Box>
@@ -165,8 +213,15 @@ export default function Login() {
                     </Box>
                 </Container>
             </Box>
-            <Box>
+            {/*top Free course*/}
+            <Box className={styles.freecourses}>
                 <Container maxWidth="lg">
+                    <Box className={styles.headerbox}>
+                        <Typography variant="h6" gutterBottom className={styles.h6}>
+                            Top Free Courses
+                        </Typography>
+                        <Divider className={styles.divder} />
+                    </Box>
                     <Box className={styles.articles}>
                         <Box className={styles.article}>
                             <Box className={styles.articlewrapper}>
@@ -174,9 +229,8 @@ export default function Login() {
                                     <img src="https://picsum.photos/id/1011/800/450" alt="" />
                                 </Box>
                                 <Box className={styles.articlebody}>
-                                    <Typography className={styles.h2}>This is some title</Typography>
-
-                                    <Typography></Typography>
+                                    <Typography className={styles.h2}>HTML Course</Typography>
+                                    <Typography className={styles.h5}>Type : Free</Typography>
                                 </Box>
                             </Box>
                         </Box>
@@ -187,23 +241,8 @@ export default function Login() {
                                         <img src="https://picsum.photos/id/1011/800/450" alt="" />
                                     </Box>
                                     <Box className={styles.articlebody}>
-                                        <Typography className={styles.h2}>This is some title</Typography>
-
-                                        <Typography></Typography>
-                                    </Box>
-                                </Box>
-                            </Box>
-                        </Box>
-                        <Box className={styles.article}>
-                            <Box className={styles.article}>
-                                <Box className={styles.articlewrapper}>
-                                    <Box className={styles.figure}>
-                                        <img src="https://picsum.photos/id/1011/800/450" alt="" />
-                                    </Box>
-                                    <Box className={styles.articlebody}>
-                                        <Typography className={styles.h2}>This is some title</Typography>
-
-                                        <Typography></Typography>
+                                        <Typography className={styles.h2}>HTML Course</Typography>
+                                        <Typography className={styles.h5}>Type : Free</Typography>
                                     </Box>
                                 </Box>
                             </Box>
@@ -215,9 +254,21 @@ export default function Login() {
                                         <img src="https://picsum.photos/id/1011/800/450" alt="" />
                                     </Box>
                                     <Box className={styles.articlebody}>
-                                        <Typography className={styles.h2}>This is some title</Typography>
-
-                                        <Typography></Typography>
+                                        <Typography className={styles.h2}>HTML Course</Typography>
+                                        <Typography className={styles.h5}>Type : Free</Typography>
+                                    </Box>
+                                </Box>
+                            </Box>
+                        </Box>
+                        <Box className={styles.article}>
+                            <Box className={styles.article}>
+                                <Box className={styles.articlewrapper}>
+                                    <Box className={styles.figure}>
+                                        <img src="https://picsum.photos/id/1011/800/450" alt="" />
+                                    </Box>
+                                    <Box className={styles.articlebody}>
+                                        <Typography className={styles.h2}>HTML Course</Typography>
+                                        <Typography className={styles.h5}>Type : Free</Typography>
                                     </Box>
                                 </Box>
                             </Box>

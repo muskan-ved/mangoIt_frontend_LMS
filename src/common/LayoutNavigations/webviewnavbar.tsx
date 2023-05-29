@@ -5,99 +5,23 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import MoreIcon from "@mui/icons-material/MoreVert";
 import { Container, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
-import styles from "../../styles/appbar.module.css";
+import styles from "../../styles/webviewHeaderFooter.module.css";
 import { HandleLogout } from "@/services/auth";
-import PowerSettingsNewOutlinedIcon from "@mui/icons-material/PowerSettingsNewOutlined";
-import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-
+import MenuIcon from '@mui/icons-material/Menu';
 
 export default function WebViewNavbar() {
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
         React.useState<null | HTMLElement>(null);
-    const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
     const router = useRouter();
     const handleMobileMenuClose = () => {
         setMobileMoreAnchorEl(null);
     };
-
-    const handleMenuClose = () => {
-        setAnchorEl(null);
-        handleMobileMenuClose();
-    };
     const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
         setMobileMoreAnchorEl(event.currentTarget);
     };
-    const menuId = "primary-search-account-menu";
-    const renderMenu = (
-        <Menu
-            anchorEl={anchorEl}
-            anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-            }}
-            id={menuId}
-            keepMounted
-            transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-            }}
-            open={isMenuOpen}
-            onClose={handleMenuClose}
-        >
-
-            <MenuItem
-                onClick={() => {
-                    router.push("/profile"), handleMenuClose();
-                }}
-            >
-                <IconButton
-                    size="large"
-                    aria-label="account of current user"
-                    aria-controls="primary-search-account-menu"
-                    aria-haspopup="true"
-                    color="inherit"
-                >
-                    <AccountCircleOutlinedIcon />
-                </IconButton>
-                <Typography>Home</Typography>
-            </MenuItem>
-
-            <MenuItem
-                onClick={() => {
-                    router.push("/user/profile"), handleMenuClose();
-                }}
-            >
-                <IconButton
-                    size="large"
-                    aria-label="account of current user"
-                    aria-controls="primary-search-account-menu"
-                    aria-haspopup="true"
-                    color="inherit"
-                >
-                    <AccountCircleOutlinedIcon />
-                </IconButton>
-                <Typography>Course</Typography>
-            </MenuItem>
-
-            <MenuItem onClick={HandleLogout}>
-                <IconButton
-                    size="large"
-                    aria-label="account of current user"
-                    aria-controls="primary-search-account-menu"
-                    aria-haspopup="true"
-                    color="inherit"
-                >
-                    <PowerSettingsNewOutlinedIcon />
-                </IconButton>
-                <Typography>My Acount</Typography>
-            </MenuItem>
-        </Menu>
-    );
     const mobileMenuId = "primary-search-account-menu-mobile";
     const renderMobileMenu = (
         <Menu
@@ -119,7 +43,6 @@ export default function WebViewNavbar() {
                 <Typography>Home</Typography>
             </MenuItem>
             <MenuItem onClick={() => router.push("/profile")}>
-
                 <Typography>Course</Typography>
             </MenuItem>
             <MenuItem onClick={HandleLogout}>
@@ -131,7 +54,7 @@ export default function WebViewNavbar() {
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static" className={styles.appBarCss}>
                 <Container maxWidth="lg">
-                    <Toolbar>
+                    <Toolbar className={styles.appBarToolbarCss}>
                         <Box
                             component="img"
                             src="/Images/company_logo.png"
@@ -170,22 +93,13 @@ export default function WebViewNavbar() {
                                 onClick={handleMobileMenuOpen}
                                 color="inherit"
                             >
-                                <MoreIcon />
-                            </IconButton>
-                            <IconButton
-                                size="large"
-                                edge="start"
-                                color="inherit"
-                                aria-label="open drawer"
-                                sx={{ mr: 2 }}
-                            >
+                                <MenuIcon />
                             </IconButton>
                         </Box>
                     </Toolbar>
                 </Container>
             </AppBar>
             {renderMobileMenu}
-            {renderMenu}
         </Box>
     );
 }
