@@ -6,10 +6,7 @@ import {
   Button,
   TextField,
   Grid,
-  FormControl,
   InputLabel,
-  Select,
-  MenuItem,
   IconButton,
   Card,
   Box,
@@ -36,7 +33,6 @@ import { userType } from "@/types/userType";
 import Navbar from "@/common/LayoutNavigations/navbar";
 import SideBar from "@/common/LayoutNavigations/sideBar";
 import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
-import Footer from "@/common/LayoutNavigations/footer";
 import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
 import SpinnerProgress from "@/common/CircularProgressComponent/spinnerComponent";
 import CircularProgressBar from "@/common/CircularProcess/circularProgressBar";

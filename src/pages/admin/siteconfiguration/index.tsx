@@ -41,7 +41,16 @@ import {
   HandleSiteGetByID,
 } from "@/services/site";
 
-const SiteConfiguration = () => {
+import { NextPageContext } from 'next';
+
+interface SiteConfigPageProps {
+  siteConfigData: any; // Replace with the actual type of your site config data
+}
+
+
+
+
+const SiteConfiguration = ({ siteConfigData }:any) => {
   const [previewProfile, setPreviewProfile] = useState<siteType>({
     org_logo: "",
     org_favicon: "",
@@ -615,6 +624,31 @@ const SiteConfiguration = () => {
       </Box>
     </>
   );
+};
+
+SiteConfiguration.getInitialProps = async (ctx: NextPageContext): Promise<SiteConfigPageProps> => {
+  // Fetch the site config data
+  let user_id:any;
+ 
+    let localData: any;
+    if (typeof window !== "undefined") {
+      localData = window.localStorage.getItem("userData");
+    }
+    if(localData){
+     user_id = JSON.parse(localData);
+  }
+  const siteConfigData = await HandleSiteGetByID(user_id?.id)
+  .then((res) => {
+      const result = res.data.reduce((acc: any, { key, value }: any) => {
+        acc[key] = value;
+        return acc;
+      }, {});
+      return result;
+  })
+  .catch((err) => {
+   console.log(err)
+  });
+  return { siteConfigData };
 };
 
 export default SiteConfiguration;

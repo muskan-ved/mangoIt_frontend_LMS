@@ -72,7 +72,7 @@ export const HandleSiteConfigCreate = async(reqData:any) =>{
       headers: LoginHeader(),
       data: updateData,
     }).then((request) => {
-      toast.success("Site Config Updated Successfully")
+      toast.success("Site configuration will be updated soon")
         return request;
       }).catch((error) => {
         if(error.response.status === 401){
