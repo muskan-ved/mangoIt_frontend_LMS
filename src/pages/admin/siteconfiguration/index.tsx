@@ -25,6 +25,7 @@ import CircularProgressBar from "@/common/CircularProcess/circularProgressBar";
 // ** CSS Imports
 import styles from "../../../styles/sidebar.module.css";
 import siteStyles from "../../../styles/allConfigurations.module.css";
+import { ToastContainer } from "react-toastify";
 
 // ** React Imports
 import { useForm } from "react-hook-form";
@@ -208,6 +209,7 @@ const SiteConfiguration = ({ siteConfigData }:any) => {
   return (
     <>
       <Navbar portalData={portalData}/>
+      <ToastContainer/>
       <Box className={styles.combineContentAndSidebar}>
         <SideBar />
 
