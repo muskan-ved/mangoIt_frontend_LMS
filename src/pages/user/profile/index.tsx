@@ -42,8 +42,8 @@ import SpinnerProgress from "@/common/CircularProgressComponent/spinnerComponent
 import CircularProgressBar from "@/common/CircularProcess/circularProgressBar";
 
 // CSS Import
-import profiles from "../../../../styles/profile.module.css";
-import styles from "../../../../styles/sidebar.module.css";
+import profiles from "../../../styles/profile.module.css";
+import styles from "../../../styles/sidebar.module.css";
 
 // API services
 import { HandleProfile } from "@/services/user";

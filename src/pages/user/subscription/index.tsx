@@ -1,3 +1,4 @@
+import * as React from "react";
 import Navbar from "@/common/LayoutNavigations/navbar";
 import SideBar from "@/common/LayoutNavigations/sideBar";
 import {
@@ -5,53 +6,35 @@ import {
   Button,
   Card,
   CardContent,
-  Container,
   FormControl,
-  Grid,
-  IconButton,
-  InputLabel,
   MenuItem,
-  OutlinedInput,
   Pagination,
-  Popover,
   Select,
   Stack,
-  TextField,
   Typography,
 } from "@mui/material";
 // CSS Import
-import CloseIcon from "@mui/icons-material/Close";
-import styles from "../../../../styles/sidebar.module.css";
-import courseStyle from "../../../../styles/course.module.css";
+import styles from "../../../styles/sidebar.module.css";
+import courseStyle from "../../../styles/course.module.css";
 import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
-import Footer from "@/common/LayoutNavigations/footer";
-import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
-import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
 import ArrowDownwardOutlinedIcon from "@mui/icons-material/ArrowDownwardOutlined";
 import ArrowUpwardOutlinedIcon from "@mui/icons-material/ArrowUpwardOutlined";
-import * as React from "react";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { SearchOutlined } from "@mui/icons-material";
 import { useRouter } from "next/router";
-import { HandleSubscriptionGet } from "@/services/subscription";
+import { HandleSubscriptionGetByUserID } from "@/services/subscription";
 import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
 import { usePagination } from "@/common/Pagination/paginations";
-import { AlertDialog } from "@/common/DeleteListRow/deleteRow";
-import { Controller, useForm } from "react-hook-form";
 import { handleSortData } from "@/common/Sorting/sorting";
-import Link from "next/link";
 
 interface Column {
-  id: "id" | "amount" | "next_pay" | "status" | "action";
+  id: "id" | "name" | "amount" | "next_pay" | "status" | "action";
   label: string;
   minWidth?: number;
   align?: "right";
@@ -60,6 +43,7 @@ interface Column {
 
 const columns: Column[] = [
   { id: "id", label: "ID", minWidth: 100 },
+  { id: "name", label: "NAME", minWidth: 100 },
   { id: "amount", label: "AMOUNT", minWidth: 100 },
   { id: "next_pay", label: "NEXT PAY", minWidth: 100 },
   { id: "status", label: "STATUS", minWidth: 100 },
@@ -67,13 +51,9 @@ const columns: Column[] = [
 ];
 
 const Subscription = () => {
+  var getId: any;
   const [rows, setRows] = React.useState<any>([]);
   const [toggle, setToggle] = React.useState<boolean>(false);
-  const [search, setSearch] = React.useState("");
-  const [deleteRow, setDeleteRow] = React.useState<any>([]);
-  const [open, setOpen] = React.useState(false);
-  const [getFilter, setFilter] = React.useState<number>(0);
-  const [filterObject, setFilterObject] = React.useState<any>("");
 
   const router = useRouter();
   //pagination
@@ -93,6 +73,17 @@ const Subscription = () => {
   const handleClickOpen = (id: any) => {
     router.push(`/user/subscription/view/${id}`);
   };
+
+  React.useEffect(() => {
+    let localData: any;
+    if (typeof window !== "undefined") {
+      localData = window.localStorage.getItem("userData");
+    }
+    if (localData) {
+      getId = JSON.parse(localData);
+    }
+    getAllCourseData(getId);
+  }, []);
 
   const handleSort = (rowsData: any) => {
     const sortData = handleSortData(rowsData);
@@ -116,15 +107,11 @@ const Subscription = () => {
   //     }
   //   };
 
-  const getAllCourseData = () => {
-    HandleSubscriptionGet().then((subs) => {
+  const getAllCourseData = (data: any) => {
+    HandleSubscriptionGetByUserID(data?.id).then((subs) => {
       setRows(subs.data);
     });
   };
-
-  React.useEffect(() => {
-    getAllCourseData();
-  }, []);
 
   return (
     <>
@@ -330,9 +317,9 @@ const Subscription = () => {
                       {rows && rows.length > 0 ? (
                         DATA.currentData() &&
                         DATA.currentData().map((row: any) => {
-                          let color = "active";
+                          let color = row?.status;
                           const statusColor =
-                            color === "active"
+                            color === row?.status
                               ? courseStyle.activeClassColor
                               : color === "inactive"
                               ? courseStyle.inactiveClassColor
@@ -345,6 +332,9 @@ const Subscription = () => {
                               key={row.id}
                             >
                               <TableCell>{row?.id}</TableCell>
+                              <TableCell>
+                                {capitalizeFirstLetter(row?.name)}
+                              </TableCell>
                               <TableCell>${row?.price}</TableCell>
                               <TableCell>
                                 {/* {capitalizeFirstLetter(
@@ -353,8 +343,7 @@ const Subscription = () => {
                                 25 May 2023
                               </TableCell>
                               <TableCell className={statusColor}>
-                                {/* {capitalizeFirstLetter(row?.course?.status)} */}
-                                Active
+                                {capitalizeFirstLetter(row?.status)}
                               </TableCell>
                               <TableCell>
                                 <Button
