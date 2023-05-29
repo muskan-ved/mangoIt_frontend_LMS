@@ -1,5 +1,5 @@
 //SERVER API URL
-export const BASE_URL = `${process.env.NEXT_PUBLIC_LOCAL_BASE_URL}`;
+export const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
 // FRONTEND SERVER URL
 export const FRONTEND_BASE_URL = `${process.env.NEXT_PUBLIC_FRONTEND_BASE_URL}`;
