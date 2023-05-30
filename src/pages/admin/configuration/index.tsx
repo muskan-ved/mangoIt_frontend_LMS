@@ -181,7 +181,7 @@ const SiteConfiguration = () => {
               item.key === "org_favicon" ||
               item.key === "title"
           );
-          console.log(hasOLOrOFOrT, "hasOLOrOFOrT");
+
           if (hasOLOrOFOrT) {
             setIsAddOrEdit(true);
           }

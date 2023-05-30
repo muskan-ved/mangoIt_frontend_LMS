@@ -57,6 +57,5 @@ App.getInitialProps = async (appContext: AppContext): Promise<MyAppProps> => {
 
   // Retrieve the siteConfigData from the SiteConfigPage props
   const { siteConfigData: pageSiteConfigData } = pageProps as any;
-console.log(pageSiteConfigData,"pageSiteConfigData")
   return { ...pageProps, siteConfigData: pageSiteConfigData  };
 };
