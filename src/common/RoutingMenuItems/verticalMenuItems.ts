@@ -51,7 +51,7 @@ export const VerticalMenuItems = () => {
       {
         title: "Courses",
         icon: DescriptionOutlinedIcon,
-        path: "/user/course",
+        path: "/user/course/list",
         disable: false,
       },
       {

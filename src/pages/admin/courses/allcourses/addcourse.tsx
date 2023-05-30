@@ -83,7 +83,7 @@ const AddCourse = () => {
       const courseCreated = await HandleCourseCreate(value)
       setLoading(false);
       setTimeout(() => {
-        router.push('/courses/allcourses/')
+        router.push('/admin/courses/allcourses/')
       }, 1000)
     }
     catch (e) {
@@ -120,7 +120,7 @@ const AddCourse = () => {
             First="Home"
             Middle="Courses"
             Text="COURSES"
-            Link="/courses/allcourses"
+            Link="/admin/courses/allcourses"
           />
 
           {/* main content */}
