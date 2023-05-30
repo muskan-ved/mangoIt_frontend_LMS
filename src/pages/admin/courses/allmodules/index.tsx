@@ -300,7 +300,7 @@ const AllModules = () => {
                               <TableCell>{capitalizeFirstLetter(row.module.course && row.module.course.title)}</TableCell>
                               <TableCell>{(row.sessionCount.sessionCount)}</TableCell>
                               <TableCell >{capitalizeFirstLetter(row.module.status)}</TableCell>
-                              <TableCell><Button onClick={() => router.push(`/courses/allsessions/updatesession/${row.id}`)} variant="outlined" color="success" ><ModeEditOutlineIcon /></Button>
+                              <TableCell><Button onClick={() => router.push(`/admin/courses/allsessions/updatesession/${row.id}`)} variant="outlined" color="success" ><ModeEditOutlineIcon /></Button>
                                 <Button variant="outlined" color="error" onClick={() => handleClickOpen(row)}><DeleteOutlineIcon /></Button>
                               </TableCell>
                             </TableRow>
