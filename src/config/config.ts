@@ -7,7 +7,7 @@ export const FRONTEND_BASE_URL = `${process.env.NEXT_PUBLIC_FRONTEND_BASE_URL}`;
 // // FRONTEND LOCAL URL
 // export const FRONTEND_BASE_URL = `${process.env.NEXT_PUBLIC_LOCAL_FRONTEND_BASE_URL}`;
 
-// // LOCAL API URL
+// // // LOCAL API URL
 // export const BASE_URL = `${process.env.NEXT_PUBLIC_LOCAL_BASE_URL}`;
 
 export const API = {
@@ -21,6 +21,7 @@ export const API = {
   userUpdateById: `${BASE_URL}/${process.env.NEXT_PUBLIC_UPDATE_USER_BY_ID}`,
 
   getCourses: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_COURSES}`,
+  getCoursesByCouseId: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_COURSES_BY_COURSE_ID}`,
   createCourse: `${BASE_URL}/${process.env.NEXT_PUBLIC_CREATE_COURSE}`,
   updateCourse: `${BASE_URL}/${process.env.NEXT_PUBLIC_UPDATE_COURSE}`,
   deleteCourse: `${BASE_URL}/${process.env.NEXT_PUBLIC_DELETE_COURSE}`,

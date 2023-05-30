@@ -106,3 +106,21 @@ export const HandleCourseDelete = async (rowID: any) => {
   })
 }
 
+export const HandleCourseByCourseId = async (subId: any) => {
+  return await axios({
+    method: "GET",
+    url: `${API.getCoursesByCouseId}/${subId}`,
+    headers: LoginHeader(),
+  })
+    .then((request) => {
+      return request;
+    })
+    .catch((error) => {
+      if (error.response.status === 401) {
+        HandleLogout();
+      } else {
+        toast.error("subscription failed");
+      }
+      return error;
+    });
+};

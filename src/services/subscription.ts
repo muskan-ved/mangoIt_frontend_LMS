@@ -78,3 +78,30 @@ export const HandleSubscriptionPayment = async (reqData: any) => {
       else return error;
     });
 };
+
+export const HandleSearchSubsGet = async (searchData: any,data:any) => {
+  const dd={
+    id:data
+  }
+  const API_URL = searchData
+    ? `${API.getSubscription}/${searchData}`
+    : `${API.getSubscription}`;
+  return await axios({
+    method: "POST",
+    url: API_URL,
+    headers: LoginHeader(),
+    data: dd,
+  })
+    .then((request) => {
+      return request;
+    })
+    .catch((error) => {
+      if (error.response.status === 401) {
+        HandleLogout();
+      } else {
+        toast.error("Something went wrong");
+      }
+      return error;
+    });
+};
+

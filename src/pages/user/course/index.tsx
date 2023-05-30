@@ -21,8 +21,8 @@ import {
 } from "@mui/material";
 // CSS Import
 import CloseIcon from "@mui/icons-material/Close";
-import styles from "../../../../styles/sidebar.module.css";
-import courseStyle from "../../../../styles/course.module.css";
+import styles from "../../../styles/sidebar.module.css";
+import courseStyle from "../../../styles/course.module.css";
 import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
 import Footer from "@/common/LayoutNavigations/footer";
 import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
@@ -165,7 +165,7 @@ const AllCourses = () => {
             First="Home"
             Middle="Courses"
             Text="COURSES"
-            Link="/admin/courses/allcourses"
+            Link="/user/courses"
           />
 
           {/* main content */}

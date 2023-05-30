@@ -7,12 +7,16 @@ import {
   Card,
   CardContent,
   FormControl,
+  IconButton,
   MenuItem,
   Pagination,
   Select,
   Stack,
+  TextField,
   Typography,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+
 // CSS Import
 import styles from "../../../styles/sidebar.module.css";
 import courseStyle from "../../../styles/course.module.css";
@@ -28,10 +32,14 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { useRouter } from "next/router";
-import { HandleSubscriptionGetByUserID } from "@/services/subscription";
+import {
+  HandleSubscriptionGetByUserID,
+  HandleSearchSubsGet,
+} from "@/services/subscription";
 import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
 import { usePagination } from "@/common/Pagination/paginations";
 import { handleSortData } from "@/common/Sorting/sorting";
+import { SearchOutlined } from "@mui/icons-material";
 
 interface Column {
   id: "id" | "name" | "amount" | "next_pay" | "status" | "action";
@@ -51,9 +59,11 @@ const columns: Column[] = [
 ];
 
 const Subscription = () => {
-  var getId: any;
+  let getId: any;
   const [rows, setRows] = React.useState<any>([]);
   const [toggle, setToggle] = React.useState<boolean>(false);
+  const [search, setSearch] = React.useState("");
+  const [userId, setUserId] = React.useState<any>("");
 
   const router = useRouter();
   //pagination
@@ -82,6 +92,7 @@ const Subscription = () => {
     if (localData) {
       getId = JSON.parse(localData);
     }
+    setUserId(getId);
     getAllCourseData(getId);
   }, []);
 
@@ -90,22 +101,30 @@ const Subscription = () => {
     setRows(sortData);
     setToggle(!toggle);
   };
-  //   const handleSearch = (e: any, identifier: any) => {
-  //     setPage(1);
-  //     DATA.jump(1);
-  //     if (identifier === "reset") {
-  //       HandleCourseGet("", { type: 0, status: 0 }).then((itemSeached) => {
-  //         setRows(itemSeached.data);
-  //       });
-  //       setSearch(e);
-  //     } else {
-  //       const search = e.target.value;
-  //       setSearch(e.target.value);
-  //       HandleCourseGet(search, filterObject).then((itemSeached) => {
-  //         setRows(itemSeached.data);
-  //       });
-  //     }
-  //   };
+  const handleSearch = (e: any, identifier: any) => {
+    setPage(1);
+    DATA.jump(1);
+    if (identifier === "reset") {
+      HandleSubscriptionGetByUserID(userId?.id).then((subs) => {
+        setRows(subs.data);
+      });
+      setSearch(e);
+    } else {
+      const search = e.target.value;
+      if (search === "") {
+        setSearch("");
+        HandleSubscriptionGetByUserID(userId?.id).then((subs) => {
+          setRows(subs.data);
+        });
+      } else {
+        setSearch(e.target.value);
+        HandleSearchSubsGet(search,userId?.id).then((itemSeached) => {
+          setRows(itemSeached.data);
+        });
+       
+      }
+    }
+  };
 
   const getAllCourseData = (data: any) => {
     HandleSubscriptionGetByUserID(data?.id).then((subs) => {
@@ -131,20 +150,25 @@ const Subscription = () => {
           {/* main content */}
           <Card>
             <CardContent>
-              {/* <TextField
+              <TextField
                 id="standard-search"
                 value={search}
                 variant="outlined"
                 placeholder="Search by course"
-                onChange={(e) => handleSearch(e, '')}
+                onChange={(e: any) => handleSearch(e, "")}
                 InputProps={{
-                  endAdornment: (
-                    !search ? <IconButton>
+                  endAdornment: !search ? (
+                    <IconButton>
                       <SearchOutlined />
-                    </IconButton> : <IconButton onClick={(e) => handleSearch('', 'reset')}> <CloseIcon /></IconButton>
+                    </IconButton>
+                  ) : (
+                    <IconButton onClick={(e) => handleSearch("", "reset")}>
+                      {" "}
+                      <CloseIcon />
+                    </IconButton>
                   ),
                 }}
-              /> */}
+              />
               {/* <Box
                 sx={{ float: "right", display: "flex", alignItems: "center" }}
               >

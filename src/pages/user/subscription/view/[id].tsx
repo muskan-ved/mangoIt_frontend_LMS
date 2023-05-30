@@ -123,7 +123,7 @@ export default function View() {
             First="Home"
             Middle="Subscription"
             Text="VIEW"
-            Link="/subscription"
+            Link="/user/subscription"
           />
 
           {/* main content */}

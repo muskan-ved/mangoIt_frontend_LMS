@@ -154,7 +154,7 @@ export default function Profile() {
             First="Home"
             Middle="Profile"
             Text="USER PROFILE"
-            Link="/profile"
+            Link="/user/profile"
           />
 
           {/* main content */}

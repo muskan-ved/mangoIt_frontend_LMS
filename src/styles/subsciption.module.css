@@ -1,23 +1,64 @@
 .subscription {
-    text-align: center;
+  text-align: center;
 }
-.mainSubsDiv{
-    background-color: #e5e5e5;
+.mainSubsDiv {
+  background-color: #e5e5e5;
 }
-.maindisplay{
-    display: flex;
+.maindisplay {
+  display: flex;
 }
-.fontCSS{
-    padding: 4px;
-    color: #646363;
+.fontCSS {
+  padding: 4px;
+  color: #646363;
 }
 .useNameFront {
-    color: #4e4a4a;
-    font-weight: bold;
+  color: #4e4a4a;
+  font-weight: bold;
 }
-.btncss{
-    text-align: end;
+.btncss {
+  text-align: end;
 }
-.headingcss{
-    font-weight: bold;
+.headingcss {
+  font-weight: bold;
 }
+.fontCSS1 {
+  font-weight: 400;
+  line-height: 1.6;
+  color: #333;
+  font-size: 20px;
+  font-family: Inter, sans-serif !important;
+}
+.useNameFront1 {
+  color: #242222;
+  font-weight: 700;
+  margin-top: 30px;
+  margin-bottom: 15px;
+}
+.shadoww {
+  box-shadow: none !important;
+}
+.moduletextcss {
+  font-size: 18px;
+  color: #232323;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+.maindiv {
+  padding: 70px;
+}
+.iconcss {
+  color: #e8661b;
+  position: relative;
+  top: 5px;
+}
+.btncss {
+  margin-left: 23px;
+  margin-top: 19px;
+  background: #e8661b;
+}
+.useNameFront2 {
+    color: #242222;
+    font-weight: 700;
+    margin-top: 30px;
+    margin-bottom: 15px;
+  }
