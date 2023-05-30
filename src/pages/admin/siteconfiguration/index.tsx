@@ -46,7 +46,6 @@ import {
 import { NextPageContext } from "next";
 import Stripe from "./stripeConfiguration";
 
-
 interface SiteConfigPageProps {
   siteConfigData: any; // Replace with the actual type of your site config data
 }
@@ -123,7 +122,7 @@ const SiteConfiguration = () => {
     }
 
     setLoadingButton(true);
-    await HandleSiteConfigCreate(formData)
+    await HandleSiteConfigCreate(formData, "site saved")
       .then((res) => {
         setLoadingButton(false);
         handleGetDataById(res?.data?.user_id);
@@ -172,12 +171,21 @@ const SiteConfiguration = () => {
   }
 
   const handleGetDataById = async (userId: any) => {
-    setLoading(true);
+    
     await HandleSiteGetByID(userId)
       .then((res) => {
         setLoading(false);
         if (res.data.length > 0) {
-          setIsAddOrEdit(true);
+          const hasOLOrOFOrT = res.data.some(
+            (item: any) =>
+              item.key === "org_logo" ||
+              item.key === "org_favicon" ||
+              item.key === "title"
+          );
+          console.log(hasOLOrOFOrT, "hasOLOrOFOrT");
+          if (hasOLOrOFOrT) {
+            setIsAddOrEdit(true);
+          }
           const result = res.data.reduce((acc: any, { key, value }: any) => {
             acc[key] = value;
             return acc;
@@ -208,6 +216,7 @@ const SiteConfiguration = () => {
       localData = window.localStorage.getItem("userData");
     }
     const user_id = JSON.parse(localData);
+    setLoading(true);
     handleGetDataById(user_id?.id);
   }, []);
 
@@ -224,15 +233,10 @@ const SiteConfiguration = () => {
     }
 
     setLoadingButton(true);
-    await HandleSiteConfigUpdate(formData)
+    await HandleSiteConfigUpdate(formData, "site update")
       .then((res) => {
         setLoadingButton(false);
-        handleGetDataById(res.data.id);
-        const result = res.data.reduce((acc: any, { key, value }: any) => {
-          acc[key] = value;
-          return acc;
-        }, {});
-        setPortalData(result);
+        handleGetDataById(res.data[0]?.user_id);
         setPreviewProfile({
           org_logo: "",
           org_favicon: "",
@@ -679,7 +683,7 @@ const SiteConfiguration = () => {
                 )}
               </TabPanel>
               <TabPanel value={tabs} index={1}>
-                <Stripe/>
+                <Stripe />
               </TabPanel>
             </CardContent>
           </Card>

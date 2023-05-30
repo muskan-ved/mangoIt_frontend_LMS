@@ -12,7 +12,7 @@ export const siteConfigValidations = Yup.object().shape({
 
 export const stripeConfigValidations = Yup.object().shape({
     org_pk:
-        Yup.string().required('Publishable key is required field').matches(/^pk_test_[0-9a-zA-Z]{24}$/, 'Invalid Publishable Key'),
+        Yup.string().required('Publishable key is required field').matches(/^pk_test_[0-9a-zA-Z]{24,}$/, 'Invalid Publishable Key'),
     org_sk:
-        Yup.string().required('Secret key is required field').matches(/^sk_test_[0-9a-zA-Z]{24}$/, 'Invalid Secret API Key')
+        Yup.string().required('Secret key is required field').matches(/^sk_test_[0-9a-zA-Z]{24,}$/, 'Invalid Secret API Key')
 });
