@@ -62,18 +62,18 @@
     right: 16px !important;
     color: white !important;
     position: relative !important;
-    background: #1a73e8 !important;
+  background-color: #E8661B !important;
     padding: 1px !important;
     border-radius: 50% !important;
     top: 44px;
-    font-size: 15px;
+    font-size: 15px !important;
 }
 
 .cameraAltIconLogo {
     right: 25px !important;
     color: white !important;
     position: relative !important;
-    background: #1a73e8 !important;
+  background-color: #E8661B !important;
     padding: 2px !important;
     border-radius: 50% !important;
     top: 35px;

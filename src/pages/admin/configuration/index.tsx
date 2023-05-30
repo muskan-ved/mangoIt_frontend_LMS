@@ -13,7 +13,6 @@ import {
   Card,
   CardContent,
   Grid,
-  IconButton,
   InputLabel,
   Tab,
   Tabs,
@@ -69,7 +68,7 @@ function TabPanel(props: TabPanelProps) {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+          {children}
         </Box>
       )}
     </div>
@@ -261,7 +260,7 @@ const SiteConfiguration = () => {
             First="Home"
             Middle="Configuration"
             Text="CONFIGURATION"
-            Link="/configurations/siteconfiguration/"
+            Link="/admin/configuration/"
           />
 
           {/* main content */}
@@ -273,8 +272,8 @@ const SiteConfiguration = () => {
                   onChange={handleChangeTab}
                   aria-label="basic tabs example"
                 >
-                  <Tab label="Organisation" {...a11yProps(0)} />
-                  <Tab label="Stripe" {...a11yProps(1)} />
+                  <Tab label="Organisation" className={styles.wholeWebsiteButtonColor} {...a11yProps(0)} />
+                  <Tab label="Stripe" className={styles.wholeWebsiteButtonColor} {...a11yProps(1)} />
                 </Tabs>
               </Box>
               <TabPanel value={tabs} index={0}>
@@ -683,7 +682,7 @@ const SiteConfiguration = () => {
                 )}
               </TabPanel>
               <TabPanel value={tabs} index={1}>
-                <Stripe />
+                {/* <Stripe /> */}
               </TabPanel>
             </CardContent>
           </Card>

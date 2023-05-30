@@ -31,10 +31,23 @@ a {
   }
 }
 
-.authPageButton{
+.css-sghohy-MuiButtonBase-root-MuiButton-root{
   background-color: #E8661B !important;
 }
 
+.css-jh47zj-MuiButtonBase-root-MuiButton-root{
+  background-color: #E8661B !important;
+}
+
+.css-1to7aaw-MuiButtonBase-root-MuiPaginationItem-root.Mui-selected{
+  background-color: #E8661B !important;
+}
+
+.css-1aquho2-MuiTabs-indicator{
+  background-color: #E8661B !important;
+
+}
+
 .GlobalTextColor{
-  color : #0E4A67
+  color : #e8661b !important
 }
