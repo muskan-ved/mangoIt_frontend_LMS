@@ -682,7 +682,7 @@ const SiteConfiguration = () => {
                 )}
               </TabPanel>
               <TabPanel value={tabs} index={1}>
-                {/* <Stripe /> */}
+                <Stripe />
               </TabPanel>
             </CardContent>
           </Card>
