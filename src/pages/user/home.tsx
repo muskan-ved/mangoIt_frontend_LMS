@@ -11,7 +11,7 @@ import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
 import SchoolIcon from '@mui/icons-material/School';
 import { HandleCourseGet } from "@/services/course";
-import CourseCard from "@/common/ResuableCardCmp/coursescard";
+import { CourseCard } from "@/common/ResuableCardCmp/coursescard";
 
 export default function HomePage() {
     const [FreeCourses, setFreeCourses] = React.useState([]);

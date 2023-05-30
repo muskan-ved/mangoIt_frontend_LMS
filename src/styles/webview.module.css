@@ -232,6 +232,11 @@
   cursor: pointer;
 }
 
+.listviewarticles {
+  padding-top: 2rem;
+  margin-bottom: 2rem;
+}
+
 .article a::after {
   position: absolute;
   inset-block: 0;

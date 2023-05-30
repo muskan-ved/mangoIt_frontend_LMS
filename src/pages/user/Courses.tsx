@@ -8,13 +8,15 @@ import styles from '../../styles/webview.module.css'
 import GridViewIcon from '@mui/icons-material/GridView';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import { HandleCourseGet } from "@/services/course";
-import CourseCard from "@/common/ResuableCardCmp/coursescard";
+import { CourseCard, CourseCardListView } from "@/common/ResuableCardCmp/coursescard";
 import { usePagination } from "@/common/Pagination/paginations";
 import SpinnerProgress from "@/common/CircularProgressComponent/spinnerComponent";
 
 export default function Courses() {
     const [courseData, setcourseData] = React.useState([]);
     const [courseStatus, setcourseStatus] = React.useState(1);
+    const [gridview, setgridview] = React.useState(true)
+    const [listview, setlistview] = React.useState(false)
     const [loader, setLoadar] = React.useState(true);
     const landingpagecontent = {
         image: 'https://source.unsplash.com/random',
@@ -58,6 +60,16 @@ export default function Courses() {
         setPage(p);
         DATA.jump(p);
     };
+
+    //gridview listview
+    const gridView = () => {
+        setgridview(false)
+        setlistview(true);
+    }
+    const listView = () => {
+        setlistview(true);
+        setgridview(true)
+    }
 
     return (
         <>
@@ -110,10 +122,10 @@ export default function Courses() {
                             </Grid>
                             <Grid item xs={12} md={6} lg={3} className={styles.gridbtn} >
                                 <Stack spacing={1} className={styles.gridicon}>
-                                    <IconButton className={styles.actionview} >
+                                    <IconButton className={styles.actionview} onClick={gridView}>
                                         <GridViewIcon />
                                     </IconButton>
-                                    <IconButton className={styles.actionview}>
+                                    <IconButton className={styles.actionview} onClick={listView}>
                                         <FormatListBulletedIcon />
                                     </IconButton>
                                 </Stack>
@@ -133,11 +145,30 @@ export default function Courses() {
                             {courseData && DATA.currentData() &&
                                 DATA.currentData().map((data: any, key: any) => {
                                     return (
-                                        <CourseCard coursedata={data} />
+                                        <>
+                                            {gridview ? (<CourseCard coursedata={data} />) : ("")}
+
+                                        </>
+
                                     )
                                 })}
                         </Box>
                     )}
+                    <Box className={styles.listviewarticles}>
+                        <Container maxWidth="lg">
+                            {listview ? (<>
+                                {courseData && DATA.currentData() &&
+                                    DATA.currentData().map((data: any, key: any) => {
+                                        return (
+                                            <>
+                                                <CourseCardListView coursedata={data} />
+                                            </>
+                                        )
+                                    })}
+                            </>
+                            ) : ""}
+                        </Container>
+                    </Box>
                     <Grid className={styles.filtersection} pb={6} pt={3}>
                         <Grid spacing={2} className={styles.filtercontainer}>
                             <Grid item xs={12} md={3} lg={3}>
@@ -177,6 +208,7 @@ export default function Courses() {
                 </Container >
             </Box >
             <WebViewFooter />
+
         </>
     );
 }
