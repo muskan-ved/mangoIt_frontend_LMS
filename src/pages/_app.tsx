@@ -9,6 +9,7 @@ import { BASE_URL } from "@/config/config";
 
 import { AppContext } from 'next/app';
 import { NextPageContext } from 'next';
+import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
 
 interface MyAppProps {
   siteConfigData: any; // Replace with the actual type of your site config data
@@ -16,12 +17,8 @@ interface MyAppProps {
 
 export default function App({ Component, pageProps, siteConfigData }: AppProps | any) {
   const router = useRouter();
-  const [siteConfig,setSiteConfig] = useState<any>('')
-// console.log(siteConfigData,"siteConsiteConfigDatafigData")
   useEffect(() => {
     if (typeof window !== "undefined") {
-        const localData:any = window.localStorage.getItem('SiteConfig')
-        setSiteConfig(JSON.parse(localData))
       if (!window.localStorage.getItem("loginToken")){
        if(window.location.pathname !== '/register/' && window.location.pathname !== '/forgotpassword/' && window.location.pathname !== '/resetpassword/') {
         // If token doesn't exist, redirect user to login page
@@ -33,11 +30,13 @@ export default function App({ Component, pageProps, siteConfigData }: AppProps |
     }
   }, []);
 
+  const lastSegment = router.pathname.substring(router.pathname.lastIndexOf("/") + 1);
+
   return (
     <>
      <Head>
          <link rel="icon" href={siteConfigData? BASE_URL+'/'+siteConfigData?.org_favicon : "/favicon.svg"} />
-         <title>{siteConfigData? siteConfigData.title : "MLMS"}</title>
+         <title>{siteConfigData? `${siteConfigData.title} - ${lastSegment ? capitalizeFirstLetter(lastSegment) : ''}` : `MLMS`}</title>
         </Head>
     <GoogleOAuthProvider
       clientId={`${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}`}
@@ -58,6 +57,5 @@ App.getInitialProps = async (appContext: AppContext): Promise<MyAppProps> => {
 
   // Retrieve the siteConfigData from the SiteConfigPage props
   const { siteConfigData: pageSiteConfigData } = pageProps as any;
-console.log(pageSiteConfigData,"pageSiteConfigData")
   return { ...pageProps, siteConfigData: pageSiteConfigData  };
 };
