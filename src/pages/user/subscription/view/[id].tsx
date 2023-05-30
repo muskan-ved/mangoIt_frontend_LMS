@@ -1,5 +1,5 @@
 // React Import
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 // MUI Import
 import {
@@ -7,44 +7,22 @@ import {
   Button,
   Card,
   CardContent,
-  Container,
   FormControl,
-  Grid,
-  IconButton,
-  InputLabel,
   MenuItem,
-  OutlinedInput,
   Pagination,
-  Popover,
   Select,
   Stack,
-  TextField,
   Typography,
 } from "@mui/material";
 
 // Helper Import
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-// Types Import
-import { userType } from "@/types/userType";
 
 // External Components
 import Navbar from "@/common/LayoutNavigations/navbar";
 import SideBar from "@/common/LayoutNavigations/sideBar";
-import SpinnerProgress from "@/common/CircularProgressComponent/spinnerComponent";
-import CircularProgressBar from "@/common/CircularProcess/circularProgressBar";
-import CloseIcon from "@mui/icons-material/Close";
-import courseStyle from "../../../../../styles/course.module.css";
-import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
-import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
-import ArrowDownwardOutlinedIcon from "@mui/icons-material/ArrowDownwardOutlined";
-import ArrowUpwardOutlinedIcon from "@mui/icons-material/ArrowUpwardOutlined";
-import * as React from "react";
+import courseStyle from "../../../../styles/course.module.css";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -55,23 +33,19 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { SearchOutlined } from "@mui/icons-material";
 import { useRouter } from "next/router";
-import {
-  HandleSubscriptionGet,
-  HandleSubscriptionGetByID,
-} from "@/services/subscription";
+import { HandleSubscriptionGetByID } from "@/services/subscription";
+import { HandleOrderGetByUserID } from "@/services/order";
 import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
 import { usePagination } from "@/common/Pagination/paginations";
-import { AlertDialog } from "@/common/DeleteListRow/deleteRow";
-import { handleSortData } from "@/common/Sorting/sorting";
+import moment from "moment";
+import Footer from "@/common/LayoutNavigations/footer";
+import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
 
 // CSS Import
-import profiles from "../../../../../styles/profile.module.css";
-import styles from "../../../../../styles/sidebar.module.css";
-import subs from "../../../../../styles/subsciption.module.css";
+import profiles from "../../../../styles/profile.module.css";
+import styles from "../../../../styles/sidebar.module.css";
+import subs from "../../../../styles/subsciption.module.css";
 
-// API services
-
-import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
 interface Column {
   id: "id" | "amount" | "date" | "transaction_id" | "payment_method";
   label: string;
@@ -89,6 +63,7 @@ const columns: Column[] = [
 ];
 
 export default function View() {
+  var getId: any;
   const [rows, setRows] = React.useState<any>([]);
   const [subsData, setSubsdata] = React.useState<any>([]);
   const [toggle, setToggle] = useState<boolean>(false);
@@ -98,17 +73,20 @@ export default function View() {
     if (typeof window !== "undefined") {
       localData = window.localStorage.getItem("userData");
     }
-    getAllCourseData();
+    if (localData) {
+      getId = JSON.parse(localData);
+    }
+    getAllCourseData(getId?.id);
     getSubsData();
   }, []);
 
   const router = useRouter();
- 
+
   const getSubsData = async () => {
     const id = router?.query?.id;
     if (id) {
       HandleSubscriptionGetByID(id).then((data) => {
-        setSubsdata(data?.data)
+        setSubsdata(data?.data);
       });
     }
   };
@@ -127,8 +105,8 @@ export default function View() {
     DATA.jump(p);
   };
 
-  const getAllCourseData = () => {
-    HandleSubscriptionGet().then((subs) => {
+  const getAllCourseData = (id: any) => {
+    HandleOrderGetByUserID(id).then((subs) => {
       setRows(subs.data);
     });
   };
@@ -143,7 +121,7 @@ export default function View() {
           {/* breadcumbs */}
           <BreadcrumbsHeading
             First="Home"
-            Middle="View"
+            Middle="Subscription"
             Text="VIEW"
             Link="/subscription"
           />
@@ -158,7 +136,16 @@ export default function View() {
                   </Typography>
                   &emsp;
                   <Typography variant="subtitle2" className={subs.fontCSS}>
-                  {subsData && subsData?.id}
+                    {subsData && subsData?.id}
+                  </Typography>
+                </Box>
+                <Box className={subs.maindisplay}>
+                  <Typography variant="subtitle1" className={subs.useNameFront}>
+                    Name :
+                  </Typography>
+                  &emsp;
+                  <Typography variant="subtitle2" className={subs.fontCSS}>
+                  {capitalizeFirstLetter(subsData && subsData?.name)}
                   </Typography>
                 </Box>
                 <Box className={subs.maindisplay}>
@@ -167,7 +154,7 @@ export default function View() {
                   </Typography>
                   &emsp;
                   <Typography variant="subtitle2" className={subs.fontCSS}>
-                    {subsData && subsData?.price}
+                    ${subsData && subsData?.price}
                   </Typography>
                 </Box>
                 <Box className={subs.maindisplay}>
@@ -176,7 +163,7 @@ export default function View() {
                   </Typography>
                   &emsp;
                   <Typography variant="subtitle2" className={subs.fontCSS}>
-                    12 May 2023
+                    {moment(subsData?.start_date).format("DD MMM YYYY")}
                   </Typography>
                 </Box>
                 <Box className={subs.maindisplay}>
@@ -215,18 +202,12 @@ export default function View() {
                             >
                               {toggle ? (
                                 column.label === "ID" ? (
-                                  <Typography>
-                                    ID{" "}
-                                    {/* <ArrowDownwardOutlinedIcon fontSize="small" />{" "} */}
-                                  </Typography>
+                                  <Typography>ID </Typography>
                                 ) : (
                                   column.label
                                 )
                               ) : column.label === "ID" ? (
-                                <Typography>
-                                  ID{" "}
-                                  {/* <ArrowUpwardOutlinedIcon fontSize="small" />{" "} */}
-                                </Typography>
+                                <Typography>ID </Typography>
                               ) : (
                                 column.label
                               )}
@@ -246,15 +227,15 @@ export default function View() {
                                 key={row.id}
                               >
                                 <TableCell>{row?.id}</TableCell>
-                                <TableCell>${row?.price}</TableCell>
+                                <TableCell>${row?.amount}</TableCell>
                                 <TableCell>
-                                  {/* {capitalizeFirstLetter(
-                                  row?.course?.is_chargeable
-                                )} */}
-                                  25 May 2023
+                                  {moment(row?.createdAt).format("DD MMM YYYY")}
                                 </TableCell>
-                                <TableCell>emsfhdh12fhf</TableCell>
-                                <TableCell>Card</TableCell>
+                                <TableCell>{row?.transaction_id}</TableCell>
+                                <TableCell>
+                                  {" "}
+                                  {capitalizeFirstLetter(row?.payment_type)}
+                                </TableCell>
                               </TableRow>
                             );
                           })

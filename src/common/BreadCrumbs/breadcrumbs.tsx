@@ -20,7 +20,7 @@ const BreadcrumbsHeading: FC<breadcrumbsVariableTypes> = (props): any => {
               key="1"
               color="inherit"
               href="admin/dashboard"
-              style={{ color: "#1A70C5", textDecoration: "none" }}
+              style={{ color: "#E8661B", textDecoration: "none" }}
             >
               {props.First}
             </Link>

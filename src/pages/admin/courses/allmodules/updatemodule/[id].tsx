@@ -9,7 +9,6 @@ import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
 import Footer from "@/common/LayoutNavigations/footer";
 import Navbar from "../../../../../common/LayoutNavigations/navbar";
 import RichEditor from "@/common/RichTextEditor/textEditor";
-import Preview from '@/common/previewAttachment';
 // Helper Import
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -47,7 +46,6 @@ export default function UpdateModule() {
   const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [error, setErrors] = useState<string>();
-
   const {
     register,
     handleSubmit,
@@ -55,10 +53,22 @@ export default function UpdateModule() {
     setValue, getValues,
     control,
     formState: { errors }, setError
-  } = useForm<courseType | any>({
+  } = useForm<moduleType | any>({
     resolver: yupResolver(moduleValidations),
   });
   // console.log('getvalue', getValues())
+
+  useEffect(() => {
+    let localData: any;
+    if (typeof window !== "undefined") {
+      localData = window.localStorage.getItem("userData");
+    }
+    if (localData) {
+      getModuleData();
+      getCourseData();
+    }
+  }, [router.query]);
+
   const handleContentChange = (value: string, identifier: string) => {
     if (identifier === 'description') {
       if (value === '<p><br></p>') {
@@ -112,9 +122,11 @@ export default function UpdateModule() {
     // }
   }
 
-  const handleChange = (e: any) => {
-    setModule(e.target.value)
-  };
+  // const handleChange = (e: any) => {
+  //   // setModule({...getModule, [e.target.name]: e.target.value })
+  //   setCourseId(e)
+  //   // console.log('eveee',e)
+  // };
 
   const getModuleData = async () => {
     const id = router.query.id
@@ -153,16 +165,7 @@ export default function UpdateModule() {
     })
   };
 
-  useEffect(() => {
-    let localData: any;
-    if (typeof window !== "undefined") {
-      localData = window.localStorage.getItem("userData");
-    }
-    if (localData) {
-      getModuleData();
-      getCourseData();
-    }
-  }, [router.query]);
+
  
 
   
@@ -173,11 +176,11 @@ export default function UpdateModule() {
       </Typography>
     );
   }
-  console.log("oppsss", getCourses)
-  let idd=getModule && getModule?.course_id;
-  console.log("oppAAAs", idd)
+  // console.log("oppsss", getCourses)
+  // let idd=getModule && getModule?.course_id;
+  console.log("oppAAAs", getCourseId)
  
- if(idd)
+//  if(idd)
   return (
     <>
       <Navbar />
@@ -232,8 +235,7 @@ export default function UpdateModule() {
                           <Controller
                             name="course"
                             control={control}
-                            defaultValue={idd && idd}
-                            
+                            defaultValue={getCourseId}                          
                             render={({ field }) => (
                               <FormControl fullWidth>
                                 <Select {...field} onChange={(e) => setCourseId(e.target.value)} displayEmpty>
@@ -312,5 +314,4 @@ export default function UpdateModule() {
     </>
   );
 };
-
 

@@ -113,7 +113,7 @@ const AddCourse = () => {
             First="Home"
             Middle="Courses"
             Text="COURSES"
-            Link="/courses/allcourses"
+            Link="/admin/courses/allcourses"
           />
 
           {/* main content */}
