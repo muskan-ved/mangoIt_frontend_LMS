@@ -49,13 +49,6 @@ const AddCourse = () => {
   });
 
   const handleContentChange = (value: string, identifier: string) => {
-    // if (identifier === "long_description") {
-    //   setdespcriptionContent(value);
-    //   setValue(identifier, value);
-    // } else if (identifier === "short_description") {
-    //   setShortDespcriptionContent(value);
-    //   setValue(identifier, value);
-    // }
     if (identifier === "long_description") {
 
       if (value === '<p><br></p>') {
@@ -172,7 +165,7 @@ const AddCourse = () => {
                         Type
                       </InputLabel>
                       <Controller
-                        name="type"
+                        name="is_chargeable"
                         control={control}
                         defaultValue={'free'}
                         render={({ field }) => (
@@ -190,8 +183,8 @@ const AddCourse = () => {
                         )}
                       />
 
-                      {errors && errors.type
-                        ? ErrorShowing(errors?.type?.message)
+                      {errors && errors.is_chargeable
+                        ? ErrorShowing(errors?.is_chargeable?.message)
                         : ""}
                     </Grid>
                     <Grid item mb={2}>

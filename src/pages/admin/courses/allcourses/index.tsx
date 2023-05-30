@@ -124,7 +124,7 @@ const AllCourses = () => {
 
   const resetFilterValue = () => {
     setFilter(0)
-    reset({ type: 0, status: 0 });
+    reset({ is_chargeable: 0, status: 0 });
   }
   const handleSort = (rowsData: any) => {
     const sortData = handleSortData(rowsData)
@@ -135,7 +135,7 @@ const AllCourses = () => {
     setPage(1);
     DATA.jump(1);
     if (identifier === 'reset') {
-      HandleCourseGet('', { type: 0, status: 0 }).then((itemSeached) => {
+      HandleCourseGet('', { is_chargeable: 0, status: 0 }).then((itemSeached) => {
         setRows(itemSeached.data);
       })
       setSearch(e)
@@ -241,7 +241,7 @@ const AllCourses = () => {
                                           Type
                                         </InputLabel>
                                         <Controller
-                                          name="type"
+                                          name="is_chargeable"
                                           control={control}
                                           defaultValue={getFilter}
                                           render={({ field }) => (
