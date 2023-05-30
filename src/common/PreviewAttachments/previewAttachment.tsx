@@ -5,7 +5,7 @@ import ImageIcon from '@mui/icons-material/Image';
 import DescriptionIcon from '@mui/icons-material/Description';
 import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
 import { Document, Page, pdfjs } from 'react-pdf';
-import Sessions from "../styles/session.module.css"
+import Sessions from "../../styles/session.module.css"
 import ReactPlayer from 'react-player';
 import { BASE_URL } from '../../config/config'
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;

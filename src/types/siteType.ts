@@ -5,3 +5,9 @@ export type siteType = {
     user_id?: string
   };
 
+  export type stripeType = {
+    org_pk: string,
+    org_sk: string,
+    user_id?: string
+  };
+

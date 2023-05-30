@@ -198,7 +198,7 @@ const AllSession = () => {
             First="Home"
             Middle="Session"
             Text="SESSION"
-            Link="/courses/allsessions"
+            Link="/admin/courses/allsessions"
           />
 
           {/* main content */}
