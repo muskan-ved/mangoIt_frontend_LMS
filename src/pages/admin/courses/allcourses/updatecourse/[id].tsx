@@ -102,7 +102,7 @@ export default function UpdateCourse() {
         getCourseData()
         setLoading(false);
         // setTimeout(() => {
-        //   router.push('/courses/allcourses/')
+        //   router.push('/admin/courses/allcourses/')
         // }, 1000)
       } catch (e) {
         console.log(e)
@@ -181,7 +181,7 @@ export default function UpdateCourse() {
             First="Home"
             Middle="Course"
             Text="COURSE"
-            Link="courses/allcourses/updatecourse"
+            Link="admin/courses/allcourses/updatecourse"
           />
           {/* main content */}
           <Card>

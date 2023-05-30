@@ -44,6 +44,24 @@ export const HandleSubscriptionGetByID = async (subId: any) => {
       return error;
     });
 };
+export const HandleSubscriptionGetByUserID = async (subId: any) => {
+  return await axios({
+    method: "GET",
+    url: `${API.getSubscription}/${subId}`,
+    headers: LoginHeader(),
+  })
+    .then((request) => {
+      return request;
+    })
+    .catch((error) => {
+      if (error.response.status === 401) {
+        HandleLogout();
+      } else {
+        toast.error("subscription failed");
+      }
+      return error;
+    });
+};
 
 export const HandleSubscriptionPayment = async (reqData: any) => {
   return await axios({

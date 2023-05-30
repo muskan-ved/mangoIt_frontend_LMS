@@ -198,7 +198,7 @@ const AllSession = () => {
             First="Home"
             Middle="Session"
             Text="SESSION"
-            Link="/courses/allsessions"
+            Link="/admin/courses/allsessions"
           />
 
           {/* main content */}
@@ -375,7 +375,7 @@ const AllSession = () => {
                   )}
                 </PopupState>
                 &nbsp;
-                <Button variant="contained" onClick={() => router.push('/courses/allsessions/addsession')}>Add Session</Button>
+                <Button variant="contained" onClick={() => router.push('/admin/courses/allsessions/addsession')}>Add Session</Button>
               </Box>
               <Paper className={Sessions.papperForTable}>
                 <TableContainer className={Sessions.tableContainer}>
@@ -416,7 +416,7 @@ const AllSession = () => {
                                 <TableCell>{capitalizeFirstLetter(row.course && row.course.title)}</TableCell>
                                 <TableCell>{capitalizeFirstLetter(row.module && row.module.title)}</TableCell>
                                 <TableCell className={statusColor}>{capitalizeFirstLetter(row.status)}</TableCell>
-                                <TableCell><Button onClick={() => router.push(`/courses/allsessions/updatesession/${row.id}`)} variant="outlined" color="success" className={Sessions.editDeleteButton}><ModeEditOutlineIcon /></Button>
+                                <TableCell><Button onClick={() => router.push(`/admin/courses/allsessions/updatesession/${row.id}`)} variant="outlined" color="success" className={Sessions.editDeleteButton}><ModeEditOutlineIcon /></Button>
                                   <Button className={Sessions.editDeleteButton} variant="outlined" color="error" onClick={() => handleClickOpen(row)}><DeleteOutlineIcon /></Button>
                                 </TableCell>
                               </TableRow>
