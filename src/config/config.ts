@@ -42,6 +42,8 @@ export const API = {
   getSubscription: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_SUBSCRIPTION}`,
   getSubsById: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_SUBSCRIPTION_BY_ID}`,
 
+  getOrder: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_ORDER_BY_USER_ID}`,
+
   //accept payment
   acceptpayment: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_PAYMENT}`,
 };

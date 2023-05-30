@@ -95,7 +95,7 @@ export default function AddSession() {
       );
    }
 
-   console.log("oopps", getCourses)
+   console.log("oopps", errors)
    return (
       <>
          <Navbar />

@@ -20,17 +20,18 @@ import {
   Typography,
 } from "@mui/material";
 // CSS Import
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from "@mui/icons-material/Close";
 import styles from "../../../../styles/sidebar.module.css";
 import courseStyle from "../../../../styles/course.module.css";
 import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
 import Footer from "@/common/LayoutNavigations/footer";
 import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
-import ArrowDownwardOutlinedIcon from '@mui/icons-material/ArrowDownwardOutlined';
-import ArrowUpwardOutlinedIcon from '@mui/icons-material/ArrowUpwardOutlined';
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
+import ArrowDownwardOutlinedIcon from "@mui/icons-material/ArrowDownwardOutlined";
+import ArrowUpwardOutlinedIcon from "@mui/icons-material/ArrowUpwardOutlined";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import * as React from "react";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -46,11 +47,18 @@ import { HandleCourseDelete, HandleCourseGet } from "@/services/course";
 import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
 import { usePagination } from "@/common/Pagination/paginations";
 import { AlertDialog } from "@/common/DeleteListRow/deleteRow";
-import { Controller,useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { handleSortData } from "@/common/Sorting/sorting";
 
 interface Column {
-  id: "id" | "title" | "module" | "session" | "is_chargeable" | "status" | "action";
+  id:
+    | "id"
+    | "title"
+    | "module"
+    | "session"
+    | "is_chargeable"
+    | "status"
+    | "action";
   label: string;
   minWidth?: number;
   align?: "right";
@@ -58,7 +66,7 @@ interface Column {
 }
 
 const columns: Column[] = [
-  { id: "id", label: "ID", },
+  { id: "id", label: "ID" },
   { id: "title", label: "COURSE NAME", minWidth: 170 },
   { id: "module", label: "NO. MODULE", minWidth: 100 },
   { id: "session", label: "NO. SESSION", minWidth: 100 },
@@ -70,14 +78,13 @@ const columns: Column[] = [
 const AllCourses = () => {
   const [rows, setRows] = React.useState<any>([]);
   const [toggle, setToggle] = React.useState<boolean>(false);
-  const [search, setSearch] = React.useState('');
-  const [deleteRow, setDeleteRow] = React.useState<any>([])
+  const [search, setSearch] = React.useState("");
+  const [deleteRow, setDeleteRow] = React.useState<any>([]);
   const [open, setOpen] = React.useState(false);
   const [getFilter, setFilter] = React.useState<number>(0);
-  const [filterObject, setFilterObject] = React.useState<any>('');
-  
+  const [filterObject, setFilterObject] = React.useState<any>("");
 
-  const router = useRouter()
+  const router = useRouter();
   //pagination
   const [row_per_page, set_row_per_page] = React.useState(5);
   let [page, setPage] = React.useState<any>(1);
@@ -92,74 +99,60 @@ const AllCourses = () => {
     DATA.jump(p);
   };
 
-  const {
-    handleSubmit,
-    control,
-    reset,
-  } = useForm();
+  const { handleSubmit, control, reset } = useForm();
 
   const onSubmit = (event: any) => {
-    HandleCourseGet('', event).then((itemFiltered) => {
-      setRows(itemFiltered.data)
-      setFilterObject(event)
-    })
-  }
-  
+    HandleCourseGet("", event).then((itemFiltered) => {
+      setRows(itemFiltered.data);
+      setFilterObject(event);
+    });
+  };
 
   const handleClickOpen = (row: any) => {
-    // console.log('row', row)
-    setDeleteRow(row)
+    router.push(`/user/course/detail/${row}`);
     setOpen(!open);
-
-  }
-  // to delete a row
-  const handleDeletesRow = () => {
-    HandleCourseDelete(deleteRow.id).then((deletedRow) => {
-      HandleCourseGet('', filterObject).then((newRows) => {
-        setRows(newRows.data)
-      })
-    })
-    setOpen(!open);
-  }
-
+  };
+ 
   const resetFilterValue = () => {
-    setFilter(0)
+    setFilter(0);
     reset({ is_chargeable: 0, status: 0 });
-  }
+    HandleCourseGet("", { is_chargeable: 0, status: 0 }).then((itemSeached) => {
+      setRows(itemSeached.data);
+    });
+  };
   const handleSort = (rowsData: any) => {
-    const sortData = handleSortData(rowsData)
-    setRows(sortData)
-    setToggle(!toggle)
-  }
+    const sortData = handleSortData(rowsData);
+    setRows(sortData);
+    setToggle(!toggle);
+  };
+
   const handleSearch = (e: any, identifier: any) => {
     setPage(1);
     DATA.jump(1);
-    if (identifier === 'reset') {
-      HandleCourseGet('', { is_chargeable: 0, status: 0 }).then((itemSeached) => {
+    if (identifier === "reset") {
+      HandleCourseGet("", { is_chargeable: 0, status: 0 }).then((itemSeached) => {
         setRows(itemSeached.data);
-      })
-      setSearch(e)
+      });
+      setSearch(e);
     } else {
       const search = e.target.value;
-      setSearch(e.target.value)
+      setSearch(e.target.value);
       HandleCourseGet(search, filterObject).then((itemSeached) => {
         setRows(itemSeached.data);
-      })
+      });
     }
-  }
+  };
 
   const getAllCourseData = () => {
-    HandleCourseGet('', filterObject).then((courses) => {
-      console.log(courses,"45")
-      setRows(courses.data)
-    })
-  }
+    HandleCourseGet("", filterObject).then((courses) => {
+      setRows(courses.data);
+    });
+  };
 
   React.useEffect(() => {
     getAllCourseData();
-  }, [])
+  }, []);
 
-  // console.log('rowww', rows)
   return (
     <>
       <Navbar />
@@ -183,19 +176,24 @@ const AllCourses = () => {
                 value={search}
                 variant="outlined"
                 placeholder="Search by course"
-                onChange={(e) => handleSearch(e, '')}
+                onChange={(e) => handleSearch(e, "")}
                 InputProps={{
-                  endAdornment: (
-                    !search ? <IconButton>
+                  endAdornment: !search ? (
+                    <IconButton>
                       <SearchOutlined />
-                    </IconButton> : <IconButton onClick={(e) => handleSearch('', 'reset')}> <CloseIcon /></IconButton>
+                    </IconButton>
+                  ) : (
+                    <IconButton onClick={(e) => handleSearch("", "reset")}>
+                      {" "}
+                      <CloseIcon />
+                    </IconButton>
                   ),
                 }}
               />
               <Box
                 sx={{ float: "right", display: "flex", alignItems: "center" }}
               >
-                <PopupState variant="popover" popupId="demo-popup-popover" >
+                <PopupState variant="popover" popupId="demo-popup-popover">
                   {(popupState) => (
                     <Box>
                       <Button
@@ -207,7 +205,7 @@ const AllCourses = () => {
                       </Button>
                       <Popover
                         {...bindPopover(popupState)}
-                        style={{ width: '35% !important' }}
+                        style={{ width: "35% !important" }}
                         anchorOrigin={{
                           vertical: "bottom",
                           horizontal: "left",
@@ -223,35 +221,45 @@ const AllCourses = () => {
                             style={{ padding: "15px" }}
                           >
                             <Grid>
-                              <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+                              <Typography
+                                variant="h5"
+                                sx={{ fontWeight: "bold" }}
+                              >
                                 Filter
                               </Typography>
-                              <Box component="form"
+                              <Box
+                                component="form"
                                 noValidate
                                 onSubmit={handleSubmit(onSubmit)}
-                                sx={{ mt: 1 }}>
+                                sx={{ mt: 1 }}
+                              >
                                 <Stack
                                   style={{ marginTop: "10px" }}
                                   className="form-filter"
                                 >
                                   <Grid container spacing={2}>
-                                    <Grid item xs={12} md={6} lg={6} >
-                                    <Stack spacing={2}>
-                                        <InputLabel htmlFor="enddate" sx={{ fontWeight: 'bold' }}>
+                                    <Grid item xs={12} md={6} lg={6}>
+                                      <Stack spacing={2}>
+                                        <InputLabel
+                                          htmlFor="enddate"
+                                          sx={{ fontWeight: "bold" }}
+                                        >
                                           Type
                                         </InputLabel>
                                         <Controller
-                                          name="is_chargeable"
+                                          name="type"
                                           control={control}
                                           defaultValue={getFilter}
                                           render={({ field }) => (
                                             <FormControl fullWidth>
                                               <Select {...field} displayEmpty>
-                                                <MenuItem value={0}>All</MenuItem>
-                                                <MenuItem value={'free'}>
+                                                <MenuItem value={0}>
+                                                  All
+                                                </MenuItem>
+                                                <MenuItem value={"free"}>
                                                   Free
                                                 </MenuItem>
-                                                <MenuItem value={'paid'}>
+                                                <MenuItem value={"paid"}>
                                                   Paid
                                                 </MenuItem>
                                               </Select>
@@ -262,7 +270,10 @@ const AllCourses = () => {
                                     </Grid>
                                     <Grid item xs={12} md={6} lg={6}>
                                       <Stack spacing={2}>
-                                        <InputLabel htmlFor="enddate" sx={{ fontWeight: 'bold' }}>
+                                        <InputLabel
+                                          htmlFor="enddate"
+                                          sx={{ fontWeight: "bold" }}
+                                        >
                                           Status
                                         </InputLabel>
                                         <Controller
@@ -272,11 +283,13 @@ const AllCourses = () => {
                                           render={({ field }) => (
                                             <FormControl fullWidth>
                                               <Select {...field} displayEmpty>
-                                                <MenuItem value={0}>All</MenuItem>
-                                                <MenuItem value={'active'}>
+                                                <MenuItem value={0}>
+                                                  All
+                                                </MenuItem>
+                                                <MenuItem value={"active"}>
                                                   Active
                                                 </MenuItem>
-                                                <MenuItem value={'inactive'}>
+                                                <MenuItem value={"inactive"}>
                                                   In-active
                                                 </MenuItem>
                                               </Select>
@@ -286,27 +299,28 @@ const AllCourses = () => {
                                       </Stack>
                                     </Grid>
 
-                                    <Grid
-                                      item
-                                      xs={12}
-                                      lg={12}
-                                    >
-                                  <Box >
-                                        <Button className={courseStyle.boxInFilter}
-                                          size="medium"
-                                          variant="contained"
-                                          color="primary"
-                                          type="button"
-                                          onClick={resetFilterValue}
-                                        >
-                                          Reset
-                                        </Button>
+                                    <Grid item xs={12} lg={12}>
+                                      <Box>
+                                        <div onClick={popupState.close} className={courseStyle.divcss}>
+                                          <Button
+                                            className={courseStyle.boxInFilter}
+                                            size="medium"
+                                            variant="contained"
+                                            color="primary"
+                                            type="button"
+                                            onClick={resetFilterValue}
+                                          >
+                                            Reset
+                                          </Button>
+                                        </div>
                                         <Button
                                           size="medium"
                                           type="submit"
                                           variant="contained"
                                           color="primary"
-                                          className={courseStyle.applyButtonInFiltter}
+                                          className={
+                                            courseStyle.applyButtonInFiltter
+                                          }
                                           onClick={popupState.close}
                                         >
                                           Apply
@@ -324,9 +338,8 @@ const AllCourses = () => {
                   )}
                 </PopupState>
                 &nbsp;
-                <Button variant="contained" onClick={() => router.push('/admin/courses/allcourses/addcourse')}>Add New Course</Button>
               </Box>
-              <Paper >
+              <Paper>
                 <TableContainer className={courseStyle.tableContainer}>
                   <Table stickyHeader aria-label="sticky table">
                     <TableHead>
@@ -337,41 +350,93 @@ const AllCourses = () => {
                             align={column.align}
                             style={{ top: 0, minWidth: column.minWidth }}
                             onClick={() => {
-                              column.label === 'ID' ?
-                                handleSort(rows) :
-                                ''
+                              column.label === "ID" ? handleSort(rows) : "";
                             }}
                           >
-                            {toggle ? column.label === 'ID' ? <Typography>ID <ArrowDownwardOutlinedIcon fontSize="small" /> </Typography> : column.label : column.label === 'ID' ? <Typography>ID <ArrowUpwardOutlinedIcon fontSize="small" /> </Typography> : column.label}
+                            {toggle ? (
+                              column.label === "ID" ? (
+                                <Typography>
+                                  ID{" "}
+                                  <ArrowDownwardOutlinedIcon fontSize="small" />{" "}
+                                </Typography>
+                              ) : (
+                                column.label
+                              )
+                            ) : column.label === "ID" ? (
+                              <Typography>
+                                ID <ArrowUpwardOutlinedIcon fontSize="small" />{" "}
+                              </Typography>
+                            ) : (
+                              column.label
+                            )}
                           </TableCell>
                         ))}
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {console.log(rows,rows?.length,DATA)}
-                      {rows && rows.length > 0 ? DATA.currentData() &&
-                        DATA.currentData()
-                          .map((row: any) => {
-                            const statusColor = (row.course.status === "active" ? courseStyle.activeClassColor : row.course.status === "inactive" ? courseStyle.inactiveClassColor : courseStyle.draftClassColor)
-                            return (
-                              <TableRow
-                                hover
-                                role="checkbox"
-                                tabIndex={-1}
-                                key={row.id}
-                              >
-                                <TableCell>{row.course.id}</TableCell>
-                                <TableCell>{capitalizeFirstLetter(row?.course?.title)}</TableCell>
-                                <TableCell>{row?.moduleCount?.length !== 0 ? row?.moduleCount[0]?.moduleCount : 0}</TableCell>
-                                <TableCell>{row?.sessionCount?.length !== 0 ? row?.sessionCount[0]?.sessionCount : 0}</TableCell>
-                                <TableCell>{capitalizeFirstLetter(row?.course?.is_chargeable.toString())}</TableCell>
-                                <TableCell className={statusColor}>{capitalizeFirstLetter(row?.course?.status)}</TableCell>
-                                <TableCell><Button onClick={() => router.push(`/admin/courses/allcourses/updatecourse/${row.course.id}`)} variant="outlined" color="success" className={courseStyle.editDeleteButton}  ><ModeEditOutlineIcon /></Button>
-                                  <Button className={courseStyle.editDeleteButton} variant="outlined" color="error" onClick={() => handleClickOpen(row?.course)}><DeleteOutlineIcon /></Button>
-                                </TableCell>
-                              </TableRow>
-                            );
-                          }) : <TableRow><TableCell colSpan={7} sx={{fontWeight:600,textAlign:'center'}}> Record not Found </TableCell></TableRow>}
+                      {rows && rows.length > 0 ? (
+                        DATA.currentData() &&
+                        DATA.currentData().map((row: any) => {
+                          const statusColor =
+                            row.course.status === "active"
+                              ? courseStyle.activeClassColor
+                              : row.course.status === "inactive"
+                              ? courseStyle.inactiveClassColor
+                              : courseStyle.draftClassColor;
+                          return (
+                            <TableRow
+                              hover
+                              role="checkbox"
+                              tabIndex={-1}
+                              key={row.id}
+                            >
+                              <TableCell>{row.course.id}</TableCell>
+                              <TableCell>
+                                {capitalizeFirstLetter(row?.course?.title)}
+                              </TableCell>
+                              <TableCell>
+                                {row?.moduleCount?.length !== 0
+                                  ? row?.moduleCount[0]?.moduleCount
+                                  : 0}
+                              </TableCell>
+                              <TableCell>
+                                {row?.sessionCount?.length !== 0
+                                  ? row?.sessionCount[0]?.sessionCount
+                                  : 0}
+                              </TableCell>
+                              <TableCell>
+                                {capitalizeFirstLetter(
+                                  row?.course?.is_chargeable
+                                )}
+                              </TableCell>
+                              <TableCell className={statusColor}>
+                                {capitalizeFirstLetter(row?.course?.status)}
+                              </TableCell>
+                              <TableCell>
+                                <Button
+                                  className={courseStyle.editDeleteButton}
+                                  //   href="/user/subscription/view"
+                                  variant="outlined"
+                                  color="primary"
+                                  onClick={() => handleClickOpen(row?.course?.id)}
+                                >
+                                  <VisibilityIcon />
+                                </Button>
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })
+                      ) : (
+                        <TableRow>
+                          <TableCell
+                            colSpan={7}
+                            sx={{ fontWeight: 600, textAlign: "center" }}
+                          >
+                            {" "}
+                            Record not Found{" "}
+                          </TableCell>
+                        </TableRow>
+                      )}
                     </TableBody>
                   </Table>
                   <Stack
@@ -394,7 +459,7 @@ const AllCourses = () => {
                         defaultValue={5}
                         onChange={handlerowchange}
                         size="small"
-                        style={{ height: "40px", marginRight: '11px' }}
+                        style={{ height: "40px", marginRight: "11px" }}
                       >
                         <MenuItem value={5}>5</MenuItem>
                         <MenuItem value={20}>20</MenuItem>
@@ -404,13 +469,6 @@ const AllCourses = () => {
                   </Stack>
                 </TableContainer>
               </Paper>
-              <AlertDialog
-                open={open}
-                onClose={handleClickOpen}
-                onSubmit={handleDeletesRow}
-                title={deleteRow.title}
-                whatYouDelete='Session'
-              />
             </CardContent>
           </Card>
         </Box>

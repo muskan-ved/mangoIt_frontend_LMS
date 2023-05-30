@@ -51,7 +51,7 @@ export const VerticalMenuItems = () => {
       {
         title: "Courses",
         icon: DescriptionOutlinedIcon,
-        path: "/user/course",
+        path: "/user/course/list",
         disable: false,
       },
       {
@@ -115,9 +115,9 @@ export const VerticalMenuItems = () => {
 
           },
           {
-            title: "Site Config",
+            title: "Configurations",
             icon: LanguageOutlinedIcon,
-            path: "/admin/siteconfiguration",
+            path: "/admin/configuration",
         disable: false,
 
           },
