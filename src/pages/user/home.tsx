@@ -10,8 +10,31 @@ import LockIcon from '@mui/icons-material/Lock';
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
 import SchoolIcon from '@mui/icons-material/School';
+import { HandleCourseGet } from "@/services/course";
+import CourseCard from "@/common/ResuableCardCmp/coursescard";
 
 export default function HomePage() {
+    const [FreeCourses, setFreeCourses] = React.useState([]);
+    const [PaidCourses, setPaidCourses] = React.useState([]);
+
+    React.useEffect(() => {
+        getAllCourseData();
+    }, [])
+
+    //get courses
+    const getAllCourseData = () => {
+        HandleCourseGet('', "").then((courses) => {
+            setFreeCourses(courses?.data?.filter((a: any) =>
+                a?.course?.is_chargeable === "free"
+            ))
+            setPaidCourses(courses?.data?.filter((a: any) =>
+                a?.course?.is_chargeable === "paid"
+            ))
+        })
+    }
+
+    console.log(PaidCourses)
+
     var items = [
         {
             name: "Random Name #1",
@@ -160,56 +183,9 @@ export default function HomePage() {
                         <Divider className={styles.divder} />
                     </Box>
                     <Box className={styles.articles}>
-                        <Box className={styles.article}>
-                            <Box className={styles.articlewrapper}>
-                                <Box className={styles.figure}>
-                                    <img src="https://picsum.photos/id/1011/800/450" alt="" />
-                                </Box>
-                                <Box className={styles.articlebody}>
-                                    <Typography className={styles.h2}>HTML Course</Typography>
-                                    <Typography className={styles.h5}>Type : Free</Typography>
-                                </Box>
-                            </Box>
-                        </Box>
-                        <Box className={styles.article}>
-                            <Box className={styles.article}>
-                                <Box className={styles.articlewrapper}>
-                                    <Box className={styles.figure}>
-                                        <img src="https://picsum.photos/id/1011/800/450" alt="" />
-                                    </Box>
-                                    <Box className={styles.articlebody}>
-                                        <Typography className={styles.h2}>HTML Course</Typography>
-                                        <Typography className={styles.h5}>Type : Free</Typography>
-                                    </Box>
-                                </Box>
-                            </Box>
-                        </Box>
-                        <Box className={styles.article}>
-                            <Box className={styles.article}>
-                                <Box className={styles.articlewrapper}>
-                                    <Box className={styles.figure}>
-                                        <img src="https://picsum.photos/id/1011/800/450" alt="" />
-                                    </Box>
-                                    <Box className={styles.articlebody}>
-                                        <Typography className={styles.h2}>HTML Course</Typography>
-                                        <Typography className={styles.h5}>Type : Free</Typography>
-                                    </Box>
-                                </Box>
-                            </Box>
-                        </Box>
-                        <Box className={styles.article}>
-                            <Box className={styles.article}>
-                                <Box className={styles.articlewrapper}>
-                                    <Box className={styles.figure}>
-                                        <img src="https://picsum.photos/id/1011/800/450" alt="" />
-                                    </Box>
-                                    <Box className={styles.articlebody}>
-                                        <Typography className={styles.h2}>HTML Course</Typography>
-                                        <Typography className={styles.h5}>Type : Free</Typography>
-                                    </Box>
-                                </Box>
-                            </Box>
-                        </Box>
+                        {PaidCourses?.slice(0, 4).map((data, key) => {
+                            return (<CourseCard paidcourses={data} />)
+                        })}
                     </Box>
                 </Container>
             </Box>
@@ -223,56 +199,11 @@ export default function HomePage() {
                         <Divider className={styles.divder} />
                     </Box>
                     <Box className={styles.articles}>
-                        <Box className={styles.article}>
-                            <Box className={styles.articlewrapper}>
-                                <Box className={styles.figure}>
-                                    <img src="https://picsum.photos/id/1011/800/450" alt="" />
-                                </Box>
-                                <Box className={styles.articlebody}>
-                                    <Typography className={styles.h2}>HTML Course</Typography>
-                                    <Typography className={styles.h5}>Type : Free</Typography>
-                                </Box>
-                            </Box>
-                        </Box>
-                        <Box className={styles.article}>
-                            <Box className={styles.article}>
-                                <Box className={styles.articlewrapper}>
-                                    <Box className={styles.figure}>
-                                        <img src="https://picsum.photos/id/1011/800/450" alt="" />
-                                    </Box>
-                                    <Box className={styles.articlebody}>
-                                        <Typography className={styles.h2}>HTML Course</Typography>
-                                        <Typography className={styles.h5}>Type : Free</Typography>
-                                    </Box>
-                                </Box>
-                            </Box>
-                        </Box>
-                        <Box className={styles.article}>
-                            <Box className={styles.article}>
-                                <Box className={styles.articlewrapper}>
-                                    <Box className={styles.figure}>
-                                        <img src="https://picsum.photos/id/1011/800/450" alt="" />
-                                    </Box>
-                                    <Box className={styles.articlebody}>
-                                        <Typography className={styles.h2}>HTML Course</Typography>
-                                        <Typography className={styles.h5}>Type : Free</Typography>
-                                    </Box>
-                                </Box>
-                            </Box>
-                        </Box>
-                        <Box className={styles.article}>
-                            <Box className={styles.article}>
-                                <Box className={styles.articlewrapper}>
-                                    <Box className={styles.figure}>
-                                        <img src="https://picsum.photos/id/1011/800/450" alt="" />
-                                    </Box>
-                                    <Box className={styles.articlebody}>
-                                        <Typography className={styles.h2}>HTML Course</Typography>
-                                        <Typography className={styles.h5}>Type : Free</Typography>
-                                    </Box>
-                                </Box>
-                            </Box>
-                        </Box>
+                        {FreeCourses?.slice(0, 4).map((data, key) => {
+                            return (
+                                <CourseCard freecourses={data} />
+                            )
+                        })}
                     </Box>
                 </Container>
             </Box>

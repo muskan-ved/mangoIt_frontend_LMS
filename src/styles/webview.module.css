@@ -1,6 +1,6 @@
 /*landing page css*/
 .landingpagecarousel {
-  background-color: rgb(229, 241, 241);
+  background-color: #e8eaed8a;
   padding-top: 2rem;
   margin-bottom: 2rem;
 }
@@ -28,7 +28,7 @@
   font-weight: 800;
   font-size: 40px;
   line-height: 55px;
-  color: rgb(236, 113, 41);
+  color: #e8661b;
 }
 .infotext {
   margin-top: 1.5rem;
@@ -102,7 +102,7 @@
   text-align: center;
   font-size: 30px;
   font-weight: 900;
-  color: rgb(236, 113, 41);
+  color: #e8661b;
 }
 /* how it works page icons cards*/
 .iconarticles {
@@ -127,7 +127,7 @@
 .iconarticle1 {
   position: relative;
   border-radius: 150px;
-  background: #007fff1a;
+  background: #e8eaed;
   transform-origin: center;
   transition: all 0.4s ease-in-out;
   width: 150px;
@@ -194,14 +194,14 @@
   text-align: center;
   font-size: 30px;
   font-weight: 900;
-  color: rgb(236, 113, 41);
+  color: #e8661b;
 }
 
 .enrolled .h6 {
   text-align: center;
   font-size: 30px;
   font-weight: 900;
-  color: rgb(236, 113, 41);
+  color: #e8661b;
 }
 
 .articles {
@@ -303,8 +303,86 @@
     rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
 }
 
-@media screen and (max-width: 360px) {
- 
+/*courses page design*/
+.coursebanner {
+  height: 250px;
+}
+
+.courses {
+  padding-top: 30px;
+}
+
+.filtersection {
+  padding-left: 1.7rem;
+  padding-right: 1.7rem;
+}
+
+.filterinput {
+  background-color: aliceblue;
+  width: 300px;
+  height: 45px;
+}
+
+.filtercontainer {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.coursesheaderbox {
+  width: 100%;
+  justify-content: left;
+  display: grid;
+  padding-left: 1.7rem;
+  padding-top: 30px;
+}
+
+.coursesheaderbox .divder {
+  background: #000;
+  width: 70%;
+  margin: 0px 5px;
+}
+
+.coursesheaderbox .h6 {
+  text-align: center;
+  font-size: 25px;
+  font-weight: 600;
+  color: #e8661b;
+}
+
+.gridicon {
+  display: inline;
+}
+
+.actionview {
+  background-color: aliceblue;
+  border-radius: inherit;
+  margin-right: 20px;
+  border: 1px solid rgb(204, 204, 204);
+  margin-top: 0px !important;
+  border-radius: 5px;
+}
+
+.paignation {
+  width: 60px;
+  height: 36px;
+  margin-right: 15px;
+  margin-top: -5px;
+  background-color: aliceblue;
+}
+
+@media screen and (max-width: 460px) {
+  .gridbtn {
+    margin-top: 20px;
+  }
+  .filterinput {
+    background-color: aliceblue;
+    width: 275px;
+    height: 40px;
+  }
+  .perpagedt {
+    padding-top: "20px";
+  }
 }
 
 @media screen and (max-width: 768px) {
