@@ -48,7 +48,7 @@
 }
 .popStateFilterButton{
     display: inline-flex;
-    color: #1976d2;
+    color: #E8661B;
 }
 .editDeleteButton{
     padding: 5px 9px !important;
@@ -90,7 +90,7 @@ width: 70% !important;
     color: green !important;
 }
 .inactiveClassColor{
-    color:red !important;
+    color:#d32f2f !important;
 }
 .draftClassColor{
     color: orange !important;

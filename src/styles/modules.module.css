@@ -20,7 +20,10 @@
     /* float: left; */
     
 }
-
+.stackStyle{
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
 .sessionNameGride{
     display: flex; 
     margin-bottom: 16px ;
@@ -90,8 +93,16 @@ width: 70% !important;
     color: green !important;
 }
 .inactiveClassColor{
-    color:red !important;
+    color:#d32f2f !important;
 }
 .draftClassColor{
     color: orange !important;
+}
+/*---------   update module css  */
+.courseNameGride{
+    display: flex; 
+    margin-bottom: 16px ;
+}
+.updateLoadingButton {
+    width: 178px;
 }

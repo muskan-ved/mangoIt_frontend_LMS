@@ -199,7 +199,7 @@ const AllCourses = () => {
                   {(popupState) => (
                     <Box>
                       <Button
-                        sx={{ display: "inline-flex", color: "#1976d2" }}
+                        sx={{ display: "inline-flex", color: "#E8661B" }}
                         {...bindTrigger(popupState)}
                       >
                         <FilterAltOutlinedIcon />

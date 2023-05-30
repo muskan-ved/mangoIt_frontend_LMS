@@ -30,6 +30,7 @@ import {
   Typography,
 } from "@mui/material";
 import styles from "../../../../styles/sidebar.module.css";
+import ModulCss from "../../../../styles/modules.module.css";
 import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
 import { SearchOutlined } from "@mui/icons-material";
 import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
@@ -41,6 +42,7 @@ import ArrowUpwardOutlinedIcon from '@mui/icons-material/ArrowUpwardOutlined';
 import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
 import { HandleModuleGet } from "@/services/module";
 import { handleSortData } from "@/common/Sorting/sorting";
+import { usePagination } from "@/common/Pagination/paginations";
 
 interface Column {
   id: "id" | "title" | "course_id" | "module_id" | "is_deleted" | "action";
@@ -61,22 +63,37 @@ const columns: Column[] = [
 
 const AllModules = () => {
   const [rows, setRows] = React.useState<any>([]);
-  const [page, setPage] = React.useState(0);
   const [toggle, setToggle] = React.useState<boolean>(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const router = useRouter()
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
+   //pagination
+   const [row_per_page, set_row_per_page] = React.useState(5);
+   let [page, setPage] = React.useState<any>(1);
+   function handlerowchange(e: any) {
+     set_row_per_page(e.target.value);
+   }
+   const PER_PAGE = row_per_page;
+   const count = Math.ceil(rows?.length / PER_PAGE);
+   const DATA = usePagination(rows, PER_PAGE);
+   const handlePageChange = (e: any, p: any) => {
+     setPage(p);
+     DATA.jump(p);
+   };
+  // const handleChangePage = (event: unknown, newPage: number) => {
+  //   setPage(newPage);
+  // };
 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
-  const handleClickOpen = (data: any) => {
+  // const handleChangeRowsPerPage = (
+  //   event: React.ChangeEvent<HTMLInputElement>
+  // ) => {
+  //   setRowsPerPage(+event.target.value);
+  //   setPage(0);
+  // };
+  const handleClickOpen = (row: any) => {
+    // console.log('row', row)
+    // setDeleteRow(row)
+    // setOpen(!open);
 
   }
   const handleSort = (rowsData: any) => {
@@ -135,7 +152,7 @@ const AllModules = () => {
 
                     <Box>
                       <Button
-                        sx={{ display: "inline-flex", color: "#1976d2" }}
+                        sx={{ display: "inline-flex", color: "#E8661B" }}
                         {...bindTrigger(popupState)}
                       >
                         <FilterAltOutlinedIcon />
@@ -284,44 +301,61 @@ const AllModules = () => {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {rows?.length > 0 ? rows
-                        .slice(
-                          page * rowsPerPage,
-                          page * rowsPerPage + rowsPerPage
-                        )
-                        .map((row: any) => {
-                          // const statusColor = (row.status === "active" ? Sessions.activeClassColor : row.status === "inactive" ? Sessions.inactiveClassColor : Sessions.draftClassColor)
-                          return (
-                            <TableRow
-                              hover
-                              role="checkbox"
-                              tabIndex={-1}
-                              key={row.id}
-                            >
+                    {rows && rows.length > 0 ? DATA.currentData() &&
+                        DATA.currentData()
+                          .map((row: any) => {
+                            const statusColor = (row.module.status === "active" ? ModulCss.activeClassColor : row.module.status === "inactive" ? ModulCss.inactiveClassColor : ModulCss.draftClassColor)
+
+                            return (
+                              <TableRow
+                                hover
+                                role="checkbox"
+                                tabIndex={-1}
+                                key={row.id}
+                              >
                               <TableCell>{row.module.id}</TableCell>
                               <TableCell>{capitalizeFirstLetter(row.module.title)}</TableCell>
                               <TableCell>{capitalizeFirstLetter(row.module.course && row.module.course.title)}</TableCell>
                               <TableCell>{(row.sessionCount.sessionCount)}</TableCell>
-                              <TableCell >{capitalizeFirstLetter(row.module.status)}</TableCell>
-                              <TableCell><Button onClick={() => router.push(`/admin/courses/allmodules/updatemodule/${row.module.id}`)} variant="outlined" color="success" ><ModeEditOutlineIcon /></Button>
-                                <Button variant="outlined" color="error" onClick={() => handleClickOpen(row)}><DeleteOutlineIcon /></Button>
+                              <TableCell className={statusColor}>{capitalizeFirstLetter(row.module.status)}</TableCell>
+                              <TableCell><Button onClick={() => router.push(`/admin/courses/allmodules/updatemodule/${row.module.id}`)} variant="outlined" color="success" className={ModulCss.editDeleteButton} ><ModeEditOutlineIcon /></Button>
+                                <Button className={ModulCss.editDeleteButton}  variant="outlined" color="error" onClick={() => handleClickOpen(row)}><DeleteOutlineIcon /></Button>
                               </TableCell>
                             </TableRow>
                           );
                         }) : <TableRow><TableCell colSpan={6} > <Typography>Record not Found</Typography> </TableCell></TableRow>}
                     </TableBody>
                   </Table>
+                  <Stack
+                    className={ModulCss.stackStyle}
+                    direction="row"
+                    alignItems="right"
+                    justifyContent="space-between"
+                  >
+                    <Pagination
+                      className="pagination"
+                      count={count}
+                      page={page}
+                      color="primary"
+                      onChange={handlePageChange}
+                    />
+                    <FormControl>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        defaultValue={5}
+                        onChange={handlerowchange}
+                        size="small"
+                        style={{ height: "40px", marginRight: '11px' }}
+                      >
+                        <MenuItem value={5}>5</MenuItem>
+                        <MenuItem value={20}>20</MenuItem>
+                        <MenuItem value={50}>50</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Stack>
                 </TableContainer>
               </Paper>
-              <TablePagination
-                rowsPerPageOptions={[5, 10, 25, 100]}
-                component="div"
-                count={rows.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-              />
             </CardContent>
           </Card>
         </Box>

@@ -23,8 +23,7 @@ import { courseType } from '@/types/courseType';
 import { moduleType } from '@/types/moduleType';
 // CSS Import
 import styles from "../../../../../styles/sidebar.module.css";
-import Sessions from "../../../../styles/session.module.css";
-import courseStyle from "../../../../../styles/course.module.css";
+import ModuleCss from "../../../../../styles/modules.module.css";
 import { ToastContainer } from 'react-toastify';
 // API services
 import { HandleCourseGet, HandleCourseGetByID, HandleCourseUpdate } from '@/services/course';
@@ -42,7 +41,6 @@ export default function UpdateModule() {
   const [getModule, setModule] = useState<moduleType | any>();
   const [getCourses, setCourses] = useState<courseType | any>();
   const [getCourseId, setCourseId] = useState<any>("");
-
   const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [error, setErrors] = useState<string>();
@@ -84,19 +82,7 @@ export default function UpdateModule() {
 
   const onSubmit = async (event: any) => {
     const id = router.query.id
-    // const reqData = { ...event }
     if (errors.description?.message === '' || (typeof errors === 'object' && errors !== null)) {
-      // const reqData: any = {
-      //   description: event.description,
-      //   title: event.title,
-
-      // }
-
-      // const formData = new FormData()
-      // for (var key in reqData) {
-      //   formData.append(key, reqData[key]);
-      // }
-
       setLoading(true);
       setLoadingButton(false)
       try {
@@ -122,12 +108,6 @@ export default function UpdateModule() {
     // }
   }
 
-  // const handleChange = (e: any) => {
-  //   // setModule({...getModule, [e.target.name]: e.target.value })
-  //   setCourseId(e)
-  //   // console.log('eveee',e)
-  // };
-
   const getModuleData = async () => {
     const id = router.query.id
     if (id) {
@@ -137,7 +117,6 @@ export default function UpdateModule() {
         const fields = [
           "course_id",
           "title",
-          "course",
           "status",
           "description",
         ];
@@ -214,7 +193,7 @@ export default function UpdateModule() {
 
                     <Grid item xs={12} sm={12} md={12} lg={6} >
                       <Typography>EDIT MODULE</Typography>
-                      <Grid item xs={12} sm={12} md={12} lg={12} className={courseStyle.courseNameGride} >
+                      <Grid item xs={12} sm={12} md={12} lg={12} className={ModuleCss.courseNameGride} >
 
                         <Grid item xs={12} sm={12} md={6} lg={6}>
                           <InputLabel>
@@ -233,12 +212,12 @@ export default function UpdateModule() {
                         <Grid item xs={12} sm={12} md={6} lg={6}>
                           <InputLabel>Course of Module</InputLabel>
                           <Controller
-                            name="course"
+                            name="course_id"
                             control={control}
                             defaultValue={getCourseId}                          
                             render={({ field }) => (
                               <FormControl fullWidth>
-                                <Select {...field} onChange={(e) => setCourseId(e.target.value)} displayEmpty>
+                                <Select {...field} displayEmpty>
                                   <MenuItem disabled value="">
                                     Select Course
                                   </MenuItem>
@@ -295,7 +274,7 @@ export default function UpdateModule() {
                       <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"right"} >
                         {!isLoadingButton ? <Button type="submit" size="large" variant="contained">
                           UPDATE MODULE
-                        </Button> : <LoadingButton loading={isLoadingButton} className={courseStyle.updateLoadingButton}
+                        </Button> : <LoadingButton loading={isLoadingButton} className={ModuleCss.updateLoadingButton}
                           size="large" variant="contained" disabled >
                           <CircularProgressBar />
                         </LoadingButton>}
