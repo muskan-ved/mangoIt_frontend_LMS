@@ -124,7 +124,7 @@ const AllCourses = () => {
 
   const resetFilterValue = () => {
     setFilter(0)
-    reset({ type: 0, status: 0 });
+    reset({ is_chargeable: 0, status: 0 });
   }
   const handleSort = (rowsData: any) => {
     const sortData = handleSortData(rowsData)
@@ -135,7 +135,7 @@ const AllCourses = () => {
     setPage(1);
     DATA.jump(1);
     if (identifier === 'reset') {
-      HandleCourseGet('', { type: 0, status: 0 }).then((itemSeached) => {
+      HandleCourseGet('', { is_chargeable: 0, status: 0 }).then((itemSeached) => {
         setRows(itemSeached.data);
       })
       setSearch(e)
@@ -241,7 +241,7 @@ const AllCourses = () => {
                                           Type
                                         </InputLabel>
                                         <Controller
-                                          name="type"
+                                          name="is_chargeable"
                                           control={control}
                                           defaultValue={getFilter}
                                           render={({ field }) => (
@@ -364,7 +364,7 @@ const AllCourses = () => {
                                 <TableCell>{capitalizeFirstLetter(row?.course?.title)}</TableCell>
                                 <TableCell>{row?.moduleCount?.length !== 0 ? row?.moduleCount[0]?.moduleCount : 0}</TableCell>
                                 <TableCell>{row?.sessionCount?.length !== 0 ? row?.sessionCount[0]?.sessionCount : 0}</TableCell>
-                                <TableCell>{capitalizeFirstLetter(row?.course?.is_chargeable)}</TableCell>
+                                <TableCell>{capitalizeFirstLetter(row?.course?.is_chargeable.toString())}</TableCell>
                                 <TableCell className={statusColor}>{capitalizeFirstLetter(row?.course?.status)}</TableCell>
                                 <TableCell><Button onClick={() => router.push(`/admin/courses/allcourses/updatecourse/${row.course.id}`)} variant="outlined" color="success" className={courseStyle.editDeleteButton}  ><ModeEditOutlineIcon /></Button>
                                   <Button className={courseStyle.editDeleteButton} variant="outlined" color="error" onClick={() => handleClickOpen(row?.course)}><DeleteOutlineIcon /></Button>

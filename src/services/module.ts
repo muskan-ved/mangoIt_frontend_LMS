@@ -7,7 +7,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { HandleLogout } from "./auth"
 
   export const HandleModuleGet = async(searchData:any,filterData:any) =>{
-    // console.log("sercDaTa",searchData)
     const API_URL = searchData ? `${API.getAllModules}/${searchData}` : `${API.getAllModules}`
     return await axios({
       method: "POST",
@@ -25,6 +24,46 @@ import { HandleLogout } from "./auth"
         return error;
       })
   }
+
+  export const HandleModuleGetByID = async (moduelId: any) => {
+    return await axios({
+      method: "GET",
+      url: `${API.getAllModules}/${moduelId}`,
+      headers: LoginHeader(),
+    })
+      .then((request) => {
+        return request;
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          HandleLogout();
+        } else {
+          toast.error("Module added failed");
+        }
+        return error;
+      });
+  };
+
+  export const HandleModuleUpdate = async (moduleId: any, updateData: any) => {
+    return await axios({
+      method: "PUT",
+      url: `${API.updateModule}/${moduleId}`,
+      headers: LoginHeader(),
+      data: updateData,
+    })
+      .then((request) => {
+        toast.success("Module Updated Successfully");
+        return request;
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          HandleLogout();
+        } else {
+          toast.error("Module added failed");
+        }
+        return error;
+      });
+  };
 
   export const HandleModuleCreate = async(reqData:any) =>{
     return await axios({

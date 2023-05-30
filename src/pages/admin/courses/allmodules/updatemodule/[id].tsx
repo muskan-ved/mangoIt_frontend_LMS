@@ -9,7 +9,6 @@ import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
 import Footer from "@/common/LayoutNavigations/footer";
 import Navbar from "../../../../../common/LayoutNavigations/navbar";
 import RichEditor from "@/common/RichTextEditor/textEditor";
-import Preview from '@/common/PreviewAttachments/previewAttachment';
 // Helper Import
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -31,19 +30,22 @@ import { ToastContainer } from 'react-toastify';
 import { HandleCourseGet, HandleCourseGetByID, HandleCourseUpdate } from '@/services/course';
 import { Attachment, Description, Image, Movie, PictureAsPdf } from '@mui/icons-material';
 import { type } from 'os';
+import { HandleModuleGetByID, HandleModuleUpdate } from '@/services/module';
+import { moduleValidations } from '@/validation_schema/moduleValidation';
 
 
 
-export default function UpdateCourse() {
+export default function UpdateModule() {
   const router: any = useRouter();
-  const [getLongDespcriptionContent, setLongDespcriptionContent] = useState("");
   const [getShortDespcriptionContent, setShortDespcriptionContent] = useState("");
-  const [getUpdateCourse, setUpdateCourse] = useState<courseType | any>([]);
-  const [getCourse, setCourse] = useState<courseType | any>();
+  const [getUpdateModule, setUpdateModule] = useState<moduleType | any>([]);
+  const [getModule, setModule] = useState<moduleType | any>();
+  const [getCourses, setCourses] = useState<courseType | any>();
+  const [getCourseId, setCourseId] = useState<any>("");
+
   const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [error, setErrors] = useState<string>();
-
   const {
     register,
     handleSubmit,
@@ -51,30 +53,32 @@ export default function UpdateCourse() {
     setValue, getValues,
     control,
     formState: { errors }, setError
-  } = useForm<courseType | any>({
-    resolver: yupResolver(courseValidations),
+  } = useForm<moduleType | any>({
+    resolver: yupResolver(moduleValidations),
   });
   // console.log('getvalue', getValues())
-  const handleContentChange = (value: string, identifier: string) => {
-    if(identifier === 'short_description'){
-    if (value === '<p><br></p>') {
-      setError(identifier, { message: 'Short Description is a required field' });
-    } else {
-      setError(identifier, { message: '' })
-      setValue(identifier, value);
-    }
-    setShortDespcriptionContent(value);
-  }
 
-  if(identifier === 'long_description'){
-    if (value === '<p><br></p>') {
-      setError(identifier, { message: 'Long Description is a required field' });
-    } else {
-      setError(identifier, { message: '' })
-      setValue(identifier, value);
+  useEffect(() => {
+    let localData: any;
+    if (typeof window !== "undefined") {
+      localData = window.localStorage.getItem("userData");
     }
-    setLongDespcriptionContent(value);
-  }
+    if (localData) {
+      getModuleData();
+      getCourseData();
+    }
+  }, [router.query]);
+
+  const handleContentChange = (value: string, identifier: string) => {
+    if (identifier === 'description') {
+      if (value === '<p><br></p>') {
+        setError(identifier, { message: 'Description is a required field' });
+      } else {
+        setError(identifier, { message: '' })
+        setValue(identifier, value);
+      }
+      setShortDespcriptionContent(value);
+    }
 
   };
 
@@ -96,11 +100,11 @@ export default function UpdateCourse() {
       setLoading(true);
       setLoadingButton(false)
       try {
-        const res = await HandleCourseUpdate(id, event)
-        getCourseData()
+        const res = await HandleModuleUpdate(id, event)
+        getModuleData()
         setLoading(false);
         setTimeout(() => {
-          router.push('/admin/courses/allcourses/')
+          router.push('/admin/courses/allmodules/')
         }, 1000)
       } catch (e) {
         console.log(e)
@@ -111,55 +115,60 @@ export default function UpdateCourse() {
     }
   };
 
+  console.log("getCourseId",getCourseId)
   const handleUpdate = (e: any) => {
     // if(e.target.name === 'title'){
-      setCourse({...getCourse, title:e.target.value})
+    setModule({ ...getModule, title: e.target.value })
     // }
   }
 
-  const handleChange = (e: any) => {
-    setCourse(e.target.value)
-  };
+  // const handleChange = (e: any) => {
+  //   // setModule({...getModule, [e.target.name]: e.target.value })
+  //   setCourseId(e)
+  //   // console.log('eveee',e)
+  // };
 
-  const getCourseData = async () => {
+  const getModuleData = async () => {
     const id = router.query.id
     if (id) {
-      HandleCourseGetByID(id).then((course) => {
-        // console.log('Course',course)
-        setCourse(course.data)
+      HandleModuleGetByID(id).then((module) => {
+        setModule(module.data)
+        setCourseId(module.data?.course_id)
         const fields = [
+          "course_id",
           "title",
-          "is_chargeable",
+          "course",
           "status",
-          "short_description",
-          "long_description",
+          "description",
         ];
-        fields.forEach((field) => setValue(field, course.data[field]));
+        fields.forEach((field) => setValue(field, module.data[field]));
+        // setCourseId(module.data?.course_id)
       })
         .catch((error) => {
           setErrors(error.message);
         });
     }
-// console.log('Course', getCourse)
+    // console.log('Course', getCourse)
     if (error) {
       return <Typography >{error}</Typography >;
     }
 
-    if (!getCourse) {
+    if (!getModule) {
       return <Typography >Loading...</Typography >;
     }
   }
 
-  useEffect(() => {
-    let localData: any;
-    if (typeof window !== "undefined") {
-      localData = window.localStorage.getItem("userData");
-    }
-    if (localData) {
-      getCourseData();
-    }
-  }, [router.query]);
 
+  const getCourseData = () => {
+    HandleCourseGet('', '').then((courses) => {
+      setCourses(courses.data)
+    })
+  };
+
+
+ 
+
+  
   function ErrorShowing(errorMessage: any) {
     return (
       <Typography variant="body2" color={"error"} gutterBottom>
@@ -167,7 +176,11 @@ export default function UpdateCourse() {
       </Typography>
     );
   }
-  console.log("opps", errors)
+  // console.log("oppsss", getCourses)
+  // let idd=getModule && getModule?.course_id;
+  console.log("oppAAAs", getCourseId)
+ 
+//  if(idd)
   return (
     <>
       <Navbar />
@@ -178,9 +191,9 @@ export default function UpdateCourse() {
           {/* breadcumbs */}
           <BreadcrumbsHeading
             First="Home"
-            Middle="Course"
-            Text="COURSE"
-            Link="/admin/courses/allcourses"
+            Middle="Module"
+            Text="MODULE"
+            Link="/admin/courses/allmodules"
           />
           {/* main content */}
           <Card>
@@ -200,16 +213,16 @@ export default function UpdateCourse() {
                     </Grid>
 
                     <Grid item xs={12} sm={12} md={12} lg={6} >
-                      <Typography>EDIT COURSE</Typography>
+                      <Typography>EDIT MODULE</Typography>
                       <Grid item xs={12} sm={12} md={12} lg={12} className={courseStyle.courseNameGride} >
 
                         <Grid item xs={12} sm={12} md={6} lg={6}>
                           <InputLabel>
-                            Course Name
+                            Module Name
                           </InputLabel>
                           <TextField
                             {...register("title")}
-                            value={getCourse?.title}
+                            value={getModule?.title}
                             onChange={handleUpdate}
                           />
                           {errors && errors.title
@@ -218,27 +231,26 @@ export default function UpdateCourse() {
                         </Grid>
 
                         <Grid item xs={12} sm={12} md={6} lg={6}>
-                          <InputLabel>Type</InputLabel>
+                          <InputLabel>Course of Module</InputLabel>
                           <Controller
-                          name="is_chargeable"
-                          control={control}                        
-                          defaultValue={getCourse?.is_chargeable || ""}
-                          // defaultValue=''
-                          render={({ field }) => (
-                            <FormControl fullWidth>
-                              <Select {...field} displayEmpty>
-                                <MenuItem value={'free'}>
-                                  Free
-                                </MenuItem>
-                                <MenuItem value={'paid'}>
-                                  Paid
-                                </MenuItem>
-                              </Select>
-                            </FormControl>
-                          )}
-                        />
-                          {errors && errors.is_chargeable
-                            ? ErrorShowing(errors?.is_chargeable?.message)
+                            name="course"
+                            control={control}
+                            defaultValue={getCourseId}                          
+                            render={({ field }) => (
+                              <FormControl fullWidth>
+                                <Select {...field} onChange={(e) => setCourseId(e.target.value)} displayEmpty>
+                                  <MenuItem disabled value="">
+                                    Select Course
+                                  </MenuItem>
+                                  {getCourses?.map((course: any) => {
+                                    return (<MenuItem key={course?.course.id} value={course?.course.id}>{capitalizeFirstLetter(course?.course.title)}</MenuItem>)
+                                  })}
+                                </Select>
+                              </FormControl>
+                            )}
+                          />
+                          {errors && errors.course
+                            ? ErrorShowing(errors?.course?.message)
                             : ""}
                         </Grid>
                       </Grid>
@@ -247,8 +259,8 @@ export default function UpdateCourse() {
                         <InputLabel>Status</InputLabel>
                         <Controller
                           name="status"
-                          control={control}                        
-                          defaultValue={getCourse?.status || ""}
+                          control={control}
+                          defaultValue={getModule?.status || ""}
                           // defaultValue=''
                           render={({ field }) => (
                             <FormControl fullWidth>
@@ -270,32 +282,19 @@ export default function UpdateCourse() {
                       <Grid item xs={12} sm={12} md={12} lg={12} mb={2}>
                         <InputLabel>Description</InputLabel>
                         <RichEditor
-                          {...register("short_description")}
-                          value={getShortDespcriptionContent ? getShortDespcriptionContent : getCourse?.short_description}
+                          {...register("description")}
+                          value={getShortDespcriptionContent ? getShortDespcriptionContent : getModule?.description}
                           onChange={(value) =>
-                            handleContentChange(value, "short_description")
+                            handleContentChange(value, "description")
                           }
                         />
-                        {errors && errors.short_description ? ErrorShowing(errors?.short_description?.message) : ""}
+                        {errors && errors.description ? ErrorShowing(errors?.description?.message) : ""}
                         {/* {getShortDespcriptionContent ? '' : errors && errors.description ? ErrorShowing(errors?.description?.message) : ""} */}
                       </Grid>
 
-                      <Grid item xs={12} sm={12} md={12} lg={12} mb={2} >
-                        <InputLabel>Long Description</InputLabel>
-                        <Box >
-                          <RichEditor
-                            {...register("long_description")}
-                            value={getLongDespcriptionContent ? getLongDespcriptionContent : getCourse?.long_description}
-                            onChange={(value) =>
-                              handleContentChange(value, "long_description")
-                            }
-                          />
-                        </Box>
-                        {errors && errors.long_description ? ErrorShowing(errors?.long_description?.message) : ""}
-                      </Grid>
                       <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"right"} >
                         {!isLoadingButton ? <Button type="submit" size="large" variant="contained">
-                          UPDATE COURSE
+                          UPDATE MODULE
                         </Button> : <LoadingButton loading={isLoadingButton} className={courseStyle.updateLoadingButton}
                           size="large" variant="contained" disabled >
                           <CircularProgressBar />
@@ -315,5 +314,4 @@ export default function UpdateCourse() {
     </>
   );
 };
-
 

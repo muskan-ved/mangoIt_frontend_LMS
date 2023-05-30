@@ -4,7 +4,7 @@ export const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 // FRONTEND SERVER URL
 export const FRONTEND_BASE_URL = `${process.env.NEXT_PUBLIC_FRONTEND_BASE_URL}`;
 
-// // FRONTEND LOCAL URL
+// //FRONTEND LOCAL URL
 // export const FRONTEND_BASE_URL = `${process.env.NEXT_PUBLIC_LOCAL_FRONTEND_BASE_URL}`;
 
 // // // LOCAL API URL
@@ -28,6 +28,7 @@ export const API = {
 
   getAllModules: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_ALL_MODULES}`,
   createModule: `${BASE_URL}/${process.env.NEXT_PUBLIC_CREATE_MODULE}`,
+  updateModule: `${BASE_URL}/${process.env.NEXT_PUBLIC_UPDATE_MODULE}`,
 
   getSessions: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_SESSION}`,
   createSession: `${BASE_URL}/${process.env.NEXT_PUBLIC_CREATE_SESSION}`,
