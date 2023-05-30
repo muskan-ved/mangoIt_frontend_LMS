@@ -31,7 +31,7 @@ import { ToastContainer } from 'react-toastify';
 import { HandleCourseGet, HandleCourseGetByID, HandleCourseUpdate } from '@/services/course';
 import { Attachment, Description, Image, Movie, PictureAsPdf } from '@mui/icons-material';
 import { type } from 'os';
-import { HandleModuleGetByID } from '@/services/module';
+import { HandleModuleGetByID, HandleModuleUpdate } from '@/services/module';
 import { moduleValidations } from '@/validation_schema/moduleValidation';
 
 
@@ -41,6 +41,9 @@ export default function UpdateModule() {
   const [getShortDespcriptionContent, setShortDespcriptionContent] = useState("");
   const [getUpdateModule, setUpdateModule] = useState<moduleType | any>([]);
   const [getModule, setModule] = useState<moduleType | any>();
+  const [getCourses, setCourses] = useState<courseType | any>();
+  const [getCourseId, setCourseId] = useState<any>("");
+
   const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [error, setErrors] = useState<string>();
@@ -57,15 +60,15 @@ export default function UpdateModule() {
   });
   // console.log('getvalue', getValues())
   const handleContentChange = (value: string, identifier: string) => {
-    if(identifier === 'description'){
-    if (value === '<p><br></p>') {
-      setError(identifier, { message: 'Description is a required field' });
-    } else {
-      setError(identifier, { message: '' })
-      setValue(identifier, value);
+    if (identifier === 'description') {
+      if (value === '<p><br></p>') {
+        setError(identifier, { message: 'Description is a required field' });
+      } else {
+        setError(identifier, { message: '' })
+        setValue(identifier, value);
+      }
+      setShortDespcriptionContent(value);
     }
-    setShortDespcriptionContent(value);
-  }
 
   };
 
@@ -87,12 +90,12 @@ export default function UpdateModule() {
       setLoading(true);
       setLoadingButton(false)
       try {
-        const res = await HandleCourseUpdate(id, event)
-        // getCourseData()
+        const res = await HandleModuleUpdate(id, event)
+        getModuleData()
         setLoading(false);
-        // setTimeout(() => {
-        //   router.push('/admin/courses/allmodules/')
-        // }, 1000)
+        setTimeout(() => {
+          router.push('/admin/courses/allmodules/')
+        }, 1000)
       } catch (e) {
         console.log(e)
         setLoadingButton(true)
@@ -102,9 +105,10 @@ export default function UpdateModule() {
     }
   };
 
+  console.log("getCourseId",getCourseId)
   const handleUpdate = (e: any) => {
     // if(e.target.name === 'title'){
-      setModule({...getModule, title:e.target.value})
+    setModule({ ...getModule, title: e.target.value })
     // }
   }
 
@@ -116,21 +120,23 @@ export default function UpdateModule() {
     const id = router.query.id
     if (id) {
       HandleModuleGetByID(id).then((module) => {
-        // console.log('module',module)
         setModule(module.data)
-        // const fields = [
-        //   "title",
-        //   "is_chargeable",
-        //   "status",
-        //   "description",
-        // ];
-        // fields.forEach((field) => setValue(field, course.data[field]));
+        setCourseId(module.data?.course_id)
+        const fields = [
+          "course_id",
+          "title",
+          "course",
+          "status",
+          "description",
+        ];
+        fields.forEach((field) => setValue(field, module.data[field]));
+        // setCourseId(module.data?.course_id)
       })
         .catch((error) => {
           setErrors(error.message);
         });
     }
-// console.log('Course', getCourse)
+    // console.log('Course', getCourse)
     if (error) {
       return <Typography >{error}</Typography >;
     }
@@ -140,6 +146,13 @@ export default function UpdateModule() {
     }
   }
 
+
+  const getCourseData = () => {
+    HandleCourseGet('', '').then((courses) => {
+      setCourses(courses.data)
+    })
+  };
+
   useEffect(() => {
     let localData: any;
     if (typeof window !== "undefined") {
@@ -147,9 +160,12 @@ export default function UpdateModule() {
     }
     if (localData) {
       getModuleData();
+      getCourseData();
     }
   }, [router.query]);
+ 
 
+  
   function ErrorShowing(errorMessage: any) {
     return (
       <Typography variant="body2" color={"error"} gutterBottom>
@@ -157,7 +173,11 @@ export default function UpdateModule() {
       </Typography>
     );
   }
-  // console.log("opps", getModule)
+  console.log("oppsss", getCourses)
+  let idd=getModule && getModule?.course_id;
+  console.log("oppAAAs", idd)
+ 
+ if(idd)
   return (
     <>
       <Navbar />
@@ -168,9 +188,9 @@ export default function UpdateModule() {
           {/* breadcumbs */}
           <BreadcrumbsHeading
             First="Home"
-            Middle="Course"
-            Text="COURSE"
-            Link="/admin/courses/allcourses"
+            Middle="Module"
+            Text="MODULE"
+            Link="/admin/courses/allmodules"
           />
           {/* main content */}
           <Card>
@@ -210,25 +230,25 @@ export default function UpdateModule() {
                         <Grid item xs={12} sm={12} md={6} lg={6}>
                           <InputLabel>Course of Module</InputLabel>
                           <Controller
-                          name="is_chargeable"
-                          control={control}                        
-                          defaultValue={getModule?.is_chargeable || ""}
-                          // defaultValue=''
-                          render={({ field }) => (
-                            <FormControl fullWidth>
-                              <Select {...field} displayEmpty>
-                                <MenuItem value={'free'}>
-                                  Free
-                                </MenuItem>
-                                <MenuItem value={'paid'}>
-                                  Paid
-                                </MenuItem>
-                              </Select>
-                            </FormControl>
-                          )}
-                        />
-                          {errors && errors.is_chargeable
-                            ? ErrorShowing(errors?.is_chargeable?.message)
+                            name="course"
+                            control={control}
+                            defaultValue={idd && idd}
+                            
+                            render={({ field }) => (
+                              <FormControl fullWidth>
+                                <Select {...field} onChange={(e) => setCourseId(e.target.value)} displayEmpty>
+                                  <MenuItem disabled value="">
+                                    Select Course
+                                  </MenuItem>
+                                  {getCourses?.map((course: any) => {
+                                    return (<MenuItem key={course?.course.id} value={course?.course.id}>{capitalizeFirstLetter(course?.course.title)}</MenuItem>)
+                                  })}
+                                </Select>
+                              </FormControl>
+                            )}
+                          />
+                          {errors && errors.course
+                            ? ErrorShowing(errors?.course?.message)
                             : ""}
                         </Grid>
                       </Grid>
@@ -237,7 +257,7 @@ export default function UpdateModule() {
                         <InputLabel>Status</InputLabel>
                         <Controller
                           name="status"
-                          control={control}                        
+                          control={control}
                           defaultValue={getModule?.status || ""}
                           // defaultValue=''
                           render={({ field }) => (

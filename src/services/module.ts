@@ -44,6 +44,27 @@ import { HandleLogout } from "./auth"
       });
   };
 
+  export const HandleModuleUpdate = async (moduleId: any, updateData: any) => {
+    return await axios({
+      method: "PUT",
+      url: `${API.updateModule}/${moduleId}`,
+      headers: LoginHeader(),
+      data: updateData,
+    })
+      .then((request) => {
+        toast.success("Module Updated Successfully");
+        return request;
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          HandleLogout();
+        } else {
+          toast.error("Module added failed");
+        }
+        return error;
+      });
+  };
+
   export const HandleModuleCreate = async(reqData:any) =>{
     return await axios({
       method: "POST",
