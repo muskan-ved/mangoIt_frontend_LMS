@@ -27,6 +27,7 @@ export const API = {
 
   getAllModules: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_ALL_MODULES}`,
   createModule: `${BASE_URL}/${process.env.NEXT_PUBLIC_CREATE_MODULE}`,
+  updateModule: `${BASE_URL}/${process.env.NEXT_PUBLIC_UPDATE_MODULE}`,
 
   getSessions: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_SESSION}`,
   createSession: `${BASE_URL}/${process.env.NEXT_PUBLIC_CREATE_SESSION}`,

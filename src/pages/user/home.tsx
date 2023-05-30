@@ -32,21 +32,21 @@ export default function HomePage() {
             ))
         })
     }
-
-    console.log(PaidCourses)
-
     var items = [
         {
-            name: "Random Name #1",
-            description: "Probably the most random thing you have ever seen!"
+            heading: "Random Name #1",
+            description: "Probably the most random thing you have ever seen!",
+            image: "https://www.skillsfuture.gov.sg/images/default-source/carousel/banner-img-3.png?Status=Master&sfvrsn=d474dd3d_0"
         },
         {
-            name: "Random Name #2",
-            description: "Hello World!"
+            heading: "Random Name #2",
+            description: "Hello World!",
+            image: "https://www.skillsfuture.gov.sg/images/default-source/initiatives/individuals/sctp1.png?sfvrsn=3d02f3e3_3"
         },
         {
-            name: "Random Name #2",
-            description: "Hello World!"
+            heading: "Random Name #3",
+            description: "Hello World!",
+            image: "https://www.skillsfuture.gov.sg/images/default-source/carousel/student-initiatives-banner-img.png?Status=Master&sfvrsn=7f86b81f_0"
         }
     ]
 
@@ -80,7 +80,7 @@ export default function HomePage() {
                 </Box>
                 <Box className={styles.griditem2}>
                     <Box className={styles.teamimgwrapper}>
-                        <img src="https://picsum.photos/id/1011/800/450" alt="team-img" />
+                        <img src={props?.item?.image} alt="team-img" />
                     </Box>
                 </Box>
             </Box>
@@ -99,7 +99,7 @@ export default function HomePage() {
                         indicatorIconButtonProps={{
                             style: {
                                 padding: '15px',
-                                color: 'black',
+                                color: "black"
                             }
                         }}
                         indicatorContainerProps={{
@@ -109,6 +109,11 @@ export default function HomePage() {
                                 zIndex: 999999,
                                 right: "278px !important",
                                 top: "350px !important"
+                            }
+                        }}
+                        activeIndicatorIconButtonProps={{
+                            style: {
+                                color: '#e8661b' // 2
                             }
                         }}
                     >

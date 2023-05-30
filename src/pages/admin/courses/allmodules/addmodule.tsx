@@ -60,7 +60,7 @@ export default function AddSession() {
          const res = await HandleModuleCreate(event)
          setLoading(false);
          setTimeout(() => {
-            router.push('/courses/allmodules/')
+            router.push('/admin/courses/allmodules/')
          }, 1000)
       } catch (e) {
          console.log(e)
@@ -70,6 +70,7 @@ export default function AddSession() {
 
    const getCourseData = () => {
       HandleCourseGet('', '').then((courses) => {
+         // console.log('courses', courses)
          setCourses(courses.data)
       })
    };
@@ -94,7 +95,7 @@ export default function AddSession() {
       );
    }
 
-   // console.log("oopps", getModules)
+   console.log("oopps", getCourses)
    return (
       <>
          <Navbar />
@@ -155,7 +156,7 @@ export default function AddSession() {
                                                       Select Course
                                                    </MenuItem>
                                                    {getCourses?.map((course: any) => {
-                                                      return (<MenuItem key={course.id} value={course.id}>{capitalizeFirstLetter(course?.title)}</MenuItem>)
+                                                      return (<MenuItem key={course?.course.id} value={course?.course.id}>{capitalizeFirstLetter(course?.course.title)}</MenuItem>)
                                                    })}
                                                 </Select>
                                              </FormControl>

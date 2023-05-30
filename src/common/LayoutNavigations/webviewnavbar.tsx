@@ -6,10 +6,11 @@ import IconButton from "@mui/material/IconButton";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import { Container, Typography } from "@mui/material";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import styles from "../../styles/webviewHeaderFooter.module.css";
 import { HandleLogout } from "@/services/auth";
 import MenuIcon from '@mui/icons-material/Menu';
+import Link from "next/link";
 
 export default function WebViewNavbar() {
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
@@ -22,6 +23,11 @@ export default function WebViewNavbar() {
     const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
         setMobileMoreAnchorEl(event.currentTarget);
     };
+    let textcolor = "#E8661B !important";
+    let path = router?.pathname;
+    let setHomeColor = path.includes("home") ? textcolor : "";
+    let setCoursesColor = path.includes("Courses") ? textcolor : "";
+
     const mobileMenuId = "primary-search-account-menu-mobile";
     const renderMobileMenu = (
         <Menu
@@ -65,24 +71,30 @@ export default function WebViewNavbar() {
                         />
                         <Box sx={{ flexGrow: 1 }} />
                         <Box sx={{ display: { xs: "none", md: "flex" } }}>
-                            <Typography
+                            <Link href="/user/home" ><Typography
                                 variant="body2"
                                 className={styles.windowFullWidthNameAlign}
+                                sx={{
+                                    color: setHomeColor,
+                                }}
                             >
                                 Home
-                            </Typography>
-                            <Typography
+                            </Typography></Link>
+                            <Link href="/user/Courses" ><Typography
                                 variant="body2"
                                 className={styles.windowFullWidthNameAlign}
+                                sx={{
+                                    color: setCoursesColor,
+                                }}
                             >
                                 Course
-                            </Typography>
-                            <Typography
+                            </Typography></Link>
+
+                            <Link href="/login" ><Typography
                                 variant="body2"
                                 className={styles.windowFullWidthNameAlign}
-                            >
-                                My Acount
-                            </Typography>
+                            >My Acount</Typography></Link>
+
                         </Box>
                         <Box sx={{ display: { xs: "flex", md: "none" } }}>
                             <IconButton

@@ -12,7 +12,7 @@
   font-size: 17px;
 }
 .windowFullWidthNameAlign:hover {
-  color: rgb(236, 113, 41);
+  color: #e8661b;
   cursor: pointer;
   transition: 0.3s;
 }
@@ -38,7 +38,7 @@
 }
 
 .windowFullWidthNameAlignfooter:hover {
-  color: rgb(236, 113, 41);
+  color: #e8661b;
   cursor: pointer;
   transition: 0.3s;
 }

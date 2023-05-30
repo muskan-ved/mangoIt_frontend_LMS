@@ -10,28 +10,34 @@ import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import { HandleCourseGet } from "@/services/course";
 import CourseCard from "@/common/ResuableCardCmp/coursescard";
 import { usePagination } from "@/common/Pagination/paginations";
+import SpinnerProgress from "@/common/CircularProgressComponent/spinnerComponent";
 
 export default function Courses() {
     const [courseData, setcourseData] = React.useState([]);
     const [courseStatus, setcourseStatus] = React.useState(1);
+    const [loader, setLoadar] = React.useState(true);
     const landingpagecontent = {
         image: 'https://source.unsplash.com/random',
     };
     const setcustStatus = (e: any) => {
+        setLoadar(true)
         const is_chargeable = e === 2 ? "free" : e === 3 ? "paid" : 0
-        console.log("dfslghdfasg",is_chargeable)
+        setcourseStatus(e);
         HandleCourseGet('', {
             is_chargeable: is_chargeable,
             status: 0
         }).then((courses) => {
             setcourseData(courses?.data)
+            setLoadar(false)
         })
     }
 
     //get courses
     const getAllCourseData = () => {
+        setLoadar(true)
         HandleCourseGet('', "").then((courses) => {
             setcourseData(courses?.data)
+            setLoadar(false);
         })
     }
     React.useEffect(() => {
@@ -104,7 +110,7 @@ export default function Courses() {
                             </Grid>
                             <Grid item xs={12} md={6} lg={3} className={styles.gridbtn} >
                                 <Stack spacing={1} className={styles.gridicon}>
-                                    <IconButton className={styles.actionview}>
+                                    <IconButton className={styles.actionview} >
                                         <GridViewIcon />
                                     </IconButton>
                                     <IconButton className={styles.actionview}>
@@ -120,11 +126,18 @@ export default function Courses() {
                         </Typography>
                         <Divider className={styles.divder} />
                     </Box>
-                    <Box className={styles.articles}>
-                        {courseData?.map((data, key) => {
-                            return (<CourseCard coursedata={data} />)
-                        })}
-                    </Box>
+                    {loader ? (
+                        <SpinnerProgress />
+                    ) : (
+                        <Box className={styles.articles}>
+                            {courseData && DATA.currentData() &&
+                                DATA.currentData().map((data: any, key: any) => {
+                                    return (
+                                        <CourseCard coursedata={data} />
+                                    )
+                                })}
+                        </Box>
+                    )}
                     <Grid className={styles.filtersection} pb={6} pt={3}>
                         <Grid spacing={2} className={styles.filtercontainer}>
                             <Grid item xs={12} md={3} lg={3}>
@@ -140,7 +153,7 @@ export default function Courses() {
                             <Grid item xs={12} md={6} lg={3} className={styles.perpagedt} >
                                 <Box sx={{ display: 'flex' }}>
                                     <Typography sx={{ margin: 'auto' }} >
-                                        Showing 12 of 50 Results</Typography>
+                                        Showing {row_per_page} of {courseData?.length} Results</Typography>
                                     <FormControl>
                                         <Select
                                             labelId="demo-simple-select-label"
@@ -149,8 +162,8 @@ export default function Courses() {
                                             onChange={handlerowchange}
                                             size="small"
                                             className={styles.paignation}
-                                            style={{ height: "40px", marginRight: '11px' }}
-                                            sx={{ margin: '0px 0px 0px 10px' }}
+                                            style={{ height: "35px", marginRight: '11px' }}
+                                            sx={{ margin: '0px 0px 0px 15px' }}
                                         >
                                             <MenuItem value={8}>8</MenuItem>
                                             <MenuItem value={20}>20</MenuItem>
