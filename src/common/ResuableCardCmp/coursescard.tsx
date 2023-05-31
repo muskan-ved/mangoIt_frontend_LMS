@@ -23,7 +23,7 @@ export function CourseCard(props: any) {
 
 export function CourseCardListView(props: any) {
     return (
-        <Card sx={{ display: 'flex', marginTop: "40px" }} >
+        <Card sx={{ display: 'flex', marginTop: "40px", borderRadius: '15px' }} >
             <CardMedia
                 component="img"
                 sx={{ width: 250 }}
@@ -39,10 +39,10 @@ export function CourseCardListView(props: any) {
                         Type : {capitalizeFirstLetter(props?.paidcourses?.course?.is_chargeable) || capitalizeFirstLetter(props?.freecourses?.course?.is_chargeable) || capitalizeFirstLetter(props?.coursedata?.course?.is_chargeable)}
                     </Typography>
                     <Typography sx={{ display: 'flex', alignItems: 'center' }}>
-                        {props?.coursedata?.course?.short_description || props?.paidcourses?.course?.short_description}
+                        {props?.coursedata?.course?.short_description?.replace(/(<([^>]+)>)/ig, '') || props?.paidcourses?.course?.short_description?.replace(/(<([^>]+)>)/ig, '') || props?.freecourses?.course?.short_description?.replace(/(<([^>]+)>)/ig, '')}
                     </Typography>
                     <Typography sx={{ display: 'flex', alignItems: 'center' }}>
-                        {props?.freecourses?.course?.long_description || props?.paidcourses?.course?.long_description || props?.coursedata?.course?.long_description}
+                        {props?.freecourses?.course?.long_description?.replace(/(<([^>]+)>)/ig, '') || props?.paidcourses?.course?.long_description?.replace(/(<([^>]+)>)/ig, '') || props?.coursedata?.course?.long_description?.replace(/(<([^>]+)>)/ig, '')}
                     </Typography>
                 </CardContent>
             </Box>

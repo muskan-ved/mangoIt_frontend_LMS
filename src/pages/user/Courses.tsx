@@ -14,9 +14,9 @@ import SpinnerProgress from "@/common/CircularProgressComponent/spinnerComponent
 
 export default function Courses() {
     const [courseData, setcourseData] = React.useState([]);
-    const [courseStatus, setcourseStatus] = React.useState(1);
+    const [courseStatus, setcourseStatus] = React.useState(0);
     const [gridview, setgridview] = React.useState(true)
-    const [listview, setlistview] = React.useState(false)
+    const [color, setcolor] = React.useState(true)
     const [loader, setLoadar] = React.useState(true);
     const landingpagecontent = {
         image: 'https://source.unsplash.com/random',
@@ -63,12 +63,10 @@ export default function Courses() {
 
     //gridview listview
     const gridView = () => {
-        setgridview(false)
-        setlistview(true);
+        setgridview(true)
     }
     const listView = () => {
-        setlistview(true);
-        setgridview(true)
+        setgridview(false)
     }
 
     return (
@@ -107,8 +105,11 @@ export default function Courses() {
                                             }
                                             value={courseStatus}
                                         >
-                                            <MenuItem value={1}>
+                                            <MenuItem value={0} disabled>
                                                 Filter By
+                                            </MenuItem>
+                                            <MenuItem value={1} >
+                                                All
                                             </MenuItem>
                                             <MenuItem value={2}>
                                                 Free
@@ -122,7 +123,7 @@ export default function Courses() {
                             </Grid>
                             <Grid item xs={12} md={6} lg={3} className={styles.gridbtn} >
                                 <Stack spacing={1} className={styles.gridicon}>
-                                    <IconButton className={styles.actionview} onClick={gridView}>
+                                    <IconButton className={styles.actionview} onClick={gridView} >
                                         <GridViewIcon />
                                     </IconButton>
                                     <IconButton className={styles.actionview} onClick={listView}>
@@ -138,37 +139,23 @@ export default function Courses() {
                         </Typography>
                         <Divider className={styles.divder} />
                     </Box>
-                    {loader ? (
-                        <SpinnerProgress />
-                    ) : (
-                        <Box className={styles.articles}>
+                    {gridview ? (<Box className={styles.articles}>
+                        {courseData && DATA.currentData() &&
+                            DATA.currentData().map((data: any, key: any) => {
+                                return (
+                                    <CourseCard coursedata={data} />
+                                )
+                            })}
+                    </Box>) : <Box className={styles.listviewarticles}>
+                        <Container maxWidth="lg">
                             {courseData && DATA.currentData() &&
                                 DATA.currentData().map((data: any, key: any) => {
                                     return (
-                                        <>
-                                            {gridview ? (<CourseCard coursedata={data} />) : ("")}
-
-                                        </>
-
+                                        <CourseCardListView coursedata={data} />
                                     )
                                 })}
-                        </Box>
-                    )}
-                    <Box className={styles.listviewarticles}>
-                        <Container maxWidth="lg">
-                            {listview ? (<>
-                                {courseData && DATA.currentData() &&
-                                    DATA.currentData().map((data: any, key: any) => {
-                                        return (
-                                            <>
-                                                <CourseCardListView coursedata={data} />
-                                            </>
-                                        )
-                                    })}
-                            </>
-                            ) : ""}
                         </Container>
-                    </Box>
+                    </Box>}
                     <Grid className={styles.filtersection} pb={6} pt={3}>
                         <Grid spacing={2} className={styles.filtercontainer}>
                             <Grid item xs={12} md={3} lg={3}>

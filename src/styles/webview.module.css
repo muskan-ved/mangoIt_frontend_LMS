@@ -222,7 +222,7 @@
   --link-icon-translate: -20px;
   --link-icon-opacity: 0;
   position: relative;
-  border-radius: 16px;
+  border-radius: 15px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 36px 0px,
     rgba(0, 0, 0, 0.01) 0px 0px 0px 1px;
   background: #fff;
@@ -233,7 +233,6 @@
 }
 
 .listviewarticles {
-  padding-top: 2rem;
   margin-bottom: 2rem;
 }
 
