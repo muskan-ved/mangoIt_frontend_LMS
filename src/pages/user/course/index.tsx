@@ -57,7 +57,7 @@ interface Column {
     | "module"
     | "session"
     | "is_chargeable"
-    | "status"
+    | "percent"
     | "action";
   label: string;
   minWidth?: number;
@@ -71,7 +71,7 @@ const columns: Column[] = [
   { id: "module", label: "NO. MODULE", minWidth: 100 },
   { id: "session", label: "NO. SESSION", minWidth: 100 },
   { id: "is_chargeable", label: "TYPE", minWidth: 100 },
-  { id: "status", label: "STATUS", minWidth: 100 },
+  { id: "percent", label: "COMPLETE %", minWidth: 100 },
   { id: "action", label: "ACTION", minWidth: 100 },
 ];
 
@@ -112,7 +112,7 @@ const AllCourses = () => {
     router.push(`/user/course/detail/${row}`);
     setOpen(!open);
   };
- 
+
   const resetFilterValue = () => {
     setFilter(0);
     reset({ is_chargeable: 0, status: 0 });
@@ -130,9 +130,11 @@ const AllCourses = () => {
     setPage(1);
     DATA.jump(1);
     if (identifier === "reset") {
-      HandleCourseGet("", { is_chargeable: 0, status: 0 }).then((itemSeached) => {
-        setRows(itemSeached.data);
-      });
+      HandleCourseGet("", { is_chargeable: 0, status: 0 }).then(
+        (itemSeached) => {
+          setRows(itemSeached.data);
+        }
+      );
       setSearch(e);
     } else {
       const search = e.target.value;
@@ -301,7 +303,10 @@ const AllCourses = () => {
 
                                     <Grid item xs={12} lg={12}>
                                       <Box>
-                                        <div onClick={popupState.close} className={courseStyle.divcss}>
+                                        <div
+                                          onClick={popupState.close}
+                                          className={courseStyle.divcss}
+                                        >
                                           <Button
                                             className={courseStyle.boxInFilter}
                                             size="medium"
@@ -409,8 +414,12 @@ const AllCourses = () => {
                                   row?.course?.is_chargeable
                                 )}
                               </TableCell>
-                              <TableCell className={statusColor}>
-                                {capitalizeFirstLetter(row?.course?.status)}
+                              <TableCell
+                              //  className={statusColor}
+                              >
+                                {row?.course?.complete_percent === null
+                                  ? "0%"
+                                  : `${row?.course?.complete_percent}%`}
                               </TableCell>
                               <TableCell>
                                 <Button
@@ -418,7 +427,9 @@ const AllCourses = () => {
                                   //   href="/user/subscription/view"
                                   variant="outlined"
                                   color="primary"
-                                  onClick={() => handleClickOpen(row?.course?.id)}
+                                  onClick={() =>
+                                    handleClickOpen(row?.course?.id)
+                                  }
                                 >
                                   <VisibilityIcon />
                                 </Button>

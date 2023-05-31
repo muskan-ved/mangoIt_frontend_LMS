@@ -44,7 +44,7 @@
   text-transform: uppercase;
 }
 .maindiv {
-  padding: 70px;
+  /* padding: 70px; */
 }
 .iconcss {
   color: #e8661b;
@@ -61,4 +61,8 @@
     font-weight: 700;
     margin-top: 30px;
     margin-bottom: 15px;
+    margin-left: 10px;
+  }
+  .btncss1{
+    text-align: end;
   }

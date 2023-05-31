@@ -125,7 +125,6 @@ export default function View() {
             Text="VIEW"
             Link="/user/subscription"
           />
-
           {/* main content */}
           <Card>
             <CardContent>
@@ -176,7 +175,7 @@ export default function View() {
                   </Typography>
                 </Box>
                 <br />
-                <Box className={subs.btncss}>
+                <Box className={subs.btncss1}>
                   <Button variant="contained">Cancel Subscription</Button>
                 </Box>
               </Box>
