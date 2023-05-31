@@ -108,10 +108,10 @@ export const VerticalMenuItems = () => {
       },
 
           {
-            title: "Email Config",
+            title: "Email Mngmt",
             icon: EmailOutlinedIcon,
-            path: "/admin/emailconfiguration",
-        disable: true,
+            path: "/admin/emailmanagement",
+        disable: false,
 
           },
           {

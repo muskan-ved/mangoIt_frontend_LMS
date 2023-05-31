@@ -11,3 +11,10 @@ export type siteType = {
     user_id?: string
   };
 
+  export type emailmanagementType = {
+    emailfrom: string,
+    emailtype: string,
+    emailsubject: string,
+    emailcontent: string
+  }
+

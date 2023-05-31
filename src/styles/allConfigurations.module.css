@@ -89,4 +89,33 @@
     width: 103px;
 }
 
+/* E-mail configuration */
+.listEmailPageBox {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tableContainerMainClass{
+    padding: "20px";
+}
+
+.tableHeadingFontWeight{
+    font-weight: 600;
+}
+
+.allEmailCountStyle{
+    font-weight: 600;
+    color: #E8661B !important;
+}
+
+.bothButtonSpace{
+    margin-right: 15px;
+}
+
+#tabHeadingFontWeight{
+    font-weight: 600;
+}
+
 

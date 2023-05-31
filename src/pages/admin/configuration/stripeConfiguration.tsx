@@ -15,6 +15,7 @@ import CircularProgressBar from "@/common/CircularProcess/circularProgressBar";
 
 // ** CSS Imports
 import siteStyles from "../../../styles/allConfigurations.module.css";
+import styles from "../../../styles/sidebar.module.css";
 import { ToastContainer } from "react-toastify";
 
 // ** React Imports
@@ -202,7 +203,7 @@ const Stripe = () => {
 
               <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"right"}>
                 {!isLoadingButton ? (
-                  <Button type="submit" size="large" variant="contained">
+                  <Button type="submit" size="large" variant="contained" id={styles.muibuttonBackgroundColor}>
                     Submit
                   </Button>
                 ) : (
@@ -286,7 +287,7 @@ const Stripe = () => {
 
               <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"right"}>
                 {!isLoadingButton ? (
-                  <Button type="submit" size="large" variant="contained">
+                  <Button type="submit" size="large" variant="contained" id={styles.muibuttonBackgroundColor}>
                     UPDATE
                   </Button>
                 ) : (
