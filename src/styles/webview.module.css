@@ -216,6 +216,17 @@
   flex-wrap: wrap;
 }
 
+.subscription {
+  padding-top: 4rem;
+  display: grid;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
 .article {
   --img-scale: 1.001;
   --title-color: black;
@@ -230,6 +241,21 @@
   transition: all 0.4s ease-in-out;
   overflow: hidden;
   cursor: pointer;
+}
+
+.subcarticle {
+  --img-scale: 1.001;
+  --title-color: black;
+  --link-icon-translate: -20px;
+  --link-icon-opacity: 0;
+  position: relative;
+  border-radius: 15px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 36px 0px,
+    rgba(0, 0, 0, 0.01) 0px 0px 0px 1px;
+  background: #fff;
+  transform-origin: center;
+  transition: all 0.4s ease-in-out;
+  overflow: hidden;
 }
 
 .listviewarticles {
@@ -316,6 +342,17 @@
   padding-top: 30px;
 }
 
+.coursesdetails {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  background-color: #f3f3f3ad;
+}
+
+.coursesdetails .crsgrid {
+  padding-left: 1.7rem;
+  padding-right: 1.7rem;
+}
+
 .filtersection {
   padding-left: 1.7rem;
   padding-right: 1.7rem;
@@ -373,6 +410,15 @@
   margin-right: 15px;
   margin-top: -5px;
   background-color: aliceblue;
+}
+.listitem {
+  font-family: sans-serif;
+}
+
+.listitems {
+  font-family: sans-serif;
+  color: rgb(45, 104, 143);
+  font-size: 17px;
 }
 
 @media screen and (max-width: 460px) {

@@ -212,6 +212,7 @@ export default function HomePage() {
                     </Box>
                 </Container>
             </Box>
+              {/*footer*/}
             <WebViewFooter />
         </>
     );

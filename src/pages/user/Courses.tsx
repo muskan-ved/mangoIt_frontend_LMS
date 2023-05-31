@@ -194,8 +194,8 @@ export default function Courses() {
                     </Grid>
                 </Container >
             </Box >
+              {/*footer*/}
             <WebViewFooter />
-
         </>
     );
 }
