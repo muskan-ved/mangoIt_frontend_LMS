@@ -189,7 +189,7 @@ export default function HomePage() {
                     </Box>
                     <Box className={styles.articles}>
                         {PaidCourses?.slice(0, 4).map((data, key) => {
-                            return (<CourseCard paidcourses={data} />)
+                            return (<CourseCard key={key} paidcourses={data} />)
                         })}
                     </Box>
                 </Container>
@@ -206,7 +206,7 @@ export default function HomePage() {
                     <Box className={styles.articles}>
                         {FreeCourses?.slice(0, 4).map((data, key) => {
                             return (
-                                <CourseCard freecourses={data} />
+                                <CourseCard key={key} freecourses={data} />
                             )
                         })}
                     </Box>

@@ -143,7 +143,7 @@ export default function Courses() {
                         {courseData && DATA.currentData() &&
                             DATA.currentData().map((data: any, key: any) => {
                                 return (
-                                    <CourseCard coursedata={data} />
+                                    <CourseCard key={key} coursedata={data} />
                                 )
                             })}
                     </Box>) : <Box className={styles.listviewarticles}>
@@ -151,7 +151,7 @@ export default function Courses() {
                             {courseData && DATA.currentData() &&
                                 DATA.currentData().map((data: any, key: any) => {
                                     return (
-                                        <CourseCardListView coursedata={data} />
+                                        <CourseCardListView key={key} coursedata={data} />
                                     )
                                 })}
                         </Container>
