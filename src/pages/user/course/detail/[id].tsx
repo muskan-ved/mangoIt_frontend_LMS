@@ -200,7 +200,7 @@ export default function Couseview() {
                             {/* </Item> */}
                           </Grid>
 
-                          <Box className="fgfgh">
+                          <Box className={courseStyle.backcss}>
                             <Button
                               type="submit"
                               size="large"
