@@ -59,7 +59,6 @@ const columns: Column[] = [
 ];
 
 const Subscription = () => {
-  let getId: any;
   const [rows, setRows] = React.useState<any>([]);
   const [toggle, setToggle] = React.useState<boolean>(false);
   const [search, setSearch] = React.useState("");
@@ -86,6 +85,8 @@ const Subscription = () => {
 
   React.useEffect(() => {
     let localData: any;
+    let getId: any;
+
     if (typeof window !== "undefined") {
       localData = window.localStorage.getItem("userData");
     }
@@ -118,10 +119,9 @@ const Subscription = () => {
         });
       } else {
         setSearch(e.target.value);
-        HandleSearchSubsGet(search,userId?.id).then((itemSeached) => {
+        HandleSearchSubsGet(search, userId?.id).then((itemSeached) => {
           setRows(itemSeached.data);
         });
-       
       }
     }
   };

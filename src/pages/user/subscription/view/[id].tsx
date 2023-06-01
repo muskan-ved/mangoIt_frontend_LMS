@@ -63,13 +63,14 @@ const columns: Column[] = [
 ];
 
 export default function View() {
-  var getId: any;
   const [rows, setRows] = React.useState<any>([]);
   const [subsData, setSubsdata] = React.useState<any>([]);
   const [toggle, setToggle] = useState<boolean>(false);
 
   useEffect(() => {
     let localData: any;
+    var getId: any;
+
     if (typeof window !== "undefined") {
       localData = window.localStorage.getItem("userData");
     }
@@ -144,7 +145,7 @@ export default function View() {
                   </Typography>
                   &emsp;
                   <Typography variant="subtitle2" className={subs.fontCSS}>
-                  {capitalizeFirstLetter(subsData && subsData?.name)}
+                    {capitalizeFirstLetter(subsData && subsData?.name)}
                   </Typography>
                 </Box>
                 <Box className={subs.maindisplay}>

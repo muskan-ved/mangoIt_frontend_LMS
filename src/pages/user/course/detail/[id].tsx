@@ -60,7 +60,6 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function Couseview() {
-  var getId: any;
   const [couseData, setCousedata] = useState<any>([]);
   const [files, setFiles] = useState<any>("");
   const [activeToggle, setActiveToggle] = useState<any>("");
@@ -68,6 +67,7 @@ export default function Couseview() {
 
   useEffect(() => {
     let localData: any;
+    let getId: any;
     if (typeof window !== "undefined") {
       localData = window.localStorage.getItem("userData");
     }
@@ -338,7 +338,7 @@ export default function Couseview() {
                       </Typography>
                       {couseData &&
                         couseData?.modules?.map((item: any) => (
-                          <Accordion>
+                          <Accordion key={item?.id}>
                             <AccordionSummary
                               expandIcon={<ExpandMoreIcon />}
                               aria-controls="panel1a-content"
@@ -359,6 +359,7 @@ export default function Couseview() {
                                       width: "100%",
                                       bgcolor: "background.paper",
                                     }}
+                                    key={ee?.id}
                                   >
                                     <nav aria-label="main mailbox folders">
                                       <List>
