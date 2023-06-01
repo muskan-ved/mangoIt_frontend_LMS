@@ -94,8 +94,8 @@ const EmailConfiguration = () => {
               {!isLoadingButton ? (
                 <>
                   <Box className={emailStyles.listEmailPageBox}>
-                    <Typography className={emailStyles.allEmailCountStyle}>All Email ({rows?.length})</Typography>
-                    <Button
+                    <Typography className={emailStyles.allEmailCountStyle}>All Email ({rows?.length > 0 ? rows?.length : 0})</Typography>
+                    {/* <Button
                       variant="contained"
                       id={styles.muibuttonBackgroundColor}
                       onClick={() =>
@@ -103,7 +103,7 @@ const EmailConfiguration = () => {
                       }
                     >
                       + Add New{" "}
-                    </Button>
+                    </Button> */}
                   </Box>
                   <Paper>
                     <TableContainer
@@ -175,9 +175,9 @@ const EmailConfiguration = () => {
                             })
                           ) : (
                             <TableRow>
-                              <TableCell colSpan={6}>
+                              <TableCell colSpan={5}>
                                 {" "}
-                                <Typography>Record not Found</Typography>{" "}
+                                <Typography align="center">Record not Found</Typography>{" "}
                               </TableCell>
                             </TableRow>
                           )}

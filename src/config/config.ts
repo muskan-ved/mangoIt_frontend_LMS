@@ -45,6 +45,10 @@ export const API = {
   getEmailContent: `${BASE_URL}/${process.env.NEXT_PUBLIC_EMAIL_CONTENT_GET}`,
   createEmailContent: `${BASE_URL}/${process.env.NEXT_PUBLIC_EMAIL_CONTENT_CREATE}`,
   updateEmailContent: `${BASE_URL}/${process.env.NEXT_PUBLIC_EMAIL_CONTENT_UPDATE}`,
+
+  getEmailType: `${BASE_URL}/${process.env.NEXT_PUBLIC_EMAIL_TYPE_GET}`,
+  createEmailType: `${BASE_URL}/${process.env.NEXT_PUBLIC_EMAIL_TYPE_CREATE}`,
+  updateEmailType: `${BASE_URL}/${process.env.NEXT_PUBLIC_EMAIL_TYPE_UPDATE}`,
   
   getOrder: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_ORDER_BY_USER_ID}`,
 

@@ -23,10 +23,10 @@ import { emailmanagementConfigValidations } from "@/validation_schema/configurat
 import emailStyle from "../../../../styles/allConfigurations.module.css";
 import { emailmanagementType } from "@/types/siteType";
 import {
-  HandleEmailContentCreate,
   HandleEmailContentGetByID,
   HandleEmailContentUpdate,
 } from "@/services/email";
+import CodeMirror from "@uiw/react-codemirror";
 import { useRouter } from "next/router";
 import { ToastContainer } from "react-toastify";
 
@@ -62,6 +62,7 @@ function a11yProps(index: number) {
 const EmailContentManage = () => {
   const [tabs, setTab] = useState(0);
   const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
+  const [emailBodyText, setEmailBodyText] = useState<string>("");
   const {
     register,
     handleSubmit,
@@ -79,26 +80,6 @@ const EmailContentManage = () => {
     setTab(newValue);
   };
 
-  // const onSubmit = async (event: any) => {
-
-  //   const reqData = {
-  //           emailfrom: event.emailfrom,
-  //           emailtype: event.emailtype,
-  //           emailsubject: event.emailsubject
-  //   }
-  //   setLoadingButton(true);
-  //   await HandleEmailContentCreate(reqData)
-  //     .then((res) => {
-  //       setLoadingButton(false);
-  //       handleGetData(res?.data?.user_id);
-  //       setIsAddOrEdit(true);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       setLoadingButton(false);
-  //     });
-  // };
-
   function ErrorShowing(errorMessage: any) {
     return (
       <Typography variant="body2" color={"error"} gutterBottom>
@@ -113,6 +94,7 @@ const EmailContentManage = () => {
         if (res.data.length > 0) {
           const fields = ["emailtype", "emailfrom", "emailsubject"];
           fields.forEach((field) => setValue(field, res.data[0][field]));
+          setEmailBodyText(res.data[0]?.emailbodytext);
         }
       })
       .catch((err) => {
@@ -126,16 +108,22 @@ const EmailContentManage = () => {
 
   const onUpdate = async (event: any) => {
     const reqData = {
-                emailfrom: event.emailfrom,
-                emailtype: event.emailtype,
-                emailsubject: event.emailsubject
-        }
+      emailfrom: event.emailfrom,
+      emailtype: event.emailtype,
+      emailsubject: event.emailsubject,
+      emailbodytext: emailBodyText,
+    };
 
     setLoadingButton(true);
-    await HandleEmailContentUpdate(reqData,id)
+    await HandleEmailContentUpdate(reqData, id)
       .then((res) => {
         setLoadingButton(false);
-        // handleGetData();
+        handleGetData();
+        if (res?.status === 201) {
+          setTimeout(() => {
+            router.replace("/admin/emailmanagement/");
+          }, 2000);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -169,36 +157,56 @@ const EmailContentManage = () => {
                 >
                   <Tab
                     label="General"
-                    sx={{fontWeight: "bold"}}
+                    sx={{ fontWeight: "bold" }}
                     className={styles.wholeWebsiteButtonColor}
                     {...a11yProps(0)}
                   />
                   <Tab
                     label="Contents"
-                    sx={{fontWeight: "bold"}}
+                    sx={{ fontWeight: "bold" }}
                     className={styles.wholeWebsiteButtonColor}
                     {...a11yProps(1)}
                   />
                   <Tab
                     label="Preview"
-                    sx={{fontWeight: "bold"}}
+                    sx={{ fontWeight: "bold" }}
                     className={styles.wholeWebsiteButtonColor}
                     {...a11yProps(2)}
                   />
                 </Tabs>
               </Box>
-              <TabPanel value={tabs} index={0}>
-               
-                {/* // update data in portal  */}
-                <Box
-                  component="form"
-                  method="POST"
-                  noValidate
-                  autoComplete="off"
-                  onSubmit={handleSubmit(onUpdate)}
-                  onReset={reset}
-                >
+              <Box
+                component="form"
+                method="POST"
+                noValidate
+                autoComplete="off"
+                onSubmit={handleSubmit(onUpdate)}
+                onReset={reset}
+              >
+                <TabPanel value={tabs} index={0}>
+                  {/* // update data in portal  */}
+
                   <Grid container spacing={3}>
+                  <Grid item xs={12} sm={12} md={12} lg={12}>
+                      <InputLabel
+                        shrink
+                        htmlFor="emailtype"
+                        className={emailStyle.inputLabels}
+                      >
+                        E-Mail Type
+                      </InputLabel>
+                      <TextField
+                        fullWidth
+                        id="emailtype"
+                        {...register("emailtype")}
+                        disabled
+                      />
+                      {errors && errors.emailtype
+                        ? ErrorShowing(errors?.emailtype?.message)
+                        : ""}
+                    </Grid>
+
+
                     <Grid item xs={12} sm={12} md={12} lg={12}>
                       <InputLabel
                         shrink
@@ -218,25 +226,7 @@ const EmailContentManage = () => {
                         : ""}
                     </Grid>
 
-                    <Grid item xs={12} sm={12} md={12} lg={12}>
-                      <InputLabel
-                        shrink
-                        htmlFor="emailtype"
-                        className={emailStyle.inputLabels}
-                      >
-                        E-Mail Type
-                      </InputLabel>
-                      <TextField
-                        fullWidth
-                        id="emailtype"
-                        {...register("emailtype")}
-                        placeholder="Provide your email type"
-                      />
-                      {errors && errors.emailtype
-                        ? ErrorShowing(errors?.emailtype?.message)
-                        : ""}
-                    </Grid>
-
+                   
                     <Grid item xs={12} sm={12} md={12} lg={12}>
                       <InputLabel
                         shrink
@@ -255,58 +245,72 @@ const EmailContentManage = () => {
                         ? ErrorShowing(errors?.emailsubject?.message)
                         : ""}
                     </Grid>
-                    <Grid
-                      item
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      lg={12}
-                      textAlign={"right"}
-                    >
-                      <Button
-                          type="button"
-                          size="large"
-                          className={emailStyle.bothButtonSpace}
-                          variant="contained"
-                          onClick={() => router.back()}
-                        >
-                          Cancel
-                        </Button>
-                      {!isLoadingButton ? (
-                        <Button
-                          type="submit"
-                          size="large"
-                          variant="contained"
-                          id={styles.muibuttonBackgroundColor}
-                        >
-                          Update
-                        </Button>
-                      ) : (
-                        <LoadingButton
-                          loading={isLoadingButton}
-                          size="large"
-                          className={emailStyle.siteLoadingButton}
-                          variant="contained"
-                          disabled
-                        >
-                          <CircularProgressBar />
-                        </LoadingButton>
-                      )}
-                    </Grid>
                   </Grid>
-                </Box>
-              </TabPanel>
-              <TabPanel value={tabs} index={1}>
-                tab2
-              </TabPanel>
-              <TabPanel value={tabs} index={2}>
-                tab3
-              </TabPanel>
+                </TabPanel>
+                <TabPanel value={tabs} index={1}>
+                  <CodeMirror
+                    height="383px"
+                    maxWidth="1200px"
+                    value={emailBodyText}
+                    onChange={setEmailBodyText}
+                  />
+                </TabPanel>
+                <TabPanel value={tabs} index={2}>
+                  <Box className={emailStyle.emailBodyTextPreview}>
+                    <Box
+                      dangerouslySetInnerHTML={{ __html: emailBodyText }}
+                      padding={2}
+                    ></Box>
+                  </Box>
+                </TabPanel>
+                {tabs !== 2 && (
+                  <Grid
+                    item
+                    xs={12}
+                    sm={12}
+                    md={12}
+                    lg={12}
+                    textAlign={"right"}
+                    mt={2}
+                    pr={3}
+                  >
+                    <Button
+                      type="button"
+                      size="large"
+                      className={emailStyle.bothButtonSpace}
+                      variant="contained"
+                      onClick={() => router.back()}
+                    >
+                      Cancel
+                    </Button>
+                    {!isLoadingButton ? (
+                      <Button
+                        type="submit"
+                        size="large"
+                        variant="contained"
+                        id={styles.muibuttonBackgroundColor}
+                      >
+                        Update
+                      </Button>
+                    ) : (
+                      <LoadingButton
+                        loading={isLoadingButton}
+                        size="large"
+                        className={emailStyle.siteLoadingButton}
+                        variant="contained"
+                        disabled
+                      >
+                        <CircularProgressBar />
+                      </LoadingButton>
+                    )}
+                  </Grid>
+                )}
+              </Box>
             </CardContent>
           </Card>
         </Box>
       </Box>
-      <ToastContainer/>
+      <ToastContainer />
     </>
   );
 };

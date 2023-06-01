@@ -28,6 +28,28 @@ export const HandleEmailContentGetByID = async (Id?: any) => {
         });
 };
 
+export const HandleEmailTypeGetByID = async (Id?: any) => {
+    const emailTypeUrl = Id ? `${API.getEmailType}/${Id}` : `${API.getEmailType}`;
+    return await axios({
+        method: "GET",
+        url: emailTypeUrl,
+        headers: LoginHeader(),
+    })
+        .then((request) => {
+            return request;
+        })
+        .catch((error) => {
+            if (error?.response?.status === 401) {
+                HandleLogout()
+            } else if (error.response?.status === 400) {
+                toast.error(error?.response?.data?.message)
+            } else {
+                toast.error("Something went wrong");
+            }
+            return error;
+        });
+};
+
 export const HandleEmailContentCreate = async (reqData: any) => {
     return await axios({
         method: "POST",
@@ -72,3 +94,4 @@ export const HandleEmailContentUpdate = async (updateData: any, id: any) => {
         return error;
     })
 };
+
