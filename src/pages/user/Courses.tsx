@@ -10,7 +10,6 @@ import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import { HandleCourseGet } from "@/services/course";
 import { CourseCard, CourseCardListView } from "@/common/ResuableCardCmp/coursescard";
 import { usePagination } from "@/common/Pagination/paginations";
-import SpinnerProgress from "@/common/CircularProgressComponent/spinnerComponent";
 
 export default function Courses() {
     const [courseData, setcourseData] = React.useState([]);
@@ -33,7 +32,6 @@ export default function Courses() {
             setLoadar(false)
         })
     }
-
     //get courses
     const getAllCourseData = () => {
         setLoadar(true)
@@ -45,8 +43,6 @@ export default function Courses() {
     React.useEffect(() => {
         getAllCourseData();
     }, [])
-
-
     //pagination
     const [row_per_page, set_row_per_page] = React.useState(8);
     let [page, setPage] = React.useState<any>(1);
@@ -68,7 +64,6 @@ export default function Courses() {
     const listView = () => {
         setgridview(false)
     }
-
     return (
         <>
             {/*header*/}
@@ -194,7 +189,7 @@ export default function Courses() {
                     </Grid>
                 </Container >
             </Box >
-              {/*footer*/}
+            {/*footer*/}
             <WebViewFooter />
         </>
     );

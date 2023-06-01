@@ -1,28 +1,28 @@
 import React, { useEffect, useState } from "react";
-//import { useRouter } from "next/router";
-import axios from "axios";
 import { Box, Button, Typography } from "@mui/material";
-import styles from "../../../../styles/payment.module.css";
+import styles from "../../styles/payment.module.css";
+import { useRouter } from "next/router";
+import { HandlePaymentDetails } from "@/services/subscription";
 
 export default function PaymentSuccess() {
-    //const router = useRouter();
-    // useEffect(() => {
-    //     // if (router.isReady) {
-    //     //     router.replace("/thankyou");
-    //     // } else {
-    //     //     router.push("/thankyou");
-    //     // }
-    // }, []);
+    const router = useRouter();
+    const { session_id } = router.query;
+    useEffect(() => {
+        getPaymentDetails();
+    }, []);
 
-    // setTimeout(() => {
-    //   // setLoad(false);
-    // }, 5000);
-
+    const reqdata = {
+        cs_test_key: session_id
+    }
+    //get subscription
+    const getPaymentDetails = () => {
+        HandlePaymentDetails(reqdata).then((paymentdet) => {
+            console.log(paymentdet?.orderdetails?.data)
+        })
+    }
     return (
         <Box>
-            {/* {load ? (
-                <Loader />
-            ) : ( */}
+
             <Box className={styles.content}>
                 <Box className={styles.wrapper1}>
                     <Box className={styles.wrapper2}>
@@ -37,7 +37,6 @@ export default function PaymentSuccess() {
                     </Box>
                 </Box>
             </Box>
-            {/* )} */}
         </Box >
     );
 }

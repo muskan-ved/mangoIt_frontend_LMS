@@ -12,6 +12,7 @@ import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
 import SchoolIcon from '@mui/icons-material/School';
 import { HandleCourseGet } from "@/services/course";
 import { CourseCard } from "@/common/ResuableCardCmp/coursescard";
+import Image from "next/image";
 
 export default function HomePage() {
     const [FreeCourses, setFreeCourses] = React.useState([]);
@@ -80,7 +81,7 @@ export default function HomePage() {
                 </Box>
                 <Box className={styles.griditem2}>
                     <Box className={styles.teamimgwrapper}>
-                        <img src={props?.item?.image} alt="team-img" />
+                        <Box component='img' src={props?.item?.image} alt="team-img" />
                     </Box>
                 </Box>
             </Box>
@@ -212,7 +213,7 @@ export default function HomePage() {
                     </Box>
                 </Container>
             </Box>
-              {/*footer*/}
+            {/*footer*/}
             <WebViewFooter />
         </>
     );

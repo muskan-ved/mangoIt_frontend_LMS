@@ -78,3 +78,49 @@ export const HandleSubscriptionPayment = async (reqData: any) => {
       else return error;
     });
 };
+
+export const HandlePaymentDetails = async (reqData: any) => {
+  return await axios({
+    method: "POST",
+    url: `${API.getpaymentdetails}`,
+    headers: LoginHeader(),
+    data: reqData,
+  })
+    .then((responce) => {
+      return responce?.data;
+    })
+    .catch((error) => {
+      if (error.response.status === 401) HandleLogout();
+      else return error;
+    });
+};
+
+export const GetallSubsctions = async () => {
+  return await axios({
+    method: "GET",
+    url: `${API.allsubscriptions}`,
+    headers: LoginHeader(),
+  })
+    .then((responce) => {
+      return responce?.data;
+    })
+    .catch((error) => {
+      if (error.response.status === 401) HandleLogout();
+      else return error;
+    });
+};
+
+export const GetSubsctionsPlansDet = async (id: any) => {
+  return await axios({
+    method: "GET",
+    url: `${API.getsubscriptionplandet}/${id}`,
+    headers: LoginHeader(),
+  })
+    .then((responce) => {
+      return responce?.data;
+    })
+    .catch((error) => {
+      if (error.response.status === 401) HandleLogout();
+      else return error;
+    });
+};

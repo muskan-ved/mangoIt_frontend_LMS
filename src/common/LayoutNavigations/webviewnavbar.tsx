@@ -27,6 +27,7 @@ export default function WebViewNavbar() {
     let path = router?.pathname;
     let setHomeColor = path.includes("home") ? textcolor : "";
     let setCoursesColor = path.includes("Courses") ? textcolor : "";
+    let setsubscribeplan = path.includes("subscribeplan") ? textcolor : "";
 
     const mobileMenuId = "primary-search-account-menu-mobile";
     const renderMobileMenu = (
@@ -46,10 +47,17 @@ export default function WebViewNavbar() {
             onClose={handleMobileMenuClose}
         >
             <MenuItem>
-                <Typography>Home</Typography>
+                <Typography sx={{
+                    color: setHomeColor,
+                }}>Home</Typography>
             </MenuItem>
             <MenuItem onClick={() => router.push("/profile")}>
-                <Typography>Course</Typography>
+                <Typography sx={{
+                    color: setCoursesColor,
+                }}>Course</Typography>
+            </MenuItem>
+            <MenuItem onClick={() => router.push("/profile")}>
+                <Typography sx={{ color: setsubscribeplan }}>Subscribe Plan</Typography>
             </MenuItem>
             <MenuItem onClick={HandleLogout}>
                 <Typography>My Acount</Typography>
@@ -90,6 +98,11 @@ export default function WebViewNavbar() {
                                 Course
                             </Typography></Link>
 
+                            <Link href="/user/subscribeplan" ><Typography
+                                variant="body2"
+                                className={styles.windowFullWidthNameAlign}
+                                sx={{ color: setsubscribeplan }}
+                            >Subscription Plan</Typography></Link>
                             <Link href="/login" ><Typography
                                 variant="body2"
                                 className={styles.windowFullWidthNameAlign}

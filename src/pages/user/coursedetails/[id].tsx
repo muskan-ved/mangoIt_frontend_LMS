@@ -11,19 +11,21 @@ import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import Link from "next/link";
 import AlarmOnIcon from '@mui/icons-material/AlarmOn';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
-import { CourseCard } from "@/common/ResuableCardCmp/coursescard";
-import SellIcon from '@mui/icons-material/Sell';
+import { CourseCard, SubscribtionPanCard } from "@/common/ResuableCardCmp/coursescard";
+import { GetallSubsctions } from "@/services/subscription";
 
 export default function CoursesDetailsPage() {
     const router = useRouter();
     const { id } = router.query;
     const [coursedet, setcoursedet] = useState([]);
+    const [subsdata, setsubsdata] = useState([]);
     const [FreeCourses, setFreeCourses] = useState([]);
     const [PaidCourses, setPaidCourses] = useState([]);
     useEffect(() => {
         if (router.isReady) {
             getCourseDetails();
             getAllCourseData();
+            getSubscribtion();
             router.push(`/user/coursedetails/${id}`);
         }
     }, [router.isReady]);
@@ -44,6 +46,13 @@ export default function CoursesDetailsPage() {
             setPaidCourses(courses?.data?.filter((a: any) =>
                 a?.course?.is_chargeable === "paid"
             ))
+        })
+    }
+
+    //get subscription
+    const getSubscribtion = () => {
+        GetallSubsctions().then((subscdata) => {
+            setsubsdata(subscdata)
         })
     }
 
@@ -267,74 +276,10 @@ export default function CoursesDetailsPage() {
                                 </Typography>
                                 <Divider className={styles.divder} />
                             </Box>
-                            <Box className={styles.subscription}>
-                                <center>
-                                    <Box className={styles.subcarticle}>
-                                        <CardHeader title='Basic Plan'></CardHeader>
-                                        <CardContent >
-                                            <Box px={1}>
-                                                <Typography variant="h3" component="h2" gutterBottom={true}>
-                                                    $785/
-                                                    <Typography variant="h6" color="textSecondary" component="span">3 months</Typography>
-                                                </Typography>
-                                                <Typography color="textSecondary" variant="subtitle1" component="p">15 Modules</Typography>
-                                                <Typography color="textSecondary" variant="subtitle1" component="p">45 Topics</Typography>
-                                                <Typography color="textSecondary" variant="subtitle1" component="p">Teacher Support</Typography>
-                                                <Typography color="textSecondary" variant="subtitle1" component="p" paragraph={true}>Practice Text</Typography>
-                                            </Box>
-                                            <Button sx={{ backgroundColor: " #E8661B", color: "white" }} id={styles.muibuttonBackgroundColor}
-                                            >Subscribe Now</Button>
-                                            <Box mt={2} sx={{ color: "#050bf7" }}>
-                                                <Link href="#">Read More</Link>
-                                            </Box>
-                                        </CardContent>
-                                    </Box>
-                                </center>
-                                <center>
-                                    <Box className={styles.subcarticle}>
-                                        <CardHeader title='Advanced Plan'></CardHeader>
-                                        <CardContent >
-                                            <Box px={1}>
-                                                <Typography variant="h3" component="h2" gutterBottom={true}>
-                                                    $785/
-                                                    <Typography variant="h6" color="textSecondary" component="span">3 months</Typography>
-                                                </Typography>
-                                                <Typography color="textSecondary" variant="subtitle1" component="p">15 Modules</Typography>
-                                                <Typography color="textSecondary" variant="subtitle1" component="p">45 Topics</Typography>
-                                                <Typography color="textSecondary" variant="subtitle1" component="p">Teacher Support</Typography>
-                                                <Typography color="textSecondary" variant="subtitle1" component="p" paragraph={true}>Practice Text</Typography>
-                                            </Box>
-                                            <Button sx={{ backgroundColor: " #E8661B", color: "white" }} id={styles.muibuttonBackgroundColor}
-                                            >Subscribe Now</Button>
-                                            <Box mt={2} sx={{ color: "#050bf7" }}>
-                                                <Link href="#">Read More</Link>
-                                            </Box>
-                                        </CardContent>
-                                    </Box>
-                                </center>
-                                <center>
-                                    <Box className={styles.subcarticle}>
-                                        <CardHeader title='Premium Plan'></CardHeader>
-                                        <CardContent >
-                                            <Box px={1}>
-                                                <Typography variant="h3" component="h2" gutterBottom={true}>
-                                                    $785/
-                                                    <Typography variant="h6" color="textSecondary" component="span">3 months</Typography>
-                                                </Typography>
-                                                <Typography color="textSecondary" variant="subtitle1" component="p">15 Modules</Typography>
-                                                <Typography color="textSecondary" variant="subtitle1" component="p">45 Topics</Typography>
-                                                <Typography color="textSecondary" variant="subtitle1" component="p">Teacher Support</Typography>
-                                                <Typography color="textSecondary" variant="subtitle1" component="p" paragraph={true}>Practice Text</Typography>
-                                            </Box>
-                                            <Button sx={{ backgroundColor: " #E8661B", color: "white" }} id={styles.muibuttonBackgroundColor}
-                                            >Subscribe Now</Button>
-                                            <Box mt={2} sx={{ color: "#050bf7" }}>
-                                                <Link href="#">Read More</Link>
-                                            </Box>
-                                        </CardContent>
-                                    </Box>
-                                </center>
-                            </Box>
+                            {subsdata.map((data, key) => {
+                                return (<SubscribtionPanCard subsdata={data} />)
+                            })
+                            }
                         </Container>
                     </Box>
                     {/*top enrolled course*/}

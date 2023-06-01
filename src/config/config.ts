@@ -46,4 +46,8 @@ export const API = {
 
   //accept payment
   acceptpayment: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_PAYMENT}`,
+  getpaymentdetails: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_PAYMENTDETAILS}`,
+  //get all subscriptions
+  allsubscriptions: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_ALLSUBSCRIPYIONS}`,
+  getsubscriptionplandet: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_SUBSCRIPTIONPLANDET}`,
 };

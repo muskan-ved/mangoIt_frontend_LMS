@@ -2,8 +2,10 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import styles from '../../styles/webview.module.css'
 import { capitalizeFirstLetter } from "../CapitalFirstLetter/capitalizeFirstLetter";
-import { Card, CardActionArea, CardContent, CardMedia, Grid } from "@mui/material";
+import { Button, Card, CardActionArea, CardContent, CardHeader, CardMedia, Grid } from "@mui/material";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { HandleCourseGet } from "@/services/course";
 
 export function CourseCard(props: any) {
     const c_id = props?.coursedata?.course?.id || props?.paidcourses?.course?.id || props?.freecourses?.course?.id;
@@ -13,7 +15,7 @@ export function CourseCard(props: any) {
                 <Box className={styles.article}>
                     <Box className={styles.articlewrapper}>
                         <Box className={styles.figure}>
-                            <img src="https://leverageedu.com/blog/wp-content/uploads/2020/06/Short-term-Professional-Courses-after-Graduation.jpg" alt="" />
+                            <Box component='img' src="https://leverageedu.com/blog/wp-content/uploads/2020/06/Short-term-Professional-Courses-after-Graduation.jpg" alt="" />
                         </Box>
                         <Box className={styles.articlebody}>
                             <Typography className={styles.h2}>{capitalizeFirstLetter(props?.paidcourses?.course?.title) || capitalizeFirstLetter(props?.freecourses?.course?.title) || capitalizeFirstLetter(props?.coursedata
@@ -69,3 +71,62 @@ export function CourseCardListView(props: any) {
 
     );
 }
+
+export function SubscribtionPanCard(props: any) {
+    const [totalcrscount, settotalcrscount] = useState(0);
+    const [totalmodulecount, settotalmodulecount] = useState(0);
+    const [totalsessionscount, settotalsessionscount] = useState(0);
+
+    useEffect(() => {
+        getAllCourseData();
+    }, [])
+
+    //get courses
+    const getAllCourseData = () => {
+        HandleCourseGet('', "").then((courses) => {
+            let dt = 0;
+            let dts = 0;
+            courses?.data?.filter((a: any, key: any) => {
+                if (a?.course?.is_chargeable === "paid" && a?.course?.status === "active" && a?.sessionCount?.length > 0) {
+                    dt = dt + a?.sessionCount[0]?.sessionCount
+                }
+                if (a?.course?.is_chargeable === "paid" && a?.course?.status === "active" && a?.moduleCount?.length > 0) {
+                    dts = dts + a?.moduleCount[0]?.moduleCount
+                }
+            }
+            )
+            settotalsessionscount(dt)
+            settotalmodulecount(dts)
+            settotalcrscount((courses?.data?.filter((a: any) =>
+                a?.course?.is_chargeable === "paid" && a?.course?.status === "active").length
+            ))
+        })
+    }
+
+    return (
+        <Grid item xs={12} md={6}>
+            <center>
+                <Box className={styles.subcarticle}>
+                    <CardHeader title={`${props?.subsdata?.title}`}></CardHeader>
+                    <CardContent  >
+                        <Box px={1}>
+                            <Typography variant="h3" component="h2" gutterBottom={true}>
+                                ${props?.subsdata?.amount}/
+                                <Typography variant="h6" color="textSecondary" component="span">All Time</Typography>
+                            </Typography>
+                            <Typography color="textSecondary" variant="subtitle1" component="p">{totalcrscount} Courses</Typography>
+                            <Typography color="textSecondary" variant="subtitle1" component="p" mt={2}>{totalmodulecount} Modules</Typography>
+                            <Typography color="textSecondary" variant="subtitle1" component="p" mt={2}>{totalsessionscount} Sessions</Typography>
+                        </Box>
+                        <Box px={1} mt={2}>
+                            <Link href={`/user/Checkout/${props?.subsdata?.id}`} >
+                                <Button sx={{ backgroundColor: " #E8661B", color: "white" }} id={styles.muibuttonBackgroundColor}
+                                >Subscribe Now</Button></Link>
+                        </Box>
+                    </CardContent>
+                </Box>
+            </center>
+        </Grid>
+    );
+}
+
