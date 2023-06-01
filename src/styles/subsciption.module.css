@@ -57,12 +57,31 @@
   background: #e8661b;
 }
 .useNameFront2 {
-    color: #242222;
-    font-weight: 700;
-    margin-top: 30px;
-    margin-bottom: 15px;
-    margin-left: 10px;
-  }
-  .btncss1{
-    text-align: end;
-  }
+  color: #242222;
+  font-weight: 700;
+  margin-top: 30px;
+  margin-bottom: 15px;
+  margin-left: 10px;
+}
+.btncss1 {
+  text-align: end;
+}
+.subsbtn {
+  width: 18%;
+}
+
+.useSubsMessage {
+  color: #e8661b;
+  font-weight: bold;
+  text-decoration: underline;
+  font-size: 18px;
+}
+.maindisplay1 {
+  display: flex;
+  float: right;
+  padding: 10px;
+}
+.useSubsCancell {
+  color: #4e4a4a;
+  font-size: 18px;
+}

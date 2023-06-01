@@ -169,140 +169,6 @@ const Subscription = () => {
                   ),
                 }}
               />
-              {/* <Box
-                sx={{ float: "right", display: "flex", alignItems: "center" }}
-              >
-                <PopupState variant="popover" popupId="demo-popup-popover" >
-                  {(popupState) => (
-                    <Box>
-                      <Button
-                        sx={{ display: "inline-flex", color: "#1976d2" }}
-                        {...bindTrigger(popupState)}
-                      >
-                        <FilterAltOutlinedIcon />
-                        Filter
-                      </Button>
-                      <Popover
-                        {...bindPopover(popupState)}
-                        style={{ width: '35% !important' }}
-                        anchorOrigin={{
-                          vertical: "bottom",
-                          horizontal: "left",
-                        }}
-                        transformOrigin={{
-                          vertical: "top",
-                          horizontal: "center",
-                        }}
-                      >
-                        <Box>
-                          <Container
-                            className="filter-box"
-                            style={{ padding: "15px" }}
-                          >
-                            <Grid>
-                              <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
-                                Filter
-                              </Typography>
-                              <Box component="form"
-                                noValidate
-                                onSubmit={handleSubmit(onSubmit)}
-                                sx={{ mt: 1 }}>
-                                <Stack
-                                  style={{ marginTop: "10px" }}
-                                  className="form-filter"
-                                >
-                                  <Grid container spacing={2}>
-                                    <Grid item xs={12} md={6} lg={6} >
-                                    <Stack spacing={2}>
-                                        <InputLabel htmlFor="enddate" sx={{ fontWeight: 'bold' }}>
-                                          Type
-                                        </InputLabel>
-                                        <Controller
-                                          name="type"
-                                          control={control}
-                                          defaultValue={getFilter}
-                                          render={({ field }) => (
-                                            <FormControl fullWidth>
-                                              <Select {...field} displayEmpty>
-                                                <MenuItem value={0}>All</MenuItem>
-                                                <MenuItem value={'free'}>
-                                                  Free
-                                                </MenuItem>
-                                                <MenuItem value={'paid'}>
-                                                  Paid
-                                                </MenuItem>
-                                              </Select>
-                                            </FormControl>
-                                          )}
-                                        />
-                                      </Stack>
-                                    </Grid>
-                                    <Grid item xs={12} md={6} lg={6}>
-                                      <Stack spacing={2}>
-                                        <InputLabel htmlFor="enddate" sx={{ fontWeight: 'bold' }}>
-                                          Status
-                                        </InputLabel>
-                                        <Controller
-                                          name="status"
-                                          control={control}
-                                          defaultValue={getFilter}
-                                          render={({ field }) => (
-                                            <FormControl fullWidth>
-                                              <Select {...field} displayEmpty>
-                                                <MenuItem value={0}>All</MenuItem>
-                                                <MenuItem value={'active'}>
-                                                  Active
-                                                </MenuItem>
-                                                <MenuItem value={'inactive'}>
-                                                  In-active
-                                                </MenuItem>
-                                              </Select>
-                                            </FormControl>
-                                          )}
-                                        />
-                                      </Stack>
-                                    </Grid>
-
-                                    <Grid
-                                      item
-                                      xs={12}
-                                      lg={12}
-                                    >
-                                  <Box >
-                                        <Button
-                                          size="medium"
-                                          variant="contained"
-                                          color="primary"
-                                          type="button"
-                                          onClick={resetFilterValue}
-                                        >
-                                          Reset
-                                        </Button>
-                                        <Button
-                                          size="medium"
-                                          type="submit"
-                                          variant="contained"
-                                          color="primary"
-                                        
-                                          onClick={popupState.close}
-                                        >
-                                          Apply
-                                        </Button>
-                                      </Box>
-                                    </Grid>
-                                  </Grid>
-                                </Stack>
-                              </Box>
-                            </Grid>
-                          </Container>
-                        </Box>
-                      </Popover>
-                    </Box>
-                  )}
-                </PopupState>
-                &nbsp;
-                <Button variant="contained" onClick={() => router.push('/admin/courses/allcourses/addcourse')}>Add New Course</Button>
-              </Box> */}
               <Paper>
                 <TableContainer className={courseStyle.tableContainer}>
                   <Table stickyHeader aria-label="sticky table">
@@ -343,9 +209,9 @@ const Subscription = () => {
                         DATA.currentData().map((row: any) => {
                           let color = row?.status;
                           const statusColor =
-                            color === row?.status
+                            color === "active"
                               ? courseStyle.activeClassColor
-                              : color === "inactive"
+                              : color === "canceled"
                               ? courseStyle.inactiveClassColor
                               : courseStyle.draftClassColor;
                           return (
@@ -361,9 +227,7 @@ const Subscription = () => {
                               </TableCell>
                               <TableCell>${row?.price}</TableCell>
                               <TableCell>
-                                {/* {capitalizeFirstLetter(
-                                  row?.course?.is_chargeable
-                                )} */}
+                             
                                 25 May 2023
                               </TableCell>
                               <TableCell className={statusColor}>
@@ -426,18 +290,10 @@ const Subscription = () => {
                   </Stack>
                 </TableContainer>
               </Paper>
-              {/* <AlertDialog
-                open={open}
-                onClose={handleClickOpen}
-                onSubmit={handleDeletesRow}
-                title={deleteRow.title}
-                whatYouDelete="Session"
-              /> */}
             </CardContent>
           </Card>
         </Box>
       </Box>
-      {/* <Footer/> */}
     </>
   );
 };

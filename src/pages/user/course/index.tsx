@@ -11,7 +11,7 @@ import {
   IconButton,
   InputLabel,
   MenuItem,
-  OutlinedInput,
+
   Pagination,
   Popover,
   Select,
@@ -24,11 +24,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import styles from "../../../styles/sidebar.module.css";
 import courseStyle from "../../../styles/course.module.css";
 import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
-import Footer from "@/common/LayoutNavigations/footer";
+
 import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
+
 import ArrowDownwardOutlinedIcon from "@mui/icons-material/ArrowDownwardOutlined";
 import ArrowUpwardOutlinedIcon from "@mui/icons-material/ArrowUpwardOutlined";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -39,14 +38,13 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
+
 import TableRow from "@mui/material/TableRow";
 import { SearchOutlined } from "@mui/icons-material";
 import { useRouter } from "next/router";
-import { HandleCourseDelete, HandleCourseGet } from "@/services/course";
+import {  HandleCourseGet } from "@/services/course";
 import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
 import { usePagination } from "@/common/Pagination/paginations";
-import { AlertDialog } from "@/common/DeleteListRow/deleteRow";
 import { Controller, useForm } from "react-hook-form";
 import { handleSortData } from "@/common/Sorting/sorting";
 
@@ -71,7 +69,7 @@ const columns: Column[] = [
   { id: "module", label: "NO. MODULE", minWidth: 100 },
   { id: "session", label: "NO. SESSION", minWidth: 100 },
   { id: "is_chargeable", label: "TYPE", minWidth: 100 },
-  { id: "percent", label: "COMPLETE %", minWidth: 100 },
+  { id: "percent", label: "COMPLETE (%)", minWidth: 100 },
   { id: "action", label: "ACTION", minWidth: 100 },
 ];
 
@@ -167,7 +165,7 @@ const AllCourses = () => {
             First="Home"
             Middle="Courses"
             Text="COURSES"
-            Link="/user/courses"
+            Link="/user/course"
           />
 
           {/* main content */}
@@ -249,7 +247,7 @@ const AllCourses = () => {
                                           Type
                                         </InputLabel>
                                         <Controller
-                                          name="type"
+                                          name="is_chargeable"
                                           control={control}
                                           defaultValue={getFilter}
                                           render={({ field }) => (
@@ -284,7 +282,7 @@ const AllCourses = () => {
                                           defaultValue={getFilter}
                                           render={({ field }) => (
                                             <FormControl fullWidth>
-                                              <Select {...field} displayEmpty>
+                                              <Select {...field} displayEmpty disabled>
                                                 <MenuItem value={0}>
                                                   All
                                                 </MenuItem>

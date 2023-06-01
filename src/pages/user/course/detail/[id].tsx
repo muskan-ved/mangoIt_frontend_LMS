@@ -7,12 +7,7 @@ import {
   Button,
   Card,
   CardContent,
-  FormControl,
-  MenuItem,
-  Pagination,
   Grid,
-  Select,
-  Stack,
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -22,6 +17,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import Divider from "@mui/material/Divider";
 import ReactPlayer from "react-player/lazy";
+import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 
 // Helper Import
 import { ToastContainer } from "react-toastify";
@@ -38,7 +34,6 @@ import Paper from "@mui/material/Paper";
 import { useRouter } from "next/router";
 import { HandleCourseByCourseId } from "@/services/course";
 import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
-import { usePagination } from "@/common/Pagination/paginations";
 import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 
@@ -49,6 +44,7 @@ import courseStyle from "../../../../styles/course.module.css";
 import Image from "next/image";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { BASE_URL } from "@/config/config";
+import Link from "next/link";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -88,20 +84,6 @@ export default function Couseview() {
     }
   };
 
-  //pagination
-  const [row_per_page, set_row_per_page] = React.useState(5);
-  let [page, setPage] = React.useState<any>(1);
-  function handlerowchange(e: any) {
-    set_row_per_page(e.target.value);
-  }
-  const PER_PAGE = row_per_page;
-  const count = Math.ceil(couseData?.length / PER_PAGE);
-  const DATA = usePagination(couseData, PER_PAGE);
-  const handlePageChange = (e: any, p: any) => {
-    setPage(p);
-    DATA.jump(p);
-  };
-
   const handlebtnClick = (rowData: any) => {
     setActiveToggle(rowData.id);
     setSessionData(rowData);
@@ -123,7 +105,6 @@ export default function Couseview() {
       setFiles(rowData.attachment);
     }
   };
-  console.log("couseDatacouseData", couseData);
 
   const download = (identifier: any) => {
     let imagename = files && files?.slice(8);
@@ -148,6 +129,10 @@ export default function Couseview() {
     }
   };
 
+  const handleMarkAsComplete = () => {
+    console.log("W@@@@@@@@@@@@markAsComplete");
+  };
+  
   return (
     <>
       <Navbar />
@@ -156,13 +141,27 @@ export default function Couseview() {
 
         <Box className={styles.siteBodyContainer}>
           {/* breadcumbs */}
-          <BreadcrumbsHeading
-            First="Home"
-            Middle="Courses"
-            Text="VIEW"
-            Link="/user/course"
-          />
-
+          <Box className={subs.maindisplay}>
+            <BreadcrumbsHeading
+              First="Home"
+              Middle="Courses"
+              Text="VIEW"
+              Link="/user/course"
+            />
+            <Box className={courseStyle.backbtn}>
+              <Link href="/user/course" style={{ textDecoration: "none" }}>
+                <Button
+                  type="submit"
+                  size="large"
+                  variant="contained"
+                  className={courseStyle.backbtncs}
+                >
+                  <ArrowBackOutlinedIcon />
+                  &nbsp;Back
+                </Button>
+              </Link>
+            </Box>
+          </Box>
           {/* main content */}
           <Card>
             <CardContent>
@@ -171,34 +170,48 @@ export default function Couseview() {
                   <Grid item xs={7}>
                     <Item className={subs.shadoww}>
                       {files && files?.includes("mp4") ? (
-                        <Grid item xs={7}>
-                          <ReactPlayer
-                            controls={true}
-                            url={`${BASE_URL}/${files}`}
-                          />
-                          {/* <Item> */}
-                          <Typography
-                            variant="h5"
-                            className={subs.useNameFront1}
-                          >
-                            {capitalizeFirstLetter(
-                              sessionData && sessionData?.title
-                            )}
-                          </Typography>
-                          <Typography
-                            variant="subtitle2"
-                            className={courseStyle.fontCS}
-                          >
-                            {capitalizeFirstLetter(
-                              sessionData &&
-                                sessionData?.description?.replace(
-                                  /(<([^>]+)>)/gi,
-                                  ""
-                                )
-                            )}
-                          </Typography>
-                          {/* </Item> */}
-                        </Grid>
+                        <Fragment>
+                          <Grid item xs={7}>
+                            <ReactPlayer
+                              controls={true}
+                              url={`${BASE_URL}/${files}`}
+                            />
+                            {/* <Item> */}
+                            <Typography
+                              variant="h5"
+                              className={subs.useNameFront1}
+                            >
+                              {capitalizeFirstLetter(
+                                sessionData && sessionData?.title
+                              )}
+                            </Typography>
+                            <Typography
+                              variant="subtitle2"
+                              className={courseStyle.fontCS}
+                            >
+                              {capitalizeFirstLetter(
+                                sessionData &&
+                                  sessionData?.description?.replace(
+                                    /(<([^>]+)>)/gi,
+                                    ""
+                                  )
+                              )}
+                            </Typography>
+                            {/* </Item> */}
+                          </Grid>
+
+                          <Box className="fgfgh">
+                            <Button
+                              type="submit"
+                              size="large"
+                              variant="contained"
+                              className={courseStyle.backbtncs12}
+                              onClick={handleMarkAsComplete}
+                            >
+                              Mark as complete
+                            </Button>
+                          </Box>
+                        </Fragment>
                       ) : files && files?.includes("pdf") ? (
                         <Grid item xs={7}>
                           <Box className={subs.maindisplay}>
@@ -401,34 +414,6 @@ export default function Couseview() {
                   <br />
                 </Grid>
               </Box>
-              {/* <Box sx={{ flexGrow: 1 }}>
-                <Grid container spacing={2}>
-                  {files && files?.includes("mp4") ? (
-                    <Grid item xs={8}>
-                      <Item>
-                        <ReactPlayer
-                          controls={true}
-                          url={`http://localhost:6030/${files}`}
-                        />
-                      </Item>
-                    </Grid>
-                  ) : files && files?.includes("png") ? (
-                    <Grid item xs={8}>
-                      <Item>
-                        <Image
-                          className={courseStyle.imgwidth}
-                          alt="image"
-                          src={`http://localhost:6030/${files}`}
-                          width={350}
-                          height={400}
-                        />
-                      </Item>
-                    </Grid>
-                  ) : (
-                    ""
-                  )}
-                </Grid>
-              </Box> */}
             </CardContent>
           </Card>
         </Box>

@@ -42,6 +42,7 @@ export const API = {
 
   getSubscription: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_SUBSCRIPTION}`,
   getSubsById: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_SUBSCRIPTION_BY_ID}`,
+  updateSubscription: `${BASE_URL}/${process.env.NEXT_PUBLIC_UPDATE_SUBSCRIPTION}`,
 
   getOrder: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_ORDER_BY_USER_ID}`,
 

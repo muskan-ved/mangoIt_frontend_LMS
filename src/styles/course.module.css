@@ -112,14 +112,26 @@ width: 70% !important;
 }
 
 .fontCS {
-    font-weight: 400;
-    /* line-height: 1.6; */
-    color: #333;
-    font-size: 15px;
-    font-family: Inter, sans-serif !important;
-  }
-  .filedownloadcss{
-    margin-top: 15px;
-    font-size: 30px;
-    color: #e8661b;
-  }
+  font-weight: 400;
+  color: #333;
+  font-size: 15px;
+  font-family: Inter, sans-serif !important;
+}
+.filedownloadcss {
+  margin-top: 15px;
+  font-size: 30px;
+  color: #e8661b;
+}
+.backbtn {
+  position: absolute;
+  right: 25px;
+}
+.backbtncs {
+  height: 37px;
+}
+.backbtncs12 {
+  height: 37px;
+  text-align: end;
+  margin-right: 10px;
+  margin-top: 20px;
+}
