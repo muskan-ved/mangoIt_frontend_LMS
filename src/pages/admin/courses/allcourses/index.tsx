@@ -46,8 +46,9 @@ import { HandleCourseDelete, HandleCourseGet } from "@/services/course";
 import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
 import { usePagination } from "@/common/Pagination/paginations";
 import { AlertDialog } from "@/common/DeleteListRow/deleteRow";
-import { Controller,useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { handleSortData } from "@/common/Sorting/sorting";
+import { ToastContainer } from "react-toastify";
 
 interface Column {
   id: "id" | "title" | "module" | "session" | "is_chargeable" | "status" | "action";
@@ -75,8 +76,6 @@ const AllCourses = () => {
   const [open, setOpen] = React.useState(false);
   const [getFilter, setFilter] = React.useState<number>(0);
   const [filterObject, setFilterObject] = React.useState<any>('');
-  
-
   const router = useRouter()
   //pagination
   const [row_per_page, set_row_per_page] = React.useState(5);
@@ -96,7 +95,12 @@ const AllCourses = () => {
     handleSubmit,
     control,
     reset,
+    setValue, getValues,
   } = useForm();
+
+  React.useEffect(() => {
+    getAllCourseData();
+  }, [])
 
   const onSubmit = (event: any) => {
     HandleCourseGet('', event).then((itemFiltered) => {
@@ -104,7 +108,7 @@ const AllCourses = () => {
       setFilterObject(event)
     })
   }
-  
+
 
   const handleClickOpen = (row: any) => {
     // console.log('row', row)
@@ -133,7 +137,6 @@ const AllCourses = () => {
   }
   const handleSearch = (e: any, identifier: any) => {
     setPage(1);
-    DATA.jump(1);
     if (identifier === 'reset') {
       HandleCourseGet('', { is_chargeable: 0, status: 0 }).then((itemSeached) => {
         setRows(itemSeached.data);
@@ -146,20 +149,17 @@ const AllCourses = () => {
         setRows(itemSeached.data);
       })
     }
+
   }
 
   const getAllCourseData = () => {
     HandleCourseGet('', filterObject).then((courses) => {
-      console.log(courses,"45")
       setRows(courses.data)
     })
   }
 
-  React.useEffect(() => {
-    getAllCourseData();
-  }, [])
 
-  // console.log('rowww', rows)
+  console.log(DATA.currentData(), 'rowww', rows)
   return (
     <>
       <Navbar />
@@ -182,7 +182,7 @@ const AllCourses = () => {
                 id="standard-search"
                 value={search}
                 variant="outlined"
-                placeholder="Search by course"
+                placeholder="Search by 'Course Name'"
                 onChange={(e) => handleSearch(e, '')}
                 InputProps={{
                   endAdornment: (
@@ -192,14 +192,11 @@ const AllCourses = () => {
                   ),
                 }}
               />
-              <Box
-                sx={{ float: "right", display: "flex", alignItems: "center" }}
-              >
+              <Box className={courseStyle.upperFilterBox}>
                 <PopupState variant="popover" popupId="demo-popup-popover" >
                   {(popupState) => (
                     <Box>
-                      <Button
-                        sx={{ display: "inline-flex", color: "#E8661B" }}
+                      <Button className={courseStyle.filterAltOutlinedIcon}
                         {...bindTrigger(popupState)}
                       >
                         <FilterAltOutlinedIcon />
@@ -223,21 +220,21 @@ const AllCourses = () => {
                             style={{ padding: "15px" }}
                           >
                             <Grid>
-                              <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+                              <Typography variant="h5" className={courseStyle.filterTypography}>
                                 Filter
                               </Typography>
                               <Box component="form"
                                 noValidate
                                 onSubmit={handleSubmit(onSubmit)}
-                                sx={{ mt: 1 }}>
+                              >
                                 <Stack
                                   style={{ marginTop: "10px" }}
                                   className="form-filter"
                                 >
                                   <Grid container spacing={2}>
                                     <Grid item xs={12} md={6} lg={6} >
-                                    <Stack spacing={2}>
-                                        <InputLabel htmlFor="enddate" sx={{ fontWeight: 'bold' }}>
+                                      <Stack spacing={2}>
+                                        <InputLabel htmlFor="enddate" className={courseStyle.typeFreePaid}>
                                           Type
                                         </InputLabel>
                                         <Controller
@@ -262,7 +259,7 @@ const AllCourses = () => {
                                     </Grid>
                                     <Grid item xs={12} md={6} lg={6}>
                                       <Stack spacing={2}>
-                                        <InputLabel htmlFor="enddate" sx={{ fontWeight: 'bold' }}>
+                                        <InputLabel htmlFor="enddate" className={courseStyle.statusBold}>
                                           Status
                                         </InputLabel>
                                         <Controller
@@ -291,8 +288,9 @@ const AllCourses = () => {
                                       xs={12}
                                       lg={12}
                                     >
-                                  <Box >
-                                        <Button className={courseStyle.boxInFilter}
+                                      <Box className={courseStyle.boxInFilter}>
+                                        <Button
+
                                           size="medium"
                                           variant="contained"
                                           color="primary"
@@ -302,6 +300,7 @@ const AllCourses = () => {
                                           Reset
                                         </Button>
                                         <Button
+                                          id={styles.muibuttonBackgroundColor}
                                           size="medium"
                                           type="submit"
                                           variant="contained"
@@ -324,7 +323,7 @@ const AllCourses = () => {
                   )}
                 </PopupState>
                 &nbsp;
-                <Button variant="contained" onClick={() => router.push('/admin/courses/allcourses/addcourse')}>Add New Course</Button>
+                <Button variant="contained" onClick={() => router.push('/admin/courses/allcourses/addcourse')} id={styles.muibuttonBackgroundColor}> + Add Course</Button>
               </Box>
               <Paper >
                 <TableContainer className={courseStyle.tableContainer}>
@@ -341,14 +340,25 @@ const AllCourses = () => {
                                 handleSort(rows) :
                                 ''
                             }}
+                            className={courseStyle.tableHeadingForId}
                           >
-                            {toggle ? column.label === 'ID' ? <Typography>ID <ArrowDownwardOutlinedIcon fontSize="small" /> </Typography> : column.label : column.label === 'ID' ? <Typography>ID <ArrowUpwardOutlinedIcon fontSize="small" /> </Typography> : column.label}
+                            {column.label === "ID" ? (
+                              <>
+                                {column.label}
+                                {toggle ? (
+                                  <ArrowDownwardOutlinedIcon fontSize="small" />
+                                ) : (
+                                  <ArrowUpwardOutlinedIcon fontSize="small" />
+                                )}
+                              </>
+                            ) : (
+                              column.label
+                            )}
                           </TableCell>
                         ))}
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {console.log(rows,rows?.length,DATA)}
                       {rows && rows.length > 0 ? DATA.currentData() &&
                         DATA.currentData()
                           .map((row: any) => {
@@ -371,7 +381,7 @@ const AllCourses = () => {
                                 </TableCell>
                               </TableRow>
                             );
-                          }) : <TableRow><TableCell colSpan={7} sx={{fontWeight:600,textAlign:'center'}}> Record not Found </TableCell></TableRow>}
+                          }) : <TableRow><TableCell colSpan={7} className={courseStyle.tableLastCell}><Typography> Record not Found </Typography> </TableCell></TableRow>}
                     </TableBody>
                   </Table>
                   <Stack
@@ -416,6 +426,7 @@ const AllCourses = () => {
         </Box>
       </Box>
       {/* <Footer/> */}
+      <ToastContainer />
     </>
   );
 };

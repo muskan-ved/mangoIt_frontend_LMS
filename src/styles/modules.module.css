@@ -1,3 +1,27 @@
+.InputLabelFont{
+    font-weight:700
+}
+.upperFilterBox{
+    float: right;
+    display: flex;
+    align-items: center;
+}
+.filterAltOutlinedIcon{
+    display: inline-flex;
+    color: #E8661B;
+}                      
+.filterTypography{
+    font-weight: bold !important;
+}
+.typeFreePaid{
+    font-weight: bold !important;
+}
+.statusBold{
+    font-weight: bold!important;
+}
+.cancelButton{
+    margin: 10px;
+}
 .subbox{
     border: 1px dashed grey;
     margin: 20px;
@@ -105,4 +129,7 @@ width: 70% !important;
 }
 .updateLoadingButton {
     width: 178px;
+}
+.tableHeadingForId{
+    font-weight: bold;
 }
