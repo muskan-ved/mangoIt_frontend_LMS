@@ -10,6 +10,7 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
+import Tooltip, { TooltipProps, tooltipClasses } from "@mui/material/Tooltip";
 import { styled } from "@mui/material/styles";
 
 import List from "@mui/material/List";
@@ -20,7 +21,7 @@ import ReactPlayer from "react-player/lazy";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 
 // Helper Import
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -47,6 +48,7 @@ import Image from "next/image";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { BASE_URL } from "@/config/config";
 import Link from "next/link";
+import Preview from "@/common/PreviewAttachments/previewAttachment";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -86,30 +88,31 @@ export default function Couseview() {
     }
   };
 
+  //tooltip
+
+  const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
+    <Tooltip {...props} classes={{ popper: className }} />
+  ))(({ theme }) => ({
+    [`& .${tooltipClasses.tooltip}`]: {
+      backgroundColor: theme.palette.common.white,
+      color: "#e8661b",
+      boxShadow: theme.shadows[1],
+      fontSize: 13,
+    },
+  }));
+
   const handlebtnClick = (rowData: any) => {
     setActiveToggle(rowData.id);
     setSessionData(rowData);
-    if (rowData.attachment.includes("txt")) {
-      console.log("txt", rowData.attachment);
-      setFiles(rowData.attachment);
-    } else if (rowData.attachment.includes("mp4")) {
-      setFiles(rowData.attachment);
-    } else if (rowData.attachment.includes("pdf")) {
-      setFiles(rowData.attachment);
-      console.log("pddfff", rowData.attachment);
-    } else if (
-      rowData.attachment.includes("jpeg") ||
-      rowData.attachment.includes("jpg") ||
-      rowData.attachment.includes("png")
-    ) {
+    if (rowData.attachment !== null) {
       setFiles(rowData.attachment);
     } else {
-      setFiles(rowData.attachment);
+      console.log("emptyl");
     }
   };
 
   const download = async (identifier: any) => {
-    let imagename = files && files?.slice(8);
+    // let imagename = files && files?.slice(8);
     if (identifier === "image") {
       let reqData = {
         imagename: files,
@@ -134,6 +137,16 @@ export default function Couseview() {
       HandlePDF(reqData).then((itemSeached: any) => {
         console.log("@");
       });
+    } else if (identifier === "mp4") {
+      let reqData = {
+        imagename: files,
+        identifier: "mp4",
+      };
+      HandlePDF(reqData).then((itemSeached: any) => {
+        console.log("@");
+      });
+    } else {
+      toast.warn("Something went wrong");
     }
   };
 
@@ -177,22 +190,31 @@ export default function Couseview() {
                 <Grid container spacing={2}>
                   <Grid item xs={7}>
                     <Item className={subs.shadoww}>
-                      {files && files?.includes("mp4") ? (
+                      {(files && files?.includes("mp4")) ||
+                      files?.includes("3gp") ||
+                      files?.includes("webm") ? (
                         <Fragment>
                           <Grid item xs={7}>
                             <ReactPlayer
+                              config={{
+                                file: {
+                                  attributes: { controlsList: "nodownload" },
+                                },
+                              }}
                               controls={true}
                               url={`${BASE_URL}/${files}`}
                             />
                             {/* <Item> */}
-                            <Typography
-                              variant="h5"
-                              className={subs.useNameFront1}
-                            >
-                              {capitalizeFirstLetter(
-                                sessionData && sessionData?.title
-                              )}
-                            </Typography>
+                            <Box className={subs.maindisplay}>
+                              <Typography
+                                variant="h5"
+                                className={subs.useNameFront1}
+                              >
+                                {capitalizeFirstLetter(
+                                  sessionData && sessionData?.title
+                                )}
+                              </Typography>
+                            </Box>
                             <Typography
                               variant="subtitle2"
                               className={courseStyle.fontCS}
@@ -232,11 +254,13 @@ export default function Couseview() {
                               )}
                             </Typography>
                             &nbsp;
-                            <Button onClick={() => download("pdf")}>
-                              <FileDownloadOutlinedIcon
-                                className={courseStyle.filedownloadcss}
-                              />
-                            </Button>
+                            <LightTooltip title="Download File">
+                              <Button onClick={() => download("pdf")}>
+                                <FileDownloadOutlinedIcon
+                                  className={courseStyle.filedownloadcss}
+                                />
+                              </Button>
+                            </LightTooltip>
                           </Box>
                           <Typography
                             variant="subtitle2"
@@ -264,11 +288,13 @@ export default function Couseview() {
                               )}
                             </Typography>
                             &nbsp;
-                            <Button onClick={() => download("txt")}>
-                              <FileDownloadOutlinedIcon
-                                className={courseStyle.filedownloadcss}
-                              />
-                            </Button>
+                            <LightTooltip title="Download File">
+                              <Button onClick={() => download("txt")}>
+                                <FileDownloadOutlinedIcon
+                                  className={courseStyle.filedownloadcss}
+                                />
+                              </Button>
+                            </LightTooltip>
                           </Box>
                           <Typography
                             variant="subtitle2"
@@ -286,7 +312,8 @@ export default function Couseview() {
                         </Grid>
                       ) : (files && files?.includes("jpeg")) ||
                         (files && files?.includes("jpg")) ||
-                        (files && files?.includes("png")) ? (
+                        (files && files?.includes("png")) ||
+                        (files && files?.includes("gif")) ? (
                         <Grid item xs={8}>
                           <Item>
                             <Image
@@ -306,11 +333,13 @@ export default function Couseview() {
                                 )}
                               </Typography>
                               &nbsp;
-                              <Button onClick={() => download("image")}>
-                                <FileDownloadOutlinedIcon
-                                  className={courseStyle.filedownloadcss}
-                                />
-                              </Button>
+                              <LightTooltip title="Download Image">
+                                <Button onClick={() => download("image")}>
+                                  <FileDownloadOutlinedIcon
+                                    className={courseStyle.filedownloadcss}
+                                  />
+                                </Button>
+                              </LightTooltip>
                             </Box>
                             <Typography
                               variant="subtitle2"
@@ -324,9 +353,6 @@ export default function Couseview() {
                                   )
                               )}
                             </Typography>
-                            <a href={`#`} download>
-                              Download
-                            </a>
                           </Item>
                         </Grid>
                       ) : !files ? (
@@ -374,16 +400,16 @@ export default function Couseview() {
                               </Typography>
                             </AccordionSummary>
                             <AccordionDetails className="vvv">
-                              {item?.sessions.map((ee: any) => {
+                              {item?.sessions.map((itemData: any) => {
                                 const togglee =
-                                  ee?.id === activeToggle ? "active" : "";
+                                  itemData?.id === activeToggle ? "active" : "";
                                 return (
                                   <Box
                                     sx={{
                                       width: "100%",
                                       bgcolor: "background.paper",
                                     }}
-                                    key={ee?.id}
+                                    key={itemData?.id}
                                   >
                                     <nav aria-label="main mailbox folders">
                                       <List>
@@ -393,13 +419,24 @@ export default function Couseview() {
                                               togglee &&
                                               courseStyle.backgroundClick
                                             }
-                                            onClick={() => handlebtnClick(ee)}
+                                            onClick={() =>
+                                              handlebtnClick(itemData)
+                                            }
                                           >
+                                            {itemData.attachment && (
+                                              <Preview
+                                                name={itemData.attachment}
+                                                identifier="user"
+                                              />
+                                            )}
                                             <Typography
                                               variant="subtitle2"
                                               className={courseStyle.typolist}
                                             >
-                                              {capitalizeFirstLetter(ee?.title)}
+                                              &nbsp;
+                                              {capitalizeFirstLetter(
+                                                itemData?.title
+                                              )}
                                             </Typography>
                                           </ListItemButton>
                                         </ListItem>

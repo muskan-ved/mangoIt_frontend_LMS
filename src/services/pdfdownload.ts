@@ -11,6 +11,8 @@ export const HandlePDF = async (reqData: any) => {
       ? "image/*"
       : reqData?.identifier === "txt"
       ? "text/*"
+      : reqData?.identifier === "mp4"
+      ? "video/*"
       : "";
   let receiptdownloaddata: any;
   await axios({
