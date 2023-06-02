@@ -33,6 +33,8 @@ import Paper from "@mui/material/Paper";
 
 import { useRouter } from "next/router";
 import { HandleCourseByCourseId } from "@/services/course";
+import { HandlePDF } from "@/services/pdfdownload";
+
 import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
 import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
@@ -106,33 +108,39 @@ export default function Couseview() {
     }
   };
 
-  const download = (identifier: any) => {
+  const download = async (identifier: any) => {
     let imagename = files && files?.slice(8);
-    var element = document.createElement("a");
     if (identifier === "image") {
-      var file = new Blob([`${BASE_URL}/${files}`], {
-        type: "image/*",
+      let reqData = {
+        imagename: files,
+        identifier: "image",
+      };
+      HandlePDF(reqData).then((itemSeached: any) => {
+        console.log("@");
       });
-      element.href = URL.createObjectURL(file);
-      element.download = `${imagename}`;
-      element.click();
     } else if (identifier === "pdf") {
-      var file = new Blob([`${BASE_URL}/${files}`], {
-        type: "application/pdf",
+      let reqData = {
+        imagename: files,
+        identifier: "pdf",
+      };
+      HandlePDF(reqData).then((itemSeached: any) => {
+        console.log("@");
       });
-      element.href = URL.createObjectURL(file);
-      element.download = `${imagename}`;
-      element.click();
     } else if (identifier === "txt") {
-      const filePath = `${BASE_URL}/${files}`;
-      window.open(filePath, "_blank");
+      let reqData = {
+        imagename: files,
+        identifier: "txt",
+      };
+      HandlePDF(reqData).then((itemSeached: any) => {
+        console.log("@");
+      });
     }
   };
 
   const handleMarkAsComplete = () => {
     console.log("W@@@@@@@@@@@@markAsComplete");
   };
-  
+
   return (
     <>
       <Navbar />
@@ -316,6 +324,9 @@ export default function Couseview() {
                                   )
                               )}
                             </Typography>
+                            <a href={`#`} download>
+                              Download
+                            </a>
                           </Item>
                         </Grid>
                       ) : !files ? (
