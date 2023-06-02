@@ -19,12 +19,20 @@ export default function App({ Component, pageProps, siteConfigData }: AppProps |
   const router = useRouter();
   useEffect(() => {
     if (typeof window !== "undefined") {
+      console.log("else1")
+      
+
       if (!window.localStorage.getItem("loginToken")){
-       if(window.location.pathname !== '/register/' && window.location.pathname !== '/forgotpassword/' && window.location.pathname !== '/resetpassword/') {
+      console.log("else2")
+      if(window.location.pathname.includes('user') || window.location.pathname.includes('paymentsuccess')){
+
+      }
+       else if(window.location.pathname !== '/register/' && window.location.pathname !== '/forgotpassword/' && window.location.pathname !== '/resetpassword/') {
         // If token doesn't exist, redirect user to login page
         router.push("/login/");
        }
       } else {
+      console.log("else")
         router.push(window.location.pathname);
       }
     }

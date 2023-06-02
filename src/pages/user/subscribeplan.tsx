@@ -34,7 +34,7 @@ export default function HomePage() {
                     </Box>
                     <Box p={5}>
                         {subsdata.map((data, key) => {
-                            return (<SubscribtionPanCard subsdata={data} />)
+                            return (<SubscribtionPanCard subsdata={data} key={key} />)
                         })
                         }
                     </Box>

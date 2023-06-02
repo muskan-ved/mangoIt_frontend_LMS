@@ -124,3 +124,19 @@ export const GetSubsctionsPlansDet = async (id: any) => {
       else return error;
     });
 };
+
+export const CreateUserSubsction = async (reqData: any) => {
+  return await axios({
+    method: "POST",
+    url: `${API.createsubscription}`,
+    headers: LoginHeader(),
+    data: reqData,
+  })
+    .then((responce) => {
+      return responce?.data;
+    })
+    .catch((error) => {
+      if (error.response.status === 401) HandleLogout();
+      else return error;
+    });
+};

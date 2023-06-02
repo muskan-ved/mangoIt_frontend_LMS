@@ -16,6 +16,7 @@ import { useForm } from 'react-hook-form';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import { GetSubsctionsPlansDet, HandleSubscriptionPayment } from '@/services/subscription';
 import { useRouter } from "next/router";
+import { HandleRegister } from '@/services/auth';
 const defaultTheme = createTheme();
 
 export default function Checkout() {
@@ -55,11 +56,32 @@ export default function Checkout() {
             amount: subscriptionplandet.amount,
             quantity: 1
         };
+        //user registration
+        localStorage.setItem("user_email", formvalue.email)
+        const reqData = {
+            first_name: formvalue.firstname,
+            last_name: formvalue.lastname,
+            email: formvalue.email
+        }
+        userregister(reqData);
+        //create payment
         HandleSubscriptionPayment(data).then((result) => {
             router.push(result);
         })
     }
-    
+
+    const userregister = async (formvalue: any) => {
+        await HandleRegister(formvalue).then((res) => {
+            if (res.status === 201) {
+                console.log("user registration success");
+            } else {
+                console.log("email registred auto login");
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
+    }
+
     function ErrorShowing(errorMessage: any) {
         return (
             <Typography variant="body2" color={"error"} sx={{ fontSize: "12px" }} gutterBottom>
@@ -67,8 +89,6 @@ export default function Checkout() {
             </Typography>
         );
     }
-
-
 
     return (
         <>
@@ -156,7 +176,7 @@ export default function Checkout() {
                                     ? ErrorShowing(errors?.number?.message)
                                     : ""}
                             </Grid>
-                            <Grid item xs={12}>
+                            {/* <Grid item xs={12}>
                                 <Stack spacing={1}>
                                     <InputLabel htmlFor="add1">
                                         Address Line 1 <span className={styles.err_str}>*</span>
@@ -172,8 +192,8 @@ export default function Checkout() {
                                 {errors && errors.address1
                                     ? ErrorShowing(errors?.address1?.message)
                                     : ""}
-                            </Grid>
-                            <Grid item xs={12}>
+                            </Grid> */}
+                            {/* <Grid item xs={12}>
                                 <Stack spacing={1}>
                                     <InputLabel htmlFor="add2">
                                         Address Line 2
@@ -186,7 +206,7 @@ export default function Checkout() {
                                         {...register("address2")}
                                     />
                                 </Stack>
-                            </Grid>
+                            </Grid> */}
                             <Grid item xs={12} sm={6}>
                                 <Stack spacing={1}>
                                     <InputLabel htmlFor="city">

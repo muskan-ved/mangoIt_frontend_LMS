@@ -19,9 +19,9 @@ export const CheckoutformvalidationStep = Yup.object().shape({
     .matches(numberrules, "Please Enter a valid number **")
     .min(10, "Number must be 10 digit **")
     .max(10, "Number must be 10 digit **"),
-  address1: Yup.string()
-    .required("Address1 field is required **")
-    .matches(/^[A-Za-z ]*$/, "Please enter valid address **"),
+  // address1: Yup.string()
+  //   .required("Address1 field is required **")
+  //   .matches(/^[A-Za-z ]*$/, "Please enter valid address **"),
   city: Yup.string()
     .required("City field is required **")
     .matches(/^[A-Za-z ]*$/, "Please enter valid city **"),

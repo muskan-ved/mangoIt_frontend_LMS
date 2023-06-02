@@ -50,4 +50,16 @@ export const API = {
   //get all subscriptions
   allsubscriptions: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_ALLSUBSCRIPYIONS}`,
   getsubscriptionplandet: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_SUBSCRIPTIONPLANDET}`,
+
+  //grt user by email
+  getuserdetbyemail: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_GETUSERBYEMAIL}`,
+
+  //create user subscription
+  createsubscription: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_CREATESUBSCRIPTION}`,
+
+  //create order
+  createsubscriptionorder: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_CREATEORDER}`,
+
+  //create transaction
+  createtransaction: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_CREATETRANSACTION}`,
 };

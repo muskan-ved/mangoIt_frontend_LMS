@@ -24,3 +24,21 @@ export const HandleOrderGetByUserID = async (orderId: any) => {
       return error;
     });
 };
+
+export const CreateOrder = async (reqdata: any) => {
+  return await axios({
+    method: "POST",
+    url: `${API.createsubscriptionorder}`,
+    headers: LoginHeader(),
+    data: reqdata,
+  })
+    .then((request) => {
+      return request;
+    })
+    .catch((error) => {
+      if (error.response.status === 401) {
+        HandleLogout();
+      }
+      return error;
+    });
+};
