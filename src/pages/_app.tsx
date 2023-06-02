@@ -10,6 +10,7 @@ import { BASE_URL } from "@/config/config";
 import { AppContext } from 'next/app';
 import { NextPageContext } from 'next';
 import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
+import { GenerateToken } from "@/services/auth";
 
 interface MyAppProps {
   siteConfigData: any; // Replace with the actual type of your site config data
@@ -18,21 +19,22 @@ interface MyAppProps {
 export default function App({ Component, pageProps, siteConfigData }: AppProps | any) {
   const router = useRouter();
   useEffect(() => {
+    GenerateToken();
     if (typeof window !== "undefined") {
       console.log("else1")
-      
 
-      if (!window.localStorage.getItem("loginToken")){
-      console.log("else2")
-      if(window.location.pathname.includes('user') || window.location.pathname.includes('paymentsuccess')){
 
-      }
-       else if(window.location.pathname !== '/register/' && window.location.pathname !== '/forgotpassword/' && window.location.pathname !== '/resetpassword/') {
-        // If token doesn't exist, redirect user to login page
-        router.push("/login/");
-       }
+      if (!window.localStorage.getItem("loginToken")) {
+        console.log("else2")
+        if (window.location.pathname.includes('user') || window.location.pathname.includes('paymentsuccess')) {
+
+        }
+        else if (window.location.pathname !== '/register/' && window.location.pathname !== '/forgotpassword/' && window.location.pathname !== '/resetpassword/') {
+          // If token doesn't exist, redirect user to login page
+          router.push("/login/");
+        }
       } else {
-      console.log("else")
+        console.log("else")
         router.push(window.location.pathname);
       }
     }
@@ -42,17 +44,17 @@ export default function App({ Component, pageProps, siteConfigData }: AppProps |
 
   return (
     <>
-     <Head>
-         <link rel="icon" href={siteConfigData? BASE_URL+'/'+siteConfigData?.org_favicon : "/favicon.svg"} />
-         <title>{siteConfigData? `${siteConfigData.title} - ${lastSegment ? capitalizeFirstLetter(lastSegment) : ''}` : `MLMS`}</title>
-        </Head>
-    <GoogleOAuthProvider
-      clientId={`${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}`}
-    >
-      <ProSidebarProvider>
-        <Component {...pageProps} siteConfigData={siteConfigData}/>
-      </ProSidebarProvider>
-    </GoogleOAuthProvider>
+      <Head>
+        <link rel="icon" href={siteConfigData ? BASE_URL + '/' + siteConfigData?.org_favicon : "/favicon.svg"} />
+        <title>{siteConfigData ? `${siteConfigData.title} - ${lastSegment ? capitalizeFirstLetter(lastSegment) : ''}` : `MLMS`}</title>
+      </Head>
+      <GoogleOAuthProvider
+        clientId={`${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}`}
+      >
+        <ProSidebarProvider>
+          <Component {...pageProps} siteConfigData={siteConfigData} />
+        </ProSidebarProvider>
+      </GoogleOAuthProvider>
     </>
   );
 }
@@ -65,5 +67,5 @@ App.getInitialProps = async (appContext: AppContext): Promise<MyAppProps> => {
 
   // Retrieve the siteConfigData from the SiteConfigPage props
   const { siteConfigData: pageSiteConfigData } = pageProps as any;
-  return { ...pageProps, siteConfigData: pageSiteConfigData  };
+  return { ...pageProps, siteConfigData: pageSiteConfigData };
 };

@@ -99,7 +99,7 @@ export const GetallSubsctions = async () => {
   return await axios({
     method: "GET",
     url: `${API.allsubscriptions}`,
-    headers: LoginHeader(),
+    headers: authHeader(),
   })
     .then((responce) => {
       return responce?.data;

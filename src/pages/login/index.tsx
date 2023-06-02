@@ -88,9 +88,9 @@ export default function Login() {
           await HandleRegister(reqData)
             .then((res) => {
               if (res.status === 201) {
-                // router.push('/profile')
-                // localStorage.setItem('loginToken',res.data.loginToken)
-                // localStorage.setItem('userData',JSON.stringify(res.data.userDetails))
+                localStorage.setItem('loginToken', res.data.loginToken)
+                localStorage.setItem('userData', JSON.stringify(res?.data?.updatedUser))
+                router.push('/profile')
               }
               setGoogleLoading(false);
             })
