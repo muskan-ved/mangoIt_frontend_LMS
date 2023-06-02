@@ -8,7 +8,7 @@
 }
 .filterAltOutlinedIcon{
     display: inline-flex;
-    color: #E8661B;
+    color: #E8661B !important;
 }                      
 .filterTypography{
     font-weight: bold !important;
@@ -20,7 +20,7 @@
     font-weight: bold!important;
 }
 .cancelButton{
-    margin: 10px;
+    margin: 10px !important;
 }
 .subbox{
     border: 1px dashed grey;
