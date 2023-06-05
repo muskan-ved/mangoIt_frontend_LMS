@@ -247,7 +247,7 @@ export default function CoursesDetailsPage() {
                                             },
                                         }}>
                                         {Courses?.slice(0, 5).map((data: any, key: any) => {
-                                            return (<ListItem >
+                                            return (<ListItem key={key} >
                                                 <Link href="#" className={styles.listitems}>{data?.course?.title}
                                                 </Link>
                                             </ListItem >)
