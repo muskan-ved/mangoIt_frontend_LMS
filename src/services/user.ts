@@ -62,3 +62,23 @@ export const HandleProfile = async(userId:any) =>{
         return error;
       })
   }
+
+  export const HandleUserDelete = async (rowID: any) => {
+    return await axios({
+      method: "DELETE",
+      url: `${API.deleteUser}/${rowID}`,
+      headers: LoginHeader(),
+    })
+      .then((request) => {
+        toast.success("User Deleted Successfully");
+        return request;
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          HandleLogout();
+        } else {
+          toast.error("Something went wrong");
+        }
+        return error;
+      });
+  };

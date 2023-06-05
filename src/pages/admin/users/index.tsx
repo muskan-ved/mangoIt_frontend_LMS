@@ -40,6 +40,7 @@ import ArrowUpwardOutlinedIcon from '@mui/icons-material/ArrowUpwardOutlined';
 // CSS Import
 import styles from "../../../styles/sidebar.module.css";
 import ModulCss from "../../../styles/modules.module.css";
+import UserCss from "../../../styles/user.module.css";
 import { ToastContainer } from "react-toastify";
 // External Components
 import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
@@ -50,11 +51,11 @@ import Navbar from "@/common/LayoutNavigations/navbar";
 import SideBar from "@/common/LayoutNavigations/sideBar";
 import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
 // API Service
-import { HandleUserGet } from "@/services/user";
+import { HandleUserDelete, HandleUserGet } from "@/services/user";
 import { HandleModuleDelete, HandleModuleGet } from "@/services/module";
 
 interface Column {
-	id: "id" | "first_name" | "last_name" | "email" | "user_role" | "status" | "action";
+	id: "id" | "first_name" | "last_name" | "email" | "role_id" | "status" | "action";
 	label: string;
 	minWidth?: number;
 	align?: "right";
@@ -66,7 +67,7 @@ const columns: Column[] = [
 	{ id: "first_name", label: "FIRST NAME", minWidth: 170 },
 	{ id: "last_name", label: "LAST NAME", minWidth: 100 },
 	{ id: "email", label: "EMAIL", minWidth: 100 },
-	{ id: "user_role", label: "USER ROLE", minWidth: 100 },
+	{ id: "role_id", label: "USER ROLE", minWidth: 100 },
 	{ id: "status", label: "STATUS", minWidth: 100 },
 	{ id: "action", label: "ACTION", minWidth: 100 },
 ];
@@ -104,8 +105,7 @@ const AllUsers = () => {
 	}, []);
 
 	const getUsereData = () => {
-		HandleUserGet('', '').then((users) => {
-      // console.log("first",users.data);
+		HandleUserGet('', '').then((users) => {;
 			setRows(users.data);
 		})
 	}
@@ -119,16 +119,15 @@ const AllUsers = () => {
 
 	const handleSearch = (e: any, identifier: any) => {
 		setPage(1);
-		// DATA.jump(1);
 		if (identifier === 'reset') {
-			HandleModuleGet('', '').then((itemSeached) => {
+			HandleUserGet('', '').then((itemSeached) => {
 				setRows(itemSeached.data);
 			})
 			setSearch(e)
 		} else {
 			const search = e.target.value;
 			setSearch(e.target.value)
-			HandleModuleGet(search, '').then((itemSeached) => {
+			HandleUserGet(search, '').then((itemSeached) => {
 				setRows(itemSeached.data);
 			})
 		}
@@ -140,8 +139,8 @@ const AllUsers = () => {
 	}
 
 	const handleDeletesRow = () => {
-		HandleModuleDelete(deleteRow.id).then((deletedRow) => {
-			HandleModuleGet('', '').then((newRows) => {
+		HandleUserDelete(deleteRow.id).then((deletedRow) => {
+			HandleUserGet('', '').then((newRows) => {
 				setRows(newRows.data)
 			})
 		})
@@ -149,20 +148,17 @@ const AllUsers = () => {
 	}
 
 	const onSubmit = (event: any) => {
-		const filterData: any = {
-			course_id: event.course,
-			status: event.status,
-		}
-		HandleModuleGet('', filterData).then((itemFiltered) => {
+		console.log("eventdata", event)
+		HandleUserGet('', event).then((itemFiltered) => {
 			setRows(itemFiltered.data)
 		})
 	}
 
 	const resetFilterValue = () => {
 		setFilter(0)
-		reset({ course: 0, status: 0 });
+		reset({ role_id: 0, status: 0 });
 	}
-	console.log('oops', rows)
+	// console.log('oops', rows)
 
 	return (
 		<>
@@ -194,12 +190,12 @@ const AllUsers = () => {
 									),
 								}}
 							/>
-							<Box className={ModulCss.upperFilterBox}>
+							<Box className={UserCss.upperFilterBox}>
 								<PopupState variant="popover" popupId="demo-popup-popover" >
 									{(popupState) => (
 										<Box>
 											<Button
-												className={ModulCss.filterAltOutlinedIcon}
+												className={UserCss.filterAltOutlinedIcon}
 												{...bindTrigger(popupState)}
 											>
 												<FilterAltOutlinedIcon />
@@ -223,7 +219,7 @@ const AllUsers = () => {
 														style={{ padding: "15px" }}
 													>
 														<Grid>
-															<Typography variant="h5" className={ModulCss.filterTypography}>
+															<Typography variant="h5" className={UserCss.filterTypography}>
 																Filter
 															</Typography>
 															<Box component="form"
@@ -237,22 +233,23 @@ const AllUsers = () => {
 																	<Grid container spacing={2}>
 																		<Grid item xs={12} md={6} lg={6} >
 																			<Stack spacing={2}>
-																				<InputLabel htmlFor="name" className={ModulCss.courseInFilter}>
-																					Course
+																				<InputLabel htmlFor="name" className={UserCss.courseInFilter}>
+																					Role
 																				</InputLabel>
 																				<Controller
-																					name="course"
+																					name="role_id"
 																					control={control}
 																					defaultValue={getFilter}
 																					render={({ field }) => (
 																						<FormControl fullWidth>
 																							<Select {...field} displayEmpty>
-																								<MenuItem value={0}>
-																									All
+																								<MenuItem value={0}>All</MenuItem>
+																								<MenuItem value={1}>
+																									Admin
 																								</MenuItem>
-																								{getCourse?.map((data: any) => {
-																									return (<MenuItem key={data.course.id} value={data.course.id}>{capitalizeFirstLetter(data?.course.title)}</MenuItem>)
-																								})}
+																								<MenuItem value={2}>
+																									Learner
+																								</MenuItem>
 																							</Select>
 																						</FormControl>
 																					)}
@@ -261,7 +258,7 @@ const AllUsers = () => {
 																		</Grid>
 																		<Grid item xs={12} md={6} lg={6}>
 																			<Stack spacing={2}>
-																				<InputLabel htmlFor="enddate" className={ModulCss.statusBold}>
+																				<InputLabel htmlFor="enddate" className={UserCss.statusBold}>
 																					Status
 																				</InputLabel>
 																				<Controller
@@ -290,7 +287,7 @@ const AllUsers = () => {
 																			xs={12}
 																			lg={12}
 																		>
-																			<Box className={ModulCss.boxInFilter}>
+																			<Box className={UserCss.boxInFilter}>
 																				<Button
 																			
 																					size="medium"
@@ -307,7 +304,7 @@ const AllUsers = () => {
 																					type="submit"
 																					variant="contained"
 																					color="primary"
-																					className={ModulCss.applyButtonInFiltter}
+																					className={UserCss.applyButtonInFiltter}
 																					onClick={popupState.close}
 																				>
 																					Apply
@@ -325,7 +322,7 @@ const AllUsers = () => {
 									)}
 								</PopupState>
 								&nbsp;
-								<Button variant="contained" onClick={() => router.push('/admin/courses/allmodules/addmodule')} id={styles.muibuttonBackgroundColor}> + Add User </Button>
+								<Button variant="contained" onClick={() => router.push('/admin/users/adduser')} id={styles.muibuttonBackgroundColor}> + Add User </Button>
 							</Box>
 							<Paper >
 								<TableContainer >
@@ -342,7 +339,7 @@ const AllUsers = () => {
 																handleSort(rows) :
 																''
 														}}
-														className={ModulCss.tableHeadingForId}
+														className={UserCss.tableHeadingForId}
 													>
 														{column.label === "ID" ? (
 															<>
@@ -364,7 +361,7 @@ const AllUsers = () => {
 											{rows && rows.length > 0 ? DATA.currentData() &&
 												DATA.currentData()
 													.map((row: any) => {
-														// const statusColor = (row.module.status === "active" ? ModulCss.activeClassColor : row.module.status === "inactive" ? ModulCss.inactiveClassColor : ModulCss.draftClassColor)
+														 const statusColor = (row.status === "active" ? UserCss.activeClassColor : row.status === "inactive" ? UserCss.inactiveClassColor : UserCss.draftClassColor)
 
 														return (
 															<TableRow
@@ -377,19 +374,18 @@ const AllUsers = () => {
 																<TableCell>{capitalizeFirstLetter(row?.first_name)}</TableCell>
 																<TableCell>{capitalizeFirstLetter(row?.last_name)}</TableCell>
 																<TableCell>{row?.email}</TableCell>
-																<TableCell>{row?.role_id}</TableCell> 
-																<TableCell>{row?.is_deleted}</TableCell>                               
-																{/* <TableCell className={statusColor}>{capitalizeFirstLetter(row.module.status)}</TableCell> */}
-																<TableCell><Button onClick={() => router.push(`/admin/courses/allmodules/updatemodule/${row.id}`)} variant="outlined" color="success" className={ModulCss.editDeleteButton} ><ModeEditOutlineIcon /></Button>
-																	<Button className={ModulCss.editDeleteButton} variant="outlined" color="error" onClick={() => handleClickOpen(row)}><DeleteOutlineIcon /></Button>
+																<TableCell>{row?.role_id == 1 ? 'Admin' : 'Learner'}</TableCell> 
+																<TableCell className={statusColor}>{capitalizeFirstLetter(row?.status)}</TableCell>
+																<TableCell><Button onClick={() => router.push(`/admin/users/updateuser/${row.id}`)} variant="outlined" color="success" className={UserCss.editDeleteButton} ><ModeEditOutlineIcon /></Button>
+																	<Button className={UserCss.editDeleteButton} variant="outlined" color="error" onClick={() => handleClickOpen(row)}><DeleteOutlineIcon /></Button>
 																</TableCell>
 															</TableRow>
 														);
-													}) : <TableRow><TableCell colSpan={6} className={ModulCss.tableLastCell}> <Typography>Record not Found</Typography> </TableCell></TableRow>}
+													}) : <TableRow><TableCell colSpan={6} className={UserCss.tableLastCell}> <Typography>Record not Found</Typography> </TableCell></TableRow>}
 										</TableBody>
 									</Table>
 									<Stack
-										className={ModulCss.stackStyle}
+										className={UserCss.stackStyle}
 										direction="row"
 										alignItems="right"
 										justifyContent="space-between"
@@ -422,8 +418,8 @@ const AllUsers = () => {
 								open={open}
 								onClose={handleClickOpen}
 								onSubmit={handleDeletesRow}
-								title={deleteRow.title}
-								whatYouDelete='Session'
+								title={deleteRow.first_name}
+								whatYouDelete='User'
 							/>
 						</CardContent>
 					</Card>
