@@ -112,7 +112,7 @@ export function SubscribtionPanCard(props: any) {
                         <Box px={1}>
                             <Typography variant="h3" component="h2" gutterBottom={true}>
                                 ${props?.subsdata?.amount}/
-                                <Typography variant="h6" color="textSecondary" component="span">All Time</Typography>
+                                <Typography variant="h6" color="textSecondary" component="span">per month</Typography>
                             </Typography>
                             <Typography color="textSecondary" variant="subtitle1" component="p">{totalcrscount} Courses</Typography>
                             <Typography color="textSecondary" variant="subtitle1" component="p" mt={2}>{totalmodulecount} Modules</Typography>
@@ -120,7 +120,7 @@ export function SubscribtionPanCard(props: any) {
                         </Box>
                         <Box px={1} mt={2}>
                             <Link href={`/user/Checkout/${props?.subsdata?.id}`} >
-                                <Button sx={{ backgroundColor: " #E8661B", color: "white" }} id={styles.muibuttonBackgroundColor}
+                                <Button variant="contained" className="authPageButton" id={styles.muibuttonBackgroundColor}
                                 >Subscribe Now</Button></Link>
                         </Box>
                     </CardContent>

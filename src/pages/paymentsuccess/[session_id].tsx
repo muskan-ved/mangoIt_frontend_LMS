@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import styles from "../../styles/payment.module.css";
 import { useRouter } from "next/router";
-import { CreateUserSubsction, HandlePaymentDetails } from "@/services/subscription";
-import { GetUserByemail, HandleProfile } from "@/services/user";
-import { CreateOrder } from "@/services/order";
+import { HandlePaymentDetails, UpdaUserSubscription } from "@/services/subscription";
+import { UpdateOrder } from "@/services/order";
 import { CreateTransaction } from "@/services/transaction";
 import Link from "next/link";
+import moment from "moment";
 
 export default function PaymentSuccess() {
     const router = useRouter();
@@ -21,54 +21,42 @@ export default function PaymentSuccess() {
     }
     //get payment details
     const getPaymentDetails = () => {
+        const orderid = localStorage.getItem("orderId");
         HandlePaymentDetails(reqdata).then((paymentdet) => {
             const peymentdet = paymentdet?.orderdetails?.data[0];
-            var email = localStorage.getItem("user_email");
-            GetUserByemail({ email: email }).then((user) => {
-                const userdet = user?.data;
-                const reqData = {
-                    userId: userdet?.id,
-                    name: peymentdet?.description,
-                    description: peymentdet?.description,
-                    price: peymentdet?.amount_total,
-                    duration_term: "days",
-                    duration_value: 5
+            if (paymentdet) {
+                const orderdet = {
+                    status: "paid",
+                    transaction_id: session_id
                 }
-                //create subscription
-                CreateUserSubsction(reqData).then((subscription) => {
-                    //create order
-                    const orderData = {
-                        user_id: userdet?.id,
-                        subscription_id: subscription?.id,
-                        payment_type: "Stripe",
-                        amount: peymentdet?.amount_total,
-                        status: "complete",
-                        parent_order_id: 7,
-                        order_type: "subscription"
-                    }
-                    //create order
-                    CreateOrder(orderData).then((order) => {
+                UpdateOrder(orderdet, orderid).then((order) => {
+                    if (order) {
                         const orderdatas = order?.data;
+                        console.log("sdfahs;", orderdatas);
                         //create transaction 
                         const tnxdata =
                         {
+                            user_id: orderdatas?.user_id,
                             order_id: orderdatas?.id,
-                            user_id: userdet?.id,
                             payment_method: "Stripe",
-                            transaction_id: "2cfjdbnf2"
+                            transaction_id: session_id,
+                            createdAt: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
                         }
-                        CreateSubscTransaction(tnxdata);
-                    });
+                        CreateTransaction(tnxdata).then((tnxdet) => {
+                            if (tnxdet) {
+                                const reqdata = {
+                                    status: "active",
+                                    start_date: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+                                }
+                                UpdaUserSubscription(reqdata, orderdatas?.subscription_id).then((subcdet) => {
+                                })
+                            }
+                        });
+                    }
                 });
-            });
-        })
-    }
-
-    const CreateSubscTransaction = (tnxdata: any) => {
-        CreateTransaction(tnxdata).then((tnxdet) => {
+            }
         });
-    };
-
+    }
     return (
         <Box>
             <Box className={styles.content}>

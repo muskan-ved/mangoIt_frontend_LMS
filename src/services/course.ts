@@ -101,7 +101,7 @@ export const HandleCourseDelete = async (rowID: any) => {
   return await axios({
     method: "DELETE",
     url: `${API.deleteCourse}/${rowID}`,
-    headers: LoginHeader(),
+    headers: authHeader(),
   })
     .then((request) => {
       toast.success("Course Deleted Successfully");

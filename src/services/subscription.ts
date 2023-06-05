@@ -114,7 +114,7 @@ export const GetSubsctionsPlansDet = async (id: any) => {
   return await axios({
     method: "GET",
     url: `${API.getsubscriptionplandet}/${id}`,
-    headers: LoginHeader(),
+    headers: authHeader(),
   })
     .then((responce) => {
       return responce?.data;
@@ -130,6 +130,25 @@ export const CreateUserSubsction = async (reqData: any) => {
     method: "POST",
     url: `${API.createsubscription}`,
     headers: LoginHeader(),
+    data: reqData,
+  })
+    .then((responce) => {
+      return responce?.data;
+    })
+    .catch((error) => {
+      if (error.response.status === 401) HandleLogout();
+      else return error;
+    });
+};
+
+export const UpdaUserSubscription = async (
+  reqData: any,
+  subscription_id: any
+) => {
+  return await axios({
+    method: "PUT",
+    url: `${API.updatesubscription}/${subscription_id}`,
+    headers: authHeader(),
     data: reqData,
   })
     .then((responce) => {

@@ -14,9 +14,11 @@ import { Box, Button, CircularProgress, Divider, InputLabel, OutlinedInput, Stac
 import styles from '../../../styles/webview.module.css'
 import { useForm } from 'react-hook-form';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
-import { GetSubsctionsPlansDet, HandleSubscriptionPayment } from '@/services/subscription';
+import { CreateUserSubsction, GetSubsctionsPlansDet, HandleSubscriptionPayment } from '@/services/subscription';
 import { useRouter } from "next/router";
 import { HandleRegister } from '@/services/auth';
+import { GetUserByemail } from '@/services/user';
+import { CreateOrder } from '@/services/order';
 const defaultTheme = createTheme();
 
 export default function Checkout() {
@@ -38,7 +40,6 @@ export default function Checkout() {
             setsubscriptionplandet(subscdata)
         })
     }
-
     const {
         register,
         handleSubmit,
@@ -51,23 +52,59 @@ export default function Checkout() {
     });
     const onSubmit = async (formvalue: any) => {
         setshowspinner(true);
-        const data = {
-            productName: subscriptionplandet.title,
-            amount: subscriptionplandet.amount,
-            quantity: 1
-        };
         //user registration
-        localStorage.setItem("user_email", formvalue.email)
         const reqData = {
             first_name: formvalue.firstname,
             last_name: formvalue.lastname,
             email: formvalue.email
         }
-        userregister(reqData);
-        //create payment
-        HandleSubscriptionPayment(data).then((result) => {
-            router.push(result);
-        })
+        userregister(reqData).then(res => {
+            //get user det 
+            GetUserByemail({ email: formvalue.email }).then((user) => {
+                if (user) {
+                    //create subscription
+                    const reqData = {
+                        userId: user?.id,
+                        name: subscriptionplandet?.title,
+                        description: subscriptionplandet?.title,
+                        price: subscriptionplandet?.amount,
+                        duration_term: "days",
+                        duration_value: 30,
+                        status: "inactive"
+                    }
+                    //create subscription
+                    CreateUserSubsction(reqData).then((subscription) => {
+                        if (subscription) {
+                            //create order
+                            const orderData = {
+                                user_id: user?.id,
+                                subscription_id: subscription?.id,
+                                payment_type: "Stripe",
+                                amount: subscription?.amount,
+                                status: "unpaid",
+                                parent_order_id: 0,
+                                order_type: "subscription"
+                            }
+                            //create order
+                            CreateOrder(orderData).then((order) => {
+                                if (order) {
+                                    localStorage.setItem("orderId", order?.data?.id)
+                                    //create payment
+                                    const data = {
+                                        productName: subscriptionplandet?.title,
+                                        amount: subscriptionplandet?.amount,
+                                        quantity: 1
+                                    };
+                                    HandleSubscriptionPayment(data).then((result) => {
+                                        router.push(result);
+                                    })
+                                }
+                            })
+                        }
+                    })
+                };
+            })
+        });
     }
 
     const userregister = async (formvalue: any) => {
@@ -75,7 +112,7 @@ export default function Checkout() {
             if (res.status === 201) {
                 console.log("user registration success");
             } else {
-                console.log("email registred auto login");
+                console.log("email registred");
             }
         }).catch((err) => {
             console.log(err)

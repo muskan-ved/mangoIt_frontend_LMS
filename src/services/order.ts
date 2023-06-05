@@ -29,7 +29,25 @@ export const CreateOrder = async (reqdata: any) => {
   return await axios({
     method: "POST",
     url: `${API.createsubscriptionorder}`,
-    headers: LoginHeader(),
+    headers: authHeader(),
+    data: reqdata,
+  })
+    .then((request) => {
+      return request;
+    })
+    .catch((error) => {
+      if (error.response.status === 401) {
+        HandleLogout();
+      }
+      return error;
+    });
+};
+
+export const UpdateOrder = async (reqdata: any, orderId: any) => {
+  return await axios({
+    method: "PUT",
+    url: `${API.updateorder}/${orderId}`,
+    headers: authHeader(),
     data: reqdata,
   })
     .then((request) => {

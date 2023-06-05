@@ -33,7 +33,7 @@ export const GetUserByemail = async (reqdata: any) => {
     data: reqdata,
   })
     .then((request) => {
-      return request;
+      return request?.data;
     })
     .catch((error) => {
       if (error.response.status === 401) {

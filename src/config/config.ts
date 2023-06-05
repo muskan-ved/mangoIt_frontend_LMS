@@ -56,9 +56,12 @@ export const API = {
 
   //create user subscription
   createsubscription: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_CREATESUBSCRIPTION}`,
+  updatesubscription: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_UPDATESUBSCRIPTION}`,
 
   //create order
   createsubscriptionorder: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_CREATEORDER}`,
+  //update order
+  updateorder: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_UPDATEORDER}`,
 
   //create transaction
   createtransaction: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_CREATETRANSACTION}`,

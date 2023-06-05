@@ -1,5 +1,5 @@
 import "react-toastify/dist/ReactToastify.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { Box, Button, Card, CardActionArea, CardContent, CardHeader, CardMedia, Container, Divider, Grid, List, ListItem, ListItemIcon, ListItemText, Typography } from "@mui/material";
 import WebViewNavbar from "@/common/LayoutNavigations/webviewnavbar";
@@ -13,14 +13,17 @@ import AlarmOnIcon from '@mui/icons-material/AlarmOn';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import { CourseCard, SubscribtionPanCard } from "@/common/ResuableCardCmp/coursescard";
 import { GetallSubsctions } from "@/services/subscription";
+import { capitalizeFirstLetter } from "../../../common/CapitalFirstLetter/capitalizeFirstLetter";
 
 export default function CoursesDetailsPage() {
     const router = useRouter();
     const { id } = router.query;
-    const [coursedet, setcoursedet] = useState([]);
+    const [coursedet, setcoursedet] = useState<any>([]);
     const [subsdata, setsubsdata] = useState([]);
+    const [Courses, setCourses] = useState([]);
     const [FreeCourses, setFreeCourses] = useState([]);
     const [PaidCourses, setPaidCourses] = useState([]);
+    const scollToRef = useRef<any>();
     useEffect(() => {
         if (router.isReady) {
             getCourseDetails();
@@ -29,17 +32,16 @@ export default function CoursesDetailsPage() {
             router.push(`/user/coursedetails/${id}`);
         }
     }, [router.isReady]);
-
     //get course details by id
     const getCourseDetails = () => {
         HandleCourseGetByID(id).then((coursedetails) => {
-            console.log('coursedetails', coursedetails);
             setcoursedet(coursedetails?.data)
         })
     }
     //get courses
     const getAllCourseData = () => {
         HandleCourseGet('', "").then((courses) => {
+            setCourses(courses?.data);
             setFreeCourses(courses?.data?.filter((a: any) =>
                 a?.course?.is_chargeable === "free"
             ))
@@ -48,13 +50,13 @@ export default function CoursesDetailsPage() {
             ))
         })
     }
-
     //get subscription
     const getSubscribtion = () => {
         GetallSubsctions().then((subscdata) => {
             setsubsdata(subscdata)
         })
     }
+
 
     return (
         <>
@@ -75,21 +77,19 @@ export default function CoursesDetailsPage() {
                                 />
                                 <CardContent sx={{ flex: 1 }}>
                                     <Typography component="h2" variant="h5">
-                                        Shubham Kumar Jaiswal
+                                        {capitalizeFirstLetter(coursedet?.title)}
                                     </Typography>
                                     <Typography variant="subtitle1" color="text.secondary">
-                                        Type : Free
+                                        Type : {capitalizeFirstLetter(coursedet?.is_chargeable)}
                                     </Typography>
                                     <Typography variant="subtitle1" paragraph sx={{ fontFamily: "sans - serif" }}>
-                                        Etiam porta sem malesuada magna mollis euismod.
-                                        Cras mattis consectetur purus sit amet fermentum.
+                                        {capitalizeFirstLetter(coursedet?.short_description ? coursedet?.short_description
+                                            : "")}
                                     </Typography>
                                     <Typography variant="subtitle1" paragraph>
-                                        Etiam porta sem malesuada magna mollis euismod.
-                                        Cras mattis consectetur purus sit amet fermentum.
-                                        Aenean lacinia bibendum nulla sed consectetur.
+                                        {capitalizeFirstLetter(coursedet?.long_description)}
                                     </Typography>
-                                    <Button variant="contained" color="success" >
+                                    <Button variant="contained" className="authPageButton" id={styles.muibuttonBackgroundColor} onClick={() => scollToRef.current.scrollIntoView({ behavior: "smooth" })} >
                                         Subscribe Now
                                     </Button>
                                 </CardContent>
@@ -103,20 +103,20 @@ export default function CoursesDetailsPage() {
                                             component="img"
                                             height="140"
                                             image=
-                                            "https://media.geeksforgeeks.org/wp-content/uploads/20220221132017/download.png"
+                                            "https://t4.ftcdn.net/jpg/02/93/50/51/240_F_293505190_QACuhlzI4WXOeznVC59LLb2yUcQbf3xv.jpg"
                                             alt="gfg"
                                         />
                                         <CardContent>
                                             <Typography gutterBottom variant="h5"
                                                 component="div">
-                                                GeeksforGeeks
+                                                LMS
                                             </Typography>
                                             <Typography variant="body2"
                                                 color="text.secondary">
-                                                A Computer Science portal for geeks.
-                                                It contains well written.
+                                                A Learning Management portal for Learning and Growing Skills.
+                                                It contains well written Courses and Tools.
                                             </Typography>
-                                            <Button variant="contained" color="success" sx={{ marginTop: "20px" }}>
+                                            <Button variant="contained" sx={{ marginTop: "20px" }} id={styles.muibuttonBackgroundColor}>
                                                 Enroll Now
                                             </Button>
                                         </CardContent>
@@ -134,7 +134,7 @@ export default function CoursesDetailsPage() {
                                         About This Course
                                     </Typography>
                                     <Typography variant="body2" color="text.primary" mt={1} sx={{ lineHeight: "26px" }}>
-                                        There are many variations of passages of Lorem Ipsum available.
+                                        {capitalizeFirstLetter(coursedet?.long_description)}
                                     </Typography>
                                     <Typography gutterBottom variant="h5" component="div" mt={2}>
                                         What you will learn
@@ -246,29 +246,19 @@ export default function CoursesDetailsPage() {
                                                 display: 'list-item',
                                             },
                                         }}>
-                                        <ListItem >
-                                            <Link href="#" className={styles.listitems}>There are many variations.
-                                            </Link>
-                                        </ListItem >
-                                        <ListItem >
-                                            <Link href="#" className={styles.listitems}> There are many variations. </Link>
-                                        </ListItem>
-                                        <ListItem >
-                                            <Link href="#" className={styles.listitems}> There are many variations. </Link>
-                                        </ListItem >
-                                        <ListItem >
-                                            <Link href="#" className={styles.listitems}> There are many variations. </Link>
-                                        </ListItem>
-                                        <ListItem >
-                                            <Link href="#" className={styles.listitems}> There are many variations. </Link>
-                                        </ListItem>
+                                        {Courses?.slice(0, 5).map((data: any, key: any) => {
+                                            return (<ListItem >
+                                                <Link href="#" className={styles.listitems}>{data?.course?.title}
+                                                </Link>
+                                            </ListItem >)
+                                        })}
                                     </List>
                                 </CardContent>
                             </Box>
                         </Grid>
                     </Grid>
                     {/*top enrolled course*/}
-                    <Box className={styles.enrolled}>
+                    <Box className={styles.enrolled} ref={scollToRef}>
                         <Container maxWidth="lg">
                             <Box className={styles.headerbox}>
                                 <Typography variant="h6" gutterBottom className={styles.h6}>
