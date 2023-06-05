@@ -16,7 +16,8 @@ export const API = {
   login: `${BASE_URL}/${process.env.NEXT_PUBLIC_LOGIN}`,
   forgotPassword: `${BASE_URL}/${process.env.NEXT_PUBLIC_FORGOT_PASSWORD}`,
   resetPassword: `${BASE_URL}/${process.env.NEXT_PUBLIC_RESET_PASSWORD}`,
-  // User
+  // User 
+  userAllUsers: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_ALL_USERS}`,
   userInfoById: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_USER_BY_ID}`,
   userUpdateById: `${BASE_URL}/${process.env.NEXT_PUBLIC_UPDATE_USER_BY_ID}`,
   //Courses

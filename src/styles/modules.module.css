@@ -79,8 +79,8 @@
 }
 .editDeleteButton{
     padding: 5px 9px !important;
-    min-width: 30px;
-    margin: 3px;
+    min-width: 30px !important;
+    margin: 3px !important;
 }
 
 .MuiPaper-root .MuiPaper-elevation .MuiPaper-rounded .MuiPaper-elevation8 .MuiPopover-paper .css-3bmhjh-MuiPaper-root-MuiPopover-paper{

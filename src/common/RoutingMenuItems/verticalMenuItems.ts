@@ -95,8 +95,8 @@ export const VerticalMenuItems = () => {
       {
         title: "Users",
         icon: PeopleAltOutlinedIcon,
-        path: "/users",
-        disable: true,
+        path: "/admin/users",
+        disable: false,
 
       },
       {

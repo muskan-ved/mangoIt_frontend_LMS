@@ -99,7 +99,7 @@ const AllCourses = () => {
   } = useForm();
 
   React.useEffect(() => {
-    getAllCourseData();
+    getAllCourseData('', filterObject);
   }, [])
 
   const onSubmit = (event: any) => {
@@ -138,24 +138,21 @@ const AllCourses = () => {
   const handleSearch = (e: any, identifier: any) => {
     setPage(1);
     if (identifier === 'reset') {
-      HandleCourseGet('', { is_chargeable: 0, status: 0 }).then((itemSeached) => {
-        setRows(itemSeached.data);
-      })
+      getAllCourseData('', { is_chargeable: 0, status: 0 })
       setSearch(e)
     } else {
       const search = e.target.value;
       setSearch(e.target.value)
-      HandleCourseGet(search, filterObject).then((itemSeached) => {
-        setRows(itemSeached.data);
-      })
+      getAllCourseData(search, filterObject)
     }
 
   }
 
-  const getAllCourseData = () => {
-    HandleCourseGet('', filterObject).then((courses) => {
+  const getAllCourseData = (search:any, filterObject:any) => {
+    HandleCourseGet(search, filterObject).then((courses) => {
       setRows(courses.data)
     })
+   
   }
 
 
