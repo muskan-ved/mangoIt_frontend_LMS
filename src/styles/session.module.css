@@ -1,5 +1,5 @@
 .InputLabelFont{
-    font-weight:700
+    font-weight:700 !important;
 }
 .subbox{
     border: 1px dashed grey;
@@ -60,6 +60,8 @@
 }
 .cancelButton{
     margin: 10px !important;
+    background-color: #1976d2 !important;
+    color: white;
 }
 .MuiPaper-root .MuiPaper-elevation .MuiPaper-rounded .MuiPaper-elevation8 .MuiPopover-paper .css-3bmhjh-MuiPaper-root-MuiPopover-paper{
 width: 70% !important;

@@ -204,7 +204,7 @@ export default function Login() {
                   fullWidth
                   size="large"
                   variant="contained"
-                  className="authPageButton"
+                 
                   sx={{ mt: 3, mb: 2 }}
                 >
                   Sign In

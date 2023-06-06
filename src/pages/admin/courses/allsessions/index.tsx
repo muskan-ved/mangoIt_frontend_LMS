@@ -411,7 +411,7 @@ const AllSession = () => {
                         ))}
                       </TableRow>
                     </TableHead>
-                    <TableBody>{console.log('row', DATA)}
+                    <TableBody>
                       {rows && rows.length > 0 ? DATA.currentData() &&
                         DATA.currentData()
                           .map((row: any) => {

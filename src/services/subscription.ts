@@ -28,6 +28,30 @@ export const HandleSubscriptionGet = async (search: string) => {
     });
 };
 
+export const HandleSubscriptionPost = async (reqData: any) => {
+  const API_URL = `${API.createsubscription}`;
+  return await axios({
+    method: "POST",
+    url: API_URL,
+    data:reqData,
+    headers: LoginHeader(),
+  })
+    .then((request) => {
+      if(request.status === 201){
+        toast.success("Subscription added successfully");
+      }
+      return request;
+    })
+    .catch((error) => {
+      if (error.response.status === 401) {
+        HandleLogout();
+      } else {
+        toast.error("Something went wrong");
+      }
+      return error;
+    });
+};
+
 export const HandleSubscriptionDelete = async (id:string) => {
   const API_URL = `${API.deleteSubscription}/${id}`;
   return await axios({
