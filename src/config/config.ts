@@ -43,6 +43,8 @@ export const API = {
   deleteSite: `${BASE_URL}/${process.env.NEXT_PUBLIC_SITE_CONFIG_DELETE}`,
   updateSite: `${BASE_URL}/${process.env.NEXT_PUBLIC_SITE_CONFIG_UPDATE}`,
 
+  getAllSubscription: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_SUBSCRIPTION}`,
+  deleteSubscription: `${BASE_URL}/${process.env.NEXT_PUBLIC_DELETE_SUBSCRIPTION}`,
   getSubscription: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_SUBSCRIPTION_BY_URSEID}`,
   getSubsById: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_SUBSCRIPTION_BY_ID}`,
   updateSubscription: `${BASE_URL}/${process.env.NEXT_PUBLIC_UPDATE_SUBSCRIPTION}`,

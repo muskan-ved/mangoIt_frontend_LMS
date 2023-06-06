@@ -8,14 +8,37 @@ import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFir
 
 export const HandleSubscriptionGet = async (search: string) => {
   const API_URL = search
-    ? `${API.getSubscription}/${search}`
-    : `${API.getSubscription}`;
+    ? `${API.getAllSubscription}/${search}`
+    : `${API.getAllSubscription}`;
   return await axios({
     method: "GET",
     url: API_URL,
     headers: LoginHeader(),
   })
     .then((request) => {
+      return request;
+    })
+    .catch((error) => {
+      if (error.response.status === 401) {
+        HandleLogout();
+      } else {
+        toast.error("Something went wrong");
+      }
+      return error;
+    });
+};
+
+export const HandleSubscriptionDelete = async (id:string) => {
+  const API_URL = `${API.deleteSubscription}/${id}`;
+  return await axios({
+    method: "DELETE",
+    url: API_URL,
+    headers: LoginHeader(),
+  })
+    .then((request) => {
+      if (request.status === 200) {
+      toast.success("Deleted successfully.");
+      }
       return request;
     })
     .catch((error) => {
