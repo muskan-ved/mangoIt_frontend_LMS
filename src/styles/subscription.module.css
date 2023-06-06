@@ -37,7 +37,7 @@
 }
 .popStateFilterButton{
     display: inline-flex;
-    color: #1976d2;
+    color: #E8661B !important;
 }
 .editDeleteButton{
     padding: 5px 9px !important;

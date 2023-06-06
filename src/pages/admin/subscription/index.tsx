@@ -303,7 +303,7 @@ const router = useRouter()
                   )}
                 </PopupState>
                 &nbsp;
-                <Button variant="contained" onClick={() => router.push('/admin/courses/allsessions/addsession')}>Add Session</Button>
+                <Button variant="contained" onClick={() => router.push('/admin/subscription/addSubscription')} id={styles.muibuttonBackgroundColor}> + Add Subscription</Button>
               </Box>
               <Paper className={subscription.papperForTable}>
                 <TableContainer className={subscription.tableContainer}>
@@ -347,7 +347,7 @@ const router = useRouter()
                                 <TableCell >{row.duration_value}</TableCell>
                                 <TableCell className={statusColor}>{capitalizeFirstLetter(row.status)}</TableCell>
                                 <TableCell >{capitalizeFirstLetter(row?.user?.first_name)} {capitalizeFirstLetter(row?.user?.last_name)}</TableCell>
-                                <TableCell><Button onClick={() => router.push(`/admin/courses/allsessions/updatesession/${row.id}`)} variant="outlined" color="success" className={subscription.editDeleteButton}><ModeEditOutlineIcon /></Button>
+                                <TableCell><Button onClick={() => router.push(`/admin/courses/allsessions/updatesession/${row.id}`)} variant="outlined" color="success" className={subscription.editDeleteButton} disabled><ModeEditOutlineIcon /></Button>
                                   <Button className={subscription.editDeleteButton} variant="outlined" color="error" onClick={() => handleClickOpen(row)}><DeleteOutlineIcon /></Button> 
                                  </TableCell>
                               </TableRow>
