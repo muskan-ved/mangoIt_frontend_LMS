@@ -1,30 +1,30 @@
-.InputLabelFont{
-    font-weight:700
+.InputLabelFont {
+  font-weight: 700;
 }
-.upperFilterBox{
-    float: right;
-    display: flex;
-    align-items: center;
+.upperFilterBox {
+  float: right;
+  display: flex;
+  align-items: center;
 }
-.filterAltOutlinedIcon{
-    display: inline-flex;
-    color: #E8661B !important;
-}                      
-.filterTypography{
-    font-weight: bold !important;
+.filterAltOutlinedIcon {
+  display: inline-flex;
+  color: #e8661b !important;
 }
-.typeFreePaid{
-    font-weight: bold !important;
+.filterTypography {
+  font-weight: bold !important;
 }
-.statusBold{
-    font-weight: bold!important;
+.typeFreePaid {
+  font-weight: bold !important;
+}
+.statusBold {
+  font-weight: bold !important;
 }
 
 /* .quillShortDescription > div > div {
     height: 80px;
 } */
 .quillDescription > div > div {
-    height: 70px;
+  height: 70px;
 }
 .wrapShortAndLongDescription {
   display: flex;
@@ -38,10 +38,10 @@
   margin-bottom: 10px;
   margin-top: 10px;
 }
-.editDeleteButton{
-    padding: 5px 9px !important;
-    min-width: 30px !important;
-    margin: 3px !important;
+.editDeleteButton {
+  padding: 5px 9px !important;
+  min-width: 30px !important;
+  margin: 3px !important;
 }
 .cancelButton{
     margin: 10px !important;
@@ -52,21 +52,20 @@
 /* .MuiPaper-root .MuiPaper-elevation .MuiPaper-rounded .MuiPaper-elevation8 .MuiPopover-paper .css-3bmhjh-MuiPaper-root-MuiPopover-paper{
 width: 70% !important;
 } */
-.courseInFilter{
-    font-weight: bold !important;
+.courseInFilter {
+  font-weight: bold !important;
 }
-.moduleInFilter{
-    font-weight: bold !important;
+.moduleInFilter {
+  font-weight: bold !important;
 }
-.statusInFilter{
-    font-weight: bold !important;
+.statusInFilter {
+  font-weight: bold !important;
 }
-.boxInFilter{
-    float: right;
+.boxInFilter {
+  float: right;
 }
-.applyButtonInFiltter{
-    margin-left: 10px !important;
-   
+.applyButtonInFiltter {
+  margin-left: 10px !important;
 }
 .papperForTable {
   width: 100%;
@@ -83,15 +82,15 @@ width: 70% !important;
 .activeClassColor {
   color: green !important;
 }
-.inactiveClassColor{
-    color:#d32f2f !important;
+.inactiveClassColor {
+  color: #d32f2f !important;
 }
 .draftClassColor {
   color: orange !important;
 }
-.addNewCourseButton{
-    margin-top: 70px !important;
-    float: right;
+.addNewCourseButton {
+  margin-top: 70px !important;
+  float: right;
 }
 /* ----------------- UPDATE COURSE CSS ----------------------- */
 .courseNameGride {
@@ -108,9 +107,9 @@ width: 70% !important;
   width: 30%;
 }
 .typoTitle {
-  font-size: 18px;
-  letter-spacing: 1px;
-  font-family: "Inter";
+  font-size: 18px !important;
+  letter-spacing: 1px !important;
+  font-family: "Inter" !important;
 }
 .expanded {
   background: #e8661b !important;
@@ -120,13 +119,13 @@ width: 70% !important;
   font-family: serif;
 }
 .backgroundClick {
-  background: #e8661b;
-  color: white;
-  border-radius: 8px;
+  background: #e8661b !important;
+  color: #fff !important;
+  border-radius: 8px !important;
 }
 .backgroundClick:hover {
-  background: #e8661b;
-  color: rgb(250, 247, 247);
+  background: #e8661b !important;
+  color: rgb(250, 247, 247) !important;
 }
 
 .imgwidth {
@@ -140,9 +139,9 @@ width: 70% !important;
   font-family: Inter, sans-serif !important;
 }
 .filedownloadcss {
-  margin-top: 15px;
-  font-size: 30px;
-  color: #e8661b;
+  margin-top: 15px !important;
+  font-size: 30px !important;
+  color: #e8661b !important;
 }
 .backbtn {
   position: absolute;
@@ -160,9 +159,18 @@ width: 70% !important;
 .backcss {
   text-align: end;
 }
-.divcss{
-    display: contents;
+.divcss {
+  display: contents;
 }
-.tableHeadingForId{
-    font-weight: bold !important;
+.tableHeadingForId {
+  font-weight: bold !important;
+}
+
+#viewIcon {
+  border: 1px solid #e8661b !important;
+  color: #e8661b !important;
+}
+.popStateFilterButton1{
+  /* display: inline-flex; */
+  color: #E8661B !important;
 }

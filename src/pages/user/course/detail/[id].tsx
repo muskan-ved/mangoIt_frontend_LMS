@@ -176,6 +176,7 @@ export default function Couseview() {
                   size="large"
                   variant="contained"
                   className={courseStyle.backbtncs}
+                  id={styles.muibuttonBackgroundColor}
                 >
                   <ArrowBackOutlinedIcon />
                   &nbsp;Back
@@ -237,6 +238,7 @@ export default function Couseview() {
                               variant="contained"
                               className={courseStyle.backbtncs12}
                               onClick={handleMarkAsComplete}
+                              id={styles.muibuttonBackgroundColor}
                             >
                               Mark as complete
                             </Button>
@@ -371,8 +373,16 @@ export default function Couseview() {
                             className={subs.fontCSS1}
                           >
                             {capitalizeFirstLetter(
-                              (couseData && couseData?.long_description) ||
-                                (couseData && couseData?.short_description)
+                              (couseData &&
+                                couseData?.long_description?.replace(
+                                  /(<([^>]+)>)/gi,
+                                  ""
+                                )) ||
+                                (couseData &&
+                                  couseData?.short_description?.replace(
+                                    /(<([^>]+)>)/gi,
+                                    ""
+                                  ))
                             )}
                           </Typography>
                         </Fragment>

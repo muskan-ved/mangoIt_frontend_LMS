@@ -41,7 +41,12 @@ a {
 .css-1to7aaw-MuiButtonBase-root-MuiPaginationItem-root.Mui-selected {
   background-color: #e8661b !important;
 }
-
+.pagination .css-1omp2b7.Mui-selected {
+  background-color: #e8661b !important;
+}
+.pagination .css-1omp2b7.Mui-selected:hover {
+  background-color: rgb(255 110 8);
+}
 .css-1aquho2-MuiTabs-indicator {
   background-color: #e8661b !important;
 }
