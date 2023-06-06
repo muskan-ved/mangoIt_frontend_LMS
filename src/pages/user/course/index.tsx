@@ -11,7 +11,6 @@ import {
   IconButton,
   InputLabel,
   MenuItem,
-
   Pagination,
   Popover,
   Select,
@@ -42,7 +41,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { SearchOutlined } from "@mui/icons-material";
 import { useRouter } from "next/router";
-import {  HandleCourseGet } from "@/services/course";
+import { HandleCourseGet } from "@/services/course";
 import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
 import { usePagination } from "@/common/Pagination/paginations";
 import { Controller, useForm } from "react-hook-form";
@@ -282,7 +281,11 @@ const AllCourses = () => {
                                           defaultValue={getFilter}
                                           render={({ field }) => (
                                             <FormControl fullWidth>
-                                              <Select {...field} displayEmpty disabled>
+                                              <Select
+                                                {...field}
+                                                displayEmpty
+                                                disabled
+                                              >
                                                 <MenuItem value={0}>
                                                   All
                                                 </MenuItem>
@@ -312,6 +315,7 @@ const AllCourses = () => {
                                             color="primary"
                                             type="button"
                                             onClick={resetFilterValue}
+                                            id={styles.muibuttonBackgroundColor}
                                           >
                                             Reset
                                           </Button>
@@ -321,6 +325,7 @@ const AllCourses = () => {
                                           type="submit"
                                           variant="contained"
                                           color="primary"
+                                          id={styles.muibuttonBackgroundColor}
                                           className={
                                             courseStyle.applyButtonInFiltter
                                           }
