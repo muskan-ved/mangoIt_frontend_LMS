@@ -1,0 +1,135 @@
+.InputLabelFont{
+    font-weight:700
+}
+.upperFilterBox{
+    float: right;
+    display: flex;
+    align-items: center;
+}
+.filterAltOutlinedIcon{
+    display: inline-flex;
+    color: #E8661B !important;
+}                      
+.filterTypography{
+    font-weight: bold !important;
+}
+.typeFreePaid{
+    font-weight: bold !important;
+}
+.statusBold{
+    font-weight: bold!important;
+}
+.cancelButton{
+    margin: 10px !important;
+}
+.subbox{
+    border: 1px dashed grey;
+    margin: 20px;
+    /* height: 150px; */
+}
+.sessionAttachments{
+    padding: 10px 33px;
+    width: fit-content;
+    margin: 10px;
+    background: #f1f1f1;
+    border-radius: 50px;
+}
+.updateSessionAttachments{
+    padding: 10px 33px;
+    width: fit-content;
+    background :#f1f1f1;
+    margin: 8px;
+    /* border: 1px solid; */
+    border-radius: 20px;
+    /* float: left; */
+    
+}
+.stackStyle{
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.sessionNameGride{
+    display: flex; 
+    margin-bottom: 16px ;
+}
+.sessionAttachmentBox{
+    border: 1px solid grey;
+    text-align: -webkit-center;
+    /* height: 200px; */
+}
+.updateLoadingButton {
+    width: 178px;
+}
+
+/* CSS for Listing Page  */
+.filterBox {
+    font-weight: bold;
+}
+.filterForm{
+    margin-top: 8px;
+}
+.mainFilterBox {
+    float: right;
+    display: flex;
+    align-items: center;
+}
+.popStateFilterButton{
+    display: inline-flex;
+    color: #1976d2;
+}
+.editDeleteButton{
+    padding: 5px 9px !important;
+    min-width: 30px !important;
+    margin: 3px !important;
+}
+
+.MuiPaper-root .MuiPaper-elevation .MuiPaper-rounded .MuiPaper-elevation8 .MuiPopover-paper .css-3bmhjh-MuiPaper-root-MuiPopover-paper{
+width: 70% !important;
+}
+.courseInFilter{
+    font-weight: bold;
+}
+.moduleInFilter{
+    font-weight: bold;
+}
+.statusInFilter{
+    font-weight: bold;
+}
+.boxInFilter{
+    float: right;
+}
+.applyButtonInFiltter{
+    margin-left: 10px !important;
+}
+.papperForTable{
+    width: 100%;
+}
+.tableContainer{
+    margin-top: 24px;
+}
+.tableCellMargin{
+    margin: 5px;
+}
+.tableLastCell{
+    text-align: center !important;
+}
+.activeClassColor{
+    color: green !important;
+}
+.inactiveClassColor{
+    color:#d32f2f !important;
+}
+.draftClassColor{
+    color: orange !important;
+}
+/*---------   update module css  */
+.courseNameGride{
+    display: flex; 
+    margin-bottom: 16px ;
+}
+.updateLoadingButton {
+    width: 178px;
+}
+.tableHeadingForId{
+    font-weight: bold;
+}
