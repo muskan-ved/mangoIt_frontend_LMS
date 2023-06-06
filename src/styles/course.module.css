@@ -27,16 +27,16 @@
     height: 70px;
 }
 .wrapShortAndLongDescription {
-    display: flex;
-    flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
 }
 
-.SubmitButton{
-    float: right;  
+.SubmitButton {
+  float: right;
 }
-.stackStyle{
-    margin-bottom: 10px;
-    margin-top: 10px;
+.stackStyle {
+  margin-bottom: 10px;
+  margin-top: 10px;
 }
 .editDeleteButton{
     padding: 5px 9px !important;
@@ -66,38 +66,97 @@ width: 70% !important;
     margin-left: 10px !important;
    
 }
-.papperForTable{
-    width: 100%;
+.papperForTable {
+  width: 100%;
 }
-.tableContainer{
-    margin-top: 24px;
+.tableContainer {
+  margin-top: 24px;
 }
-.tableCellMargin{
-    margin: 5px;
+.tableCellMargin {
+  margin: 5px;
 }
-.tableLastCell{
-    text-align: center !important;
+.tableLastCell {
+  text-align: center !important;
 }
-.activeClassColor{
-    color: green !important;
+.activeClassColor {
+  color: green !important;
 }
 .inactiveClassColor{
     color:#d32f2f !important;
 }
-.draftClassColor{
-    color: orange !important;
+.draftClassColor {
+  color: orange !important;
 }
 .addNewCourseButton{
     margin-top: 70px !important;
     float: right;
 }
-/* ----------------- UPDATE COURSE CSS ----------------------- */         
-.courseNameGride{
-    display: flex; 
-    margin-bottom: 16px ;
+/* ----------------- UPDATE COURSE CSS ----------------------- */
+.courseNameGride {
+  display: flex;
+  margin-bottom: 16px;
 }
 .updateLoadingButton {
-    width: 178px;
+  width: 178px;
+}
+.divcss {
+  display: contents;
+}
+.widthCss {
+  width: 30%;
+}
+.typoTitle {
+  font-size: 18px;
+  letter-spacing: 1px;
+  font-family: "Inter";
+}
+.expanded {
+  background: #e8661b !important;
+}
+.typolist {
+  font-size: large;
+  font-family: serif;
+}
+.backgroundClick {
+  background: #e8661b;
+  color: white;
+  border-radius: 8px;
+}
+.backgroundClick:hover {
+  background: #e8661b;
+  color: rgb(250, 247, 247);
+}
+
+.imgwidth {
+  width: 100% !important;
+}
+
+.fontCS {
+  font-weight: 400;
+  color: #333;
+  font-size: 15px;
+  font-family: Inter, sans-serif !important;
+}
+.filedownloadcss {
+  margin-top: 15px;
+  font-size: 30px;
+  color: #e8661b;
+}
+.backbtn {
+  position: absolute;
+  right: 25px;
+}
+.backbtncs {
+  height: 37px;
+}
+.backbtncs12 {
+  height: 37px;
+  text-align: end;
+  margin-right: 32px;
+  margin-top: 20px;
+}
+.backcss {
+  text-align: end;
 }
 .divcss{
     display: contents;
