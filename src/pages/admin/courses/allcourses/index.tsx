@@ -416,7 +416,7 @@ const AllCourses = () => {
                 onClose={handleClickOpen}
                 onSubmit={handleDeletesRow}
                 title={deleteRow.title}
-                whatYouDelete='Session'
+                whatYouDelete='Course'
               />
             </CardContent>
           </Card>

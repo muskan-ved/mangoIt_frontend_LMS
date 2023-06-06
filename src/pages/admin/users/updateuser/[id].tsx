@@ -34,7 +34,7 @@ import { moduleValidations } from '@/validation_schema/moduleValidation';
 
 
 
-export default function UpdateModule() {
+export default function UpdateUser() {
     // const router: any = useRouter();
     // const [getDespcriptionContent, setDespcriptionContent] = useState("");
     // const [getUpdateModule, setUpdateModule] = useState<moduleType | any>([]);
