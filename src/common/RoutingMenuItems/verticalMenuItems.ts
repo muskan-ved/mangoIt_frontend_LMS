@@ -14,6 +14,7 @@ import ManageAccountsOutlinedIcon from "@mui/icons-material/ManageAccountsOutlin
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
 import PaymentOutlinedIcon from "@mui/icons-material/PaymentOutlined";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 export const VerticalMenuItems = () => {
   const [userData, setUserData] = React.useState<any>("");
@@ -65,7 +66,7 @@ export const VerticalMenuItems = () => {
       {
         title: "Dashboard",
         icon: HomeOutlinedIcon,
-        path: "admin/dashboard",
+        path: "/admin/dashboard",
         disable: false,
       },
       {
@@ -76,70 +77,63 @@ export const VerticalMenuItems = () => {
             title: "All Courses",
             icon: ContentPasteOutlinedIcon,
             path: "/admin/courses/allcourses",
-        disable: false,
+            disable: false,
           },
           {
             title: "All Modules",
             icon: ViewModuleOutlinedIcon,
             path: "/admin/courses/allmodules",
-        disable: false,
+            disable: false,
           },
           {
             title: "All Sessions",
             icon: CalendarTodayOutlinedIcon,
             path: "/admin/courses/allsessions",
-        disable: false,
+            disable: false,
           },
         ],
       },
       {
         title: "Users",
         icon: PeopleAltOutlinedIcon,
-        path: "/users",
-        disable: true,
-
+        path: "/admin/users",
+        disable: false,
       },
       {
         title: "Subscriptions",
         icon: SubscriptionsOutlinedIcon,
-        path: "/subscriptions",
-        disable: true,
-
+        path: "/admin/subscription",
+        disable: false,
       },
 
-          {
-            title: "Email Config",
-            icon: EmailOutlinedIcon,
-            path: "/admin/emailconfiguration",
-        disable: true,
-
-          },
-          {
-            title: "Configurations",
-            icon: LanguageOutlinedIcon,
-            path: "/admin/configuration",
+      {
+        title: "Email Mngmt",
+        icon: EmailOutlinedIcon,
+        path: "/admin/emailmanagement",
         disable: false,
-
-          },
+      },
+      {
+        title: "Configurations",
+        icon: LanguageOutlinedIcon,
+        path: "/admin/configuration",
+        disable: false,
+      },
       {
         title: "Invoices",
         icon: InsertDriveFileOutlinedIcon,
         path: "/admin/invoices",
         disable: true,
-
       },
       {
         title: "Settings",
         icon: SettingsOutlinedIcon,
-        path: "admin/settings",
+        path: "/admin/settings",
         disable: true,
-
       },
       {
         title: "Logout",
         icon: PowerSettingsNewOutlinedIcon,
         disable: false,
-
       },
     ];
   }

@@ -1,3 +1,27 @@
+.InputLabelFont{
+    font-weight:700
+}
+.upperFilterBox{
+    float: right;
+    display: flex;
+    align-items: center;
+}
+.filterAltOutlinedIcon{
+    display: inline-flex;
+    color: #E8661B !important;
+}                      
+.filterTypography{
+    font-weight: bold !important;
+}
+.typeFreePaid{
+    font-weight: bold !important;
+}
+.statusBold{
+    font-weight: bold!important;
+}
+.cancelButton{
+    margin: 10px !important;
+}
 .subbox{
     border: 1px dashed grey;
     margin: 20px;
@@ -20,7 +44,10 @@
     /* float: left; */
     
 }
-
+.stackStyle{
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
 .sessionNameGride{
     display: flex; 
     margin-bottom: 16px ;
@@ -52,8 +79,8 @@
 }
 .editDeleteButton{
     padding: 5px 9px !important;
-    min-width: 30px;
-    margin: 3px;
+    min-width: 30px !important;
+    margin: 3px !important;
 }
 
 .MuiPaper-root .MuiPaper-elevation .MuiPaper-rounded .MuiPaper-elevation8 .MuiPopover-paper .css-3bmhjh-MuiPaper-root-MuiPopover-paper{
@@ -90,8 +117,19 @@ width: 70% !important;
     color: green !important;
 }
 .inactiveClassColor{
-    color:red !important;
+    color:#d32f2f !important;
 }
 .draftClassColor{
     color: orange !important;
+}
+/*---------   update module css  */
+.courseNameGride{
+    display: flex; 
+    margin-bottom: 16px ;
+}
+.updateLoadingButton {
+    width: 178px;
+}
+.tableHeadingForId{
+    font-weight: bold;
 }

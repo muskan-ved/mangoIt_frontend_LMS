@@ -60,6 +60,7 @@ export default function UpdateSession() {
    const handleContentChange = (value: string, identifier: string) => {
       if (value === '<p><br></p>') {
          setError(identifier, { message: 'Description is a required field' });
+         setValue(identifier, '');
       } else {
          setError(identifier, { message: '' })
          setValue(identifier, value);
@@ -193,7 +194,7 @@ export default function UpdateSession() {
                   First="Home"
                   Middle="Session"
                   Text="SESSION"
-                  Link="admin/courses/allsessions/updatesession"
+                  Link="/admin/courses/allsessions"
                />
                {/* main content */}
                <Card>
@@ -213,11 +214,11 @@ export default function UpdateSession() {
                               </Grid>
 
                               <Grid item xs={12} sm={12} md={12} lg={6} >
-                                 <Typography>EDIT SESSION</Typography>
+                                 <Typography className={Sessions.InputLabelFont} mb={1}>EDIT SESSION</Typography>
                                  <Grid item xs={12} sm={12} md={12} lg={12} className={Sessions.sessionNameGride} >
 
                                     <Grid item xs={12} sm={12} md={6} lg={6}>
-                                       <InputLabel>
+                                       <InputLabel className={Sessions.InputLabelFont}>
                                           Session Name
                                        </InputLabel>
                                        <TextField
@@ -231,7 +232,7 @@ export default function UpdateSession() {
                                     </Grid>
 
                                     <Grid item xs={12} sm={12} md={6} lg={6}>
-                                       <InputLabel>Course of session</InputLabel>
+                                       <InputLabel className={Sessions.InputLabelFont}>Course of session</InputLabel>
                                        <Controller
                                           name="course_id"
                                           control={control}
@@ -253,7 +254,7 @@ export default function UpdateSession() {
                                  </Grid>
 
                                  <Grid item xs={12} sm={12} md={12} lg={12} mb={2} >
-                                    <InputLabel>Module of session</InputLabel>
+                                    <InputLabel className={Sessions.InputLabelFont}>Module of session</InputLabel>
                                     <Controller
                                        name="module_id"
                                        control={control}
@@ -271,7 +272,7 @@ export default function UpdateSession() {
                                     {errors && errors.module_id ? ErrorShowing(errors?.module_id?.message) : ""}
                                  </Grid>
                                  <Grid item xs={12} sm={12} md={12} lg={12} mb={2}>
-                                    <InputLabel>Description</InputLabel>
+                                    <InputLabel className={Sessions.InputLabelFont}>Description</InputLabel>
                                     <RichEditor
                                        {...register("description")}
                                        value={despcriptionContent ? despcriptionContent : getSession?.description}
@@ -284,7 +285,7 @@ export default function UpdateSession() {
                                  </Grid>
 
                                  <Grid item xs={12} sm={12} md={12} lg={12} mb={2} >
-                                    <InputLabel>Attachment</InputLabel>
+                                    <InputLabel className={Sessions.InputLabelFont}>Attachment</InputLabel>
                                     <Box className={Sessions.sessionAttachmentBox}>
                                        <Box component='span'>
                                           {getSession !== undefined && <Preview name={getSession.attachment} />}
@@ -306,8 +307,9 @@ export default function UpdateSession() {
                                     {file ? '' : errors && errors.file ? ErrorShowing(errors?.file?.message) : ""}
                                  </Grid>
                                  <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"right"} >
-                                    {!isLoadingButton ? <Button type="submit" size="large" variant="contained">
-                                       UPDATE SESSION
+                                 <Button className={Sessions.cancelButton} variant="contained" size="large" onClick={() => router.push('/admin/courses/allsessions')} >Cancel</Button>
+                                    {!isLoadingButton ? <Button type="submit" size="large" variant="contained" id={styles.muibuttonBackgroundColor}>
+                                       UPDATE
                                     </Button> : <LoadingButton loading={isLoadingButton} className={Sessions.updateLoadingButton}
                                        size="large" variant="contained" disabled >
                                        <CircularProgressBar />

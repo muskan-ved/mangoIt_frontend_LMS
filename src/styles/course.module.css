@@ -1,15 +1,31 @@
-.CourseInputLabelFont {
-  font-weight: 700;
+.InputLabelFont{
+    font-weight:700
 }
-
-.quillDescription > div > div {
-  height: 80px;
+.upperFilterBox{
+    float: right;
+    display: flex;
+    align-items: center;
+}
+.filterAltOutlinedIcon{
+    display: inline-flex;
+    color: #E8661B !important;
+}                      
+.filterTypography{
+    font-weight: bold !important;
+}
+.typeFreePaid{
+    font-weight: bold !important;
+}
+.statusBold{
+    font-weight: bold!important;
 }
 
 /* .quillShortDescription > div > div {
     height: 80px;
 } */
-
+.quillDescription > div > div {
+    height: 70px;
+}
 .wrapShortAndLongDescription {
   display: flex;
   flex-wrap: wrap;
@@ -22,29 +38,33 @@
   margin-bottom: 10px;
   margin-top: 10px;
 }
-.editDeleteButton {
-  padding: 5px 9px !important;
-  min-width: 30px;
-  margin: 3px;
+.editDeleteButton{
+    padding: 5px 9px !important;
+    min-width: 30px !important;
+    margin: 3px !important;
+}
+.cancelButton{
+    margin: 10px !important;
 }
 
 /* .MuiPaper-root .MuiPaper-elevation .MuiPaper-rounded .MuiPaper-elevation8 .MuiPopover-paper .css-3bmhjh-MuiPaper-root-MuiPopover-paper{
 width: 70% !important;
 } */
-.courseInFilter {
-  font-weight: bold;
+.courseInFilter{
+    font-weight: bold !important;
 }
-.moduleInFilter {
-  font-weight: bold;
+.moduleInFilter{
+    font-weight: bold !important;
 }
-.statusInFilter {
-  font-weight: bold;
+.statusInFilter{
+    font-weight: bold !important;
 }
-/* .boxInFilter{
+.boxInFilter{
     float: right;
-} */
-.applyButtonInFiltter {
-  margin-left: 10px !important;
+}
+.applyButtonInFiltter{
+    margin-left: 10px !important;
+   
 }
 .papperForTable {
   width: 100%;
@@ -61,15 +81,15 @@ width: 70% !important;
 .activeClassColor {
   color: green !important;
 }
-.inactiveClassColor {
-  color: red !important;
+.inactiveClassColor{
+    color:#d32f2f !important;
 }
 .draftClassColor {
   color: orange !important;
 }
-.addNewCourseButton {
-  margin-top: 80px !important;
-  float: right;
+.addNewCourseButton{
+    margin-top: 70px !important;
+    float: right;
 }
 /* ----------------- UPDATE COURSE CSS ----------------------- */
 .courseNameGride {
@@ -137,4 +157,10 @@ width: 70% !important;
 }
 .backcss {
   text-align: end;
+}
+.divcss{
+    display: contents;
+}
+.tableHeadingForId{
+    font-weight: bold !important;
 }

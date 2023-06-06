@@ -207,6 +207,7 @@ const Subscription = () => {
                       {rows && rows.length > 0 ? (
                         DATA.currentData() &&
                         DATA.currentData().map((row: any) => {
+                          console.log(row)
                           let color = row?.status;
                           const statusColor =
                             color === "active"
