@@ -59,7 +59,7 @@ import { HandleSessionDelete, HandleSessionGet } from "@/services/session";
 import { HandleCourseGet } from "@/services/course";
 import { HandleModuleGet } from "@/services/module";
 import { AlertDialog } from "@/common/DeleteListRow/deleteRow";
-import { HandleSubscriptionGet } from "@/services/subscription";
+import { HandleSubscriptionDelete, HandleSubscriptionGet } from "@/services/subscription";
 
 interface Column {
     id: "id" | "name" | "description" | "price" | "durationTerm" | "durationValue" | "status" | "createdBy" | "action";
@@ -115,18 +115,16 @@ const router = useRouter()
   } = useForm();
 
   const handleClickOpen = (row: any) => {
-    // console.log('row', row)
     setDeleteRow(row)
     setOpen(!open);
 
   }
   // to delete a row
   const handleDeletesRow = () => {
-    // HandleCourseDelete(deleteRow.id).then((deletedRow) => {
-    //   HandleSubscriptionsGet('', filterObject).then((newRows) => {
-    //     setRows(newRows.data)
-    //   })
-    // })
+    HandleSubscriptionDelete(deleteRow.id).then((newRows) => {
+        setRows(newRows.data)
+        getAllSubscriptionData()
+      })
     setOpen(!open);
   }
 
@@ -143,7 +141,6 @@ const router = useRouter()
   
   const handleSearch = (e: any, identifier: any) => {
     setPage(1);
-    DATA.jump(1);
     if (identifier === 'reset') {
         getAllSubscriptionData()
       setSearch(e)
@@ -166,6 +163,7 @@ const router = useRouter()
   }, [])
 
     return ( <>
+    <ToastContainer/>
         <Navbar />
         <Box className={styles.combineContentAndSidebar}>
           <SideBar />
@@ -186,7 +184,7 @@ const router = useRouter()
                 id="standard-search"
                 value={search}
                 variant="outlined"
-                placeholder="Search by subscription name"
+                placeholder="Search by subscrip. name"
                 onChange={(e) => handleSearch(e, '')}
                 InputProps={{
                   endAdornment: (
@@ -355,7 +353,7 @@ const router = useRouter()
                               </TableRow>
                             );
                           })
-                        : <TableRow><TableCell colSpan={6} className={subscription.tableLastCell}> <Typography>Record not Found</Typography> </TableCell></TableRow>}
+                        : <TableRow><TableCell colSpan={9} className={subscription.tableLastCell}> <Typography>Record not Found</Typography> </TableCell></TableRow>}
                     </TableBody>
                   </Table>
                   <Stack
@@ -393,7 +391,7 @@ const router = useRouter()
                 open={open}
                 onClose={handleClickOpen}
                 onSubmit={handleDeletesRow}
-                title={deleteRow.title}
+                title={deleteRow.name}
                 whatYouDelete='Session'
               />
             </CardContent>

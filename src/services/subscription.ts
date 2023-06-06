@@ -25,6 +25,29 @@ export const HandleSubscriptionGet = async (search:string) => {
     });
 };
 
+export const HandleSubscriptionDelete = async (id:string) => {
+  const API_URL = `${API.deleteSubscription}/${id}`;
+  return await axios({
+    method: "DELETE",
+    url: API_URL,
+    headers: LoginHeader(),
+  })
+    .then((request) => {
+      if (request.status === 200) {
+      toast.success("Deleted successfully.");
+      }
+      return request;
+    })
+    .catch((error) => {
+      if (error.response.status === 401) {
+        HandleLogout();
+      } else {
+        toast.error("Something went wrong");
+      }
+      return error;
+    });
+};
+
 export const HandleSubscriptionGetByID = async (subId: any) => {
   return await axios({
     method: "GET",
