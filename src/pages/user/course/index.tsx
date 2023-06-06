@@ -427,7 +427,7 @@ const AllCourses = () => {
                               <TableCell>
                                 <Button
                                   className={courseStyle.editDeleteButton}
-                                  //   href="/user/subscription/view"
+                                  id={courseStyle.viewIcon}
                                   variant="outlined"
                                   color="primary"
                                   onClick={() =>
