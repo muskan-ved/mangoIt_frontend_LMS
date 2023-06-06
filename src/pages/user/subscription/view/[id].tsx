@@ -47,7 +47,7 @@ import styles from "../../../../styles/sidebar.module.css";
 import subs from "../../../../styles/subsciption.module.css";
 
 interface Column {
-  id: "id" | "amount" | "date" | "transaction_id" | "payment_method";
+  id: "id" | "amount" | "date" | "transaction_id" | "payment_method" | "pay_of_month";
   label: string;
   minWidth?: number;
   align?: "right";
@@ -58,9 +58,15 @@ const columns: Column[] = [
   { id: "id", label: "ID", minWidth: 120 },
   { id: "amount", label: "AMOUNT", minWidth: 120 },
   { id: "date", label: "DATE", minWidth: 120 },
+  { id: "pay_of_month", label: "PAY OF MONTH", minWidth: 120 },
   { id: "transaction_id", label: "TRANSACTION ID", minWidth: 120 },
   { id: "payment_method", label: "PAYMENT METHOD", minWidth: 120 },
 ];
+
+const monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
+const d = new Date();
 
 export default function View() {
   var getId: any;
@@ -145,7 +151,7 @@ export default function View() {
                   </Typography>
                   &emsp;
                   <Typography variant="subtitle2" className={subs.fontCSS}>
-                  {capitalizeFirstLetter(subsData && subsData?.name)}
+                    {capitalizeFirstLetter(subsData && subsData?.name)}
                   </Typography>
                 </Box>
                 <Box className={subs.maindisplay}>
@@ -159,11 +165,20 @@ export default function View() {
                 </Box>
                 <Box className={subs.maindisplay}>
                   <Typography variant="subtitle1" className={subs.useNameFront}>
+                    Status :
+                  </Typography>
+                  &emsp;
+                  <Typography variant="subtitle2" className={subs.fontCSS} sx={{ color: "green" }}>
+                    {subsData && subsData?.status}
+                  </Typography>
+                </Box>
+                <Box className={subs.maindisplay}>
+                  <Typography variant="subtitle1" className={subs.useNameFront}>
                     Start Date :
                   </Typography>
                   &emsp;
                   <Typography variant="subtitle2" className={subs.fontCSS}>
-                    {moment(subsData?.start_date).format("DD MMM YYYY")}
+                    {subsData?.start_date ? moment(subsData?.start_date).format("DD MMM YYYY") : ""}
                   </Typography>
                 </Box>
                 <Box className={subs.maindisplay}>
@@ -227,9 +242,12 @@ export default function View() {
                                 key={row.id}
                               >
                                 <TableCell>{row?.id}</TableCell>
-                                <TableCell>${row?.amount}</TableCell>
+                                <TableCell>${subsData?.price}</TableCell>
                                 <TableCell>
                                   {moment(row?.createdAt).format("DD MMM YYYY")}
+                                </TableCell>
+                                <TableCell>
+                                  {monthNames[d.getMonth()]}
                                 </TableCell>
                                 <TableCell>{row?.transaction_id}</TableCell>
                                 <TableCell>
@@ -286,9 +304,9 @@ export default function View() {
             </CardContent>
           </Card>
         </Box>
-      </Box>
+      </Box >
       {/* <Footer /> */}
-      <ToastContainer />
+      < ToastContainer />
     </>
   );
 }

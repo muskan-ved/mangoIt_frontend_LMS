@@ -1,14 +1,14 @@
-// //SERVER API URL
-// export const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
+//SERVER API URL
+export const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
-// // FRONTEND SERVER URL
-// export const FRONTEND_BASE_URL = `${process.env.NEXT_PUBLIC_FRONTEND_BASE_URL}`;
+// FRONTEND SERVER URL
+export const FRONTEND_BASE_URL = `${process.env.NEXT_PUBLIC_FRONTEND_BASE_URL}`;
 
-//FRONTEND LOCAL URL
-export const FRONTEND_BASE_URL = `${process.env.NEXT_PUBLIC_LOCAL_FRONTEND_BASE_URL}`;
+// //FRONTEND LOCAL URL
+// export const FRONTEND_BASE_URL = `${process.env.NEXT_PUBLIC_LOCAL_FRONTEND_BASE_URL}`;
 
-// LOCAL API URL
-export const BASE_URL = `${process.env.NEXT_PUBLIC_LOCAL_BASE_URL}`;
+// // LOCAL API URL
+// export const BASE_URL = `${process.env.NEXT_PUBLIC_LOCAL_BASE_URL}`;
 
 export const API = {
   authToken: `${BASE_URL}/${process.env.NEXT_PUBLIC_AUTH_TOKEN}`,
@@ -56,4 +56,23 @@ export const API = {
 
   //accept payment
   acceptpayment: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_PAYMENT}`,
+  getpaymentdetails: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_PAYMENTDETAILS}`,
+  //get all subscriptions
+  allsubscriptions: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_ALLSUBSCRIPYIONS}`,
+  getsubscriptionplandet: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_SUBSCRIPTIONPLANDET}`,
+
+  //grt user by email
+  getuserdetbyemail: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_GETUSERBYEMAIL}`,
+
+  //create user subscription
+  createsubscription: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_CREATESUBSCRIPTION}`,
+  updatesubscription: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_UPDATESUBSCRIPTION}`,
+
+  //create order
+  createsubscriptionorder: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_CREATEORDER}`,
+  //update order
+  updateorder: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_UPDATEORDER}`,
+
+  //create transaction
+  createtransaction: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_CREATETRANSACTION}`,
 };
