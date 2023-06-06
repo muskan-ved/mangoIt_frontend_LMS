@@ -2,8 +2,7 @@
   box-sizing: border-box;
   padding: 0;
   margin: 0;
-  font-family: 'Source Sans Pro !important';
-
+  font-family: "Source Sans Pro !important";
 }
 
 html,
@@ -31,10 +30,34 @@ a {
   }
 }
 
-.authPageButton{
-  background-color: #E8661B !important;
+.css-sghohy-MuiButtonBase-root-MuiButton-root {
+  background-color: #e8661b !important;
 }
 
-.GlobalTextColor{
-  color : #0E4A67
+.css-jh47zj-MuiButtonBase-root-MuiButton-root {
+  background-color: #e8661b !important;
+}
+
+.css-1to7aaw-MuiButtonBase-root-MuiPaginationItem-root.Mui-selected {
+  background-color: #e8661b !important;
+}
+.pagination .css-1omp2b7.Mui-selected {
+  background-color: #e8661b !important;
+}
+.pagination .css-1omp2b7.Mui-selected:hover {
+  background-color: rgb(255 110 8);
+}
+.css-1aquho2-MuiTabs-indicator {
+  background-color: #e8661b !important;
+}
+
+.GlobalTextColor {
+  color: #e8661b !important;
+}
+
+.css-ttwr4n {
+  background-color: #e8661b !important;
+}
+.GlobalTextColor {
+  color: #e8661b !important;
 }

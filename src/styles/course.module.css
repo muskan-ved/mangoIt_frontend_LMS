@@ -1,74 +1,174 @@
-.CourseInputLabelFont{
-    font-weight:700
+.InputLabelFont {
+  font-weight: 700;
+}
+.upperFilterBox {
+  float: right;
+  display: flex;
+  align-items: center;
+}
+.filterAltOutlinedIcon {
+  display: inline-flex;
+  color: #e8661b !important;
+}
+.filterTypography {
+  font-weight: bold !important;
+}
+.typeFreePaid {
+  font-weight: bold !important;
+}
+.statusBold {
+  font-weight: bold !important;
 }
 
-.quillDescriptionTop{
-    margin-top:50px;
-    margin-bottom: 60px;
-}
-
-.quillDescription > div > div {
-    height: 150px;
-}
-
-.quillShortDescription > div > div {
+/* .quillShortDescription > div > div {
     height: 80px;
+} */
+.quillDescription > div > div {
+  height: 70px;
 }
-
 .wrapShortAndLongDescription {
-    display: flex;
-    flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
 }
 
-.SubmitButton{
-    float: right;
+.SubmitButton {
+  float: right;
 }
-.stackStyle{
-    margin-bottom: 10px;
-    margin-top: 10px;
+.stackStyle {
+  margin-bottom: 10px;
+  margin-top: 10px;
 }
-.editDeleteButton{
-    padding: 5px 9px !important;
-    min-width: 30px;
-    margin: 3px;
+.editDeleteButton {
+  padding: 5px 9px !important;
+  min-width: 30px !important;
+  margin: 3px !important;
+}
+.cancelButton {
+  margin: 10px !important;
 }
 
-.MuiPaper-root .MuiPaper-elevation .MuiPaper-rounded .MuiPaper-elevation8 .MuiPopover-paper .css-3bmhjh-MuiPaper-root-MuiPopover-paper{
+/* .MuiPaper-root .MuiPaper-elevation .MuiPaper-rounded .MuiPaper-elevation8 .MuiPopover-paper .css-3bmhjh-MuiPaper-root-MuiPopover-paper{
 width: 70% !important;
+} */
+.courseInFilter {
+  font-weight: bold !important;
 }
-.courseInFilter{
-    font-weight: bold;
+.moduleInFilter {
+  font-weight: bold !important;
 }
-.moduleInFilter{
-    font-weight: bold;
+.statusInFilter {
+  font-weight: bold !important;
 }
-.statusInFilter{
-    font-weight: bold;
+.boxInFilter {
+  float: right;
 }
-.boxInFilter{
-    float: right;
+.applyButtonInFiltter {
+  margin-left: 10px !important;
 }
-.applyButtonInFiltter{
-    margin-left: 10px !important;
+.papperForTable {
+  width: 100%;
 }
-.papperForTable{
-    width: 100%;
+.tableContainer {
+  margin-top: 24px;
 }
-.tableContainer{
-    margin-top: 24px;
+.tableCellMargin {
+  margin: 5px;
 }
-.tableCellMargin{
-    margin: 5px;
+.tableLastCell {
+  text-align: center !important;
 }
-.tableLastCell{
-    text-align: center !important;
+.activeClassColor {
+  color: green !important;
 }
-.activeClassColor{
-    color: green !important;
+.inactiveClassColor {
+  color: #d32f2f !important;
 }
-.inactiveClassColor{
-    color:red !important;
+.draftClassColor {
+  color: orange !important;
 }
-.draftClassColor{
-    color: orange !important;
+.addNewCourseButton {
+  margin-top: 70px !important;
+  float: right;
+}
+/* ----------------- UPDATE COURSE CSS ----------------------- */
+.courseNameGride {
+  display: flex;
+  margin-bottom: 16px;
+}
+.updateLoadingButton {
+  width: 178px;
+}
+.divcss {
+  display: contents;
+}
+.widthCss {
+  width: 30%;
+}
+.typoTitle {
+  font-size: 18px !important;
+  letter-spacing: 1px !important;
+  font-family: "Inter" !important;
+}
+.expanded {
+  background: #e8661b !important;
+}
+.typolist {
+  font-size: large;
+  font-family: serif;
+}
+.backgroundClick {
+  background: #e8661b !important;
+  color: #fff !important;
+  border-radius: 8px !important;
+}
+.backgroundClick:hover {
+  background: #e8661b !important;
+  color: rgb(250, 247, 247) !important;
+}
+
+.imgwidth {
+  width: 100% !important;
+}
+
+.fontCS {
+  font-weight: 400;
+  color: #333;
+  font-size: 15px;
+  font-family: Inter, sans-serif !important;
+}
+.filedownloadcss {
+  margin-top: 15px !important;
+  font-size: 30px !important;
+  color: #e8661b !important;
+}
+.backbtn {
+  position: absolute;
+  right: 25px;
+}
+.backbtncs {
+  height: 37px;
+}
+.backbtncs12 {
+  height: 37px;
+  text-align: end;
+  margin-right: 32px;
+  margin-top: 20px;
+}
+.backcss {
+  text-align: end;
+}
+.divcss {
+  display: contents;
+}
+.tableHeadingForId {
+  font-weight: bold !important;
+}
+
+#viewIcon {
+  border: 1px solid #e8661b !important;
+  color: #e8661b !important;
+}
+.popStateFilterButton1{
+  /* display: inline-flex; */
+  color: #E8661B !important;
 }

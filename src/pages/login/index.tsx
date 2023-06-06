@@ -16,91 +16,116 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { userLoginValidations } from "@/validation_schema/authValidation";
 import { useForm } from "react-hook-form";
 import { loginType } from "../../types/authType";
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { GenerateToken, HandleLogin, HandleLoginByGoogle, HandleRegister } from "@/services/auth";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import {
+  GenerateToken,
+  HandleLogin,
+  HandleLoginByGoogle,
+  HandleRegister,
+} from "@/services/auth";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useGoogleLogin } from "@react-oauth/google";
 
 const theme = createTheme();
 
 export default function Login() {
-
-  const { register,	handleSubmit,formState: { errors } } = useForm<loginType>({resolver: yupResolver(userLoginValidations)});
-  const router:any = useRouter();
-  const [loading,setLoading] = React.useState<boolean>(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<loginType>({ resolver: yupResolver(userLoginValidations) });
+  const router: any = useRouter();
+  const [loading, setLoading] = React.useState<boolean>(false);
   const [showPassword, setShowPassword] = React.useState(false);
   const [googleLoading, setGoogleLoading] = React.useState(false);
 
-const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const onSubmit = async(event:any) => {
+  const onSubmit = async (event: any) => {
+    setLoading(true);
+    await HandleLogin(event)
+      .then((res) => {
+        if (res.status === 200) {
+          if (res?.data?.userDetails?.role_id === 1) {
+            router.push("/profile");
+          } else {
+            router.push("/user/profile");
+          }
+          localStorage.setItem("loginToken", res.data.loginToken);
+          localStorage.setItem(
+            "userData",
+            JSON.stringify(res.data.userDetails)
+          );
+        }
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+  };
 
-    setLoading(true)
-    await HandleLogin(event).then((res) => {
-      if(res.status === 200){
-        router.push('/profile')
-        localStorage.setItem('loginToken',res.data.loginToken)
-        localStorage.setItem('userData',JSON.stringify(res.data.userDetails))
-      }
-      setLoading(false)
-    }).catch(() => {
-      setLoading(false)
-    })
-
-};
-
-  function ErrorShowing (errorMessage:any){
-    return ( <Typography variant="body2" color={'error'} gutterBottom>{errorMessage} </Typography> );
+  function ErrorShowing(errorMessage: any) {
+    return (
+      <Typography variant="body2" color={"error"} gutterBottom>
+        {errorMessage}{" "}
+      </Typography>
+    );
   }
 
   const googleLogin = useGoogleLogin({
-    onSuccess: async(tokenResponse) => {
-  await HandleLoginByGoogle(tokenResponse)
-                    .then(async(res) => {
-                      const reqData = {
-                          first_name: res.data.given_name,
-                          last_name: res.data.family_name,
-                          profile_pic: res.data.picture,
-                          email: res.data.email,
-                          loggedin_by: 'google',
-                      }
-                      setGoogleLoading(true)
-                          await HandleRegister(reqData).then((res) => {
-                            if(res.status === 201){
-                              // router.push('/profile')
-                              // localStorage.setItem('loginToken',res.data.loginToken)
-                              // localStorage.setItem('userData',JSON.stringify(res.data.userDetails))
-                            }
-                            setGoogleLoading(false)
-                          }).catch(() => {
-                            setGoogleLoading(false)
-                          })
-                    })
-                    .catch((err) => console.log(err));
-        },
-    onError: errorResponse => console.log(errorResponse), 
+    onSuccess: async (tokenResponse) => {
+      await HandleLoginByGoogle(tokenResponse)
+        .then(async (res) => {
+          const reqData = {
+            first_name: res.data.given_name,
+            last_name: res.data.family_name,
+            profile_pic: res.data.picture,
+            email: res.data.email,
+            loggedin_by: "google",
+          };
+          setGoogleLoading(true);
+          await HandleRegister(reqData)
+            .then((res) => {
+              if (res.status === 201) {
+                localStorage.setItem('loginToken', res.data.loginToken)
+                localStorage.setItem('userData', JSON.stringify(res?.data?.updatedUser))
+                router.push('/profile')
+              }
+              setGoogleLoading(false);
+            })
+            .catch(() => {
+              setGoogleLoading(false);
+            });
+        })
+        .catch((err) => console.log(err));
+    },
+    onError: (errorResponse) => console.log(errorResponse),
   });
 
   React.useEffect(() => {
-    GenerateToken()      
-      if (typeof window !== "undefined" && window.localStorage.getItem('loginToken')) {
-        // If token exists, redirect user to dashboard page
-        if(window.location.pathname === '/' || window.location.pathname === '/login' ){
-          router.push('/profile');
-        }else{
-          router.back()
-        }
+    GenerateToken();
+    if (
+      typeof window !== "undefined" &&
+      window.localStorage.getItem("loginToken")
+    ) {
+      // If token exists, redirect user to dashboard page
+      if (
+        window.location.pathname === "/" ||
+        window.location.pathname === "/login"
+      ) {
+        router.push("/profile");
+      } else {
+        router.back();
       }
-      
-  }, [])
-  
+    }
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
-      <ToastContainer/>
+      <ToastContainer />
       <Grid container component="main">
-        <AuthSidebar/>
+        <AuthSidebar />
         <Grid item xs={12} sm={6} md={6} lg={5}>
           <Box
             sx={{
@@ -148,44 +173,54 @@ const handleClickShowPassword = () => setShowPassword((show) => !show);
                 autoFocus
                 {...register("email")}
               />
-              {errors && errors.email ? ErrorShowing(errors?.email?.message) : ''}
+              {errors && errors.email
+                ? ErrorShowing(errors?.email?.message)
+                : ""}
               <TextField
                 margin="normal"
                 fullWidth
                 label="Password"
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 id="outlined-password"
                 {...register("password")}
                 InputProps={{
                   endAdornment: (
-                     <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  edge="end"
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
                   ),
                 }}
               />
-              {errors && errors.password ? ErrorShowing(errors?.password?.message) : ''}
-             {!loading ? <Button
-             
-                type="submit"
-                fullWidth
-                size="large"
-                variant="contained"
-                className="authPageButton"
-                sx={{ mt: 3, mb: 2 }}
-                
-              >
-                
-                Sign In
-              </Button>: <LoadingButton loading={loading}  fullWidth
-                size="large" sx={{ mt: 3, mb: 2 }}
-                variant="outlined" disabled >
-         <CircularProgressBar/>
-        </LoadingButton>}
+              {errors && errors.password
+                ? ErrorShowing(errors?.password?.message)
+                : ""}
+              {!loading ? (
+                <Button
+                  type="submit"
+                  fullWidth
+                  size="large"
+                  variant="contained"
+                  className="authPageButton"
+                  sx={{ mt: 3, mb: 2 }}
+                >
+                  Sign In
+                </Button>
+              ) : (
+                <LoadingButton
+                  loading={loading}
+                  fullWidth
+                  size="large"
+                  sx={{ mt: 3, mb: 2 }}
+                  variant="outlined"
+                  disabled
+                >
+                  <CircularProgressBar />
+                </LoadingButton>
+              )}
 
               <Link
                 href="/forgotpassword"

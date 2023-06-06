@@ -12,8 +12,6 @@ const SideBar = () => {
     router.push(path);
   };
 
-
-
   return (
     <>
       <Sidebar
@@ -24,9 +22,8 @@ const SideBar = () => {
       >
         <Menu>
           {NavItem.map((item: any, index: number) => {
-            // console.log('dfd',router.pathname ,item)
             const pathnameMatch =
-              router.pathname === item?.path
+              router.pathname === item?.path || router.pathname.includes(item.path)
                 ? styles.activeMenuItem
                 : styles.nonActiveMenuItem;
             return (
@@ -38,6 +35,7 @@ const SideBar = () => {
                     label={item.title}
                     defaultOpen={router.pathname.includes("all")}
                     className={pathnameMatch}
+                    disabled={item.disable}
                   >
                     {item?.children.map((subItem: any, idx: number) => {
                       const subPathnameMatch =
@@ -50,8 +48,10 @@ const SideBar = () => {
                           key={idx}
                           icon={<subItem.icon />}
                           onClick={() => navigateURL(subItem.path)}
-                          active={router.pathname.includes(subItem.path)}
+                          active={router.pathname.includes(subItem.path) ? true : false}
                           className={subPathnameMatch}
+                          disabled={subItem.disable}
+
                         >
                           {subItem.title}
                         </MenuItem>
@@ -65,6 +65,9 @@ const SideBar = () => {
                     onClick={() => navigateURL(item.path)}
                     active={router.pathname === item.path}
                     className={pathnameMatch}
+                    disabled={item.disable}
+
+
                   >
                     {item.title}
                   </MenuItem>
@@ -77,6 +80,7 @@ const SideBar = () => {
                       HandleLogout();
                     }}
                     className={pathnameMatch}
+                    disabled={item.disable}
                   >
                     {item.title}
                   </MenuItem>

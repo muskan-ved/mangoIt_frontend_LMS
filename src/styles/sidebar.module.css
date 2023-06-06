@@ -10,13 +10,14 @@
   border-bottom-right-radius: 23px !important;
   max-width: 200px !important;
   color: white !important;
-  background-color: black !important;
+  background-color: #E8661B !important;
 }
 
 .nonActiveMenuItem{
   border-top-right-radius: 23px !important;
   border-bottom-right-radius: 23px !important;
   max-width: 200px !important;
+  /* color:#E8661B !important; */
 }
 
 .footerContainercss{
@@ -38,4 +39,12 @@
 
 .asideTag{
   min-height: calc(100vh - 65px);
+}
+
+.wholeWebsiteButtonColor{
+  color: #E8661B !important;
+}
+
+#muibuttonBackgroundColor{
+  background-color: #E8661B !important;
 }

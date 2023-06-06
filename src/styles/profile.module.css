@@ -34,8 +34,8 @@
 }
 
 .useNameFront {
-    color: #7C7C7C;
-    font-weight: bold;
+    color: #7C7C7C !important;
+    font-weight: bold !important;
 }
 
 .cameraAltIcon {
@@ -47,4 +47,7 @@
 }
 .userData{
     margin-left: 15px;
+}
+.InputLabelFont{
+    font-weight:700
 }
