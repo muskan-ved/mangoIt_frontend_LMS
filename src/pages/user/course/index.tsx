@@ -197,6 +197,7 @@ const AllCourses = () => {
                     <Box>
                       <Button
                         sx={{ display: "inline-flex", color: "#1976d2" }}
+                        className={courseStyle.popStateFilterButton1}
                         {...bindTrigger(popupState)}
                       >
                         <FilterAltOutlinedIcon />
