@@ -1,4 +1,4 @@
-import { LoginHeader } from "@/common/Tokens/authToken";
+import { LoginHeader, authHeader } from "@/common/Tokens/authToken";
 import { API } from "@/config/config";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -19,6 +19,42 @@ export const HandleOrderGetByUserID = async (orderId: any) => {
         HandleLogout();
       } else {
         toast.error("subscription failed");
+      }
+      return error;
+    });
+};
+
+export const CreateOrder = async (reqdata: any) => {
+  return await axios({
+    method: "POST",
+    url: `${API.createsubscriptionorder}`,
+    headers: authHeader(),
+    data: reqdata,
+  })
+    .then((request) => {
+      return request;
+    })
+    .catch((error) => {
+      if (error.response.status === 401) {
+        HandleLogout();
+      }
+      return error;
+    });
+};
+
+export const UpdateOrder = async (reqdata: any, orderId: any) => {
+  return await axios({
+    method: "PUT",
+    url: `${API.updateorder}/${orderId}`,
+    headers: authHeader(),
+    data: reqdata,
+  })
+    .then((request) => {
+      return request;
+    })
+    .catch((error) => {
+      if (error.response.status === 401) {
+        HandleLogout();
       }
       return error;
     });

@@ -14,6 +14,7 @@ import ManageAccountsOutlinedIcon from "@mui/icons-material/ManageAccountsOutlin
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
 import PaymentOutlinedIcon from "@mui/icons-material/PaymentOutlined";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 export const VerticalMenuItems = () => {
   const [userData, setUserData] = React.useState<any>("");
@@ -34,7 +35,7 @@ export const VerticalMenuItems = () => {
         title: "Dashboard",
         icon: HomeOutlinedIcon,
         path: "/user/dashboard",
-        disable: false,
+        disable: true,
       },
       {
         title: "Profile",
@@ -51,7 +52,7 @@ export const VerticalMenuItems = () => {
       {
         title: "Courses",
         icon: DescriptionOutlinedIcon,
-        path: "/user/course/list",
+        path: "/user/course",
         disable: false,
       },
       {
@@ -97,14 +98,12 @@ export const VerticalMenuItems = () => {
         icon: PeopleAltOutlinedIcon,
         path: "/admin/users",
         disable: false,
-
       },
       {
         title: "Subscriptions",
         icon: SubscriptionsOutlinedIcon,
         path: "/admin/subscription",
         disable: false,
-
       },
 
       {
@@ -112,34 +111,29 @@ export const VerticalMenuItems = () => {
         icon: EmailOutlinedIcon,
         path: "/admin/emailmanagement",
         disable: false,
-
       },
       {
         title: "Configurations",
         icon: LanguageOutlinedIcon,
         path: "/admin/configuration",
         disable: false,
-
       },
       {
         title: "Invoices",
         icon: InsertDriveFileOutlinedIcon,
         path: "/admin/invoices",
         disable: true,
-
       },
       {
         title: "Settings",
         icon: SettingsOutlinedIcon,
         path: "/admin/settings",
         disable: true,
-
       },
       {
         title: "Logout",
         icon: PowerSettingsNewOutlinedIcon,
         disable: false,
-
       },
     ];
   }

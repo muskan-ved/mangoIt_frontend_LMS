@@ -5,99 +5,30 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import MoreIcon from "@mui/icons-material/MoreVert";
 import { Container, Typography } from "@mui/material";
-import { useRouter } from "next/navigation";
-import styles from "../../styles/appbar.module.css";
+import { useRouter } from "next/router";
+import styles from "../../styles/webviewHeaderFooter.module.css";
 import { HandleLogout } from "@/services/auth";
-import PowerSettingsNewOutlinedIcon from "@mui/icons-material/PowerSettingsNewOutlined";
-import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-
+import MenuIcon from '@mui/icons-material/Menu';
+import Link from "next/link";
 
 export default function WebViewNavbar() {
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
         React.useState<null | HTMLElement>(null);
-    const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
     const router = useRouter();
     const handleMobileMenuClose = () => {
         setMobileMoreAnchorEl(null);
     };
-
-    const handleMenuClose = () => {
-        setAnchorEl(null);
-        handleMobileMenuClose();
-    };
     const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
         setMobileMoreAnchorEl(event.currentTarget);
     };
-    const menuId = "primary-search-account-menu";
-    const renderMenu = (
-        <Menu
-            anchorEl={anchorEl}
-            anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-            }}
-            id={menuId}
-            keepMounted
-            transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-            }}
-            open={isMenuOpen}
-            onClose={handleMenuClose}
-        >
+    let textcolor = "#E8661B !important";
+    let path = router?.pathname;
+    let setHomeColor = path.includes("home") ? textcolor : "";
+    let setCoursesColor = path.includes("Courses") ? textcolor : "";
+    let setsubscribeplan = path.includes("subscribeplan") ? textcolor : "";
 
-            <MenuItem
-                onClick={() => {
-                    router.push("/profile"), handleMenuClose();
-                }}
-            >
-                <IconButton
-                    size="large"
-                    aria-label="account of current user"
-                    aria-controls="primary-search-account-menu"
-                    aria-haspopup="true"
-                    color="inherit"
-                >
-                    <AccountCircleOutlinedIcon />
-                </IconButton>
-                <Typography>Home</Typography>
-            </MenuItem>
-
-            <MenuItem
-                onClick={() => {
-                    router.push("/user/profile"), handleMenuClose();
-                }}
-            >
-                <IconButton
-                    size="large"
-                    aria-label="account of current user"
-                    aria-controls="primary-search-account-menu"
-                    aria-haspopup="true"
-                    color="inherit"
-                >
-                    <AccountCircleOutlinedIcon />
-                </IconButton>
-                <Typography>Course</Typography>
-            </MenuItem>
-
-            <MenuItem onClick={HandleLogout}>
-                <IconButton
-                    size="large"
-                    aria-label="account of current user"
-                    aria-controls="primary-search-account-menu"
-                    aria-haspopup="true"
-                    color="inherit"
-                >
-                    <PowerSettingsNewOutlinedIcon />
-                </IconButton>
-                <Typography>My Acount</Typography>
-            </MenuItem>
-        </Menu>
-    );
     const mobileMenuId = "primary-search-account-menu-mobile";
     const renderMobileMenu = (
         <Menu
@@ -116,11 +47,17 @@ export default function WebViewNavbar() {
             onClose={handleMobileMenuClose}
         >
             <MenuItem>
-                <Typography>Home</Typography>
+                <Typography sx={{
+                    color: setHomeColor,
+                }}>Home</Typography>
             </MenuItem>
             <MenuItem onClick={() => router.push("/profile")}>
-
-                <Typography>Course</Typography>
+                <Typography sx={{
+                    color: setCoursesColor,
+                }}>Course</Typography>
+            </MenuItem>
+            <MenuItem onClick={() => router.push("/profile")}>
+                <Typography sx={{ color: setsubscribeplan }}>Subscribe Plan</Typography>
             </MenuItem>
             <MenuItem onClick={HandleLogout}>
                 <Typography>My Acount</Typography>
@@ -131,7 +68,7 @@ export default function WebViewNavbar() {
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static" className={styles.appBarCss}>
                 <Container maxWidth="lg">
-                    <Toolbar>
+                    <Toolbar className={styles.appBarToolbarCss}>
                         <Box
                             component="img"
                             src="/Images/company_logo.png"
@@ -142,24 +79,35 @@ export default function WebViewNavbar() {
                         />
                         <Box sx={{ flexGrow: 1 }} />
                         <Box sx={{ display: { xs: "none", md: "flex" } }}>
-                            <Typography
+                            <Link href="/user/home" ><Typography
                                 variant="body2"
                                 className={styles.windowFullWidthNameAlign}
+                                sx={{
+                                    color: setHomeColor,
+                                }}
                             >
                                 Home
-                            </Typography>
-                            <Typography
+                            </Typography></Link>
+                            <Link href="/user/Courses" ><Typography
                                 variant="body2"
                                 className={styles.windowFullWidthNameAlign}
+                                sx={{
+                                    color: setCoursesColor,
+                                }}
                             >
                                 Course
-                            </Typography>
-                            <Typography
+                            </Typography></Link>
+
+                            <Link href="/user/subscribeplan" ><Typography
                                 variant="body2"
                                 className={styles.windowFullWidthNameAlign}
-                            >
-                                My Acount
-                            </Typography>
+                                sx={{ color: setsubscribeplan }}
+                            >Subscription Plan</Typography></Link>
+                            <Link href="/login" ><Typography
+                                variant="body2"
+                                className={styles.windowFullWidthNameAlign}
+                            >My Acount</Typography></Link>
+
                         </Box>
                         <Box sx={{ display: { xs: "flex", md: "none" } }}>
                             <IconButton
@@ -170,22 +118,13 @@ export default function WebViewNavbar() {
                                 onClick={handleMobileMenuOpen}
                                 color="inherit"
                             >
-                                <MoreIcon />
-                            </IconButton>
-                            <IconButton
-                                size="large"
-                                edge="start"
-                                color="inherit"
-                                aria-label="open drawer"
-                                sx={{ mr: 2 }}
-                            >
+                                <MenuIcon />
                             </IconButton>
                         </Box>
                     </Toolbar>
                 </Container>
             </AppBar>
             {renderMobileMenu}
-            {renderMenu}
         </Box>
     );
 }
