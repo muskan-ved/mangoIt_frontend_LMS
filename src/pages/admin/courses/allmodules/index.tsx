@@ -424,7 +424,7 @@ const AllModules = () => {
 								onClose={handleClickOpen}
 								onSubmit={handleDeletesRow}
 								title={deleteRow.title}
-								whatYouDelete='Session'
+								whatYouDelete='Module'
 							/>
 						</CardContent>
 					</Card>
