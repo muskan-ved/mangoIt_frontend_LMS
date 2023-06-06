@@ -22,8 +22,8 @@ import { sessionType } from '@/types/sessionType';
 import { courseType } from '@/types/courseType';
 import { moduleType } from '@/types/moduleType';
 // CSS Import
-import styles from "../../../../styles/sidebar.module.css";
-import Sessions from "../../../../styles/session.module.css"
+import styles from "../../../styles/sidebar.module.css";
+import Sessions from "../../../styles/session.module.css"
 import { ToastContainer } from 'react-toastify';
 // API services
 import { HandleCourseGet } from '@/services/course';
@@ -179,14 +179,14 @@ export default function AddSubscription() {
 
                               <Grid item xs={12} sm={12} md={12} lg={6} >
                                  <Typography className={Sessions.InputLabelFont} mb={1}>ADD SESSION</Typography>
-                                 <Grid item xs={12} sm={12} md={12} lg={12} className={Sessions.sessionNameGride} >
+                                 <Grid item xs={12} sm={12} md={12} lg={12} >
 
                                     <Grid item xs={12} sm={12} md={6} lg={6}>
                                        <InputLabel className={Sessions.InputLabelFont}>
-                                          Session Name
+                                          Subscription Name
                                        </InputLabel>
                                        <TextField
-                                          placeholder="Session Name"
+                                          placeholder="Subscription Name"
                                           {...register("title")}
                                        />
                                        {errors && errors.title
@@ -195,26 +195,29 @@ export default function AddSubscription() {
                                     </Grid>
 
                                     <Grid item xs={12} sm={12} md={6} lg={6}>
-                                       <InputLabel className={Sessions.InputLabelFont}>Course of session</InputLabel>
-                                       <Controller
-                                          name="course_id"
-                                          control={control}
-                                          defaultValue=""
-                                          render={({ field }) => (
-                                             <FormControl fullWidth>
-                                                <Select {...field} displayEmpty>
-                                                   <MenuItem disabled value="">
-                                                      Select Course
-                                                   </MenuItem>
-                                                   {getCourses?.map((course: any) => {
-                                                      return (<MenuItem key={course.course.id} value={course.course.id}>{capitalizeFirstLetter(course?.course.title)}</MenuItem>)
-                                                   })}
-                                                </Select>
-                                             </FormControl>
-                                          )}
+                                       <InputLabel className={Sessions.InputLabelFont}>
+                                          Price
+                                       </InputLabel>
+                                       <TextField
+                                          placeholder="Price"
+                                          {...register("title")}
                                        />
-                                       {errors && errors.course_id
-                                          ? ErrorShowing(errors?.course_id?.message)
+                                       {errors && errors.title
+                                          ? ErrorShowing(errors?.title?.message)
+                                          : ""}
+                                    </Grid>
+
+                                    <Grid item xs={12} sm={12} md={6} lg={6}>
+                                       <InputLabel className={Sessions.InputLabelFont}>
+                                          Duration
+                                       </InputLabel>
+                                       <TextField
+                                       type='date'
+                                          placeholder="Duration Date"
+                                          {...register("title")}
+                                       />
+                                       {errors && errors.title
+                                          ? ErrorShowing(errors?.title?.message)
                                           : ""}
                                     </Grid>
                                  </Grid>
@@ -228,12 +231,9 @@ export default function AddSubscription() {
                                        render={({ field }) => (
                                           <FormControl fullWidth>
                                              <Select {...field} displayEmpty>
-                                                <MenuItem disabled value="">
-                                                   Select Module
-                                                </MenuItem>
-                                                {getModules?.map((module: any) => {
-                                                   return (<MenuItem key={module.module.id} value={module.module.id}>{capitalizeFirstLetter(module?.module.title)}</MenuItem>)
-                                                })}
+                                                <MenuItem value={'active'}>Active</MenuItem>
+                                                <MenuItem value={'active'}>Inactive</MenuItem>
+                                               
                                              </Select>
                                           </FormControl>
                                        )}
@@ -254,21 +254,7 @@ export default function AddSubscription() {
                                     {/* {despcriptionContent ? '' : errors && errors.description ? ErrorShowing(errors?.description?.message) : ""} */}
                                  </Grid>
 
-                                 <Grid item xs={12} sm={12} md={12} lg={12} mb={2}>
-                                    <InputLabel className={Sessions.InputLabelFont}>Attachment</InputLabel>
-                                    <Box className={Sessions.sessionAttachmentBox}>
-                                       <InputLabel className={Sessions.subbox} >
-                                          <input
-                                             type="file"
-                                             {...register('attachment')}
-                                             onChange={handleChange}
-                                             hidden
-                                          />
-                                          <Typography className={Sessions.sessionAttachments}>  {!file.name ? "Upload" : file.name}</Typography>
-                                       </InputLabel>
-                                    </Box>
-                                    {file ? '' : errors && errors.file ? ErrorShowing(errors?.file?.message) : ""}
-                                 </Grid>
+                               
                                  <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"right"} >
                                     <Button className={Sessions.cancelButton} variant="contained" size="large" onClick={() => router.push('/admin/courses/allsessions')} >Cancel</Button>
                                     {!isLoadingButton ? <Button type="submit" size="large" variant="contained" id={styles.muibuttonBackgroundColor}>
