@@ -27,9 +27,8 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { Margin, SearchOutlined } from "@mui/icons-material";
+import { SearchOutlined } from "@mui/icons-material";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
@@ -86,8 +85,13 @@ const AllSession = () => {
   const [search, setSearch] = React.useState('');
   const [getFilter, setFilter] = React.useState<number>(0);
   const [deleteRow, setDeleteRow] = React.useState<sessionType | any>([])
-
   const router = useRouter()
+  const {
+    handleSubmit,
+    control,
+    reset,
+  } = useForm();
+
   //pagination
   const [row_per_page, set_row_per_page] = React.useState(5);
   let [page, setPage] = React.useState<any>(1);
@@ -102,65 +106,11 @@ const AllSession = () => {
     DATA.jump(p);
   };
 
-  const {
-    handleSubmit,
-    control,
-    reset,
-  } = useForm();
-
-  const onSubmit = (event: any) => {
-    const filterData: any = {
-      module_id: event.module,
-      course_id: event.course,
-      status: event.status,
-    }
-    HandleSessionGet('', filterData).then((itemFiltered) => {
-      setRows(itemFiltered.data)
-    })
-  }
-  
-  const handleClickOpen = (row: any) => {
-    setDeleteRow(row)
-    setOpen(!open);
-
-  };
-  // to delete a row
-  const handleDeletesRow = () => {
-    HandleSessionDelete(deleteRow.id).then((deletedRow) => {
-      HandleSessionGet('', '').then((newRows) => {
-        setRows(newRows.data)
-      })
-    })
-    setOpen(!open);
-  }
-
-  const resetFilterValue = () => {
-    setFilter(0)
-    reset({ course: 0, module: 0, status: 0 });
-  }
-
-  const handleSort = (rowsData: any) => {
-    const sortData = handleSortData(rowsData)
-    setRows(sortData)
-    setToggle(!toggle)
-  }
-
-  const handleSearch = (e: any, identifier: any) => {
-    setPage(1);
-    DATA.jump(1);
-    if (identifier === 'reset') {
-      HandleSessionGet('', '').then((itemSeached) => {
-        setRows(itemSeached.data);
-      })
-      setSearch(e)
-    } else {
-      const search = e.target.value;
-      setSearch(e.target.value)
-      HandleSessionGet(search, '').then((itemSeached) => {
-        setRows(itemSeached.data);
-      })
-    }
-  }
+  React.useEffect(() => {
+    getSessionData();
+    getModuleData();
+    getCourseData();
+  }, []);
 
   const getSessionData = () => {
     HandleSessionGet('', '').then((sessions) => {
@@ -180,12 +130,61 @@ const AllSession = () => {
     })
   }
 
-  React.useEffect(() => {
-    getSessionData();
-    getModuleData();
-    getCourseData();
-  }, []);
-  console.log(' session rowss', rows)
+  const handleSort = (rowsData: any) => {
+    const sortData = handleSortData(rowsData)
+    setRows(sortData)
+    setToggle(!toggle)
+  }
+
+  const handleSearch = (e: any, identifier: any) => {
+    setPage(1);
+    // DATA.jump(1);
+    if (identifier === 'reset') {
+      HandleSessionGet('', '').then((itemSeached) => {
+        setRows(itemSeached.data);
+      })
+      setSearch(e)
+    } else {
+      const search = e.target.value;
+      setSearch(e.target.value)
+      HandleSessionGet(search, '').then((itemSeached) => {
+        setRows(itemSeached.data);
+      })
+    }
+  }
+
+  const handleClickOpen = (row: any) => {
+    setDeleteRow(row)
+    setOpen(!open);
+
+  };
+  // to delete a row
+  const handleDeletesRow = () => {
+    HandleSessionDelete(deleteRow.id).then((deletedRow) => {
+      HandleSessionGet('', '').then((newRows) => {
+        setRows(newRows.data)
+      })
+    })
+    setOpen(!open);
+  }
+
+  const onSubmit = (event: any) => {
+    const filterData: any = {
+      module_id: event.module,
+      course_id: event.course,
+      status: event.status,
+    }
+    HandleSessionGet('', filterData).then((itemFiltered) => {
+      setRows(itemFiltered.data)
+    })
+  }
+
+  const resetFilterValue = () => {
+    setFilter(0)
+    reset({ course: 0, module: 0, status: 0 });
+  }
+
+  // console.log(' session rowss', rows)
   return (
     <>
       <Navbar />
@@ -208,7 +207,7 @@ const AllSession = () => {
                 id="standard-search"
                 value={search}
                 variant="outlined"
-                placeholder="Search by session"
+                placeholder="Search by 'Session Name'"
                 onChange={(e) => handleSearch(e, '')}
                 InputProps={{
                   endAdornment: (
@@ -344,6 +343,7 @@ const AllSession = () => {
                                     >
                                       <Box className={Sessions.boxInFilter}>
                                         <Button
+                                      
                                           size="medium"
                                           variant="contained"
                                           color="primary"
@@ -353,6 +353,7 @@ const AllSession = () => {
                                           Reset
                                         </Button>
                                         <Button
+                                          id={styles.muibuttonBackgroundColor}
                                           size="medium"
                                           type="submit"
                                           variant="contained"
@@ -375,7 +376,7 @@ const AllSession = () => {
                   )}
                 </PopupState>
                 &nbsp;
-                <Button variant="contained" onClick={() => router.push('/admin/courses/allsessions/addsession')}>Add Session</Button>
+                <Button variant="contained" onClick={() => router.push('/admin/courses/allsessions/addsession')} id={styles.muibuttonBackgroundColor}> + Add Session</Button>
               </Box>
               <Paper className={Sessions.papperForTable}>
                 <TableContainer className={Sessions.tableContainer}>
@@ -392,8 +393,20 @@ const AllSession = () => {
                                 handleSort(rows) :
                                 ''
                             }}
+                            className={Sessions.tableHeadingForId}
                           >
-                            {toggle ? column.label === 'ID' ? <Typography>ID <ArrowDownwardOutlinedIcon fontSize="small" /> </Typography> : column.label : column.label === 'ID' ? <Typography>ID <ArrowUpwardOutlinedIcon fontSize="small" /> </Typography> : column.label}
+                            {column.label === "ID" ? (
+                              <>
+                                {column.label}
+                                {toggle ? (
+                                  <ArrowDownwardOutlinedIcon fontSize="small" />
+                                ) : (
+                                  <ArrowUpwardOutlinedIcon fontSize="small" />
+                                )}
+                              </>
+                            ) : (
+                              column.label
+                            )}
                           </TableCell>
                         ))}
                       </TableRow>

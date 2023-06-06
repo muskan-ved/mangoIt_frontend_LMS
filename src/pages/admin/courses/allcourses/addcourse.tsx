@@ -29,11 +29,15 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { courseValidations } from "@/validation_schema/courseValidation";
 import { HandleCourseCreate } from "@/services/course";
 import { useRouter } from "next/router";
+import CircularProgressBar from "@/common/CircularProcess/circularProgressBar";
+import { LoadingButton } from "@mui/lab";
+import { Margin } from "@mui/icons-material";
 
 
 const AddCourse = () => {
   const [shortDespcriptionContent, setShortDespcriptionContent] = useState("");
   const [despcriptionContent, setdespcriptionContent] = useState("");
+  const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
   const router: any = useRouter();
 
@@ -140,13 +144,13 @@ const AddCourse = () => {
                   <Grid item xs={12} sm={12} md={12} lg={6}>
                     <Typography
                       variant="subtitle1"
-                      className={styles.CourseInputLabelFont}
-                      mb={2}
+                      className={styles.InputLabelFont}
+                      mb={1}
                     >
                       ADD COURSE
                     </Typography>
                     <Grid item mb={2}>
-                      <InputLabel className={styles.CourseInputLabelFont}>
+                      <InputLabel className={styles.InputLabelFont}>
                         Course Name
                       </InputLabel>
                       <TextField
@@ -161,7 +165,7 @@ const AddCourse = () => {
 
                     <Grid item mb={2}>
 
-                      <InputLabel className={styles.CourseInputLabelFont}>
+                      <InputLabel className={styles.InputLabelFont}>
                         Type
                       </InputLabel>
                       <Controller
@@ -188,7 +192,7 @@ const AddCourse = () => {
                         : ""}
                     </Grid>
                     <Grid item mb={2}>
-                      <InputLabel className={styles.CourseInputLabelFont}>
+                      <InputLabel className={styles.InputLabelFont}>
                         Status
                       </InputLabel>
                       <Controller
@@ -215,7 +219,7 @@ const AddCourse = () => {
                     </Grid>
                     <Box className={styles.wrapShortAndLongDescription}>
                       <Grid item mb={2}>
-                        <InputLabel className={styles.CourseInputLabelFont}>
+                        <InputLabel className={styles.InputLabelFont}>
                           Short Description
                         </InputLabel>
                         <Box className={styles.quillShortDescription}>
@@ -234,8 +238,8 @@ const AddCourse = () => {
                       </Grid>
 
                       <Grid item className={styles.quillDescriptionTop} >
-                        <InputLabel className={styles.CourseInputLabelFont}>
-                          Description
+                        <InputLabel className={styles.InputLabelFont}>
+                          Long Description
                         </InputLabel>
                         <Box className={styles.quillDescription}>
                           <RichEditor
@@ -252,10 +256,19 @@ const AddCourse = () => {
                     </Box>
                     {/* {const showErrorMessage = errors?.long_description?.message ? className={styles.addNewCourseButton} : className={styles.SubmitButton}}
                     <Grid item mt={3} className={showErrorMessage}> */}
-                    <Grid item mt={3} className={!errors?.long_description?.message ? styles.addNewCourseButton : styles.SubmitButton} >
+                    {/* <Grid item mt={3} className={!errors?.long_description?.message ? styles.addNewCourseButton : styles.SubmitButton} >
                       <Button type="submit" variant="contained">
                         ADD NEW COURSE
                       </Button>
+                    </Grid> */}
+                    <Grid item mt={2} className={!errors?.long_description?.message ? styles.addNewCourseButton : styles.SubmitButton} >
+                    <Button className={styles.cancelButton} variant="contained" size="large" onClick={() => router.push('/admin/courses/allcourses')} >Cancel</Button>
+                      {!isLoadingButton ? <Button type="submit" size="large" variant="contained" id={SidebarStyles.muibuttonBackgroundColor}>
+                        Submit
+                      </Button> : <LoadingButton loading={isLoadingButton} className={styles.updateLoadingButton}
+                        size="large" variant="contained" disabled >
+                        <CircularProgressBar />
+                      </LoadingButton>}
                     </Grid>
                   </Grid>
                 </Grid>

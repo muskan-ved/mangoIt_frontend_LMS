@@ -38,8 +38,8 @@ import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 import ArrowDownwardOutlinedIcon from '@mui/icons-material/ArrowDownwardOutlined';
 import ArrowUpwardOutlinedIcon from '@mui/icons-material/ArrowUpwardOutlined';
 // CSS Import
-import styles from "../../../../styles/sidebar.module.css";
-import ModulCss from "../../../../styles/modules.module.css";
+import styles from "../../../styles/sidebar.module.css";
+import ModulCss from "../../../styles/modules.module.css";
 import { ToastContainer } from "react-toastify";
 // External Components
 import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
@@ -50,11 +50,11 @@ import Navbar from "@/common/LayoutNavigations/navbar";
 import SideBar from "@/common/LayoutNavigations/sideBar";
 import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
 // API Service
-import { HandleCourseGet } from "@/services/course";
+import { HandleUserGet } from "@/services/user";
 import { HandleModuleDelete, HandleModuleGet } from "@/services/module";
 
 interface Column {
-	id: "id" | "title" | "course_id" | "module_id" | "is_deleted" | "action";
+	id: "id" | "first_name" | "last_name" | "email" | "user_role" | "status" | "action";
 	label: string;
 	minWidth?: number;
 	align?: "right";
@@ -63,14 +63,15 @@ interface Column {
 
 const columns: Column[] = [
 	{ id: "id", label: "ID", },
-	{ id: "title", label: "MODULE NAME", minWidth: 170 },
-	{ id: "course_id", label: "COURSE NAME", minWidth: 100 },
-	{ id: "module_id", label: "NO. SESSION", minWidth: 100 },
-	{ id: "is_deleted", label: "STATUS", minWidth: 100 },
+	{ id: "first_name", label: "FIRST NAME", minWidth: 170 },
+	{ id: "last_name", label: "LAST NAME", minWidth: 100 },
+	{ id: "email", label: "EMAIL", minWidth: 100 },
+	{ id: "user_role", label: "USER ROLE", minWidth: 100 },
+	{ id: "status", label: "STATUS", minWidth: 100 },
 	{ id: "action", label: "ACTION", minWidth: 100 },
 ];
 
-const AllModules = () => {
+const AllUsers = () => {
 	const [rows, setRows] = React.useState<any>([]);
 	const [search, setSearch] = React.useState('');
 	const [getCourse, setCourse] = React.useState<any>([]);
@@ -99,21 +100,17 @@ const AllModules = () => {
 		DATA.jump(p);
 	};
 	React.useEffect(() => {
-		getModuleData();
-		getCourseData();
+		getUsereData();
 	}, []);
 
-	const getModuleData = () => {
-		HandleModuleGet('', '').then((modules) => {
-			setRows(modules.data);
+	const getUsereData = () => {
+		HandleUserGet('', '').then((users) => {
+      // console.log("first",users.data);
+			setRows(users.data);
 		})
 	}
 
-	const getCourseData = () => {
-		HandleCourseGet('', '').then((courseSearched) => {
-			setCourse(courseSearched.data)
-		})
-	}
+
 	const handleSort = (rowsData: any) => {
 		const sortData = handleSortData(rowsData)
 		setRows(sortData)
@@ -165,7 +162,7 @@ const AllModules = () => {
 		setFilter(0)
 		reset({ course: 0, status: 0 });
 	}
-	// console.log('oops', deleteRow)
+	console.log('oops', rows)
 
 	return (
 		<>
@@ -176,9 +173,9 @@ const AllModules = () => {
 					{/* breadcumbs */}
 					<BreadcrumbsHeading
 						First="Home"
-						Middle="Module"
-						Text="MODULE"
-						Link="/admin/courses/allmodules"
+						Middle="User"
+						Text="USER"
+						Link="/admin/users"
 					/>
 					{/* main content */}
 					<Card>
@@ -187,7 +184,7 @@ const AllModules = () => {
 								id="standard-search"
 								value={search}
 								variant="outlined"
-								placeholder="Search by 'Module Name'"
+								placeholder="Search by 'User Name'"
 								onChange={(e) => handleSearch(e, '')}
 								InputProps={{
 									endAdornment: (
@@ -328,7 +325,7 @@ const AllModules = () => {
 									)}
 								</PopupState>
 								&nbsp;
-								<Button variant="contained" onClick={() => router.push('/admin/courses/allmodules/addmodule')} id={styles.muibuttonBackgroundColor}> + Add Module </Button>
+								<Button variant="contained" onClick={() => router.push('/admin/courses/allmodules/addmodule')} id={styles.muibuttonBackgroundColor}> + Add User </Button>
 							</Box>
 							<Paper >
 								<TableContainer >
@@ -367,7 +364,7 @@ const AllModules = () => {
 											{rows && rows.length > 0 ? DATA.currentData() &&
 												DATA.currentData()
 													.map((row: any) => {
-														const statusColor = (row.module.status === "active" ? ModulCss.activeClassColor : row.module.status === "inactive" ? ModulCss.inactiveClassColor : ModulCss.draftClassColor)
+														// const statusColor = (row.module.status === "active" ? ModulCss.activeClassColor : row.module.status === "inactive" ? ModulCss.inactiveClassColor : ModulCss.draftClassColor)
 
 														return (
 															<TableRow
@@ -376,13 +373,15 @@ const AllModules = () => {
 																tabIndex={-1}
 																key={row.id}
 															>
-																<TableCell>{row.module.id}</TableCell>
-																<TableCell>{capitalizeFirstLetter(row.module.title)}</TableCell>
-																<TableCell>{capitalizeFirstLetter(row.module.course && row.module.course.title)}</TableCell>
-																<TableCell>{(row.sessionCount.sessionCount)}</TableCell>
-																<TableCell className={statusColor}>{capitalizeFirstLetter(row.module.status)}</TableCell>
-																<TableCell><Button onClick={() => router.push(`/admin/courses/allmodules/updatemodule/${row.module.id}`)} variant="outlined" color="success" className={ModulCss.editDeleteButton} ><ModeEditOutlineIcon /></Button>
-																	<Button className={ModulCss.editDeleteButton} variant="outlined" color="error" onClick={() => handleClickOpen(row.module)}><DeleteOutlineIcon /></Button>
+																<TableCell>{row.id}</TableCell>
+																<TableCell>{capitalizeFirstLetter(row?.first_name)}</TableCell>
+																<TableCell>{capitalizeFirstLetter(row?.last_name)}</TableCell>
+																<TableCell>{row?.email}</TableCell>
+																<TableCell>{row?.role_id}</TableCell> 
+																<TableCell>{row?.is_deleted}</TableCell>                               
+																{/* <TableCell className={statusColor}>{capitalizeFirstLetter(row.module.status)}</TableCell> */}
+																<TableCell><Button onClick={() => router.push(`/admin/courses/allmodules/updatemodule/${row.id}`)} variant="outlined" color="success" className={ModulCss.editDeleteButton} ><ModeEditOutlineIcon /></Button>
+																	<Button className={ModulCss.editDeleteButton} variant="outlined" color="error" onClick={() => handleClickOpen(row)}><DeleteOutlineIcon /></Button>
 																</TableCell>
 															</TableRow>
 														);
@@ -436,4 +435,4 @@ const AllModules = () => {
 	);
 };
 
-export default AllModules;
+export default AllUsers;

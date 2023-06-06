@@ -1,3 +1,6 @@
+.InputLabelFont{
+    font-weight:700
+}
 .subbox{
     border: 1px dashed grey;
     margin: 20px;
@@ -48,25 +51,27 @@
 }
 .popStateFilterButton{
     display: inline-flex;
-    color: #1976d2;
+    color: #E8661B !important;
 }
 .editDeleteButton{
     padding: 5px 9px !important;
-    min-width: 30px;
-    margin: 3px;
+    min-width: 30px !important;
+    margin: 3px !important;
 }
-
+.cancelButton{
+    margin: 10px !important;
+}
 .MuiPaper-root .MuiPaper-elevation .MuiPaper-rounded .MuiPaper-elevation8 .MuiPopover-paper .css-3bmhjh-MuiPaper-root-MuiPopover-paper{
 width: 70% !important;
 }
 .courseInFilter{
-    font-weight: bold;
+    font-weight: bold !important;
 }
 .moduleInFilter{
-    font-weight: bold;
+    font-weight: bold !important;
 }
 .statusInFilter{
-    font-weight: bold;
+    font-weight: bold !important;
 }
 .boxInFilter{
     float: right;
@@ -90,7 +95,7 @@ width: 70% !important;
     color: green !important;
 }
 .inactiveClassColor{
-    color:red !important;
+    color:#d32f2f !important;
 }
 .draftClassColor{
     color: orange !important;
@@ -98,4 +103,7 @@ width: 70% !important;
 .stackStyle{
     margin-bottom: 10px;
     margin-top: 10px;
+}
+.tableHeadingForId{
+    font-weight: bold !important;
 }

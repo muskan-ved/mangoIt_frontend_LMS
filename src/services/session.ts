@@ -13,7 +13,7 @@ export const HandleSessionCreate = async (reqData: any) => {
     data: reqData,
   })
     .then((request) => {
-      toast.success("Session Created");
+      toast.success("Session Created Successfully");
       return request;
     })
     .catch((error) => {

@@ -65,7 +65,7 @@ export const VerticalMenuItems = () => {
       {
         title: "Dashboard",
         icon: HomeOutlinedIcon,
-        path: "admin/dashboard",
+        path: "/admin/dashboard",
         disable: false,
       },
       {
@@ -95,8 +95,8 @@ export const VerticalMenuItems = () => {
       {
         title: "Users",
         icon: PeopleAltOutlinedIcon,
-        path: "/users",
-        disable: true,
+        path: "/admin/users",
+        disable: false,
 
       },
       {
@@ -131,7 +131,7 @@ export const VerticalMenuItems = () => {
       {
         title: "Settings",
         icon: SettingsOutlinedIcon,
-        path: "admin/settings",
+        path: "/admin/settings",
         disable: true,
 
       },

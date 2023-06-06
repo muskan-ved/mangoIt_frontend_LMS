@@ -47,6 +47,17 @@ export default function AddSession() {
       resolver: yupResolver(moduleValidations),
    });
 
+   useEffect(() => {
+      let localData: any;
+      if (typeof window !== "undefined") {
+         localData = window.localStorage.getItem("userData");
+      }
+      if (localData) {
+         const userId = JSON.parse(localData);
+         getCourseData();
+      }
+   }, []);
+
    const handleContentChange = (value: string, identifier: string) => {
       setdespcriptionContent(value);
       setValue(identifier, value);
@@ -75,17 +86,7 @@ export default function AddSession() {
       })
    };
 
-   useEffect(() => {
-      let localData: any;
-      if (typeof window !== "undefined") {
-         localData = window.localStorage.getItem("userData");
-      }
-      if (localData) {
-         const userId = JSON.parse(localData);
-         getCourseData();
 
-      }
-   }, []);
 
    function ErrorShowing(errorMessage: any) {
       return (
@@ -107,7 +108,7 @@ export default function AddSession() {
                   First="Home"
                   Middle="Module"
                   Text="MODULE"
-                  Link="/modules/addmodule"
+                  Link="/admin/courses/allmodules"
                />
                {/* main content */}
                <Card>
@@ -126,12 +127,12 @@ export default function AddSession() {
                                  <Box component="img" src="/Images/pages/addFeature.jpg" width={'100%'} />
                               </Grid>
 
-                              <Grid item xs={12} sm={12} md={12} lg={6} >
-                                 <Typography>ADD MODULE</Typography>
+                              <Grid item xs={12} sm={12} md={12} lg={6} mt={5}>
+                                 <Typography className={ModuleCss.InputLabelFont} mb={1}>ADD MODULE</Typography>
                                  <Grid item xs={12} sm={12} md={12} lg={12} className={ModuleCss.sessionNameGride} >
 
                                     <Grid item xs={12} sm={12} md={6} lg={6}>
-                                       <InputLabel>
+                                       <InputLabel className={ModuleCss.InputLabelFont}>
                                           Module Name
                                        </InputLabel>
                                        <TextField
@@ -144,7 +145,7 @@ export default function AddSession() {
                                     </Grid>
 
                                     <Grid item xs={12} sm={12} md={6} lg={6}>
-                                       <InputLabel>Course of Module</InputLabel>
+                                       <InputLabel className={ModuleCss.InputLabelFont}>Course of Module</InputLabel>
                                        <Controller
                                           name="course_id"
                                           control={control}
@@ -169,7 +170,7 @@ export default function AddSession() {
                                  </Grid>
 
                                  <Grid item xs={12} sm={12} md={12} lg={12} mb={2} >
-                                    <InputLabel>Status</InputLabel>
+                                    <InputLabel className={ModuleCss.InputLabelFont}>Status</InputLabel>
                                     <Controller
                                        name="status"
                                        control={control}
@@ -194,7 +195,7 @@ export default function AddSession() {
                                  </Grid>
 
                                  <Grid item xs={12} sm={12} md={12} lg={12} mb={2} >
-                                    <InputLabel>Description</InputLabel>
+                                    <InputLabel className={ModuleCss.InputLabelFont}>Description</InputLabel>
                                     <RichEditor
                                        {...register("description")}
                                        value={despcriptionContent}
@@ -202,13 +203,15 @@ export default function AddSession() {
                                           handleContentChange(e, "description")
                                        }
                                     />
-                                    {despcriptionContent ? '' : errors && errors.description ? ErrorShowing(errors?.description?.message) : ""}
+                                    {errors && errors.description ? ErrorShowing(errors?.description?.message) : ""}
+                                    {/* {despcriptionContent ? '' : errors && errors.description ? ErrorShowing(errors?.description?.message) : ""} */}
                                  </Grid>
 
 
                                  <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"right"} >
-                                    {!isLoadingButton ? <Button type="submit" size="large" variant="contained">
-                                       ADD NEW MODULE
+                                    <Button className={ModuleCss.cancelButton} variant="contained" size="large" onClick={() => router.push('/admin/courses/allmodules')} >Cancel</Button>
+                                    {!isLoadingButton ? <Button type="submit" size="large" variant="contained" id={styles.muibuttonBackgroundColor}>
+                                       Submit
                                     </Button> : <LoadingButton loading={isLoadingButton} className={ModuleCss.updateLoadingButton}
                                        size="large" variant="contained" disabled >
                                        <CircularProgressBar />
