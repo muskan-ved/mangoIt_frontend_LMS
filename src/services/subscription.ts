@@ -5,8 +5,8 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { HandleLogout } from "./auth";
 
-export const HandleSubscriptionGet = async () => {
-  const API_URL = `${API.getSubscription}`;
+export const HandleSubscriptionGet = async (search:string) => {
+  const API_URL = search ? `${API.getSubscription}/${search}` : `${API.getSubscription}`;
   return await axios({
     method: "GET",
     url: API_URL,
