@@ -59,3 +59,21 @@ export const UpdateOrder = async (reqdata: any, orderId: any) => {
       return error;
     });
 };
+
+export const CreateOrderForSubscription = async (reqData: any) => {
+  return await axios({
+    method: "POST",
+    url: `${API.createorderforsubscription}`,
+    headers: authHeader(),
+    data: reqData,
+  })
+    .then((request) => {
+      return request;
+    })
+    .catch((error) => {
+      if (error.response.status === 401) {
+        HandleLogout();
+      }
+      return error;
+    });
+};

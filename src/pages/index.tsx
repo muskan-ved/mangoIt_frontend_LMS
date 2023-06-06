@@ -9,23 +9,20 @@ export const getHomeRoute = (role: number) => {
 }
 
 export default function Home() {
-
   const router: any = useRouter()
-
-
   useEffect(() => {
-    // getHomeRoute(2)
+    //get authorization token and store in localstorage
+    GenerateToken();
+    //getHomeRoute(2)
     if (typeof window !== "undefined") {
-      if (window.location.pathname === '/' && !window.localStorage.getItem('loginToken') || !window.localStorage.getItem('loginToken')) {
-        // If token exists, redirect user to dashboard page
-        router.push('/login/')
+      if (window.location.pathname === '/' || window.location.pathname === '/home' && !window.localStorage.getItem('loginToken')) {
+        router.push('/home');
       } else if (window.location.pathname === '/' && window.localStorage.getItem('loginToken')) {
-        router.push('/profile')
-      } else if (window.location.pathname === '/user/home') {
-        router.push('/user/home')
+        router.push('/profile');
+      } else if (window.location.pathname === '/login' && !window.localStorage.getItem('loginToken')) {
+        router.push('/login');
       }
     }
-    GenerateToken()
   }, [])
 
   return (<SpinnerProgress />)

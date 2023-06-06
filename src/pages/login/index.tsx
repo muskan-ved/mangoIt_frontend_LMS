@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Button, Divider, IconButton } from "@mui/material";
 import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -26,6 +25,7 @@ import {
 } from "@/services/auth";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useGoogleLogin } from "@react-oauth/google";
+import Link from "next/link";
 
 const theme = createTheme();
 
@@ -148,9 +148,7 @@ export default function Login() {
                 Don&lsquo;t have an account?
                 <Link
                   href="/register"
-                  variant="body2"
                   className={styles.signInUpColor}
-                  sx={{ textDecoration: "none", ml: 1 }}
                 >
                   Create Now
                 </Link>
@@ -224,9 +222,7 @@ export default function Login() {
 
               <Link
                 href="/forgotpassword"
-                variant="body2"
                 className="GlobalTextColor"
-                sx={{ textDecoration: "none" }}
               >
                 Forgot a password?
               </Link>

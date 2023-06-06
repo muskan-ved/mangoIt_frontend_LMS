@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Button, Divider,Link,Box,Typography,Grid,TextField } from "@mui/material";
+import { Button, Divider, Box, Typography, Grid, TextField } from "@mui/material";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -12,19 +12,20 @@ import { userForgotPasswordValidations } from "@/validation_schema/authValidatio
 import { HandleForgotPassword } from "@/services/auth";
 import { LoadingButton } from "@mui/lab";
 import CircularProgressBar from "@/common/CircularProcess/circularProgressBar";
+import Link from "next/link";
 
 const theme = createTheme();
 
 export default function ForgotPassword() {
 
-  const { register,	handleSubmit,formState: { errors } } = useForm<forgotPasswordType>({resolver: yupResolver(userForgotPasswordValidations)});
-  const [loading,setLoading] = React.useState<boolean>(false);
+  const { register, handleSubmit, formState: { errors } } = useForm<forgotPasswordType>({ resolver: yupResolver(userForgotPasswordValidations) });
+  const [loading, setLoading] = React.useState<boolean>(false);
 
-  const onSubmit = async(event:any) => {
+  const onSubmit = async (event: any) => {
 
-    const reqData:any = {
-      to:event.email,
-      subject:'Reset Password'
+    const reqData: any = {
+      to: event.email,
+      subject: 'Reset Password'
     }
 
     const formData = new FormData()
@@ -39,15 +40,15 @@ export default function ForgotPassword() {
     })
   };
 
-  function ErrorShowing (errorMessage:any){
-    return ( <Typography variant="body2" color={'error'} gutterBottom>{errorMessage} </Typography> );
+  function ErrorShowing(errorMessage: any) {
+    return (<Typography variant="body2" color={'error'} gutterBottom>{errorMessage} </Typography>);
   }
 
   return (
     <ThemeProvider theme={theme}>
-      <ToastContainer/>
+      <ToastContainer />
       <Grid container component="main">
-        <AuthSidebar/>
+        <AuthSidebar />
         <Grid item xs={12} sm={7} md={5} lg={5}>
           <Box
             sx={{
@@ -97,17 +98,15 @@ export default function ForgotPassword() {
               >
                 Send
               </Button>
-              : <LoadingButton loading={loading}  fullWidth
-                size="large" sx={{ mt: 3, mb: 2 }}
-                variant="outlined" disabled >
-         <CircularProgressBar/>
-        </LoadingButton>}
+                : <LoadingButton loading={loading} fullWidth
+                  size="large" sx={{ mt: 3, mb: 2 }}
+                  variant="outlined" disabled >
+                  <CircularProgressBar />
+                </LoadingButton>}
 
               <Link
                 href="/login"
-                variant="body2"
                 className="GlobalTextColor"
-                sx={{ textDecoration: "none" }}
               >
                 Back to sign in
               </Link>

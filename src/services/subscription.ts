@@ -28,7 +28,7 @@ export const HandleSubscriptionGet = async (search: string) => {
     });
 };
 
-export const HandleSubscriptionDelete = async (id:string) => {
+export const HandleSubscriptionDelete = async (id: string) => {
   const API_URL = `${API.deleteSubscription}/${id}`;
   return await axios({
     method: "DELETE",
@@ -37,7 +37,7 @@ export const HandleSubscriptionDelete = async (id:string) => {
   })
     .then((request) => {
       if (request.status === 200) {
-      toast.success("Deleted successfully.");
+        toast.success("Deleted successfully.");
       }
       return request;
     })
@@ -89,9 +89,6 @@ export const HandleSubscriptionGetByUserID = async (subId: any) => {
 };
 
 export const HandleSubscriptionPayment = async (reqData: any) => {
-  console.log("reqData", reqData);
-
-  return false;
   return await axios({
     method: "POST",
     url: `${API.acceptpayment}`,

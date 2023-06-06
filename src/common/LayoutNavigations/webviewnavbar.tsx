@@ -26,7 +26,7 @@ export default function WebViewNavbar() {
     let textcolor = "#E8661B !important";
     let path = router?.pathname;
     let setHomeColor = path.includes("home") ? textcolor : "";
-    let setCoursesColor = path.includes("Courses") ? textcolor : "";
+    let setCoursesColor = path.includes("courses") ? textcolor : "";
     let setsubscribeplan = path.includes("subscribeplan") ? textcolor : "";
 
     const mobileMenuId = "primary-search-account-menu-mobile";
@@ -79,7 +79,7 @@ export default function WebViewNavbar() {
                         />
                         <Box sx={{ flexGrow: 1 }} />
                         <Box sx={{ display: { xs: "none", md: "flex" } }}>
-                            <Link href="/user/home" ><Typography
+                            <Link href="/home" ><Typography
                                 variant="body2"
                                 className={styles.windowFullWidthNameAlign}
                                 sx={{
@@ -88,7 +88,7 @@ export default function WebViewNavbar() {
                             >
                                 Home
                             </Typography></Link>
-                            <Link href="/user/Courses" ><Typography
+                            <Link href="/courses" ><Typography
                                 variant="body2"
                                 className={styles.windowFullWidthNameAlign}
                                 sx={{
@@ -98,7 +98,7 @@ export default function WebViewNavbar() {
                                 Course
                             </Typography></Link>
 
-                            <Link href="/user/subscribeplan" ><Typography
+                            <Link href="/subscribeplan" ><Typography
                                 variant="body2"
                                 className={styles.windowFullWidthNameAlign}
                                 sx={{ color: setsubscribeplan }}
