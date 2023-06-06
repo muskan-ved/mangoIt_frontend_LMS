@@ -80,7 +80,7 @@ export default function Checkout() {
                                 user_id: user?.id,
                                 subscription_id: subscription?.id,
                                 payment_type: "Stripe",
-                                amount: subscription?.amount,
+                                amount: subscriptionplandet?.amount,
                                 status: "unpaid",
                                 parent_order_id: 0,
                                 order_type: "subscription"

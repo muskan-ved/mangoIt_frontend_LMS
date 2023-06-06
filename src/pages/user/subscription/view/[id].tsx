@@ -47,7 +47,7 @@ import styles from "../../../../styles/sidebar.module.css";
 import subs from "../../../../styles/subsciption.module.css";
 
 interface Column {
-  id: "id" | "amount" | "date" | "transaction_id" | "payment_method";
+  id: "id" | "amount" | "date" | "transaction_id" | "payment_method" | "pay_of_month";
   label: string;
   minWidth?: number;
   align?: "right";

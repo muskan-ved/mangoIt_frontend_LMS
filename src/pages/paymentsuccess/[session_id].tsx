@@ -13,8 +13,10 @@ export default function PaymentSuccess() {
     const { session_id } = router.query;
 
     useEffect(() => {
-        getPaymentDetails();
-    }, []);
+        if (router.isReady) {
+            getPaymentDetails();
+        }
+    }, [router.isReady]);
 
     const reqdata = {
         cs_test_key: session_id
@@ -32,7 +34,6 @@ export default function PaymentSuccess() {
                 UpdateOrder(orderdet, orderid).then((order) => {
                     if (order) {
                         const orderdatas = order?.data;
-                        console.log("sdfahs;", orderdatas);
                         //create transaction 
                         const tnxdata =
                         {
@@ -40,6 +41,7 @@ export default function PaymentSuccess() {
                             order_id: orderdatas?.id,
                             payment_method: "Stripe",
                             transaction_id: session_id,
+                            trx_amount: peymentdet?.amount_total / 100,
                             createdAt: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
                         }
                         CreateTransaction(tnxdata).then((tnxdet) => {
@@ -49,6 +51,11 @@ export default function PaymentSuccess() {
                                     start_date: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
                                 }
                                 UpdaUserSubscription(reqdata, orderdatas?.subscription_id).then((subcdet) => {
+                                    if (subcdet) {
+                                        setTimeout(function () {
+                                            router.push(`/user/home`);
+                                        }, 10000)
+                                    }
                                 })
                             }
                         });
