@@ -11,6 +11,7 @@ import moment from "moment";
 export default function PaymentSuccess() {
     const router = useRouter();
     const { session_id } = router.query;
+    const [loader, setLoadar] = React.useState(true);
 
     useEffect(() => {
         if (router.isReady) {

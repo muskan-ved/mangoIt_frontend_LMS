@@ -1,5 +1,4 @@
-import { LoginHeader } from "@/common/Tokens/authToken";
-import { authHeader } from "@/common/Tokens/authToken";
+import { LoginHeader, authHeader } from "@/common/Tokens/authToken";
 import { API } from "@/config/config";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -55,6 +54,27 @@ export const HandleCourseGetByID = async (courseId: any) => {
     });
 };
 
+export const HandleCourseCreate = async (reqData: any) => {
+  return await axios({
+    method: "POST",
+    url: `${API.createCourse}`,
+    headers: LoginHeader(),
+    data: reqData,
+  })
+    .then((request) => {
+      toast.success("Course Created Successfully");
+      return request;
+    })
+    .catch((error) => {
+      if (error.response.status === 401) {
+        HandleLogout();
+      } else {
+        toast.error("Course added failed");
+      }
+      return error;
+    });
+};
+
 export const HandleCourseUpdate = async (courseId: any, updateData: any) => {
   return await axios({
     method: "PUT",
@@ -70,28 +90,7 @@ export const HandleCourseUpdate = async (courseId: any, updateData: any) => {
       if (error.response.status === 401) {
         HandleLogout();
       } else {
-        toast.error("Course added failed");
-      }
-      return error;
-    });
-};
-
-export const HandleCourseCreate = async (reqData: any) => {
-  return await axios({
-    method: "POST",
-    url: `${API.createCourse}`,
-    headers: LoginHeader(),
-    data: reqData,
-  })
-    .then((request) => {
-      toast.success("Course Created");
-      return request;
-    })
-    .catch((error) => {
-      if (error.response.status === 401) {
-        HandleLogout();
-      } else {
-        toast.error("Course added failed");
+        toast.error("Course Update failed");
       }
       return error;
     });
@@ -101,8 +100,20 @@ export const HandleCourseDelete = async (rowID: any) => {
   return await axios({
     method: "DELETE",
     url: `${API.deleteCourse}/${rowID}`,
-    headers: authHeader(),
+    headers: LoginHeader(),
   })
+    .then((request) => {
+      toast.success("Course Deleted Successfully");
+      return request;
+    })
+    .catch((error) => {
+      if (error.response.status === 401) {
+        HandleLogout();
+      } else {
+        toast.error("Course Delete failed");
+      }
+      return error;
+    })
     .then((request) => {
       toast.success("Course Deleted Successfully");
       return request;

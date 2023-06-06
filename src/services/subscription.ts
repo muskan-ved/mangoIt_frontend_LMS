@@ -1,13 +1,14 @@
-import { LoginHeader } from "@/common/Tokens/authToken";
-import { authHeader } from "@/common/Tokens/authToken";
+import { LoginHeader, authHeader } from "@/common/Tokens/authToken";
 import { API } from "@/config/config";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { HandleLogout } from "./auth";
 
-export const HandleSubscriptionGet = async () => {
-  const API_URL = `${API.getSubscription}`;
+export const HandleSubscriptionGet = async (search: string) => {
+  const API_URL = search
+    ? `${API.getSubscription}/${search}`
+    : `${API.getSubscription}`;
   return await axios({
     method: "GET",
     url: API_URL,
@@ -129,7 +130,7 @@ export const CreateUserSubsction = async (reqData: any) => {
   return await axios({
     method: "POST",
     url: `${API.createsubscription}`,
-    headers: LoginHeader(),
+    headers: authHeader(),
     data: reqData,
   })
     .then((responce) => {

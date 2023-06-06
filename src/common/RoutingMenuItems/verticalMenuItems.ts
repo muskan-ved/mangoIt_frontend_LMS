@@ -66,7 +66,7 @@ export const VerticalMenuItems = () => {
       {
         title: "Dashboard",
         icon: HomeOutlinedIcon,
-        path: "admin/dashboard",
+        path: "/admin/dashboard",
         disable: false,
       },
       {
@@ -96,21 +96,21 @@ export const VerticalMenuItems = () => {
       {
         title: "Users",
         icon: PeopleAltOutlinedIcon,
-        path: "/users",
-        disable: true,
+        path: "/admin/users",
+        disable: false,
       },
       {
         title: "Subscriptions",
         icon: SubscriptionsOutlinedIcon,
-        path: "/subscriptions",
-        disable: true,
+        path: "/admin/subscription",
+        disable: false,
       },
 
       {
-        title: "Email Config",
+        title: "Email Mngmt",
         icon: EmailOutlinedIcon,
-        path: "/admin/emailconfiguration",
-        disable: true,
+        path: "/admin/emailmanagement",
+        disable: false,
       },
       {
         title: "Configurations",
@@ -127,7 +127,7 @@ export const VerticalMenuItems = () => {
       {
         title: "Settings",
         icon: SettingsOutlinedIcon,
-        path: "admin/settings",
+        path: "/admin/settings",
         disable: true,
       },
       {

@@ -445,6 +445,7 @@ const SiteConfiguration = () => {
                                 type="submit"
                                 size="large"
                                 variant="contained"
+                                id={styles.muibuttonBackgroundColor}
                               >
                                 Submit
                               </Button>
@@ -658,6 +659,7 @@ const SiteConfiguration = () => {
                                 type="submit"
                                 size="large"
                                 variant="contained"
+                                id={styles.muibuttonBackgroundColor}
                               >
                                 UPDATE
                               </Button>
