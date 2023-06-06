@@ -76,19 +76,19 @@ export const VerticalMenuItems = () => {
             title: "All Courses",
             icon: ContentPasteOutlinedIcon,
             path: "/admin/courses/allcourses",
-        disable: false,
+            disable: false,
           },
           {
             title: "All Modules",
             icon: ViewModuleOutlinedIcon,
             path: "/admin/courses/allmodules",
-        disable: false,
+            disable: false,
           },
           {
             title: "All Sessions",
             icon: CalendarTodayOutlinedIcon,
             path: "/admin/courses/allsessions",
-        disable: false,
+            disable: false,
           },
         ],
       },
@@ -102,25 +102,25 @@ export const VerticalMenuItems = () => {
       {
         title: "Subscriptions",
         icon: SubscriptionsOutlinedIcon,
-        path: "/subscriptions",
-        disable: true,
+        path: "/admin/subscription",
+        disable: false,
 
       },
 
-          {
-            title: "Email Config",
-            icon: EmailOutlinedIcon,
-            path: "/admin/emailconfiguration",
-        disable: true,
-
-          },
-          {
-            title: "Configurations",
-            icon: LanguageOutlinedIcon,
-            path: "/admin/configuration",
+      {
+        title: "Email Mngmt",
+        icon: EmailOutlinedIcon,
+        path: "/admin/emailmanagement",
         disable: false,
 
-          },
+      },
+      {
+        title: "Configurations",
+        icon: LanguageOutlinedIcon,
+        path: "/admin/configuration",
+        disable: false,
+
+      },
       {
         title: "Invoices",
         icon: InsertDriveFileOutlinedIcon,

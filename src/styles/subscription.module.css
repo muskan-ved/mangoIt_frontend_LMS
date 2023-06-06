@@ -1,0 +1,85 @@
+.subscription {
+    text-align: center;
+}
+.mainSubsDiv{
+    background-color: #e5e5e5;
+}
+.maindisplay{
+    display: flex;
+}
+.fontCSS{
+    padding: 4px;
+    color: #646363;
+}
+.useNameFront {
+    color: #4e4a4a;
+    font-weight: bold;
+}
+.btncss{
+    text-align: end; 
+}
+.headingcss{
+    font-weight: bold;
+}
+
+
+/* admin page css */
+.filterBox {
+    font-weight: bold;
+}
+.filterForm{
+    margin-top: 8px;
+}
+.mainFilterBox {
+    float: right;
+    display: flex;
+    align-items: center;
+}
+.popStateFilterButton{
+    display: inline-flex;
+    color: #1976d2;
+}
+.editDeleteButton{
+    padding: 5px 9px !important;
+    min-width: 30px;
+    margin: 3px;
+}
+
+.MuiPaper-root .MuiPaper-elevation .MuiPaper-rounded .MuiPaper-elevation8 .MuiPopover-paper .css-3bmhjh-MuiPaper-root-MuiPopover-paper{
+width: 70% !important;
+}
+
+.statusInFilter{
+    font-weight: bold;
+}
+.boxInFilter{
+    float: right;
+}
+.applyButtonInFiltter{
+    margin-left: 10px !important;
+}
+.papperForTable{
+    width: 100%;
+}
+.tableContainer{
+    margin-top: 24px;
+}
+.tableCellMargin{
+    margin: 5px;
+}
+.tableLastCell{
+    text-align: center !important;
+}
+.activeClassColor{
+    color: green !important;
+}
+.inactiveClassColor{
+    color:red !important;
+}
+.draftClassColor{
+    color: orange !important;
+}
+.stackStyle{
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
