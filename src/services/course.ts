@@ -96,6 +96,25 @@ export const HandleCourseUpdate = async (courseId: any, updateData: any) => {
     });
 };
 
+export const HandleCourseByCourseId = async (subId: any) => {
+  return await axios({
+    method: "GET",
+    url: `${API.getCoursesByCouseId}/${subId}`,
+    headers: LoginHeader(),
+  })
+    .then((request) => {
+      return request;
+    })
+    .catch((error) => {
+      if (error.response.status === 401) {
+        HandleLogout();
+      } else {
+        toast.error("subscription failed");
+      }
+      return error;
+    });
+};
+
 export const HandleCourseDelete = async (rowID: any) => {
   return await axios({
     method: "DELETE",
@@ -111,18 +130,6 @@ export const HandleCourseDelete = async (rowID: any) => {
         HandleLogout();
       } else {
         toast.error("Course Delete failed");
-      }
-      return error;
-    })
-    .then((request) => {
-      toast.success("Course Deleted Successfully");
-      return request;
-    })
-    .catch((error) => {
-      if (error.response.status === 401) {
-        HandleLogout();
-      } else {
-        toast.error("Something went wrong");
       }
       return error;
     });

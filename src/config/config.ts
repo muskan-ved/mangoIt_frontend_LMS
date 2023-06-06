@@ -22,6 +22,7 @@ export const API = {
   userUpdateById: `${BASE_URL}/${process.env.NEXT_PUBLIC_UPDATE_USER_BY_ID}`,
   //Courses
   getCourses: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_COURSES}`,
+  getCoursesByCouseId: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_COURSES_BY_COURSE_ID}`,
   createCourse: `${BASE_URL}/${process.env.NEXT_PUBLIC_CREATE_COURSE}`,
   updateCourse: `${BASE_URL}/${process.env.NEXT_PUBLIC_UPDATE_COURSE}`,
   deleteCourse: `${BASE_URL}/${process.env.NEXT_PUBLIC_DELETE_COURSE}`,
@@ -41,8 +42,11 @@ export const API = {
   deleteSite: `${BASE_URL}/${process.env.NEXT_PUBLIC_SITE_CONFIG_DELETE}`,
   updateSite: `${BASE_URL}/${process.env.NEXT_PUBLIC_SITE_CONFIG_UPDATE}`,
 
-  getSubscription: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_SUBSCRIPTION}`,
+  getSubscription: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_SUBSCRIPTION_BY_URSEID}`,
   getSubsById: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_SUBSCRIPTION_BY_ID}`,
+  updateSubscription: `${BASE_URL}/${process.env.NEXT_PUBLIC_UPDATE_SUBSCRIPTION}`,
+
+  downloadPDF: `${BASE_URL}/${process.env.NEXT_PUBLIC_DOWNLOAD_RECEIPT}`,
 
   getEmailContent: `${BASE_URL}/${process.env.NEXT_PUBLIC_EMAIL_CONTENT_GET}`,
   createEmailContent: `${BASE_URL}/${process.env.NEXT_PUBLIC_EMAIL_CONTENT_CREATE}`,

@@ -35,7 +35,7 @@ export const VerticalMenuItems = () => {
         title: "Dashboard",
         icon: HomeOutlinedIcon,
         path: "/user/dashboard",
-        disable: false,
+        disable: true,
       },
       {
         title: "Profile",
@@ -52,7 +52,7 @@ export const VerticalMenuItems = () => {
       {
         title: "Courses",
         icon: DescriptionOutlinedIcon,
-        path: "/user/course/list",
+        path: "/user/course",
         disable: false,
       },
       {
