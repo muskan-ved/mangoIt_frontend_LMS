@@ -23,8 +23,7 @@ import { courseType } from '@/types/courseType';
 import { moduleType } from '@/types/moduleType';
 // CSS Import
 import styles from "../../../../../styles/sidebar.module.css";
-import Sessions from "../../../../styles/session.module.css";
-import courseStyle from "../../../../../styles/course.module.css";
+import ModuleCss from "../../../../../styles/modules.module.css";
 import { ToastContainer } from 'react-toastify';
 // API services
 import { HandleCourseGet, HandleCourseGetByID, HandleCourseUpdate } from '@/services/course';
@@ -37,12 +36,11 @@ import { moduleValidations } from '@/validation_schema/moduleValidation';
 
 export default function UpdateModule() {
   const router: any = useRouter();
-  const [getShortDespcriptionContent, setShortDespcriptionContent] = useState("");
+  const [getDespcriptionContent, setDespcriptionContent] = useState("");
   const [getUpdateModule, setUpdateModule] = useState<moduleType | any>([]);
   const [getModule, setModule] = useState<moduleType | any>();
   const [getCourses, setCourses] = useState<courseType | any>();
   const [getCourseId, setCourseId] = useState<any>("");
-
   const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [error, setErrors] = useState<string>();
@@ -56,7 +54,7 @@ export default function UpdateModule() {
   } = useForm<moduleType | any>({
     resolver: yupResolver(moduleValidations),
   });
-  // console.log('getvalue', getValues())
+  console.log('getvalue', getValues())
 
   useEffect(() => {
     let localData: any;
@@ -73,30 +71,22 @@ export default function UpdateModule() {
     if (identifier === 'description') {
       if (value === '<p><br></p>') {
         setError(identifier, { message: 'Description is a required field' });
+        setValue(identifier, '');
+
       } else {
         setError(identifier, { message: '' })
         setValue(identifier, value);
       }
-      setShortDespcriptionContent(value);
+      setDespcriptionContent(value);
     }
 
   };
 
   const onSubmit = async (event: any) => {
     const id = router.query.id
-    // const reqData = { ...event }
+  console.log(event,"onsubmit",errors )
+    
     if (errors.description?.message === '' || (typeof errors === 'object' && errors !== null)) {
-      // const reqData: any = {
-      //   description: event.description,
-      //   title: event.title,
-
-      // }
-
-      // const formData = new FormData()
-      // for (var key in reqData) {
-      //   formData.append(key, reqData[key]);
-      // }
-
       setLoading(true);
       setLoadingButton(false)
       try {
@@ -115,18 +105,11 @@ export default function UpdateModule() {
     }
   };
 
-  console.log("getCourseId",getCourseId)
   const handleUpdate = (e: any) => {
     // if(e.target.name === 'title'){
     setModule({ ...getModule, title: e.target.value })
     // }
   }
-
-  // const handleChange = (e: any) => {
-  //   // setModule({...getModule, [e.target.name]: e.target.value })
-  //   setCourseId(e)
-  //   // console.log('eveee',e)
-  // };
 
   const getModuleData = async () => {
     const id = router.query.id
@@ -137,7 +120,6 @@ export default function UpdateModule() {
         const fields = [
           "course_id",
           "title",
-          "course",
           "status",
           "description",
         ];
@@ -176,11 +158,7 @@ export default function UpdateModule() {
       </Typography>
     );
   }
-  // console.log("oppsss", getCourses)
-  // let idd=getModule && getModule?.course_id;
-  console.log("oppAAAs", getCourseId)
- 
-//  if(idd)
+  // console.log(getDespcriptionContent,"opps",errors,getModule?.description )
   return (
     <>
       <Navbar />
@@ -212,12 +190,12 @@ export default function UpdateModule() {
                       <Box component="img" src="/Images/pages/addFeature.jpg" width={'100%'} />
                     </Grid>
 
-                    <Grid item xs={12} sm={12} md={12} lg={6} >
-                      <Typography>EDIT MODULE</Typography>
-                      <Grid item xs={12} sm={12} md={12} lg={12} className={courseStyle.courseNameGride} >
+                    <Grid item xs={12} sm={12} md={12} lg={6} mt={5}>
+                      <Typography className={ModuleCss.InputLabelFont} mb={1}>EDIT MODULE</Typography>
+                      <Grid item xs={12} sm={12} md={12} lg={12} className={ModuleCss.courseNameGride} >
 
                         <Grid item xs={12} sm={12} md={6} lg={6}>
-                          <InputLabel>
+                          <InputLabel className={ModuleCss.InputLabelFont}>
                             Module Name
                           </InputLabel>
                           <TextField
@@ -231,14 +209,14 @@ export default function UpdateModule() {
                         </Grid>
 
                         <Grid item xs={12} sm={12} md={6} lg={6}>
-                          <InputLabel>Course of Module</InputLabel>
+                          <InputLabel className={ModuleCss.InputLabelFont}>Course of Module</InputLabel>
                           <Controller
-                            name="course"
+                            name="course_id"
                             control={control}
                             defaultValue={getCourseId}                          
                             render={({ field }) => (
                               <FormControl fullWidth>
-                                <Select {...field} onChange={(e) => setCourseId(e.target.value)} displayEmpty>
+                                <Select {...field} displayEmpty>
                                   <MenuItem disabled value="">
                                     Select Course
                                   </MenuItem>
@@ -256,7 +234,7 @@ export default function UpdateModule() {
                       </Grid>
 
                       <Grid item xs={12} sm={12} md={12} lg={12} mb={2} >
-                        <InputLabel>Status</InputLabel>
+                        <InputLabel className={ModuleCss.InputLabelFont}>Status</InputLabel>
                         <Controller
                           name="status"
                           control={control}
@@ -280,22 +258,23 @@ export default function UpdateModule() {
                           : ""}
                       </Grid>
                       <Grid item xs={12} sm={12} md={12} lg={12} mb={2}>
-                        <InputLabel>Description</InputLabel>
+                        <InputLabel className={ModuleCss.InputLabelFont}>Description</InputLabel>
                         <RichEditor
                           {...register("description")}
-                          value={getShortDespcriptionContent ? getShortDespcriptionContent : getModule?.description}
+                          value={getDespcriptionContent ? getDespcriptionContent : getModule?.description}
                           onChange={(value) =>
                             handleContentChange(value, "description")
                           }
                         />
                         {errors && errors.description ? ErrorShowing(errors?.description?.message) : ""}
-                        {/* {getShortDespcriptionContent ? '' : errors && errors.description ? ErrorShowing(errors?.description?.message) : ""} */}
+                        {/* {getDespcriptionContent ? '' : errors && errors.description ? ErrorShowing(errors?.description?.message) : ""} */}
                       </Grid>
 
                       <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"right"} >
-                        {!isLoadingButton ? <Button type="submit" size="large" variant="contained">
-                          UPDATE MODULE
-                        </Button> : <LoadingButton loading={isLoadingButton} className={courseStyle.updateLoadingButton}
+                      <Button className={ModuleCss.cancelButton} variant="contained" size="large" onClick={() => router.push('/admin/courses/allmodules')} >Cancel</Button>
+                        {!isLoadingButton ? <Button type="submit" size="large" variant="contained" id={styles.muibuttonBackgroundColor}>
+                          UPDATE
+                        </Button> : <LoadingButton loading={isLoadingButton} className={ModuleCss.updateLoadingButton}
                           size="large" variant="contained" disabled >
                           <CircularProgressBar />
                         </LoadingButton>}

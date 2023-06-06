@@ -9,7 +9,6 @@ import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
 import Footer from "@/common/LayoutNavigations/footer";
 import Navbar from "../../../../../common/LayoutNavigations/navbar";
 import RichEditor from "@/common/RichTextEditor/textEditor";
-import Preview from '@/common/PreviewAttachments/previewAttachment';
 // Helper Import
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -29,8 +28,6 @@ import courseStyle from "../../../../../styles/course.module.css";
 import { ToastContainer } from 'react-toastify';
 // API services
 import { HandleCourseGet, HandleCourseGetByID, HandleCourseUpdate } from '@/services/course';
-import { Attachment, Description, Image, Movie, PictureAsPdf } from '@mui/icons-material';
-import { type } from 'os';
 
 
 
@@ -54,7 +51,6 @@ export default function UpdateCourse() {
   } = useForm<courseType | any>({
     resolver: yupResolver(courseValidations),
   });
-  // console.log('getvalue', getValues())
   const handleContentChange = (value: string, identifier: string) => {
     if(identifier === 'short_description'){
     if (value === '<p><br></p>') {
@@ -112,9 +108,9 @@ export default function UpdateCourse() {
   };
 
   const handleUpdate = (e: any) => {
-    // if(e.target.name === 'title'){
+    if(e.target.name === 'title'){
       setCourse({...getCourse, title:e.target.value})
-    // }
+    }
   }
 
   const handleChange = (e: any) => {
@@ -125,7 +121,6 @@ export default function UpdateCourse() {
     const id = router.query.id
     if (id) {
       HandleCourseGetByID(id).then((course) => {
-        // console.log('Course',course)
         setCourse(course.data)
         const fields = [
           "title",
@@ -140,7 +135,7 @@ export default function UpdateCourse() {
           setErrors(error.message);
         });
     }
-// console.log('Course', getCourse)
+
     if (error) {
       return <Typography >{error}</Typography >;
     }
@@ -167,7 +162,7 @@ export default function UpdateCourse() {
       </Typography>
     );
   }
-  console.log("opps", errors)
+  // console.log("opps", errors)
   return (
     <>
       <Navbar />
@@ -200,11 +195,11 @@ export default function UpdateCourse() {
                     </Grid>
 
                     <Grid item xs={12} sm={12} md={12} lg={6} >
-                      <Typography>EDIT COURSE</Typography>
+                      <Typography className={courseStyle.InputLabelFont} mb={1}>EDIT COURSE</Typography>
                       <Grid item xs={12} sm={12} md={12} lg={12} className={courseStyle.courseNameGride} >
 
                         <Grid item xs={12} sm={12} md={6} lg={6}>
-                          <InputLabel>
+                          <InputLabel className={courseStyle.InputLabelFont}>
                             Course Name
                           </InputLabel>
                           <TextField
@@ -218,7 +213,7 @@ export default function UpdateCourse() {
                         </Grid>
 
                         <Grid item xs={12} sm={12} md={6} lg={6}>
-                          <InputLabel>Type</InputLabel>
+                          <InputLabel className={courseStyle.InputLabelFont}>Type</InputLabel>
                           <Controller
                           name="is_chargeable"
                           control={control}                        
@@ -244,7 +239,7 @@ export default function UpdateCourse() {
                       </Grid>
 
                       <Grid item xs={12} sm={12} md={12} lg={12} mb={2} >
-                        <InputLabel>Status</InputLabel>
+                        <InputLabel className={courseStyle.InputLabelFont}>Status</InputLabel>
                         <Controller
                           name="status"
                           control={control}                        
@@ -268,7 +263,7 @@ export default function UpdateCourse() {
                           : ""}
                       </Grid>
                       <Grid item xs={12} sm={12} md={12} lg={12} mb={2}>
-                        <InputLabel>Description</InputLabel>
+                        <InputLabel className={courseStyle.InputLabelFont}>Short Description</InputLabel>
                         <RichEditor
                           {...register("short_description")}
                           value={getShortDespcriptionContent ? getShortDespcriptionContent : getCourse?.short_description}
@@ -281,7 +276,7 @@ export default function UpdateCourse() {
                       </Grid>
 
                       <Grid item xs={12} sm={12} md={12} lg={12} mb={2} >
-                        <InputLabel>Long Description</InputLabel>
+                        <InputLabel className={courseStyle.InputLabelFont}>Long Description</InputLabel>
                         <Box >
                           <RichEditor
                             {...register("long_description")}
@@ -294,8 +289,9 @@ export default function UpdateCourse() {
                         {errors && errors.long_description ? ErrorShowing(errors?.long_description?.message) : ""}
                       </Grid>
                       <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"right"} >
-                        {!isLoadingButton ? <Button type="submit" size="large" variant="contained">
-                          UPDATE COURSE
+                      <Button className={courseStyle.cancelButton} variant="contained" size="large" onClick={() => router.push('/admin/courses/allcourses')} >Cancel</Button>
+                        {!isLoadingButton ? <Button type="submit" size="large" variant="contained" id={styles.muibuttonBackgroundColor}>
+                          UPDATE
                         </Button> : <LoadingButton loading={isLoadingButton} className={courseStyle.updateLoadingButton}
                           size="large" variant="contained" disabled >
                           <CircularProgressBar />

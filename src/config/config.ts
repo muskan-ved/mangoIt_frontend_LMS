@@ -16,24 +16,26 @@ export const API = {
   login: `${BASE_URL}/${process.env.NEXT_PUBLIC_LOGIN}`,
   forgotPassword: `${BASE_URL}/${process.env.NEXT_PUBLIC_FORGOT_PASSWORD}`,
   resetPassword: `${BASE_URL}/${process.env.NEXT_PUBLIC_RESET_PASSWORD}`,
-
+  // User 
+  userAllUsers: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_ALL_USERS}`,
   userInfoById: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_USER_BY_ID}`,
   userUpdateById: `${BASE_URL}/${process.env.NEXT_PUBLIC_UPDATE_USER_BY_ID}`,
-
+  //Courses
   getCourses: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_COURSES}`,
   createCourse: `${BASE_URL}/${process.env.NEXT_PUBLIC_CREATE_COURSE}`,
   updateCourse: `${BASE_URL}/${process.env.NEXT_PUBLIC_UPDATE_COURSE}`,
   deleteCourse: `${BASE_URL}/${process.env.NEXT_PUBLIC_DELETE_COURSE}`,
-
+  //Modules
   getAllModules: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_ALL_MODULES}`,
   createModule: `${BASE_URL}/${process.env.NEXT_PUBLIC_CREATE_MODULE}`,
   updateModule: `${BASE_URL}/${process.env.NEXT_PUBLIC_UPDATE_MODULE}`,
-
+  deleteModule: `${BASE_URL}/${process.env.NEXT_PUBLIC_DELETE_MODULE}`,
+  //Sessions
   getSessions: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_SESSION}`,
   createSession: `${BASE_URL}/${process.env.NEXT_PUBLIC_CREATE_SESSION}`,
   deleteSession: `${BASE_URL}/${process.env.NEXT_PUBLIC_DELETE_SESSION}`,
   updateSession: `${BASE_URL}/${process.env.NEXT_PUBLIC_UPDATE_SESSION}`,
-
+  //Site Options
   getSite: `${BASE_URL}/${process.env.NEXT_PUBLIC_SITE_CONFIG_GET}`,
   createSite: `${BASE_URL}/${process.env.NEXT_PUBLIC_SITE_CONFIG_CREATE}`,
   deleteSite: `${BASE_URL}/${process.env.NEXT_PUBLIC_SITE_CONFIG_DELETE}`,

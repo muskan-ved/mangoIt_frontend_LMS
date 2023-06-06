@@ -43,6 +43,25 @@ import { HandleLogout } from "./auth"
       });
   };
 
+  export const HandleModuleCreate = async(reqData:any) =>{
+    return await axios({
+      method: "POST",
+      url: `${API.createModule}`,
+      headers: LoginHeader(),
+      data:reqData,
+    }).then((request) => {
+      toast.success("Module Created Successfully")
+        return request;
+      }).catch((error) => {
+        if(error.response.status === 401){
+          HandleLogout()
+        }else{
+          toast.error("Module added failed")
+        }
+        return error;
+      })
+  }
+
   export const HandleModuleUpdate = async (moduleId: any, updateData: any) => {
     return await axios({
       method: "PUT",
@@ -64,21 +83,24 @@ import { HandleLogout } from "./auth"
       });
   };
 
-  export const HandleModuleCreate = async(reqData:any) =>{
+
+
+  export const HandleModuleDelete = async (rowID: any) => {
     return await axios({
-      method: "POST",
-      url: `${API.createModule}`,
+      method: "DELETE",
+      url: `${API.deleteModule}/${rowID}`,
       headers: LoginHeader(),
-      data:reqData,
-    }).then((request) => {
-      toast.success("Module Created")
+    })
+      .then((request) => {
+        toast.success("Module Deleted Successfully");
         return request;
-      }).catch((error) => {
-        if(error.response.status === 401){
-          HandleLogout()
-        }else{
-          toast.error("Module added failed")
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          HandleLogout();
+        } else {
+          toast.error("Something went wrong");
         }
         return error;
-      })
-  }
+      });
+  };

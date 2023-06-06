@@ -56,6 +56,7 @@ export default function AddSession() {
       // console.log(value, "identifier", identifier, value === '<p><br></p>', value === `<p><br></p>`)
       if (value === '<p><br></p>') {
          setError(identifier, { message: 'Description is a required field' });
+         setValue(identifier, '');
       } else {
          setError(identifier, { message: '' })
          setValue(identifier, value);
@@ -177,11 +178,11 @@ export default function AddSession() {
                               </Grid>
 
                               <Grid item xs={12} sm={12} md={12} lg={6} >
-                                 <Typography>ADD SESSION</Typography>
+                                 <Typography className={Sessions.InputLabelFont} mb={1}>ADD SESSION</Typography>
                                  <Grid item xs={12} sm={12} md={12} lg={12} className={Sessions.sessionNameGride} >
 
                                     <Grid item xs={12} sm={12} md={6} lg={6}>
-                                       <InputLabel>
+                                       <InputLabel className={Sessions.InputLabelFont}>
                                           Session Name
                                        </InputLabel>
                                        <TextField
@@ -194,7 +195,7 @@ export default function AddSession() {
                                     </Grid>
 
                                     <Grid item xs={12} sm={12} md={6} lg={6}>
-                                       <InputLabel>Course of session</InputLabel>
+                                       <InputLabel className={Sessions.InputLabelFont}>Course of session</InputLabel>
                                        <Controller
                                           name="course_id"
                                           control={control}
@@ -219,7 +220,7 @@ export default function AddSession() {
                                  </Grid>
 
                                  <Grid item xs={12} sm={12} md={12} lg={12} mb={2} >
-                                    <InputLabel>Module of session</InputLabel>
+                                    <InputLabel className={Sessions.InputLabelFont}>Module of session</InputLabel>
                                     <Controller
                                        name="module_id"
                                        control={control}
@@ -241,7 +242,7 @@ export default function AddSession() {
                                  </Grid>
 
                                  <Grid item xs={12} sm={12} md={12} lg={12} mb={2}>
-                                    <InputLabel>Description</InputLabel>
+                                    <InputLabel className={Sessions.InputLabelFont}>Description</InputLabel>
                                     <RichEditor
                                        {...register("description")}
                                        value={despcriptionContent}
@@ -254,7 +255,7 @@ export default function AddSession() {
                                  </Grid>
 
                                  <Grid item xs={12} sm={12} md={12} lg={12} mb={2}>
-                                    <InputLabel>Attachment</InputLabel>
+                                    <InputLabel className={Sessions.InputLabelFont}>Attachment</InputLabel>
                                     <Box className={Sessions.sessionAttachmentBox}>
                                        <InputLabel className={Sessions.subbox} >
                                           <input
@@ -269,8 +270,9 @@ export default function AddSession() {
                                     {file ? '' : errors && errors.file ? ErrorShowing(errors?.file?.message) : ""}
                                  </Grid>
                                  <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"right"} >
-                                    {!isLoadingButton ? <Button type="submit" size="large" variant="contained">
-                                       ADD NEW SESSION
+                                    <Button className={Sessions.cancelButton} variant="contained" size="large" onClick={() => router.push('/admin/courses/allsessions')} >Cancel</Button>
+                                    {!isLoadingButton ? <Button type="submit" size="large" variant="contained" id={styles.muibuttonBackgroundColor}>
+                                       Submit
                                     </Button> : <LoadingButton loading={isLoadingButton} className={Sessions.updateLoadingButton}
                                        size="large" variant="contained" disabled >
                                        <CircularProgressBar />

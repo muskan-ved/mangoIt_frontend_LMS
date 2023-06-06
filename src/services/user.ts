@@ -6,6 +6,25 @@ import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css";
 import { HandleLogout } from "./auth"
 
+export const HandleUserGet = async(searchData:any,filterData:any) =>{
+  const API_URL = searchData ? `${API.userAllUsers}/${searchData}` : `${API.userAllUsers}`
+  return await axios({
+    method: "POST",
+    url: API_URL,
+    headers: LoginHeader(),
+    data: filterData,
+  }).then((request) => {
+      return request;
+    }).catch((error) => {
+      if(error.response.status === 401){
+        HandleLogout()
+      }else{
+        toast.error("Something went wrong")
+      }
+      return error;
+    })
+}
+
 export const HandleProfile = async(userId:any) =>{
     return await axios({
       method: "GET",
