@@ -321,6 +321,7 @@ export default function Profile() {
                                 type="submit"
                                 size="large"
                                 variant="contained"
+                                id={styles.muibuttonBackgroundColor}
                               >
                                 Update Profile
                               </Button>

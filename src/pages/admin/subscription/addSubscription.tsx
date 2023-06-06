@@ -29,6 +29,7 @@ import { ToastContainer } from 'react-toastify';
 import { HandleCourseGet } from '@/services/course';
 import { HandleModuleGet } from '@/services/module';
 import { HandleSessionCreate } from '@/services/session';
+import { subscriptionValidations } from '@/validation_schema/subscriptionValidation';
 
 export default function AddSubscription() {
 
@@ -49,7 +50,7 @@ export default function AddSubscription() {
       control,
       formState: { errors }, setError
    } = useForm<sessionType | any>({
-      resolver: yupResolver(sessionValidations),
+      resolver: yupResolver(subscriptionValidations),
    });
 
    const handleContentChange = (value: any, identifier: string) => {
@@ -65,38 +66,37 @@ export default function AddSubscription() {
    };
 
    const onSubmit = async (event: any) => {
-      if (errors.description?.message === '') {
-         const reqData: any = {
-            description: event.description,
-            module_id: event.module_id,
-            course_id: event.course_id,
-            title: event.title,
-            attachment: file
-         }
+      
+      // if (errors.description?.message === '') {
+      //    const reqData: any = {
+      //       name:event.name,
+      //       description:event.description,
+      //       price:event.price,
+      //       // userId:userId,
+      //       startDate:event.duration,
+      //       status:event.status,
+      //       duration_term:event.duration_term,
+      //       duration_value:event.duration_value,
+      //    }
 
-         const formData = new FormData()
-         for (var key in reqData) {
-            formData.append(key, reqData[key]);
-         }
+      //    setLoading(true);
+      //    setLoadingButton(false)
+      //    try {
+      //       const res = await HandleSessionCreate(reqData)
+      //       setSession(res.data)
+      //       setLoading(false);
+      //       setTimeout(() => {
+      //          router.push('/admin/courses/allsessions/')
+      //       }, 1000)
+      //    }
 
-         setLoading(true);
-         setLoadingButton(false)
-         try {
-            const res = await HandleSessionCreate(formData)
-            setSession(res.data)
-            setLoading(false);
-            setTimeout(() => {
-               router.push('/admin/courses/allsessions/')
-            }, 1000)
-         }
-
-         catch (e) {
-            console.log(e)
-            setLoadingButton(true)
-         }
-      } else {
-         setError('description', { message: 'Description is a required field' });
-      }
+      //    catch (e) {
+      //       console.log(e)
+      //       setLoadingButton(true)
+      //    }
+      // } else {
+      //    setError('description', { message: 'Description is a required field' });
+      // }
    };
 
    const getCourseData = () => {
@@ -156,9 +156,9 @@ export default function AddSubscription() {
                {/* breadcumbs */}
                <BreadcrumbsHeading
                   First="Home"
-                  Middle="Session"
-                  Text="SESSION"
-                  Link="/admin/courses/allsessions"
+                  Middle="Subscription"
+                  Text="SUBSCRIPTION"
+                  Link="/admin/subscription/"
                />
                {/* main content */}
                <Card>
@@ -178,67 +178,105 @@ export default function AddSubscription() {
                               </Grid>
 
                               <Grid item xs={12} sm={12} md={12} lg={6} >
-                                 <Typography className={Sessions.InputLabelFont} mb={1}>ADD SESSION</Typography>
-                                 <Grid item xs={12} sm={12} md={12} lg={12} >
+                                 <Typography className={Sessions.InputLabelFont} mb={1}>ADD SUBSCRIPTION</Typography>
+                                 
+                                 <Grid item xs={12} sm={12} md={12} lg={12} className={Sessions.sessionNameGride} >
 
-                                    <Grid item xs={12} sm={12} md={6} lg={6}>
+                                    <Grid item  xs={12} sm={12} md={6} lg={6}  mr={2}>
                                        <InputLabel className={Sessions.InputLabelFont}>
                                           Subscription Name
                                        </InputLabel>
                                        <TextField
                                           placeholder="Subscription Name"
-                                          {...register("title")}
+                                          {...register("name")}
+                                          fullWidth
                                        />
-                                       {errors && errors.title
-                                          ? ErrorShowing(errors?.title?.message)
+                                       {errors && errors.name
+                                          ? ErrorShowing(errors?.name?.message)
                                           : ""}
                                     </Grid>
 
-                                    <Grid item xs={12} sm={12} md={6} lg={6}>
+                                    <Grid item  xs={12} sm={12} md={6} lg={6}>
                                        <InputLabel className={Sessions.InputLabelFont}>
                                           Price
                                        </InputLabel>
                                        <TextField
                                           placeholder="Price"
-                                          {...register("title")}
+                                          {...register("price")}
+                                          fullWidth
                                        />
-                                       {errors && errors.title
-                                          ? ErrorShowing(errors?.title?.message)
+                                       {errors && errors.price
+                                          ? ErrorShowing(errors?.price?.message)
                                           : ""}
                                     </Grid>
+                                    </Grid>
 
-                                    <Grid item xs={12} sm={12} md={6} lg={6}>
+                                    <Grid item xs={12} sm={12} md={12} lg={12} className={Sessions.sessionNameGride} >
+
+<Grid item  xs={12} sm={12} md={6} lg={6} mr={2}>
+   <InputLabel className={Sessions.InputLabelFont}>
+      Duration Term
+   </InputLabel>
+   <TextField
+      placeholder="Duration Term"
+      {...register("duration_term")}
+      fullWidth
+   />
+   {errors && errors.duration_term
+      ? ErrorShowing(errors?.duration_term?.message)
+      : ""}
+</Grid>
+
+<Grid item  xs={12} sm={12} md={6} lg={6}>
+   <InputLabel className={Sessions.InputLabelFont}>
+   Duration Value
+   </InputLabel>
+   <TextField
+      placeholder="Duration Value"
+      {...register("duration_value")}
+      fullWidth
+   />
+   {errors && errors.duration_value
+      ? ErrorShowing(errors?.duration_value?.message)
+      : ""}
+</Grid>
+</Grid>
+
+                                    <Grid item xs={12} sm={12} md={12} lg={12} className={Sessions.sessionNameGride} >
+                                    <Grid item  xs={12} sm={12} md={6} lg={6} mr={2}>
                                        <InputLabel className={Sessions.InputLabelFont}>
                                           Duration
                                        </InputLabel>
                                        <TextField
+                                       fullWidth
                                        type='date'
                                           placeholder="Duration Date"
-                                          {...register("title")}
+                                          {...register("duration")}
+                                          
                                        />
-                                       {errors && errors.title
-                                          ? ErrorShowing(errors?.title?.message)
+                                       {errors && errors.duration
+                                          ? ErrorShowing(errors?.duration?.message)
                                           : ""}
                                     </Grid>
-                                 </Grid>
-
-                                 <Grid item xs={12} sm={12} md={12} lg={12} mb={2} >
-                                    <InputLabel className={Sessions.InputLabelFont}>Module of session</InputLabel>
+                               
+                                 <Grid item xs={12} sm={12} md={6} lg={6} >
+                                    <InputLabel className={Sessions.InputLabelFont}>Status</InputLabel>
                                     <Controller
-                                       name="module_id"
+                                       name="status"
                                        control={control}
-                                       defaultValue=""
+                                       defaultValue="active"
                                        render={({ field }) => (
                                           <FormControl fullWidth>
                                              <Select {...field} displayEmpty>
                                                 <MenuItem value={'active'}>Active</MenuItem>
-                                                <MenuItem value={'active'}>Inactive</MenuItem>
+                                                <MenuItem value={'inactive'}>Inactive</MenuItem>
                                                
                                              </Select>
                                           </FormControl>
                                        )}
                                     />
                                     {errors && errors.module_id ? ErrorShowing(errors?.module_id?.message) : ""}
+                                 </Grid>
                                  </Grid>
 
                                  <Grid item xs={12} sm={12} md={12} lg={12} mb={2}>

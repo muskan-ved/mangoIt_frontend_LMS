@@ -205,6 +205,7 @@ export default function View() {
                   size="large"
                   variant="contained"
                   className={courseStyle.backbtncs}
+                  id={styles.muibuttonBackgroundColor}
                 >
                   <ArrowBackOutlinedIcon />
                   &nbsp;Back
@@ -299,6 +300,8 @@ export default function View() {
                       <Button
                         variant="contained"
                         onClick={() => cancelSubscription(subsData?.id)}
+                        id={styles.muibuttonBackgroundColor}
+
                       >
                         Cancel Subscription
                       </Button>
