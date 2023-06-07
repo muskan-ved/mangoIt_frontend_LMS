@@ -54,7 +54,13 @@ import CircularProgressBar from "@/common/CircularProcess/circularProgressBar";
 import { AlertSubscriptionDialog } from "@/common/SubscriptionStatus/subscriptionManage";
 
 interface Column {
-  id: "id" | "amount" | "date" | "transaction_id" | "payment_method" | "pay_of_month";
+  id:
+    | "id"
+    | "amount"
+    | "date"
+    | "transaction_id"
+    | "payment_method"
+    | "pay_of_month";
   label: string;
   minWidth?: number;
   align?: "right";
@@ -70,8 +76,19 @@ const columns: Column[] = [
   { id: "payment_method", label: "PAYMENT METHOD", minWidth: 120 },
 ];
 
-const monthNames = ["January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
+const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 const d = new Date();
 
@@ -249,8 +266,12 @@ export default function View() {
                     Status :
                   </Typography>
                   &emsp;
-                  <Typography variant="subtitle2" className={subs.fontCSS} sx={{ color: "green" }}>
-                    {subsData && subsData?.status}
+                  <Typography
+                    variant="subtitle2"
+                    className={subs.fontCSS}
+                    sx={{ color: "green" }}
+                  >
+                    {capitalizeFirstLetter(subsData && subsData?.status)}
                   </Typography>
                 </Box>
                 <Box className={subs.maindisplay}>
@@ -259,7 +280,9 @@ export default function View() {
                   </Typography>
                   &emsp;
                   <Typography variant="subtitle2" className={subs.fontCSS}>
-                    {subsData?.start_date ? moment(subsData?.start_date).format("DD MMM YYYY") : ""}
+                    {subsData?.start_date
+                      ? moment(subsData?.start_date).format("DD MMM YYYY")
+                      : ""}
                   </Typography>
                 </Box>
                 <Box className={subs.maindisplay}>
@@ -293,6 +316,8 @@ export default function View() {
                       </Link>
                     </Box>
                   </Fragment>
+                ) : subsData.status === "inactive" ? (
+                  ""
                 ) : (
                   // </Link>
                   <Box className={subs.btncss1}>
@@ -301,7 +326,6 @@ export default function View() {
                         variant="contained"
                         onClick={() => cancelSubscription(subsData?.id)}
                         id={styles.muibuttonBackgroundColor}
-
                       >
                         Cancel Subscription
                       </Button>
@@ -438,9 +462,9 @@ export default function View() {
             </CardContent>
           </Card>
         </Box>
-      </Box >
+      </Box>
       {/* <Footer /> */}
-      < ToastContainer />
+      <ToastContainer />
     </>
   );
 }
