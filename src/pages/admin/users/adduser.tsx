@@ -14,10 +14,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { LoadingButton } from "@mui/lab";
 import CircularProgressBar from '@/common/CircularProcess/circularProgressBar';
 import SpinnerProgress from '@/common/CircularProgressComponent/spinnerComponent';
-import { capitalizeFirstLetter } from '@/common/CapitalFirstLetter/capitalizeFirstLetter';
-// Types Import
-import { courseType } from '@/types/courseType';
-import { moduleType } from '@/types/moduleType';
 // CSS Import
 import styles from "../../../styles/sidebar.module.css";
 import UserCSS from "../../../styles/user.module.css";
@@ -100,7 +96,7 @@ export default function AddUser() {
                       <Box component="img" src="/Images/pages/addFeature.jpg" width={'100%'} />
                     </Grid>
 
-                    <Grid item xs={12} sm={12} md={12} lg={6} mt={5}>
+                    <Grid item xs={12} sm={12} md={12} lg={6} mt={10}>
                       <Typography className={UserCSS.InputLabelFont} mb={1}>ADD USER</Typography>
 
                       <Grid item xs={12} sm={12} md={12} lg={12} className={UserCSS.sessionNameGride} >
