@@ -182,6 +182,8 @@ const AllSession = () => {
   const resetFilterValue = () => {
     setFilter(0)
     reset({ course: 0, module: 0, status: 0 });
+    getSessionData();
+ 
   }
 
   // console.log(' session rowss', rows)
