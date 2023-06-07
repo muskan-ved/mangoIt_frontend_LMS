@@ -4,8 +4,8 @@ import { useRouter } from "next/router";
 import { Box, Button, Card, CardActionArea, CardContent, CardHeader, CardMedia, Container, Divider, Grid, List, ListItem, ListItemIcon, ListItemText, Typography } from "@mui/material";
 import WebViewNavbar from "@/common/LayoutNavigations/webviewnavbar";
 import WebViewFooter from "@/common/LayoutNavigations/webviewfooter";
-import styles from '../../../styles/webview.module.css'
-import { HandleCourseGet, HandleCourseGetByID } from "@/services/course";
+import styles from '../../styles/webview.module.css'
+import { HandleCourseByCourseId, HandleCourseGet, HandleCourseGetByID } from "@/services/course";
 import PeopleIcon from '@mui/icons-material/People';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import Link from "next/link";
@@ -13,7 +13,7 @@ import AlarmOnIcon from '@mui/icons-material/AlarmOn';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import { CourseCard, SubscribtionPanCard } from "@/common/ResuableCardCmp/coursescard";
 import { GetallSubsctions } from "@/services/subscription";
-import { capitalizeFirstLetter } from "../../../common/CapitalFirstLetter/capitalizeFirstLetter";
+import { capitalizeFirstLetter } from "../../common/CapitalFirstLetter/capitalizeFirstLetter";
 
 export default function CoursesDetailsPage() {
     const router = useRouter();
@@ -23,19 +23,22 @@ export default function CoursesDetailsPage() {
     const [Courses, setCourses] = useState([]);
     const [FreeCourses, setFreeCourses] = useState([]);
     const [PaidCourses, setPaidCourses] = useState([]);
+    const [modulesdet, setmodulesdet] = useState([])
+
     const scollToRef = useRef<any>();
     useEffect(() => {
         if (router.isReady) {
             getCourseDetails();
             getAllCourseData();
             getSubscribtion();
-            router.push(`/user/coursedetails/${id}`);
+            //router.push(`/coursedetails/${id}`);
         }
     }, [router.isReady]);
     //get course details by id
     const getCourseDetails = () => {
-        HandleCourseGetByID(id).then((coursedetails) => {
+        HandleCourseByCourseId(id).then((coursedetails) => {
             setcoursedet(coursedetails?.data)
+            setmodulesdet(coursedetails?.data?.modules);
         })
     }
     //get courses
@@ -56,6 +59,8 @@ export default function CoursesDetailsPage() {
             setsubsdata(subscdata)
         })
     }
+
+    console.log(modulesdet);
 
 
     return (
@@ -147,36 +152,32 @@ export default function CoursesDetailsPage() {
                                                 display: 'list-item',
                                             },
                                         }}>
-                                        <ListItem className={styles.listitem}>
-                                            There are many variations of passages of Lorem Ipsum available.
-                                        </ListItem>
-                                        <ListItem className={styles.listitem}>
-                                            There are many variations of passages of Lorem Ipsum available.
-                                        </ListItem>
-                                        <ListItem className={styles.listitem}>
-                                            There are many variations of passages of Lorem Ipsum available.
-                                        </ListItem>
-                                        <ListItem className={styles.listitem}>
-                                            There are many variations of passages of Lorem Ipsum available.
-                                        </ListItem>
-                                        <ListItem className={styles.listitem}>
-                                            There are many variations of passages of Lorem Ipsum available.
-                                        </ListItem>
-                                        <ListItem className={styles.listitem}>
-                                            There are many variations of passages of Lorem Ipsum available.
-                                        </ListItem>
-                                        <ListItem className={styles.listitem}>
-                                            There are many variations of passages of Lorem Ipsum available.
-                                        </ListItem>
-                                        <ListItem className={styles.listitem}>
-                                            There are many variations of passages of Lorem Ipsum available.
-                                        </ListItem>
-                                        <ListItem className={styles.listitem}>
-                                            There are many variations of passages of Lorem Ipsum available.
-                                        </ListItem>
-                                        <ListItem className={styles.listitem}>
-                                            There are many variations of passages of Lorem Ipsum available.
-                                        </ListItem>
+                                        {modulesdet.map((value: any, key) => {
+                                            return (
+                                                <ListItem key={key} className={styles.listitem}>
+                                                    {value?.title}
+                                                    {value?.sessions.map((session: any, key: any) => {
+                                                        return (
+                                                            <List
+                                                                key={key}
+                                                                sx={{
+                                                                    listStyleType: 'disc',
+                                                                    pl: 2.5,
+                                                                    '& .MuiListItem-root': {
+                                                                        display: 'list-item',
+                                                                    },
+                                                                }}>
+                                                                <ListItem className={styles.listitem}>
+                                                                    {session?.title}
+                                                                </ListItem>
+                                                            </List>
+                                                        )
+
+                                                    })}
+                                                </ListItem>
+                                            )
+                                        })
+                                        }
                                     </List>
                                 </CardContent>
                             </Card>

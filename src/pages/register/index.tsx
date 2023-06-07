@@ -1,5 +1,5 @@
-import {useState} from "react";
-import { Button, Divider,TextField,Link,Box,Grid,Typography, IconButton, } from "@mui/material";
+import { useState } from "react";
+import { Button, Divider, TextField, Box, Grid, Typography, IconButton, } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
 import styles from "../../styles/login.module.css";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -15,46 +15,47 @@ import { useRouter } from "next/navigation";
 import CircularProgressBar from "@/common/CircularProcess/circularProgressBar";
 import AuthSidebar from "../../common/LayoutNavigations/authSideLayout";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import Link from "next/link";
 
 const theme = createTheme();
 
 export default function Register() {
 
-  const { register,	handleSubmit,formState: { errors }  } = useForm<registerType>({resolver: yupResolver(userRegisterValidations)});
+  const { register, handleSubmit, formState: { errors } } = useForm<registerType>({ resolver: yupResolver(userRegisterValidations) });
   const router = useRouter();
-  const [loading,setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-const handleClickShowPassword = () => setShowPassword((show) => !show);
-const handleClickShowConfirmPassword = () => setShowConfirmPassword((show) => !show);
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowConfirmPassword = () => setShowConfirmPassword((show) => !show);
 
-  const onSubmit = async(event:any) => {
+  const onSubmit = async (event: any) => {
 
     setLoading(true)
-      await HandleRegister(event).then((res) => {
-        if(res.status === 201){
-          setTimeout(() => {          
-            router.push('/login')
-          }, 1000);
-        }
-        setLoading(false)
-      }).catch(() => {
-        setLoading(false)
-      })
+    await HandleRegister(event).then((res) => {
+      if (res.status === 201) {
+        setTimeout(() => {
+          router.push('/login')
+        }, 1000);
+      }
+      setLoading(false)
+    }).catch(() => {
+      setLoading(false)
+    })
   };
 
 
-  function ErrorShowing (errorMessage:any){
-    return ( <Typography variant="body2" color={'error'} gutterBottom>{errorMessage} </Typography> );
+  function ErrorShowing(errorMessage: any) {
+    return (<Typography variant="body2" color={'error'} gutterBottom>{errorMessage} </Typography>);
   }
 
   return (
 
     <ThemeProvider theme={theme}>
-       <ToastContainer />
+      <ToastContainer />
       <Grid container component="main">
-        <AuthSidebar/>
+        <AuthSidebar />
         <Grid item xs={12} sm={7} md={5} lg={5}>
           <Box
             sx={{
@@ -78,9 +79,7 @@ const handleClickShowConfirmPassword = () => setShowConfirmPassword((show) => !s
                 Already have an account?
                 <Link
                   href="/login"
-                  variant="body2"
                   className={styles.signInUpColor}
-                  sx={{ textDecoration: "none", ml: 1 }}
                 >
                   Login
                 </Link>
@@ -130,16 +129,16 @@ const handleClickShowConfirmPassword = () => setShowConfirmPassword((show) => !s
                 autoFocus
                 InputProps={{
                   endAdornment: (
-                     <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  edge="end"
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
                   ),
                 }}
-               
+
               />
               {errors && errors.password ? ErrorShowing(errors?.password?.message) : ''}
 
@@ -152,18 +151,18 @@ const handleClickShowConfirmPassword = () => setShowConfirmPassword((show) => !s
                 id="outlined-confirm_password"
                 InputProps={{
                   endAdornment: (
-                     <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowConfirmPassword}
-                  edge="end"
-                >
-                  {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowConfirmPassword}
+                      edge="end"
+                    >
+                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
                   ),
                 }}
               />
               {errors && errors.confirm_password ? ErrorShowing(errors?.confirm_password?.message) : ''}
-              {!loading? <Button
+              {!loading ? <Button
                 type="submit"
                 fullWidth
                 size="large"
@@ -172,11 +171,11 @@ const handleClickShowConfirmPassword = () => setShowConfirmPassword((show) => !s
                 sx={{ mt: 3, mb: 2 }}
               >
                 Register
-              </Button> : <LoadingButton loading={loading}  fullWidth
+              </Button> : <LoadingButton loading={loading} fullWidth
                 size="large" sx={{ mt: 3, mb: 2 }}
                 variant="outlined" disabled >
-         <CircularProgressBar/>
-        </LoadingButton>}
+                <CircularProgressBar />
+              </LoadingButton>}
 
               <Box sx={{ marginLeft: "90px" }}>
                 <Divider
