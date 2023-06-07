@@ -159,6 +159,7 @@ export default function CoursesDetailsPage() {
                                                     {value?.sessions.map((session: any, key: any) => {
                                                         return (
                                                             <List
+                                                                key={key}
                                                                 sx={{
                                                                     listStyleType: 'disc',
                                                                     pl: 2.5,
@@ -166,7 +167,7 @@ export default function CoursesDetailsPage() {
                                                                         display: 'list-item',
                                                                     },
                                                                 }}>
-                                                                <ListItem key={key} className={styles.listitem}>
+                                                                <ListItem className={styles.listitem}>
                                                                     {session?.title}
                                                                 </ListItem>
                                                             </List>
