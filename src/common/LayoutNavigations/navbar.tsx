@@ -20,20 +20,22 @@ import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined
 import { capitalizeFirstLetter } from "../CapitalFirstLetter/capitalizeFirstLetter";
 import { BASE_URL } from "@/config/config";
 
-interface appbar{
-  portalData ?: any;
+interface appbar {
+  portalData?: any;
 }
 
-function stringAvatar(first_name: string,last_name: string){
+function stringAvatar(first_name: string, last_name: string) {
   return {
     sx: {
-      bgcolor: '#e8661b',
+      bgcolor: "#e8661b",
     },
-    children: `${capitalizeFirstLetter(first_name?.split(' ')[0][0])}${capitalizeFirstLetter(last_name?.split(' ')[0][0])}`,
+    children: `${capitalizeFirstLetter(
+      first_name?.split(" ")[0][0]
+    )}${capitalizeFirstLetter(last_name?.split(" ")[0][0])}`,
   };
 }
 
-export default function Navbar({portalData}:appbar) {
+export default function Navbar({ portalData }: appbar) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
@@ -109,7 +111,7 @@ export default function Navbar({portalData}:appbar) {
             aria-haspopup="true"
             color="inherit"
           >
-            <AccountCircleOutlinedIcon />
+            {/* <AccountCircleOutlinedIcon /> */}
           </IconButton>
           <Typography>Profile</Typography>
         </MenuItem>
@@ -119,28 +121,28 @@ export default function Navbar({portalData}:appbar) {
             router.push("/user/profile"), handleMenuClose();
           }}
         >
-          <IconButton
+          {/* <IconButton
             size="large"
             aria-label="account of current user"
             aria-controls="primary-search-account-menu"
             aria-haspopup="true"
             color="inherit"
-          >
-            <AccountCircleOutlinedIcon />
-          </IconButton>
+          > */}
+          {/* <AccountCircleOutlinedIcon /> */}
+          {/* </IconButton> */}
           <Typography>Profile</Typography>
         </MenuItem>
       )}
       <MenuItem onClick={HandleLogout}>
-        <IconButton
+        {/* <IconButton
           size="large"
           aria-label="account of current user"
           aria-controls="primary-search-account-menu"
           aria-haspopup="true"
           color="inherit"
         >
-          <PowerSettingsNewOutlinedIcon />
-        </IconButton>
+      <PowerSettingsNewOutlinedIcon />
+      </IconButton> */}
         <Typography>Logout</Typography>
       </MenuItem>
     </Menu>
@@ -183,7 +185,7 @@ export default function Navbar({portalData}:appbar) {
         <Typography>Notifications</Typography>
       </MenuItem> */}
       <MenuItem onClick={() => router.push("/profile")}>
-        <IconButton
+        {/* <IconButton
           size="large"
           aria-label="account of current user"
           aria-controls="primary-search-account-menu"
@@ -191,11 +193,11 @@ export default function Navbar({portalData}:appbar) {
           color="inherit"
         >
           <AccountCircleOutlinedIcon />
-        </IconButton>
+        </IconButton> */}
         <Typography>Profile</Typography>
       </MenuItem>
       <MenuItem onClick={HandleLogout}>
-        <IconButton
+        {/* <IconButton
           size="large"
           aria-label="account of current user"
           aria-controls="primary-search-account-menu"
@@ -203,7 +205,7 @@ export default function Navbar({portalData}:appbar) {
           color="inherit"
         >
           <PowerSettingsNewOutlinedIcon />
-        </IconButton>
+        </IconButton> */}
         <Typography>Logout</Typography>
       </MenuItem>
     </Menu>
@@ -212,8 +214,19 @@ export default function Navbar({portalData}:appbar) {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" className={styles.appBarCss}>
-        <Toolbar>      
-           <Box component='img' src={portalData?BASE_URL+"/"+portalData?.org_logo:'/Images/company_logo.png'} width={'180px'} height={'50px'}  sx={{ display: { xs: 'block', sm: 'block' } }} alt="Company logo"/>
+        <Toolbar>
+          <Box
+            component="img"
+            src={
+              portalData
+                ? BASE_URL + "/" + portalData?.org_logo
+                : "/Images/company_logo.png"
+            }
+            width={"180px"}
+            height={"50px"}
+            sx={{ display: { xs: "block", sm: "block" } }}
+            alt="Company logo"
+          />
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             {/* <IconButton
@@ -228,8 +241,12 @@ export default function Navbar({portalData}:appbar) {
             <Box className={styles.createVrLine}></Box>
 
             <Avatar
-              src="/"
-              {...stringAvatar(userData?.first_name,userData?.last_name)}
+              src={
+                userData && userData?.profile_pic !== null
+                  ? `${BASE_URL}/${userData?.profile_pic}`
+                  : "/"
+              }
+              {...stringAvatar(userData?.first_name, userData?.last_name)}
               alt={userData && userData?.first_name}
               className={styles.windowFullWidthAvatar}
             />

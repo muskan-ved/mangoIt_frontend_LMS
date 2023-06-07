@@ -131,9 +131,10 @@ width: 70% !important;
 }
 
 .fontCS {
-  font-weight: 400;
-  color: #333;
-  font-size: 15px;
+  font-weight: 400 !important;
+  line-height: 1.6 !important;
+  color: #333 !important;
+  font-size: 20px !important;
   font-family: Inter, sans-serif !important;
 }
 .filedownloadcss {
@@ -172,3 +173,9 @@ width: 70% !important;
   /* display: inline-flex; */
   color: #E8661B !important;
 }
+.hoverbtn:hover{
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  background-color: rgba(255, 255, 255, 0.04) !important;
+}
+
