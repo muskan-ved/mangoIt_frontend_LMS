@@ -189,7 +189,7 @@ const AllCourses = () => {
                   ),
                 }}
               />
-              <Box
+              {/* <Box
                 sx={{ float: "right", display: "flex", alignItems: "center" }}
               >
                 <PopupState variant="popover" popupId="demo-popup-popover">
@@ -347,7 +347,7 @@ const AllCourses = () => {
                   )}
                 </PopupState>
                 &nbsp;
-              </Box>
+              </Box> */}
               <Paper>
                 <TableContainer className={courseStyle.tableContainer}>
                   <Table stickyHeader aria-label="sticky table">
