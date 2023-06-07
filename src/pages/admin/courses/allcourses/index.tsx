@@ -129,6 +129,7 @@ const AllCourses = () => {
   const resetFilterValue = () => {
     setFilter(0)
     reset({ is_chargeable: 0, status: 0 });
+    getAllCourseData('', { is_chargeable: 0, status: 0 })
   }
   const handleSort = (rowsData: any) => {
     const sortData = handleSortData(rowsData)
@@ -156,7 +157,7 @@ const AllCourses = () => {
   }
 
 
-  console.log(DATA.currentData(), 'rowww', rows)
+  // console.log(DATA.currentData(), 'rowww', rows)
   return (
     <>
       <Navbar />

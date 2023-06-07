@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import WebViewNavbar from "@/common/LayoutNavigations/webviewnavbar";
 import WebViewFooter from "@/common/LayoutNavigations/webviewfooter";
-import styles from '../../styles/webview.module.css'
+import styles from '../styles/webview.module.css'
 import { SubscribtionPanCard } from "@/common/ResuableCardCmp/coursescard";
 import { GetallSubsctions } from "@/services/subscription";
 export default function HomePage() {

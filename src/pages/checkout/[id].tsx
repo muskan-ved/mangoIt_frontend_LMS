@@ -11,7 +11,7 @@ import Grid from '@mui/material/Grid';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { Box, Button, CircularProgress, Divider, InputLabel, OutlinedInput, Stack, Step, StepLabel, Stepper, Typography } from '@mui/material';
-import styles from '../../../styles/webview.module.css'
+import styles from '../../styles/webview.module.css'
 import { useForm } from 'react-hook-form';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import { CreateUserSubsction, GetSubsctionsPlansDet, HandleSubscriptionPayment } from '@/services/subscription';
@@ -30,7 +30,7 @@ export default function Checkout() {
     React.useEffect(() => {
         if (router.isReady) {
             getSubscribtion(id);
-            router.push(`/user/Checkout//${id}`);
+            router.push(`/checkout/${id}`);
         }
     }, [router.isReady]);
 

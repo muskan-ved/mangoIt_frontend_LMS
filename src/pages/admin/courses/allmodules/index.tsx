@@ -49,6 +49,7 @@ import { AlertDialog } from "@/common/DeleteListRow/deleteRow";
 import Navbar from "@/common/LayoutNavigations/navbar";
 import SideBar from "@/common/LayoutNavigations/sideBar";
 import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
+import Autocomplete from "@mui/material/Autocomplete";
 // API Service
 import { HandleCourseGet } from "@/services/course";
 import { HandleModuleDelete, HandleModuleGet } from "@/services/module";
@@ -78,6 +79,12 @@ const AllModules = () => {
 	const [deleteRow, setDeleteRow] = React.useState<any>([])
 	const [open, setOpen] = React.useState(false);
 	const [getFilter, setFilter] = React.useState<number>(0);
+	const [parentvalue, setparentvalue] = React.useState<any>("");
+	const [parentId, setparentId] = React.useState<any>("");
+	const [pId, setpId] = React.useState<any>(0);
+
+
+
 	const router = useRouter()
 	const {
 		handleSubmit,
@@ -164,8 +171,9 @@ const AllModules = () => {
 	const resetFilterValue = () => {
 		setFilter(0)
 		reset({ course: 0, status: 0 });
+		getModuleData()
 	}
-	// console.log('oops', deleteRow)
+	console.log('oops', getFilter)
 
 	return (
 		<>
@@ -232,7 +240,7 @@ const AllModules = () => {
 															<Box component="form"
 																noValidate
 																onSubmit={handleSubmit(onSubmit)}
-																>
+															>
 																<Stack
 																	style={{ marginTop: "10px" }}
 																	className="form-filter"
@@ -243,7 +251,7 @@ const AllModules = () => {
 																				<InputLabel htmlFor="name" className={ModulCss.courseInFilter}>
 																					Course
 																				</InputLabel>
-																				<Controller
+																				{/*	<Controller
 																					name="course"
 																					control={control}
 																					defaultValue={getFilter}
@@ -259,6 +267,38 @@ const AllModules = () => {
 																							</Select>
 																						</FormControl>
 																					)}
+																				/>
+																			 */}
+
+																				{/* <TextField
+																					id="standard-search"
+																					value={search}
+																					variant="outlined"
+																					placeholder="Course"
+																					onChange={(e) => handleSearch(e, '')}
+																					InputProps={{
+																						endAdornment: (
+																							 <IconButton onClick={(e) => handleSearch('', 'reset')}></IconButton>
+																						),
+																					}}
+																				/> */}
+																				<Autocomplete
+																					id="combo-box-demo"
+																					value={parentvalue === "" ? null : parentvalue}
+																					options={getCourse}
+																					getOptionLabel={(option: any) =>
+																						option?.course.title
+																					}
+																					renderInput={(params) => (
+																						<TextField
+																							{...params}
+																							placeholder="Course Name"
+																						/>
+																					)}
+																					onChange={(event, newValue) => {
+																						setpId(newValue?.id);
+																						setparentvalue(newValue);
+																					}}
 																				/>
 																			</Stack>
 																		</Grid>
@@ -295,7 +335,7 @@ const AllModules = () => {
 																		>
 																			<Box className={ModulCss.boxInFilter}>
 																				<Button
-																			
+
 																					size="medium"
 																					variant="contained"
 																					color="primary"

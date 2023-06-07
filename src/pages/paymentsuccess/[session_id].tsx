@@ -54,7 +54,7 @@ export default function PaymentSuccess() {
                                 UpdaUserSubscription(reqdata, orderdatas?.subscription_id).then((subcdet) => {
                                     if (subcdet) {
                                         setTimeout(function () {
-                                            router.push(`/user/home`);
+                                            router.push(`/home`);
                                         }, 10000)
                                     }
                                 })

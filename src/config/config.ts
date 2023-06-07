@@ -7,7 +7,7 @@ export const FRONTEND_BASE_URL = `${process.env.NEXT_PUBLIC_FRONTEND_BASE_URL}`;
 // //FRONTEND LOCAL URL
 // export const FRONTEND_BASE_URL = `${process.env.NEXT_PUBLIC_LOCAL_FRONTEND_BASE_URL}`;
 
-// // // LOCAL API URL
+// // LOCAL API URL
 // export const BASE_URL = `${process.env.NEXT_PUBLIC_LOCAL_BASE_URL}`;
 
 export const API = {
@@ -16,7 +16,7 @@ export const API = {
   login: `${BASE_URL}/${process.env.NEXT_PUBLIC_LOGIN}`,
   forgotPassword: `${BASE_URL}/${process.env.NEXT_PUBLIC_FORGOT_PASSWORD}`,
   resetPassword: `${BASE_URL}/${process.env.NEXT_PUBLIC_RESET_PASSWORD}`,
-  // User 
+  // User
   userAllUsers: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_ALL_USERS}`,
   userInfoById: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_USER_BY_ID}`,
   userUpdateById: `${BASE_URL}/${process.env.NEXT_PUBLIC_UPDATE_USER_BY_ID}`,
@@ -58,7 +58,7 @@ export const API = {
   getEmailType: `${BASE_URL}/${process.env.NEXT_PUBLIC_EMAIL_TYPE_GET}`,
   createEmailType: `${BASE_URL}/${process.env.NEXT_PUBLIC_EMAIL_TYPE_CREATE}`,
   updateEmailType: `${BASE_URL}/${process.env.NEXT_PUBLIC_EMAIL_TYPE_UPDATE}`,
-  
+
   getOrder: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_ORDER_BY_USER_ID}`,
 
   //accept payment
@@ -79,6 +79,8 @@ export const API = {
   createsubscriptionorder: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_CREATEORDER}`,
   //update order
   updateorder: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_UPDATEORDER}`,
+  //create order for subscription
+  createorderforsubscription: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_CREATETORDERFORSUBSCRIPTION}`,
 
   //create transaction
   createtransaction: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_CREATETRANSACTION}`,
