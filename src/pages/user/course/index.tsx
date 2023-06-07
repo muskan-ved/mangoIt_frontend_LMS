@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import Navbar from "@/common/LayoutNavigations/navbar";
 import SideBar from "@/common/LayoutNavigations/sideBar";
 import {
@@ -30,7 +31,6 @@ import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import ArrowDownwardOutlinedIcon from "@mui/icons-material/ArrowDownwardOutlined";
 import ArrowUpwardOutlinedIcon from "@mui/icons-material/ArrowUpwardOutlined";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import * as React from "react";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -41,7 +41,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { SearchOutlined } from "@mui/icons-material";
 import { useRouter } from "next/router";
-import { HandleCourseGet } from "@/services/course";
+import { HandleCourseGet, HandleCourseGetByUserId } from "@/services/course";
 import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
 import { usePagination } from "@/common/Pagination/paginations";
 import { Controller, useForm } from "react-hook-form";
@@ -73,18 +73,23 @@ const columns: Column[] = [
 ];
 
 const AllCourses = () => {
-  const [rows, setRows] = React.useState<any>([]);
-  const [toggle, setToggle] = React.useState<boolean>(false);
-  const [search, setSearch] = React.useState("");
-  const [deleteRow, setDeleteRow] = React.useState<any>([]);
-  const [open, setOpen] = React.useState(false);
-  const [getFilter, setFilter] = React.useState<number>(0);
-  const [filterObject, setFilterObject] = React.useState<any>("");
-
+  const [rows, setRows] = useState<any>([]);
+  const [toggle, setToggle] = useState<boolean>(false);
+  const [search, setSearch] = useState("");
+  const [deleteRow, setDeleteRow] = useState<any>([]);
+  const [open, setOpen] = useState(false);
+  const [getFilter, setFilter] = useState<number>(0);
+  const [filterObject, setFilterObject] = useState<any>("");
+  const [userId, getUserId] = useState<any>("");
   const router = useRouter();
+
+  useEffect(() => {
+    getAllCourseData();
+  }, [router]);
+
   //pagination
-  const [row_per_page, set_row_per_page] = React.useState(5);
-  let [page, setPage] = React.useState<any>(1);
+  const [row_per_page, set_row_per_page] = useState(5);
+  let [page, setPage] = useState<any>(1);
   function handlerowchange(e: any) {
     set_row_per_page(e.target.value);
   }
@@ -110,13 +115,6 @@ const AllCourses = () => {
     setOpen(!open);
   };
 
-  const resetFilterValue = () => {
-    setFilter(0);
-    reset({ is_chargeable: 0, status: 0 });
-    HandleCourseGet("", { is_chargeable: 0, status: 0 }).then((itemSeached) => {
-      setRows(itemSeached.data);
-    });
-  };
   const handleSort = (rowsData: any) => {
     const sortData = handleSortData(rowsData);
     setRows(sortData);
@@ -143,14 +141,23 @@ const AllCourses = () => {
   };
 
   const getAllCourseData = () => {
-    HandleCourseGet("", filterObject).then((courses) => {
-      setRows(courses.data);
-    });
-  };
+    let localData: any;
+    if (typeof window !== "undefined") {
+      localData = window.localStorage.getItem("userData");
+    }
+    if (localData) {
+      const userIds = JSON.parse(localData);
 
-  React.useEffect(() => {
-    getAllCourseData();
-  }, []);
+      HandleCourseGetByUserId(userIds?.id).then((courses) => {
+        setRows(courses.data);
+      });
+      getUserId(userIds?.id);
+    }
+
+    // HandleCourseGet("", filterObject).then((courses) => {
+    //   setRows(courses.data);
+    // });
+  };
 
   return (
     <>
@@ -387,9 +394,9 @@ const AllCourses = () => {
                         DATA.currentData() &&
                         DATA.currentData().map((row: any) => {
                           const statusColor =
-                            row.course.status === "active"
+                            row.course.course.status === "active"
                               ? courseStyle.activeClassColor
-                              : row.course.status === "inactive"
+                              : row.course.course.status === "inactive"
                               ? courseStyle.inactiveClassColor
                               : courseStyle.draftClassColor;
                           return (
@@ -397,11 +404,13 @@ const AllCourses = () => {
                               hover
                               role="checkbox"
                               tabIndex={-1}
-                              key={row.id}
+                              key={row.course.course.id}
                             >
-                              <TableCell>{row.course.id}</TableCell>
+                              <TableCell>{row.course.course.id}</TableCell>
                               <TableCell>
-                                {capitalizeFirstLetter(row?.course?.title)}
+                                {capitalizeFirstLetter(
+                                  row?.course?.course?.title
+                                )}
                               </TableCell>
                               <TableCell>
                                 {row?.moduleCount?.length !== 0
@@ -415,15 +424,15 @@ const AllCourses = () => {
                               </TableCell>
                               <TableCell>
                                 {capitalizeFirstLetter(
-                                  row?.course?.is_chargeable
+                                  row?.course?.course?.is_chargeable
                                 )}
                               </TableCell>
                               <TableCell
                               //  className={statusColor}
                               >
-                                {row?.course?.complete_percent === null
+                                {row?.course?.course?.complete_percent === null
                                   ? "0%"
-                                  : `${row?.course?.complete_percent}%`}
+                                  : `${row?.course?.course?.complete_percent}%`}
                               </TableCell>
                               <TableCell>
                                 <Button
@@ -432,7 +441,7 @@ const AllCourses = () => {
                                   variant="outlined"
                                   color="primary"
                                   onClick={() =>
-                                    handleClickOpen(row?.course?.id)
+                                    handleClickOpen(row?.course?.course?.id)
                                   }
                                 >
                                   <VisibilityIcon />

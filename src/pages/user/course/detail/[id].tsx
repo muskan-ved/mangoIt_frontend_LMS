@@ -165,7 +165,7 @@ export default function Couseview() {
         <Box sx={{ width: "100%", mr: 1 }}>
           <LinearProgress variant="determinate" {...props} />
         </Box>
-        <Box sx={{ minWidth: 35 }}>
+        <Box sx={{ minWidth: -1 }} className="varruu">
           <Typography variant="body2" color="text.secondary">
             {`${Math.round(props.value)}%`}&nbsp;Complete
           </Typography>
@@ -209,135 +209,57 @@ export default function Couseview() {
             </Box>
           </Box>
           {/* main content */}
-          <Card className={subs.mediaque}>
-            <CardContent>
-              <Box sx={{ flexGrow: 1 }}>
-                <Grid container spacing={2}>
-                  <Grid item xs={9}>
-                    <Item className={subs.shadoww}>
-                      {(files && files?.includes("mp4")) ||
-                      files?.includes("3gp") ||
-                      files?.includes("webm") ? (
-                        <Fragment>
-                          <Grid item xs={7}>
-                            <ReactPlayer
-                              config={{
-                                file: {
-                                  attributes: { controlsList: "nodownload" },
-                                },
-                              }}
-                              controls={true}
-                              url={`${BASE_URL}/${files}`}
-                              width="167%"
-                              height="100%"
-                            />
-                            {/* <Item> */}
-                            <Box className={subs.maindisplay}>
+          <Box>
+            <Card className={subs.mediaque}>
+              <CardContent>
+                <Box sx={{ flexGrow: 1 }}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={9}>
+                      <Item className={subs.shadoww}>
+                        {(files && files?.includes("mp4")) ||
+                        files?.includes("3gp") ||
+                        files?.includes("webm") ? (
+                          <Fragment>
+                            <Grid item xs={7}>
+                              <ReactPlayer
+                                config={{
+                                  file: {
+                                    attributes: { controlsList: "nodownload" },
+                                  },
+                                }}
+                                controls={true}
+                                url={`${BASE_URL}/${files}`}
+                                width="167%"
+                                height="100%"
+                              />
+                              {/* <Item> */}
+                              <Box className={subs.maindisplay}>
+                                <Typography
+                                  variant="h5"
+                                  className={subs.useNameFront1}
+                                >
+                                  {capitalizeFirstLetter(
+                                    sessionData && sessionData?.title
+                                  )}
+                                </Typography>
+                              </Box>
                               <Typography
-                                variant="h5"
-                                className={subs.useNameFront1}
+                                variant="subtitle2"
+                                className={courseStyle.fontCS}
                               >
                                 {capitalizeFirstLetter(
-                                  sessionData && sessionData?.title
+                                  sessionData &&
+                                    sessionData?.description?.replace(
+                                      /(<([^>]+)>)/gi,
+                                      ""
+                                    )
                                 )}
                               </Typography>
-                            </Box>
-                            <Typography
-                              variant="subtitle2"
-                              className={courseStyle.fontCS}
-                            >
-                              {capitalizeFirstLetter(
-                                sessionData &&
-                                  sessionData?.description?.replace(
-                                    /(<([^>]+)>)/gi,
-                                    ""
-                                  )
-                              )}
-                            </Typography>
-                            {/* </Item> */}
-                          </Grid>
-                        </Fragment>
-                      ) : files && files?.includes("pdf") ? (
-                        <Grid item xs={12}>
-                          <Box className={subs.maindisplay}>
-                            <Typography
-                              variant="h5"
-                              className={subs.useNameFront1}
-                            >
-                              {capitalizeFirstLetter(
-                                sessionData && sessionData?.title
-                              )}
-                            </Typography>
-                            &nbsp;
-                            <LightTooltip title="Download File">
-                              <Button onClick={() => download("pdf")}>
-                                <FileDownloadOutlinedIcon
-                                  className={courseStyle.filedownloadcss}
-                                />
-                              </Button>
-                            </LightTooltip>
-                          </Box>
-                          <Typography
-                            variant="subtitle2"
-                            className={courseStyle.fontCS}
-                          >
-                            {capitalizeFirstLetter(
-                              sessionData &&
-                                sessionData?.description?.replace(
-                                  /(<([^>]+)>)/gi,
-                                  ""
-                                )
-                            )}
-                          </Typography>
-                          {/* </Item> */}
-                        </Grid>
-                      ) : files && files?.includes("txt") ? (
-                        <Grid item xs={12}>
-                          <Box className={subs.maindisplay}>
-                            <Typography
-                              variant="h5"
-                              className={subs.useNameFront1}
-                            >
-                              {capitalizeFirstLetter(
-                                sessionData && sessionData?.title
-                              )}
-                            </Typography>
-                            &nbsp;
-                            <LightTooltip title="Download File">
-                              <Button onClick={() => download("txt")}>
-                                <FileDownloadOutlinedIcon
-                                  className={courseStyle.filedownloadcss}
-                                />
-                              </Button>
-                            </LightTooltip>
-                          </Box>
-                          <Typography
-                            variant="subtitle2"
-                            className={courseStyle.fontCS}
-                          >
-                            {capitalizeFirstLetter(
-                              sessionData &&
-                                sessionData?.description?.replace(
-                                  /(<([^>]+)>)/gi,
-                                  ""
-                                )
-                            )}
-                          </Typography>
-                          {/* </Item> */}
-                        </Grid>
-                      ) : (files && files?.includes("jpeg")) ||
-                        (files && files?.includes("jpg")) ||
-                        (files && files?.includes("png")) ||
-                        (files && files?.includes("gif")) ? (
-                        <Grid item xs={12}>
-                          <Item>
-                            <Image
-                              className={courseStyle.imgwidth}
-                              alt="image"
-                              src={`${BASE_URL}/${files}`}
-                              width={350}
-                              height={500}
-                            />
+                              {/* </Item> */}
+                            </Grid>
+                          </Fragment>
+                        ) : files && files?.includes("pdf") ? (
+                          <Grid item xs={12}>
                             <Box className={subs.maindisplay}>
                               <Typography
                                 variant="h5"
@@ -348,11 +270,8 @@ export default function Couseview() {
                                 )}
                               </Typography>
                               &nbsp;
-                              <LightTooltip title="Download Image">
-                                <Button
-                                  className={courseStyle.hoverbtn}
-                                  onClick={() => download("image")}
-                                >
+                              <LightTooltip title="Download File">
+                                <Button onClick={() => download("pdf")}>
                                   <FileDownloadOutlinedIcon
                                     className={courseStyle.filedownloadcss}
                                   />
@@ -371,129 +290,213 @@ export default function Couseview() {
                                   )
                               )}
                             </Typography>
-                          </Item>
-                        </Grid>
-                      ) : !files ? (
-                        <Fragment>
-                          <Typography
-                            variant="h4"
-                            className={subs.useNameFront1}
-                          >
-                            {capitalizeFirstLetter(
-                              couseData && couseData?.title
-                            )}
-                          </Typography>
-                          <br />
-                          <Typography
-                            variant="subtitle2"
-                            className={subs.fontCSS1}
-                          >
-                            {capitalizeFirstLetter(
-                              (couseData &&
-                                couseData?.long_description?.replace(
-                                  /(<([^>]+)>)/gi,
-                                  ""
-                                )) ||
-                                (couseData &&
-                                  couseData?.short_description?.replace(
+                            {/* </Item> */}
+                          </Grid>
+                        ) : files && files?.includes("txt") ? (
+                          <Grid item xs={12}>
+                            <Box className={subs.maindisplay}>
+                              <Typography
+                                variant="h5"
+                                className={subs.useNameFront1}
+                              >
+                                {capitalizeFirstLetter(
+                                  sessionData && sessionData?.title
+                                )}
+                              </Typography>
+                              &nbsp;
+                              <LightTooltip title="Download File">
+                                <Button onClick={() => download("txt")}>
+                                  <FileDownloadOutlinedIcon
+                                    className={courseStyle.filedownloadcss}
+                                  />
+                                </Button>
+                              </LightTooltip>
+                            </Box>
+                            <Typography
+                              variant="subtitle2"
+                              className={courseStyle.fontCS}
+                            >
+                              {capitalizeFirstLetter(
+                                sessionData &&
+                                  sessionData?.description?.replace(
                                     /(<([^>]+)>)/gi,
                                     ""
-                                  ))
-                            )}
-                          </Typography>
-                        </Fragment>
-                      ) : (
-                        ""
-                      )}
-                      <Box className={courseStyle.backcss}>
-                        <Button
-                          type="submit"
-                          size="large"
-                          variant="contained"
-                          className={courseStyle.backbtncs12}
-                          onClick={handleMarkAsComplete}
-                          id={styles.muibuttonBackgroundColor}
-                        >
-                          Mark as complete
-                        </Button>
-                      </Box>
-                    </Item>
-                  </Grid>
-                  <Grid item xs={3}>
-                    <Box className={subs.maindiv}>
-                      <Typography variant="h5" className={subs.useNameFront2}>
-                        Course Curriculum
-                      </Typography>
-                      <Box sx={{ width: "92%" }}>
-                        <LinearProgressWithLabel value={progress} />
-                      </Box>
-                      <br />
-                      {couseData &&
-                        couseData?.modules?.map((item: any) => (
-                          <Accordion key={item?.id}>
-                            <AccordionSummary
-                              expandIcon={<ExpandMoreIcon />}
-                              aria-controls="panel1a-content"
-                              id="panel1a-header"
-                            >
-                              <Typography className={courseStyle.typoTitle}>
-                                <MenuBookIcon className={subs.iconcss} /> &nbsp;{" "}
-                                {capitalizeFirstLetter(item?.title)}
-                              </Typography>
-                            </AccordionSummary>
-                            <AccordionDetails className="vvv">
-                              {item?.sessions.map((itemData: any) => {
-                                const togglee =
-                                  itemData?.id === activeToggle ? "active" : "";
-                                return (
-                                  <Box
-                                    sx={{
-                                      width: "100%",
-                                      bgcolor: "background.paper",
-                                    }}
-                                    key={itemData?.id}
+                                  )
+                              )}
+                            </Typography>
+                            {/* </Item> */}
+                          </Grid>
+                        ) : (files && files?.includes("jpeg")) ||
+                          (files && files?.includes("jpg")) ||
+                          (files && files?.includes("png")) ||
+                          (files && files?.includes("gif")) ? (
+                          <Grid item xs={12}>
+                            <Item>
+                              <Image
+                                className={courseStyle.imgwidth}
+                                alt="image"
+                                src={`${BASE_URL}/${files}`}
+                                width={350}
+                                height={500}
+                              />
+                              <Box className={subs.maindisplay}>
+                                <Typography
+                                  variant="h5"
+                                  className={subs.useNameFront1}
+                                >
+                                  {capitalizeFirstLetter(
+                                    sessionData && sessionData?.title
+                                  )}
+                                </Typography>
+                                &nbsp;
+                                <LightTooltip title="Download Image">
+                                  <Button
+                                    className={courseStyle.hoverbtn}
+                                    onClick={() => download("image")}
                                   >
-                                    <nav aria-label="main mailbox folders">
-                                      <List>
-                                        <ListItem disablePadding>
-                                          <ListItemButton
-                                            className={
-                                              togglee &&
-                                              courseStyle.backgroundClick
-                                            }
-                                            onClick={() =>
-                                              handlebtnClick(itemData)
-                                            }
-                                          >
-                                            {itemData.attachment && (
-                                              <Preview
-                                                name={itemData.attachment}
-                                                identifier="user"
-                                              />
-                                            )}
-                                            <Typography
-                                              variant="subtitle2"
-                                              className={courseStyle.typolist}
+                                    <FileDownloadOutlinedIcon
+                                      className={courseStyle.filedownloadcss}
+                                    />
+                                  </Button>
+                                </LightTooltip>
+                              </Box>
+                              <Typography
+                                variant="subtitle2"
+                                className={courseStyle.fontCS}
+                              >
+                                {capitalizeFirstLetter(
+                                  sessionData &&
+                                    sessionData?.description?.replace(
+                                      /(<([^>]+)>)/gi,
+                                      ""
+                                    )
+                                )}
+                              </Typography>
+                            </Item>
+                          </Grid>
+                        ) : !files ? (
+                          <Fragment>
+                            <Typography
+                              variant="h4"
+                              className={subs.useNameFront1}
+                            >
+                              {capitalizeFirstLetter(
+                                couseData && couseData?.title
+                              )}
+                            </Typography>
+                            <br />
+                            <Typography
+                              variant="subtitle2"
+                              className={subs.fontCSS1}
+                            >
+                              {capitalizeFirstLetter(
+                                (couseData &&
+                                  couseData?.long_description?.replace(
+                                    /(<([^>]+)>)/gi,
+                                    ""
+                                  )) ||
+                                  (couseData &&
+                                    couseData?.short_description?.replace(
+                                      /(<([^>]+)>)/gi,
+                                      ""
+                                    ))
+                              )}
+                            </Typography>
+                          </Fragment>
+                        ) : (
+                          ""
+                        )}
+                        <Box className={courseStyle.backcss}>
+                          <Button
+                            type="submit"
+                            size="large"
+                            variant="contained"
+                            className={courseStyle.backbtncs12}
+                            onClick={handleMarkAsComplete}
+                            id={styles.muibuttonBackgroundColor}
+                          >
+                            Mark as complete
+                          </Button>
+                        </Box>
+                      </Item>
+                    </Grid>
+                    <Grid item xs={3}>
+                      <Box className={subs.maindiv}>
+                        <Typography variant="h5" className={subs.useNameFront2}>
+                          Course Curriculum
+                        </Typography>
+                        <Box sx={{ width: "92%" }}>
+                          <LinearProgressWithLabel value={progress} />
+                        </Box>
+                        <br />
+                        {couseData &&
+                          couseData?.modules?.map((item: any) => (
+                            <Accordion key={item?.id}>
+                              <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel1a-content"
+                                id="panel1a-header"
+                              >
+                                <Typography className={courseStyle.typoTitle}>
+                                  <MenuBookIcon className={subs.iconcss} />{" "}
+                                  &nbsp; {capitalizeFirstLetter(item?.title)}
+                                </Typography>
+                              </AccordionSummary>
+                              <AccordionDetails className="vvv">
+                                {item?.sessions.map((itemData: any) => {
+                                  const togglee =
+                                    itemData?.id === activeToggle
+                                      ? "active"
+                                      : "";
+                                  return (
+                                    <Box
+                                      sx={{
+                                        width: "100%",
+                                        bgcolor: "background.paper",
+                                      }}
+                                      key={itemData?.id}
+                                    >
+                                      <nav aria-label="main mailbox folders">
+                                        <List>
+                                          <ListItem disablePadding>
+                                            <ListItemButton
+                                              className={
+                                                togglee &&
+                                                courseStyle.backgroundClick
+                                              }
+                                              onClick={() =>
+                                                handlebtnClick(itemData)
+                                              }
                                             >
-                                              &nbsp;
-                                              {capitalizeFirstLetter(
-                                                itemData?.title
+                                              {itemData.attachment && (
+                                                <Preview
+                                                  name={itemData.attachment}
+                                                  identifier="user"
+                                                />
                                               )}
-                                            </Typography>
-                                          </ListItemButton>
-                                        </ListItem>
-                                      </List>
-                                    </nav>
-                                    <Divider />
-                                  </Box>
-                                );
-                              })}
-                            </AccordionDetails>
-                          </Accordion>
-                        ))}
-                    </Box>
-                  </Grid>
-                  {/* <Button
+                                              <Typography
+                                                variant="subtitle2"
+                                                className={courseStyle.typolist}
+                                              >
+                                                &nbsp;
+                                                {capitalizeFirstLetter(
+                                                  itemData?.title
+                                                )}
+                                              </Typography>
+                                            </ListItemButton>
+                                          </ListItem>
+                                        </List>
+                                      </nav>
+                                      <Divider />
+                                    </Box>
+                                  );
+                                })}
+                              </AccordionDetails>
+                            </Accordion>
+                          ))}
+                      </Box>
+                    </Grid>
+                    {/* <Button
                     type="submit"
                     size="large"
                     variant="contained"
@@ -501,11 +504,12 @@ export default function Couseview() {
                   >
                     Enroll Now
                   </Button> */}
-                  <br />
-                </Grid>
-              </Box>
-            </CardContent>
-          </Card>
+                    <br />
+                  </Grid>
+                </Box>
+              </CardContent>
+            </Card>
+          </Box>
         </Box>
       </Box>
       <ToastContainer />

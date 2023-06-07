@@ -83,10 +83,27 @@
   font-size: 18px;
 }
 
-@media (min-width: 1400px) {
+@media (min-width: 1400px) and (max-width: 1700px) {
   .mediaque {
-    background-color: rgb(241, 29, 29);
     margin-left: 10%;
     margin-right: 10%;
+  }
+}
+@media (min-width: 1700px) and (max-width: 2000px) {
+  .mediaque {
+    margin-left: 15%;
+    margin-right: 15%;
+  }
+}
+@media (min-width: 2000px) and (max-width: 2300px) {
+  .mediaque {
+    margin-left: 20%;
+    margin-right: 20%;
+  }
+}
+@media (min-width: 2300px) {
+  .mediaque {
+    margin-left: 25%;
+    margin-right: 25%;
   }
 }

@@ -134,3 +134,22 @@ export const HandleCourseDelete = async (rowID: any) => {
       return error;
     });
 };
+
+export const HandleCourseGetByUserId = async (courseId: any) => {
+  return await axios({
+    method: "GET",
+    url: `${API.getCoursesByUserId}/${courseId}`,
+    headers: LoginHeader(),
+  })
+    .then((request) => {
+      return request;
+    })
+    .catch((error) => {
+      if (error.response.status === 401) {
+        HandleLogout();
+      } else {
+        toast.error("Course added failed");
+      }
+      return error;
+    });
+};

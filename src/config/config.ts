@@ -1,14 +1,14 @@
 //SERVER API URL
-export const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
+// export const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
 // FRONTEND SERVER URL
-export const FRONTEND_BASE_URL = `${process.env.NEXT_PUBLIC_FRONTEND_BASE_URL}`;
+// export const FRONTEND_BASE_URL = `${process.env.NEXT_PUBLIC_FRONTEND_BASE_URL}`;
 
 // //FRONTEND LOCAL URL
-// export const FRONTEND_BASE_URL = `${process.env.NEXT_PUBLIC_LOCAL_FRONTEND_BASE_URL}`;
+export const FRONTEND_BASE_URL = `${process.env.NEXT_PUBLIC_LOCAL_FRONTEND_BASE_URL}`;
 
 // // LOCAL API URL
-// export const BASE_URL = `${process.env.NEXT_PUBLIC_LOCAL_BASE_URL}`;
+export const BASE_URL = `${process.env.NEXT_PUBLIC_LOCAL_BASE_URL}`;
 
 export const API = {
   authToken: `${BASE_URL}/${process.env.NEXT_PUBLIC_AUTH_TOKEN}`,
@@ -24,6 +24,7 @@ export const API = {
   //Courses
   getCourses: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_COURSES}`,
   getCoursesByCouseId: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_COURSES_BY_COURSE_ID}`,
+  getCoursesByUserId: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_COURSES_BY_USER_ID}`,
   createCourse: `${BASE_URL}/${process.env.NEXT_PUBLIC_CREATE_COURSE}`,
   updateCourse: `${BASE_URL}/${process.env.NEXT_PUBLIC_UPDATE_COURSE}`,
   deleteCourse: `${BASE_URL}/${process.env.NEXT_PUBLIC_DELETE_COURSE}`,
