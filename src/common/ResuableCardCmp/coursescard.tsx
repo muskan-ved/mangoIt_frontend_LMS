@@ -10,7 +10,7 @@ import { HandleCourseGet } from "@/services/course";
 export function CourseCard(props: any) {
     const c_id = props?.coursedata?.course?.id || props?.paidcourses?.course?.id || props?.freecourses?.course?.id;
     return (
-        <Link href={`/user/coursedetails/${c_id}`}>
+        <Link href={`/coursedetails/${c_id}`}>
             <CardActionArea component="a" >
                 <Box className={styles.article}>
                     <Box className={styles.articlewrapper}>
@@ -33,7 +33,7 @@ export function CourseCardListView(props: any) {
     const c_id = props?.coursedata?.course?.id || props?.paidcourses?.course?.id || props?.freecourses?.course?.id;
     return (
         <Grid item xs={12} md={6}>
-            <Link href={`/user/coursedetails/${c_id}`}>
+            <Link href={`/coursedetails/${c_id}`}>
                 <CardActionArea component="a">
                     <Card sx={{ display: 'flex', marginTop: "40px", borderRadius: '15px' }} >
                         <CardMedia
@@ -119,8 +119,8 @@ export function SubscribtionPanCard(props: any) {
                             <Typography color="textSecondary" variant="subtitle1" component="p" mt={2}>{totalsessionscount} Sessions</Typography>
                         </Box>
                         <Box px={1} mt={2}>
-                            <Link href={`/user/Checkout/${props?.subsdata?.id}`} >
-                                <Button variant="contained" className="authPageButton" id={styles.muibuttonBackgroundColor}
+                            <Link href={`/checkout/${props?.subsdata?.id}`} >
+                                <Button variant="contained" id={styles.muibuttonBackgroundColor}
                                 >Subscribe Now</Button></Link>
                         </Box>
                     </CardContent>

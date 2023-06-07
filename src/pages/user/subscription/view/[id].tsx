@@ -32,11 +32,13 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { useRouter } from "next/router";
+import CreditCardIcon from '@mui/icons-material/CreditCard';
 import {
   HandleSubscriptionGetByID,
+  HandleSubscriptionPayment,
   HandleSubscriptionUpdate,
 } from "@/services/subscription";
-import { HandleOrderGetByUserID } from "@/services/order";
+import { CreateOrderForSubscription, HandleOrderGetByUserID } from "@/services/order";
 import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
 import { usePagination } from "@/common/Pagination/paginations";
 import moment from "moment";
@@ -97,6 +99,8 @@ export default function View() {
   const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
   const [subsId, setSubId] = useState<any>();
+  const [userId, setuserId] = useState<any>();
+
 
   useEffect(() => {
     let localData: any;
@@ -110,6 +114,7 @@ export default function View() {
     }
     getAllCourseData(getId?.id);
     getSubsData();
+    setuserId(getId?.id)
   }, []);
 
   const router = useRouter();
@@ -122,6 +127,8 @@ export default function View() {
       });
     }
   };
+
+
 
   //pagination
   const [row_per_page, set_row_per_page] = React.useState(5);
@@ -167,6 +174,29 @@ export default function View() {
         setLoadingButton(false);
       });
   };
+
+
+  //acccept payment
+  const AcceptPayment = () => {
+    const reqData = {
+      userId: userId,
+      subscriptioId: subsData?.id
+    }
+    CreateOrderForSubscription(reqData).then((result) => {
+      if (result) {
+        //localStorage.setItem("orderId", "134")
+        return false;
+        const data: any = ""
+        HandleSubscriptionPayment(data).then((result) => {
+          router.push(result);
+        })
+      }
+
+    })
+
+
+  }
+
   return (
     <>
       <Navbar />
@@ -276,7 +306,7 @@ export default function View() {
                         If you want to activate this subscription
                       </Typography>
                       &nbsp;
-                      <Link href="/user/subscription">
+                      <Link href="/user/subscribeplan">
                         <Typography
                           variant="subtitle1"
                           className={subs.useSubsMessage}
@@ -313,6 +343,9 @@ export default function View() {
                   </Box>
                 )}
               </Box>
+              <Button variant="contained" endIcon={<CreditCardIcon />} onClick={AcceptPayment}>
+                Renew Subscription
+              </Button>
             </CardContent>
           </Card>
           <br />

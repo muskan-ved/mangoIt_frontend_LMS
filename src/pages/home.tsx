@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import WebViewNavbar from "@/common/LayoutNavigations/webviewnavbar";
 import WebViewFooter from "@/common/LayoutNavigations/webviewfooter";
-import styles from '../../styles/webview.module.css'
+import styles from '../styles/webview.module.css'
 import Carousel from 'react-material-ui-carousel'
 import LockIcon from '@mui/icons-material/Lock';
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
