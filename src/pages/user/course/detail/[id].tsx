@@ -209,7 +209,7 @@ export default function Couseview() {
             </Box>
           </Box>
           {/* main content */}
-          <Card>
+          <Card className={subs.mediaque}>
             <CardContent>
               <Box sx={{ flexGrow: 1 }}>
                 <Grid container spacing={2}>

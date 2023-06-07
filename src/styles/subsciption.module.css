@@ -82,3 +82,11 @@
   color: #4e4a4a;
   font-size: 18px;
 }
+
+@media (min-width: 1400px) {
+  .mediaque {
+    background-color: rgb(241, 29, 29);
+    margin-left: 10%;
+    margin-right: 10%;
+  }
+}
