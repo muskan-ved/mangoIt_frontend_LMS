@@ -270,7 +270,7 @@ export default function AddSession() {
                                     {file ? '' : errors && errors.file ? ErrorShowing(errors?.file?.message) : ""}
                                  </Grid>
                                  <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"right"} >
-                                    <Button className={Sessions.cancelButton} variant="contained" size="large" onClick={() => router.push('/admin/courses/allsessions')} >Cancel</Button>
+                                    <Button className={Sessions.cancelButton} variant="contained" size="large" onClick={() => router.push('/admin/courses/allsessions')} id={styles.muibuttonBackgroundColor}>Cancel</Button>
                                     {!isLoadingButton ? <Button type="submit" size="large" variant="contained" id={styles.muibuttonBackgroundColor}>
                                        Submit
                                     </Button> : <LoadingButton loading={isLoadingButton} className={Sessions.updateLoadingButton}

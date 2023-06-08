@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from "next/router";
 // MUI Import
-import { Box, Button, Card, CardContent, FormControl, Grid, IconButton, InputLabel, MenuItem, NativeSelect, Select, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, Button, Card, CardContent, FormControl, Grid, IconButton, InputLabel, MenuItem, NativeSelect, Select, TextField, Typography } from "@mui/material";
 // External Components
 import SideBar from "@/common/LayoutNavigations/sideBar";
 import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
@@ -41,9 +41,11 @@ export default function UpdateModule() {
   const [getModule, setModule] = useState<moduleType | any>();
   const [getCourses, setCourses] = useState<courseType | any>();
   const [getCourseId, setCourseId] = useState<any>("");
+  const [getCourseID, setCourseID] = React.useState<string | null>();
   const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [error, setErrors] = useState<string>();
+  // const [value, setValue] = React.useState<string | null>(options[0]);
   const {
     register,
     handleSubmit,
@@ -84,8 +86,8 @@ export default function UpdateModule() {
 
   const onSubmit = async (event: any) => {
     const id = router.query.id
-  console.log(event,"onsubmit",errors )
-    
+    console.log(event, "onsubmit", errors)
+
     if (errors.description?.message === '' || (typeof errors === 'object' && errors !== null)) {
       setLoading(true);
       setLoadingButton(false)
@@ -148,9 +150,9 @@ export default function UpdateModule() {
   };
 
 
- 
 
-  
+
+
   function ErrorShowing(errorMessage: any) {
     return (
       <Typography variant="body2" color={"error"} gutterBottom>
@@ -158,7 +160,7 @@ export default function UpdateModule() {
       </Typography>
     );
   }
-  // console.log(getDespcriptionContent,"opps",errors,getModule?.description )
+  console.log('getDespcriptionContent', getCourseId)
   return (
     <>
       <Navbar />
@@ -181,7 +183,7 @@ export default function UpdateModule() {
                   component="form"
                   method="POST"
                   noValidate
-                  autoComplete="off"
+                  autoComplete="on"
                   onSubmit={handleSubmit(onSubmit)}
                   onReset={reset}
                 >
@@ -210,7 +212,7 @@ export default function UpdateModule() {
 
                         <Grid item xs={12} sm={12} md={6} lg={6}>
                           <InputLabel className={ModuleCss.InputLabelFont}>Course of Module</InputLabel>
-                          <Controller
+                          {/* <Controller
                             name="course_id"
                             control={control}
                             defaultValue={getCourseId}                          
@@ -226,7 +228,26 @@ export default function UpdateModule() {
                                 </Select>
                               </FormControl>
                             )}
-                          />
+                          /> */}
+
+                          {getCourseId ? (<Autocomplete
+                            //  defaultValue={getCourseId ? getCourseId : ""}
+                            id="combo-box-demo"
+                            options={getCourses}
+                            getOptionLabel={(option: any) => option?.course?.title}
+                            renderInput={(params) => (
+                              <TextField
+                                defaultValue='sfdsfds'
+                                {...register("course_id")}
+                                {...params}
+                                placeholder="Select Course"
+                              />
+                            )}
+                            onChange={(event, newValue) => {
+                              setCourseID(newValue?.course?.id);
+                            }}
+                          />) : ""}
+
                           {errors && errors.course
                             ? ErrorShowing(errors?.course?.message)
                             : ""}
@@ -271,7 +292,7 @@ export default function UpdateModule() {
                       </Grid>
 
                       <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"right"} >
-                      <Button className={ModuleCss.cancelButton} variant="contained" size="large" onClick={() => router.push('/admin/courses/allmodules')} >Cancel</Button>
+                        <Button className={ModuleCss.cancelButton} variant="contained" size="large" onClick={() => router.push('/admin/courses/allmodules')} id={styles.muibuttonBackgroundColor}>Cancel</Button>
                         {!isLoadingButton ? <Button type="submit" size="large" variant="contained" id={styles.muibuttonBackgroundColor}>
                           UPDATE
                         </Button> : <LoadingButton loading={isLoadingButton} className={ModuleCss.updateLoadingButton}
