@@ -44,7 +44,7 @@ export default function Courses() {
         getAllCourseData();
     }, [])
     //pagination
-    const [row_per_page, set_row_per_page] = React.useState(8);
+    const [row_per_page, set_row_per_page] = React.useState(12);
     let [page, setPage] = React.useState<any>(1);
     function handlerowchange(e: any) {
         set_row_per_page(e.target.value);
@@ -166,21 +166,21 @@ export default function Courses() {
                             <Grid item xs={12} md={6} lg={3} className={styles.perpagedt} >
                                 <Box sx={{ display: 'flex' }}>
                                     <Typography sx={{ margin: 'auto' }} >
-                                        Showing {row_per_page} of {courseData?.length} Results</Typography>
+                                        Per Page Data</Typography>
                                     <FormControl>
                                         <Select
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"
-                                            defaultValue={8}
+                                            defaultValue={12}
                                             onChange={handlerowchange}
                                             size="small"
                                             className={styles.paignation}
                                             style={{ height: "35px", marginRight: '11px' }}
                                             sx={{ margin: '0px 0px 0px 15px' }}
                                         >
-                                            <MenuItem value={8}>8</MenuItem>
-                                            <MenuItem value={20}>20</MenuItem>
-                                            <MenuItem value={50}>50</MenuItem>
+                                            <MenuItem value={12}>12</MenuItem>
+                                            <MenuItem value={24}>24</MenuItem>
+                                            <MenuItem value={48}>48</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </Box>

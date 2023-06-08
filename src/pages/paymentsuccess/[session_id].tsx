@@ -73,7 +73,7 @@ export default function PaymentSuccess() {
                         <Typography variant="h3" className={styles.h1}>Thank you !</Typography>
                         <Typography className={styles.p}>Thanks for Payment. </Typography>
                         <Typography className={styles.p}>you should receive a confirmation email soon </Typography>
-                        <Link href={"/user/home"}><Button className={styles.gohome}
+                        <Link href={"/home"}><Button className={styles.gohome}
                         >
                             go to orders
                         </Button>
