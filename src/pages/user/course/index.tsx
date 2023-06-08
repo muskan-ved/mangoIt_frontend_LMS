@@ -41,7 +41,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { SearchOutlined } from "@mui/icons-material";
 import { useRouter } from "next/router";
-import { HandleCourseGet, HandleCourseGetByUserId } from "@/services/course";
+import { HandleCourseGetByUserId } from "@/services/course_enroll";
+
 import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
 import { usePagination } from "@/common/Pagination/paginations";
 import { Controller, useForm } from "react-hook-form";
@@ -104,10 +105,10 @@ const AllCourses = () => {
   const { handleSubmit, control, reset } = useForm();
 
   const onSubmit = (event: any) => {
-    HandleCourseGet("", event).then((itemFiltered) => {
-      setRows(itemFiltered.data);
-      setFilterObject(event);
-    });
+    // HandleCourseGet("", event).then((itemFiltered) => {
+    //   setRows(itemFiltered.data);
+    //   setFilterObject(event);
+    // });
   };
 
   const handleClickOpen = (row: any) => {
@@ -122,20 +123,21 @@ const AllCourses = () => {
   };
 
   const handleSearch = (e: any, identifier: any) => {
+    const search = e.target.value;
+    console.log("search", search);
     setPage(1);
     DATA.jump(1);
     if (identifier === "reset") {
-      HandleCourseGet("", { is_chargeable: 0, status: 0 }).then(
-        (itemSeached) => {
-          setRows(itemSeached.data);
-        }
-      );
+      getAllCourseData();
       setSearch(e);
-    } else {
-      const search = e.target.value;
+    } else if (search !== null) {
       setSearch(e.target.value);
-      HandleCourseGet(search, filterObject).then((itemSeached) => {
-        setRows(itemSeached.data);
+      HandleCourseGetByUserId(userId, search).then((courses) => {
+        setRows(courses.data);
+      });
+    } else {
+      HandleCourseGetByUserId(userId).then((courses) => {
+        setRows(courses.data);
       });
     }
   };
@@ -394,9 +396,9 @@ const AllCourses = () => {
                         DATA.currentData() &&
                         DATA.currentData().map((row: any) => {
                           const statusColor =
-                            row.course.course.status === "active"
+                            row?.course?.course?.status === "active"
                               ? courseStyle.activeClassColor
-                              : row.course.course.status === "inactive"
+                              : row?.course?.course?.status === "inactive"
                               ? courseStyle.inactiveClassColor
                               : courseStyle.draftClassColor;
                           return (
@@ -404,9 +406,9 @@ const AllCourses = () => {
                               hover
                               role="checkbox"
                               tabIndex={-1}
-                              key={row.course.course.id}
+                              key={row?.course?.course?.id}
                             >
-                              <TableCell>{row.course.course.id}</TableCell>
+                              <TableCell>{row?.course?.course?.id}</TableCell>
                               <TableCell>
                                 {capitalizeFirstLetter(
                                   row?.course?.course?.title

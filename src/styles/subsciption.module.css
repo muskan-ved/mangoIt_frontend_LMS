@@ -107,3 +107,7 @@
     margin-right: 25%;
   }
 }
+
+.videodisplay div {
+  display: contents !important;
+}
