@@ -9,6 +9,7 @@ import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
 import Footer from "@/common/LayoutNavigations/footer";
 import Navbar from "../../../../../common/LayoutNavigations/navbar";
 import RichEditor from "@/common/RichTextEditor/textEditor";
+import newAtoCompelete from "../../../../../common/AutoCompeletes/autoComplete";
 // Helper Import
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -39,8 +40,10 @@ export default function UpdateModule() {
   const [getDespcriptionContent, setDespcriptionContent] = useState("");
   const [getUpdateModule, setUpdateModule] = useState<moduleType | any>([]);
   const [getModule, setModule] = useState<moduleType | any>();
-  const [getCourses, setCourses] = useState<courseType | any>();
-  const [getCourseId, setCourseId] = useState<any>("");
+  const [getCourses, setCourses] = useState<any>([]);
+  const [getCourseId, setCourseId] = useState<any>({ id: null, title: null });
+  const [inputValue, setInputValue] = useState<any>([]);
+
   const [getCourseID, setCourseID] = React.useState<string | null>();
   const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
@@ -56,7 +59,7 @@ export default function UpdateModule() {
   } = useForm<moduleType | any>({
     resolver: yupResolver(moduleValidations),
   });
-  console.log('getvalue', getValues())
+
 
   useEffect(() => {
     let localData: any;
@@ -68,6 +71,29 @@ export default function UpdateModule() {
       getCourseData();
     }
   }, [router.query]);
+  const name = getCourses?.filter((item: any) => {
+    return item?.course?.id === getModule?.course_id;
+  });
+  // console.log("name", name[0]?.course?.title)
+
+
+  const defaultValue = { value: 'default', label: name[0]?.course?.title };
+  console.log("defaultValue", defaultValue);
+  const options = [
+    { label: 'Option 1', value: 'option1' },
+    { label: 'Option 2', value: 'option2' },
+    { label: 'Option 3', value: 'option3' },
+  ];
+  // const defaultValue = { id: getModule?.course_id, };
+
+  // const options = [
+  //   { id: getCourses?.course?.id, },
+  // ];
+  console.log("module", getModule, 'getCourse', getCourses);
+
+
+
+
 
   const handleContentChange = (value: string, identifier: string) => {
     if (identifier === 'description') {
@@ -96,7 +122,7 @@ export default function UpdateModule() {
         getModuleData()
         setLoading(false);
         setTimeout(() => {
-          router.push('/admin/courses/allmodules/')
+          // router.push('/admin/courses/allmodules/')
         }, 1000)
       } catch (e) {
         console.log(e)
@@ -160,7 +186,7 @@ export default function UpdateModule() {
       </Typography>
     );
   }
-  console.log('getDespcriptionContent', getCourseId)
+  // console.log('getcours', getCourses, "module", getModule)
   return (
     <>
       <Navbar />
@@ -179,14 +205,8 @@ export default function UpdateModule() {
           <Card>
             <CardContent>
               {!isLoading ?
-                <Box
-                  component="form"
-                  method="POST"
-                  noValidate
-                  autoComplete="on"
-                  onSubmit={handleSubmit(onSubmit)}
-                  onReset={reset}
-                >
+                <form onSubmit={handleSubmit(onSubmit)}>
+
                   <Grid container spacing={2}>
                     <Grid item xs={12} sm={12} md={12} lg={6} >
                       <Box component="img" src="/Images/pages/addFeature.jpg" width={'100%'} />
@@ -230,24 +250,31 @@ export default function UpdateModule() {
                             )}
                           /> */}
 
-                          {getCourseId ? (<Autocomplete
+                          {/* <Autocomplete
                             //  defaultValue={getCourseId ? getCourseId : ""}
                             id="combo-box-demo"
                             options={getCourses}
                             getOptionLabel={(option: any) => option?.course?.title}
+                            // value={"ihyhyh"}
+                            onChange={(event, newValue) => {
+                              // setCourseID(newValue?.course?.id);
+                            }}
                             renderInput={(params) => (
                               <TextField
-                                defaultValue='sfdsfds'
                                 {...register("course_id")}
                                 {...params}
-                                placeholder="Select Course"
+                                // placeholder={`${getCourses && getCourses?.course?.title}`}
                               />
                             )}
-                            onChange={(event, newValue) => {
-                              setCourseID(newValue?.course?.id);
-                            }}
-                          />) : ""}
-
+                          /> */}
+                          {defaultValue ?
+                            (<Autocomplete
+                              defaultValue={defaultValue?.label}
+                              options={options}
+                              getOptionLabel={(option) => option.label}
+                              renderInput={(params) => <TextField {...params} />}
+                            />) : "loading"
+                          }
                           {errors && errors.course
                             ? ErrorShowing(errors?.course?.message)
                             : ""}
@@ -303,7 +330,8 @@ export default function UpdateModule() {
                     </Grid>
 
                   </Grid>
-                </Box>
+                  {/* </Box> */}
+                </form>
                 : <SpinnerProgress />}
             </CardContent>
           </Card>
