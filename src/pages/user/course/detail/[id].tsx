@@ -53,6 +53,7 @@ import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { BASE_URL } from "@/config/config";
 import Link from "next/link";
 import Preview from "@/common/PreviewAttachments/previewAttachment";
+import { HandleCourseGetByUserId } from "@/services/course_enroll";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -68,7 +69,9 @@ export default function Couseview() {
   const [files, setFiles] = useState<any>("");
   const [activeToggle, setActiveToggle] = useState<any>("");
   const [sessionData, setSessionData] = useState<any>([]);
-  const [progress, setProgress] = React.useState(10);
+  const [progress, setProgress] = useState<any>(10);
+  const [allData, setAllData] = useState<any>([]);
+  const [userId, setUserId] = useState<any>("");
 
   useEffect(() => {
     let localData: any;
@@ -79,11 +82,12 @@ export default function Couseview() {
     if (localData) {
       getId = JSON.parse(localData);
     }
+    setUserId(getId.id);
     getCourseData();
-    setProgress((prevProgress) =>
+    setProgress((prevProgress: any) =>
       prevProgress >= 100 ? 10 : prevProgress + 10
     );
-  }, []);
+  }, [userId]);
 
   const router = useRouter();
 
@@ -93,6 +97,12 @@ export default function Couseview() {
       HandleCourseByCourseId(id).then((data) => {
         setCousedata(data?.data);
       });
+      console.log("userIduserId", userId);
+      if (userId && userId) {
+        HandleCourseGetByUserId(userId).then((data1) => {
+          setAllData(data1.data);
+        });
+      }
     }
   };
 
@@ -175,8 +185,19 @@ export default function Couseview() {
   }
 
   const handleMarkAsComplete = () => {
-    console.log("W@@@@@@@@@@@@markAsComplete");
+    console.log("W@@@@@@@@@@@@markAsComplete",sessionData);
   };
+
+  var calculate: any;
+  const getPercentage =
+    allData &&
+    allData.map((row: any) => {
+      const obj = row?.courseIdCounts;
+      const key: any = router?.query?.id;
+      const value = obj[key];
+      const sessionValue = row?.sessionCount[0]?.sessionCount;
+      calculate = (value / sessionValue) * 100;
+    });
 
   return (
     <>
@@ -432,7 +453,9 @@ export default function Couseview() {
                           Course Curriculum
                         </Typography>
                         <Box sx={{ width: "92%" }}>
-                          <LinearProgressWithLabel value={progress} />
+                          <LinearProgressWithLabel
+                            value={calculate && calculate !== null ? calculate:0}
+                          />
                         </Box>
                         <br />
                         {couseData &&

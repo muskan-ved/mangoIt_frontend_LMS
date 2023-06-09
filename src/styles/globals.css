@@ -95,3 +95,13 @@ a {
   color: white !important;
   background-color: #e8661b !important;
 }
+
+.css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root.Mui-selected:hover {
+  background-color: #e8661b !important;
+  color: white !important;
+}
+
+.css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root.Mui-selected {
+  background-color: #e8661b !important;
+  color: white !important;
+}

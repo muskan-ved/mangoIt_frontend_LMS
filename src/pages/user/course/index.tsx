@@ -155,10 +155,6 @@ const AllCourses = () => {
       });
       getUserId(userIds?.id);
     }
-
-    // HandleCourseGet("", filterObject).then((courses) => {
-    //   setRows(courses.data);
-    // });
   };
 
   return (
@@ -198,165 +194,6 @@ const AllCourses = () => {
                   ),
                 }}
               />
-              {/* <Box
-                sx={{ float: "right", display: "flex", alignItems: "center" }}
-              >
-                <PopupState variant="popover" popupId="demo-popup-popover">
-                  {(popupState) => (
-                    <Box>
-                      <Button
-                        sx={{ display: "inline-flex", color: "#1976d2" }}
-                        className={courseStyle.popStateFilterButton1}
-                        {...bindTrigger(popupState)}
-                      >
-                        <FilterAltOutlinedIcon />
-                        Filter
-                      </Button>
-                      <Popover
-                        {...bindPopover(popupState)}
-                        style={{ width: "35% !important" }}
-                        anchorOrigin={{
-                          vertical: "bottom",
-                          horizontal: "left",
-                        }}
-                        transformOrigin={{
-                          vertical: "top",
-                          horizontal: "center",
-                        }}
-                      >
-                        <Box>
-                          <Container
-                            className="filter-box"
-                            style={{ padding: "15px" }}
-                          >
-                            <Grid>
-                              <Typography
-                                variant="h5"
-                                sx={{ fontWeight: "bold" }}
-                              >
-                                Filter
-                              </Typography>
-                              <Box
-                                component="form"
-                                noValidate
-                                onSubmit={handleSubmit(onSubmit)}
-                                sx={{ mt: 1 }}
-                              >
-                                <Stack
-                                  style={{ marginTop: "10px" }}
-                                  className="form-filter"
-                                >
-                                  <Grid container spacing={2}>
-                                    <Grid item xs={12} md={6} lg={6}>
-                                      <Stack spacing={2}>
-                                        <InputLabel
-                                          htmlFor="enddate"
-                                          sx={{ fontWeight: "bold" }}
-                                        >
-                                          Type
-                                        </InputLabel>
-                                        <Controller
-                                          name="is_chargeable"
-                                          control={control}
-                                          defaultValue={getFilter}
-                                          render={({ field }) => (
-                                            <FormControl fullWidth>
-                                              <Select {...field} displayEmpty>
-                                                <MenuItem value={0}>
-                                                  All
-                                                </MenuItem>
-                                                <MenuItem value={"free"}>
-                                                  Free
-                                                </MenuItem>
-                                                <MenuItem value={"paid"}>
-                                                  Paid
-                                                </MenuItem>
-                                              </Select>
-                                            </FormControl>
-                                          )}
-                                        />
-                                      </Stack>
-                                    </Grid>
-                                    <Grid item xs={12} md={6} lg={6}>
-                                      <Stack spacing={2}>
-                                        <InputLabel
-                                          htmlFor="enddate"
-                                          sx={{ fontWeight: "bold" }}
-                                        >
-                                          Status
-                                        </InputLabel>
-                                        <Controller
-                                          name="status"
-                                          control={control}
-                                          defaultValue={getFilter}
-                                          render={({ field }) => (
-                                            <FormControl fullWidth>
-                                              <Select
-                                                {...field}
-                                                displayEmpty
-                                                disabled
-                                              >
-                                                <MenuItem value={0}>
-                                                  All
-                                                </MenuItem>
-                                                <MenuItem value={"active"}>
-                                                  Active
-                                                </MenuItem>
-                                                <MenuItem value={"inactive"}>
-                                                  In-active
-                                                </MenuItem>
-                                              </Select>
-                                            </FormControl>
-                                          )}
-                                        />
-                                      </Stack>
-                                    </Grid>
-
-                                    <Grid item xs={12} lg={12}>
-                                      <Box>
-                                        <div
-                                          onClick={popupState.close}
-                                          className={courseStyle.divcss}
-                                        >
-                                          <Button
-                                            className={courseStyle.boxInFilter}
-                                            size="medium"
-                                            variant="contained"
-                                            color="primary"
-                                            type="button"
-                                            onClick={resetFilterValue}
-                                            id={styles.muibuttonBackgroundColor}
-                                          >
-                                            Reset
-                                          </Button>
-                                        </div>
-                                        <Button
-                                          size="medium"
-                                          type="submit"
-                                          variant="contained"
-                                          color="primary"
-                                          id={styles.muibuttonBackgroundColor}
-                                          className={
-                                            courseStyle.applyButtonInFiltter
-                                          }
-                                          onClick={popupState.close}
-                                        >
-                                          Apply
-                                        </Button>
-                                      </Box>
-                                    </Grid>
-                                  </Grid>
-                                </Stack>
-                              </Box>
-                            </Grid>
-                          </Container>
-                        </Box>
-                      </Popover>
-                    </Box>
-                  )}
-                </PopupState>
-                &nbsp;
-              </Box> */}
               <Paper>
                 <TableContainer className={courseStyle.tableContainer}>
                   <Table stickyHeader aria-label="sticky table">
@@ -401,6 +238,13 @@ const AllCourses = () => {
                               : row?.course?.course?.status === "inactive"
                               ? courseStyle.inactiveClassColor
                               : courseStyle.draftClassColor;
+                          const obj = row?.courseIdCounts;
+                          const key = row?.course?.course?.id;
+                          const value = obj[key];
+                          const sessionValue =
+                            row?.sessionCount[0]?.sessionCount;
+                          let calculate = (value / sessionValue) * 100;
+
                           return (
                             <TableRow
                               hover
@@ -426,15 +270,17 @@ const AllCourses = () => {
                               </TableCell>
                               <TableCell>
                                 {capitalizeFirstLetter(
-                                  row?.course?.course?.is_chargeable
+                                  row?.course?.course_type
                                 )}
                               </TableCell>
                               <TableCell
                               //  className={statusColor}
                               >
-                                {row?.course?.course?.complete_percent === null
-                                  ? "0%"
-                                  : `${row?.course?.course?.complete_percent}%`}
+                                {`${
+                                  calculate && calculate
+                                    ? calculate?.toFixed(2)
+                                    : 0
+                                }%`}
                               </TableCell>
                               <TableCell>
                                 <Button

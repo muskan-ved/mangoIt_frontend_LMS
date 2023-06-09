@@ -224,8 +224,12 @@ export default function Profile() {
                                   ? capitalizeFirstLetter(
                                       getUserData?.first_name
                                     )
-                                  : ""}{" "}
-                                {getUserData?.last_name}
+                                  : ""}&nbsp;
+                                {getUserData
+                                  ? capitalizeFirstLetter(
+                                      getUserData?.last_name
+                                    )
+                                  : ""}
                               </Typography>
 
                               <Typography
@@ -273,9 +277,7 @@ export default function Profile() {
                             fullWidth
                             label="Last Name"
                             {...register("last_name")}
-                            defaultValue={capitalizeFirstLetter(
-                              getUserData?.last_name
-                            )}
+                            defaultValue={getUserData?.last_name}
                             disabled={!toggle}
                           />
                           {errors && errors.last_name
@@ -301,9 +303,7 @@ export default function Profile() {
                             fullWidth
                             label="Role"
                             {...register("role")}
-                            defaultValue={capitalizeFirstLetter(
-                              "learner"
-                            )}
+                            defaultValue={capitalizeFirstLetter("learner")}
                             disabled={true}
                           />
                         </Grid>
