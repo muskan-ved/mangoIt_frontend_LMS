@@ -251,7 +251,7 @@ export default function CoursesDetailsPage() {
                                     component="img"
                                     sx={{ width: 300, display: { xs: 'none', sm: 'block', borderRadius: "10px" } }}
                                     image="https://leverageedu.com/blog/wp-content/uploads/2020/06/Short-term-Professional-Courses-after-Graduation.jpg"
-                                    alt={"kjho;lih"}
+                                    alt={"image"}
                                 />
                                 <CardContent sx={{ flex: 1, paddingTop: "0px", paddingBottom: '0px' }} >
                                     <Typography component="h2" variant="h5" sx={{ fontSize: "2.5rem", fontWeight: "bold" }}>
@@ -293,7 +293,7 @@ export default function CoursesDetailsPage() {
                             <center>
                                 <Box sx={{ maxWidth: 345, display: 'flex' }} >
                                     <Box sx={{ background: "white", border: "border: 1px solid #80808024", borderRadius: "6px" }}>
-                                        <ReactPlayer url='https://www.youtube.com/watch?v=SHGEo-LdUGU&list=RDSHGEo-LdUGU&start_radio=1' width={"auto"} height={270}
+                                        <ReactPlayer url='https://youtu.be/yRpLlJmRo2w?t=4' width={"auto"} height={270}
                                             playing={true}
                                             muted={true}
                                             controls={true} />
