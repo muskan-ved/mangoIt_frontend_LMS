@@ -315,7 +315,7 @@ export default function CoursesDetailsPage() {
                                     </Typography>
                                     <Box sx={{ border: "1px solid gray", marginTop: "30px", padding: "10px" }}>
                                         <Typography gutterBottom variant="h5" component="div" sx={{ fontWeight: "bold" }} >
-                                            What you'll learn
+                                            What you&apos;ll learn
                                         </Typography>
                                         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                                             <Grid item xs={6}>
@@ -597,7 +597,7 @@ export default function CoursesDetailsPage() {
                         Hii, user if you have a already subscriptins in LMS please login and enroll course.
                     </Typography>
                     <Typography gutterBottom>
-                        Don't have a subscriptions please subscribe.
+                        Don&apos;t have a subscriptions please subscribe.
                     </Typography>
                 </DialogContent>
                 <DialogActions>
