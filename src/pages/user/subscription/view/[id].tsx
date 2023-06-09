@@ -7,6 +7,7 @@ import {
   Button,
   Card,
   CardContent,
+  CircularProgress,
   FormControl,
   MenuItem,
   Pagination,
@@ -55,12 +56,12 @@ import { AlertSubscriptionDialog } from "@/common/SubscriptionStatus/subscriptio
 
 interface Column {
   id:
-    | "id"
-    | "amount"
-    | "date"
-    | "transaction_id"
-    | "payment_method"
-    | "pay_of_month";
+  | "id"
+  | "amount"
+  | "date"
+  | "transaction_id"
+  | "payment_method"
+  | "pay_of_month";
   label: string;
   minWidth?: number;
   align?: "right";
@@ -100,6 +101,7 @@ export default function View() {
   const [open, setOpen] = useState(false);
   const [subsId, setSubId] = useState<any>();
   const [userId, setuserId] = useState<any>();
+  const [spinner, setshowspinner] = React.useState(false);
 
 
   useEffect(() => {
@@ -175,26 +177,29 @@ export default function View() {
       });
   };
 
-
   //acccept payment
   const AcceptPayment = () => {
+    setshowspinner(true)
     const reqData = {
       userId: userId,
       subscriptioId: subsData?.id
     }
     CreateOrderForSubscription(reqData).then((result) => {
-      if (result) {
-        //localStorage.setItem("orderId", "134")
-        return false;
-        const data: any = ""
+      if (result?.status === 201 && result?.data) {
+        localStorage.setItem("orderId", result?.data?.id)
+        const data = {
+          productName: subsData?.name,
+          amount: result?.data?.amount,
+          quantity: 1
+        }
         HandleSubscriptionPayment(data).then((result) => {
-          router.push(result);
+          if (result) {
+            setshowspinner(false)
+            router.push(result);
+          }
         })
       }
-
     })
-
-
   }
 
   return (
@@ -344,7 +349,7 @@ export default function View() {
                 )}
               </Box>
               <Button variant="contained" endIcon={<CreditCardIcon />} onClick={AcceptPayment}>
-                Renew Subscription
+                Renew Subscription  {spinner === true ? <CircularProgress color="inherit" /> : ""}
               </Button>
             </CardContent>
           </Card>

@@ -1,6 +1,7 @@
-import { AppBar, Box, Container, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Container, Grid, Toolbar, Typography } from "@mui/material";
 import * as React from "react";
 import styles from "../../styles/webviewHeaderFooter.module.css";
+import Link from "next/link";
 
 
 const WebViewFooter = () => {
@@ -9,14 +10,16 @@ const WebViewFooter = () => {
             <AppBar position="static" className={styles.appBarFooterCss}>
                 <Container maxWidth="lg">
                     <Toolbar className={styles.appBarFooterToolbarCss}>
-                        <Box
-                            component="img"
-                            src="/Images/company_logo.png"
-                            width={"180px"}
-                            height={"50px"}
-                            sx={{ display: { xs: "block", sm: "block" } }}
-                            alt="Company logo"
-                        />
+                        <Link href="/" >
+                            <Box
+                                component="img"
+                                src="/Images/company_logo.png"
+                                width={"180px"}
+                                height={"50px"}
+                                sx={{ display: { xs: "block", sm: "block" } }}
+                                alt="Company logo"
+                            />
+                        </Link>
                         <Box sx={{ flexGrow: 1 }} />
                         <Box sx={{ display: { xs: "block", md: "flex" } }}>
                             <Typography
