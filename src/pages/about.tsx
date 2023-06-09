@@ -17,7 +17,8 @@ import { TopEnrolledCourses } from "@/services/course_enroll";
 
 export default function About() {
     const [FreeCourses, setFreeCourses] = React.useState([]);
-    const [PaidCourses, setPaidCourses] = React.useState([]);
+    // const [PaidCourses, setPaidCourses] = React.useState([]);
+    const [EnrolledCourses, setEnrolledCoursess] = React.useState([]);
 
     React.useEffect(() => {
         getAllCourseData();
@@ -30,9 +31,9 @@ export default function About() {
             setFreeCourses(courses?.data?.filter((a: any) =>
                 a?.course?.is_chargeable === "free"
             ))
-            setPaidCourses(courses?.data?.filter((a: any) =>
-                a?.course?.is_chargeable === "paid"
-            ))
+            // setPaidCourses(courses?.data?.filter((a: any) =>
+            //     a?.course?.is_chargeable === "paid"
+            // ))
         })
     }
     var items = [
@@ -95,7 +96,7 @@ export default function About() {
     //get top enrolled courses
     const getTopEnrolledCourses = () => {
         TopEnrolledCourses().then((res) => {
-           // console.log("enrolled", res)
+            setEnrolledCoursess(res?.data)
         })
     }
 
@@ -204,8 +205,8 @@ export default function About() {
                         <Divider className={styles.divder} />
                     </Box>
                     <Box className={styles.articles}>
-                        {PaidCourses?.slice(0, 8).map((data, key) => {
-                            return (<CourseCard key={key} paidcourses={data} />)
+                        {EnrolledCourses?.slice(0, 8).map((data, key) => {
+                            return (<CourseCard key={key} enrolledCourses={data} />)
                         })}
                     </Box>
                 </Container>

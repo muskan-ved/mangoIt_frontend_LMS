@@ -28,7 +28,7 @@ import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import CloseIcon from '@mui/icons-material/Close';
-import { CheckEnrolledCourses, UserEnrolledCourses } from "@/services/course_enroll";
+import { CheckEnrolledCourses, TopEnrolledCourses, UserEnrolledCourses } from "@/services/course_enroll";
 import { ToastContainer, toast } from "react-toastify";
 
 
@@ -107,8 +107,6 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
     );
 }
 
-
-
 export default function CoursesDetailsPage() {
     const router = useRouter();
     const { id } = router.query;
@@ -116,11 +114,12 @@ export default function CoursesDetailsPage() {
     const [subsdata, setsubsdata] = useState([]);
     const [Courses, setCourses] = useState([]);
     const [FreeCourses, setFreeCourses] = useState([]);
-    const [PaidCourses, setPaidCourses] = useState([]);
+    // const [PaidCourses, setPaidCourses] = useState([]);
     const [modulesdet, setmodulesdet] = useState([])
     const [userData, setUserData] = useState<any>("");
     const [enrolled, setenrolled] = useState<any>(false);
     const [expanded, setExpanded] = useState<string | false>('panel1');
+    const [EnrolledCourses, setEnrolledCoursess] = useState([]);
     const handleChange =
         (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
             setExpanded(newExpanded ? panel : false);
@@ -137,6 +136,7 @@ export default function CoursesDetailsPage() {
             getCourseDetails();
             getAllCourseData();
             getSubscribtion();
+            getTopEnrolledCourses();
 
             if (localData) {
                 const dt = JSON.parse(localData)
@@ -158,9 +158,9 @@ export default function CoursesDetailsPage() {
             setFreeCourses(courses?.data?.filter((a: any) =>
                 a?.course?.is_chargeable === "free"
             ))
-            setPaidCourses(courses?.data?.filter((a: any) =>
-                a?.course?.is_chargeable === "paid"
-            ))
+            // setPaidCourses(courses?.data?.filter((a: any) =>
+            //     a?.course?.is_chargeable === "paid"
+            // ))
         })
     }
     //get subscription
@@ -169,6 +169,15 @@ export default function CoursesDetailsPage() {
             setsubsdata(subscdata)
         })
     }
+
+
+    //get top enrolled courses
+    const getTopEnrolledCourses = () => {
+        TopEnrolledCourses().then((res) => {
+            setEnrolledCoursess(res?.data)
+        })
+    }
+
     //dialogs
     const [open, setOpen] = useState(false);
     const handleClickOpen = () => {
@@ -555,8 +564,8 @@ export default function CoursesDetailsPage() {
                                 <Divider className={styles.divder} />
                             </Box>
                             <Box className={styles.articles}>
-                                {PaidCourses?.slice(0, 6).map((data, key) => {
-                                    return (<CourseCard key={key} paidcourses={data} />)
+                                {EnrolledCourses?.slice(0, 6).map((data, key) => {
+                                    return (<CourseCard key={key} enrolledCourses={data} />)
                                 })}
                             </Box>
                         </Container>

@@ -8,7 +8,9 @@ import { useEffect, useState } from "react";
 import { HandleCourseGet } from "@/services/course";
 
 export function CourseCard(props: any) {
-    const c_id = props?.coursedata?.course?.id || props?.paidcourses?.course?.id || props?.freecourses?.course?.id;
+    console.log(props)
+    const c_id = props?.coursedata?.course?.id || props?.paidcourses?.course?.id || props?.freecourses?.course?.id || props?.enrolledCourses
+        .id;
     return (
         <Link href={`/coursedetails/${c_id}`}>
             <CardActionArea component="a" >
@@ -19,8 +21,9 @@ export function CourseCard(props: any) {
                         </Box>
                         <Box className={styles.articlebody}>
                             <Typography className={styles.h2}>{capitalizeFirstLetter(props?.paidcourses?.course?.title) || capitalizeFirstLetter(props?.freecourses?.course?.title) || capitalizeFirstLetter(props?.coursedata
-                                ?.course?.title)}</Typography>
-                            <Typography className={styles.h5}>Type : {capitalizeFirstLetter(props?.paidcourses?.course?.is_chargeable) || capitalizeFirstLetter(props?.freecourses?.course?.is_chargeable) || capitalizeFirstLetter(props?.coursedata?.course?.is_chargeable)}</Typography>
+                                ?.course?.title) || capitalizeFirstLetter(props?.enrolledCourses
+                                    .title)}</Typography>
+                            <Typography className={styles.h5}>Type : {capitalizeFirstLetter(props?.paidcourses?.course?.is_chargeable) || capitalizeFirstLetter(props?.freecourses?.course?.is_chargeable) || capitalizeFirstLetter(props?.coursedata?.course?.is_chargeable) || capitalizeFirstLetter(props?.enrolledCourses.is_chargeable)}</Typography>
                         </Box>
                     </Box>
                 </Box>
