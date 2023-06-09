@@ -24,7 +24,10 @@
   border-bottom: 1.2px solid #0000001f !important;
 }
 .appBarFooterToolbarCss {
-  min-height: 85px !important;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .windowFullWidthNameAlignfooter {
@@ -42,3 +45,5 @@
   cursor: pointer;
   transition: 0.3s;
 }
+
+
