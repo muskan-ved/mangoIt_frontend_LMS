@@ -13,6 +13,7 @@ import SchoolIcon from '@mui/icons-material/School';
 import { HandleCourseGet } from "@/services/course";
 import { CourseCard } from "@/common/ResuableCardCmp/coursescard";
 import Link from "next/link";
+import { TopEnrolledCourses } from "@/services/course_enroll";
 
 export default function About() {
     const [FreeCourses, setFreeCourses] = React.useState([]);
@@ -20,6 +21,7 @@ export default function About() {
 
     React.useEffect(() => {
         getAllCourseData();
+        getTopEnrolledCourses();
     }, [])
 
     //get courses
@@ -88,6 +90,13 @@ export default function About() {
                 </Box>
             </Box>
         )
+    }
+
+    //get top enrolled courses
+    const getTopEnrolledCourses = () => {
+        TopEnrolledCourses().then((res) => {
+           // console.log("enrolled", res)
+        })
     }
 
     return (

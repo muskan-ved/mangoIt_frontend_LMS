@@ -12,6 +12,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Link from "next/link";
 import { capitalizeFirstLetter } from "../CapitalFirstLetter/capitalizeFirstLetter";
 import { AccountCircle } from "@mui/icons-material";
+import { HandleLogout } from "@/services/auth";
 
 export default function WebViewNavbar() {
     const [userData, setUserData] = React.useState<any>("");
@@ -178,6 +179,9 @@ export default function WebViewNavbar() {
                                     <MenuItem >Hii, {capitalizeFirstLetter(userData?.first_name)}</MenuItem>
                                     <Link href="/user/profile" ><MenuItem >Profile </MenuItem></Link>
                                     <Link href="/user/dashboard" ><MenuItem >Dashboard</MenuItem> </Link>
+                                    <MenuItem onClick={HandleLogout}>
+                                        <Typography>Logout</Typography>
+                                    </MenuItem>
                                 </Menu>
                             </Typography>
                             ) :
