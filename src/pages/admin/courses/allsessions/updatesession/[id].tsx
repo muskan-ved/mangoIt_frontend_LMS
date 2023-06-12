@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from "next/router";
 // MUI Import
-import { Box, Button, Card, CardContent, FormControl, Grid, IconButton, InputLabel, MenuItem, NativeSelect, Select, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, Button, Card, CardContent, FormControl, Grid, IconButton, InputLabel, MenuItem, NativeSelect, Select, TextField, Typography } from "@mui/material";
 // External Components
 import SideBar from "@/common/LayoutNavigations/sideBar";
 import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
@@ -45,6 +45,9 @@ export default function UpdateSession() {
    const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
    const [isLoading, setLoading] = useState<boolean>(false);
    const [error, setErrors] = useState<string>();
+   const [getCourseID, setCourseID] = React.useState<string | null>();
+   const [getModuleID, setModuleID] = React.useState<string | null>();
+
 
    const {
       register,
@@ -56,7 +59,19 @@ export default function UpdateSession() {
    } = useForm<sessionType | any>({
       resolver: yupResolver(sessionUpdateValidation),
    });
-// console.log('getvalue', getValues())
+
+   useEffect(() => {
+      let localData: any;
+      if (typeof window !== "undefined") {
+         localData = window.localStorage.getItem("userData");
+      }
+      if (localData) {
+         getSessionData();
+         getCourseData();
+         getModuleData();
+      }
+   }, [router.query]);
+
    const handleContentChange = (value: string, identifier: string) => {
       if (value === '<p><br></p>') {
          setError(identifier, { message: 'Description is a required field' });
@@ -68,15 +83,17 @@ export default function UpdateSession() {
       setdespcriptionContent(value);
    };
 
-   const onSubmit = async (event: any) => {   
-      const id = router.query.id   
+   const onSubmit = async (event: any) => {
+      const id = router.query.id
       // const reqData = { ...event, 'attachment': file }
+      console.log("event",event);
       if (errors.description?.message === '' || (typeof errors === 'object' && errors !== null)) {
          const reqData: any = {
-            description: event.description,
-            module_id: event.module_id,
-            course_id: event.course_id,
-            title: event.title,
+            ...event,
+            // description: event.description,
+            module_id: getModuleID,
+            course_id: getCourseID,
+            // title: event.title,
             attachment: file
          }
 
@@ -92,7 +109,7 @@ export default function UpdateSession() {
             getSessionData()
             setLoading(false);
             setTimeout(() => {
-               router.push('/admin/courses/allsessions/')
+               // router.push('/admin/courses/allsessions/')
             }, 1000)
          } catch (e) {
             console.log(e)
@@ -147,17 +164,7 @@ export default function UpdateSession() {
       })
    }
 
-   useEffect(() => {
-      let localData: any;
-      if (typeof window !== "undefined") {
-         localData = window.localStorage.getItem("userData");
-      }
-      if (localData) {
-         getSessionData();
-         getCourseData();
-         getModuleData();
-      }
-   }, [router.query]);
+
 
    function ErrorShowing(errorMessage: any) {
       return (
@@ -233,7 +240,7 @@ export default function UpdateSession() {
 
                                     <Grid item xs={12} sm={12} md={6} lg={6}>
                                        <InputLabel className={Sessions.InputLabelFont}>Course of session</InputLabel>
-                                       <Controller
+                                       {/* <Controller
                                           name="course_id"
                                           control={control}
                                           defaultValue=''
@@ -246,6 +253,22 @@ export default function UpdateSession() {
                                                 </Select>
                                              </FormControl>
                                           )}
+                                       /> */}
+                                       <Autocomplete
+                                          //  defaultValue={defaultValue}
+                                          id="combo-box-demo"
+                                          options={getCourses}
+                                          getOptionLabel={(option: any) => option?.course?.title}
+                                          onChange={(event, newValue) => {
+                                             setCourseID(newValue?.course?.id);
+                                          }}
+                                          renderInput={(params) => (
+                                             <TextField
+                                                {...register("course_id")}
+                                                {...params}
+                                                placeholder='Search for courses'
+                                             />
+                                          )}
                                        />
                                        {errors && errors.course_id
                                           ? ErrorShowing(errors?.course_id?.message)
@@ -255,7 +278,7 @@ export default function UpdateSession() {
 
                                  <Grid item xs={12} sm={12} md={12} lg={12} mb={2} >
                                     <InputLabel className={Sessions.InputLabelFont}>Module of session</InputLabel>
-                                    <Controller
+                                    {/* <Controller
                                        name="module_id"
                                        control={control}
                                        defaultValue=""
@@ -267,6 +290,22 @@ export default function UpdateSession() {
                                                 })}
                                              </Select>
                                           </FormControl>
+                                       )}
+                                    /> */}
+                                    <Autocomplete
+                                       //  defaultValue={defaultValue}
+                                       id="combo-box-demo"
+                                       options={getModules}
+                                       getOptionLabel={(option: any) => option?.module?.title}
+                                       onChange={(event, newValue) => {
+                                          setModuleID(newValue?.module?.id);
+                                       }}
+                                       renderInput={(params) => (
+                                          <TextField
+                                             {...register("module_id")}
+                                             {...params}
+                                             placeholder='Search for module'
+                                          />
                                        )}
                                     />
                                     {errors && errors.module_id ? ErrorShowing(errors?.module_id?.message) : ""}
@@ -307,7 +346,7 @@ export default function UpdateSession() {
                                     {file ? '' : errors && errors.file ? ErrorShowing(errors?.file?.message) : ""}
                                  </Grid>
                                  <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"right"} >
-                                 <Button className={Sessions.cancelButton} variant="contained" size="large" onClick={() => router.push('/admin/courses/allsessions')} id={styles.muibuttonBackgroundColor}>Cancel</Button>
+                                    <Button className={Sessions.cancelButton} variant="contained" size="large" onClick={() => router.push('/admin/courses/allsessions')} id={styles.muibuttonBackgroundColor}>Cancel</Button>
                                     {!isLoadingButton ? <Button type="submit" size="large" variant="contained" id={styles.muibuttonBackgroundColor}>
                                        UPDATE
                                     </Button> : <LoadingButton loading={isLoadingButton} className={Sessions.updateLoadingButton}

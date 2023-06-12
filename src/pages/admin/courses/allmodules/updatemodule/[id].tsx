@@ -41,14 +41,13 @@ export default function UpdateModule() {
   const [getUpdateModule, setUpdateModule] = useState<moduleType | any>([]);
   const [getModule, setModule] = useState<moduleType | any>();
   const [getCourses, setCourses] = useState<any>([]);
-  const [getCourseId, setCourseId] = useState<any>({ id: null, title: null });
+  const [getCourseId, setCourseId] = useState<any>();
   const [inputValue, setInputValue] = useState<any>([]);
 
   const [getCourseID, setCourseID] = React.useState<string | null>();
   const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [error, setErrors] = useState<string>();
-  // const [value, setValue] = React.useState<string | null>(options[0]);
   const {
     register,
     handleSubmit,
@@ -60,7 +59,6 @@ export default function UpdateModule() {
     resolver: yupResolver(moduleValidations),
   });
 
-
   useEffect(() => {
     let localData: any;
     if (typeof window !== "undefined") {
@@ -69,32 +67,26 @@ export default function UpdateModule() {
     if (localData) {
       getModuleData();
       getCourseData();
+      setValue('course_id', defaultValue?.course?.id);
     }
   }, [router.query]);
-  const name = getCourses?.filter((item: any) => {
-    return item?.course?.id === getModule?.course_id;
-  });
-  // console.log("name", name[0]?.course?.title)
 
-
-  const defaultValue = { value: 'default', label: name[0]?.course?.title };
-  console.log("defaultValue", defaultValue);
-  const options = [
-    { label: 'Option 1', value: 'option1' },
-    { label: 'Option 2', value: 'option2' },
-    { label: 'Option 3', value: 'option3' },
-  ];
-  // const defaultValue = { id: getModule?.course_id, };
-
-  // const options = [
-  //   { id: getCourses?.course?.id, },
-  // ];
-  console.log("module", getModule, 'getCourse', getCourses);
+  const defaultValue = { course: { id: `${getModule?.course_id}` } }; // Set your default value here
 
 
 
+  // const defaultCourse = getModule?.course_id
+  // console.log("new error", getModule?.course_id)
+  // const findCourse = getCourses?.filter((item: any) => {
+  //   return item?.course?.id === getModule?.course_id;
+  // });
+  // const defaultValue = { lebel: "test", label: findCourse[0]?.course?.title, value: findCourse[0]?.course?.id }
+  // let options: any = [];
+  // getCourses?.map((course: any) => {
+  //   options.push({ label: course?.course?.title, value: course?.course?.id, })
+  // })
 
-
+  // handle changes for decriptions
   const handleContentChange = (value: string, identifier: string) => {
     if (identifier === 'description') {
       if (value === '<p><br></p>') {
@@ -107,23 +99,22 @@ export default function UpdateModule() {
       }
       setDespcriptionContent(value);
     }
-
   };
-
+  //submit form
   const onSubmit = async (event: any) => {
     const id = router.query.id
-    console.log(event, "onsubmit", errors)
+    const reqData = { ...event, course_id: getCourseID }
 
     if (errors.description?.message === '' || (typeof errors === 'object' && errors !== null)) {
       setLoading(true);
       setLoadingButton(false)
       try {
-        const res = await HandleModuleUpdate(id, event)
+        const res = await HandleModuleUpdate(id, reqData)
         getModuleData()
         setLoading(false);
         setTimeout(() => {
           // router.push('/admin/courses/allmodules/')
-        }, 1000)
+        }, 900)
       } catch (e) {
         console.log(e)
         setLoadingButton(true)
@@ -134,11 +125,11 @@ export default function UpdateModule() {
   };
 
   const handleUpdate = (e: any) => {
-    // if(e.target.name === 'title'){
-    setModule({ ...getModule, title: e.target.value })
-    // }
+    if (e.target.name === 'title') {
+      setModule({ ...getModule, title: e.target.value })
+    }
   }
-
+  // get module data
   const getModuleData = async () => {
     const id = router.query.id
     if (id) {
@@ -152,13 +143,11 @@ export default function UpdateModule() {
           "description",
         ];
         fields.forEach((field) => setValue(field, module.data[field]));
-        // setCourseId(module.data?.course_id)
       })
         .catch((error) => {
           setErrors(error.message);
         });
     }
-    // console.log('Course', getCourse)
     if (error) {
       return <Typography >{error}</Typography >;
     }
@@ -168,16 +157,12 @@ export default function UpdateModule() {
     }
   }
 
-
+  // get all courses data 
   const getCourseData = () => {
     HandleCourseGet('', '').then((courses) => {
       setCourses(courses.data)
     })
   };
-
-
-
-
 
   function ErrorShowing(errorMessage: any) {
     return (
@@ -250,31 +235,20 @@ export default function UpdateModule() {
                             )}
                           /> */}
 
-                          {/* <Autocomplete
-                            //  defaultValue={getCourseId ? getCourseId : ""}
+                          <Autocomplete
+                            {...register('course_id')}
                             id="combo-box-demo"
                             options={getCourses}
-                            getOptionLabel={(option: any) => option?.course?.title}
-                            // value={"ihyhyh"}
-                            onChange={(event, newValue) => {
-                              // setCourseID(newValue?.course?.id);
+                            getOptionLabel={(option) => option?.course?.id}
+                            onChange={(event, newValue) => {                              
+                              setValue('course_id', newValue?.course?.id);
                             }}
+                            defaultValue={defaultValue} // Set the defaultValue prop
                             renderInput={(params) => (
-                              <TextField
-                                {...register("course_id")}
-                                {...params}
-                                // placeholder={`${getCourses && getCourses?.course?.title}`}
-                              />
+                              <TextField {...params} placeholder="Search for courses" />
                             )}
-                          /> */}
-                          {defaultValue ?
-                            (<Autocomplete
-                              defaultValue={defaultValue?.label}
-                              options={options}
-                              getOptionLabel={(option) => option.label}
-                              renderInput={(params) => <TextField {...params} />}
-                            />) : "loading"
-                          }
+                          />
+
                           {errors && errors.course
                             ? ErrorShowing(errors?.course?.message)
                             : ""}
