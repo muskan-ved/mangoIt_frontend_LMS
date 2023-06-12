@@ -9,7 +9,6 @@ import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
 import Footer from "@/common/LayoutNavigations/footer";
 import Navbar from "../../../../../common/LayoutNavigations/navbar";
 import RichEditor from "@/common/RichTextEditor/textEditor";
-import newAtoCompelete from "../../../../../common/AutoCompeletes/autoComplete";
 // Helper Import
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -28,26 +27,18 @@ import ModuleCss from "../../../../../styles/modules.module.css";
 import { ToastContainer } from 'react-toastify';
 // API services
 import { HandleCourseGet, HandleCourseGetByID, HandleCourseUpdate } from '@/services/course';
-import { Attachment, Description, Image, Movie, PictureAsPdf } from '@mui/icons-material';
-import { type } from 'os';
 import { HandleModuleGetByID, HandleModuleUpdate } from '@/services/module';
 import { moduleValidations } from '@/validation_schema/moduleValidation';
-
-
-
 export default function UpdateModule() {
   const router: any = useRouter();
   const [getDespcriptionContent, setDespcriptionContent] = useState("");
-  const [getUpdateModule, setUpdateModule] = useState<moduleType | any>([]);
   const [getModule, setModule] = useState<moduleType | any>();
   const [getCourses, setCourses] = useState<any>([]);
-  const [getCourseId, setCourseId] = useState<any>();
   const [inputValue, setInputValue] = useState<any>([]);
-
-  const [getCourseID, setCourseID] = React.useState<string | null>();
   const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [error, setErrors] = useState<string>();
+  const [value, setNewValue] = useState<any>({});
   const {
     register,
     handleSubmit,
@@ -66,25 +57,9 @@ export default function UpdateModule() {
     }
     if (localData) {
       getModuleData();
-      getCourseData();
-      setValue('course_id', defaultValue?.course?.id);
     }
   }, [router.query]);
 
-  const defaultValue = { course: { id: `${getModule?.course_id}` } }; // Set your default value here
-
-
-
-  // const defaultCourse = getModule?.course_id
-  // console.log("new error", getModule?.course_id)
-  // const findCourse = getCourses?.filter((item: any) => {
-  //   return item?.course?.id === getModule?.course_id;
-  // });
-  // const defaultValue = { lebel: "test", label: findCourse[0]?.course?.title, value: findCourse[0]?.course?.id }
-  // let options: any = [];
-  // getCourses?.map((course: any) => {
-  //   options.push({ label: course?.course?.title, value: course?.course?.id, })
-  // })
 
   // handle changes for decriptions
   const handleContentChange = (value: string, identifier: string) => {
@@ -103,8 +78,7 @@ export default function UpdateModule() {
   //submit form
   const onSubmit = async (event: any) => {
     const id = router.query.id
-    const reqData = { ...event, course_id: getCourseID }
-
+    const reqData = { ...event, course_id: value?.id }
     if (errors.description?.message === '' || (typeof errors === 'object' && errors !== null)) {
       setLoading(true);
       setLoadingButton(false)
@@ -135,7 +109,6 @@ export default function UpdateModule() {
     if (id) {
       HandleModuleGetByID(id).then((module) => {
         setModule(module.data)
-        setCourseId(module.data?.course_id)
         const fields = [
           "course_id",
           "title",
@@ -143,6 +116,21 @@ export default function UpdateModule() {
           "description",
         ];
         fields.forEach((field) => setValue(field, module.data[field]));
+        if (module?.data?.id > 0) {
+          HandleCourseGet('', '').then((courses) => {
+            if (courses?.data.length > 0) {
+              setCourses(courses.data)
+
+              const findCourse = courses.data?.filter((item: any) => {
+                return item?.course?.id === module?.data?.course_id;
+              });
+              setNewValue({
+                id: findCourse && findCourse[0]?.course?.id,
+                title: findCourse && findCourse[0]?.course?.title ? findCourse[0]?.course?.title : ""
+              })
+            }
+          })
+        };
       })
         .catch((error) => {
           setErrors(error.message);
@@ -151,18 +139,10 @@ export default function UpdateModule() {
     if (error) {
       return <Typography >{error}</Typography >;
     }
-
     if (!getModule) {
       return <Typography >Loading...</Typography >;
     }
   }
-
-  // get all courses data 
-  const getCourseData = () => {
-    HandleCourseGet('', '').then((courses) => {
-      setCourses(courses.data)
-    })
-  };
 
   function ErrorShowing(errorMessage: any) {
     return (
@@ -171,7 +151,16 @@ export default function UpdateModule() {
       </Typography>
     );
   }
-  // console.log('getcours', getCourses, "module", getModule)
+
+  const option: { id: number; title: string; }[] = [];
+  getCourses &&
+    getCourses.map((data: any, key: any) => {
+      return option.push({
+        id: data?.course?.id,
+        title: data?.course?.title,
+      });
+    });
+
   return (
     <>
       <Navbar />
@@ -217,35 +206,23 @@ export default function UpdateModule() {
 
                         <Grid item xs={12} sm={12} md={6} lg={6}>
                           <InputLabel className={ModuleCss.InputLabelFont}>Course of Module</InputLabel>
-                          {/* <Controller
-                            name="course_id"
-                            control={control}
-                            defaultValue={getCourseId}                          
-                            render={({ field }) => (
-                              <FormControl fullWidth>
-                                <Select {...field} displayEmpty>
-                                  <MenuItem disabled value="">
-                                    Select Course
-                                  </MenuItem>
-                                  {getCourses?.map((course: any) => {
-                                    return (<MenuItem key={course?.course.id} value={course?.course.id}>{capitalizeFirstLetter(course?.course.title)}</MenuItem>)
-                                  })}
-                                </Select>
-                              </FormControl>
-                            )}
-                          /> */}
-
                           <Autocomplete
-                            {...register('course_id')}
-                            id="combo-box-demo"
-                            options={getCourses}
-                            getOptionLabel={(option) => option?.course?.id}
-                            onChange={(event, newValue) => {                              
-                              setValue('course_id', newValue?.course?.id);
+                            value={value}
+                            inputValue={inputValue}
+                            onChange={(event, newValue) => {
+                              setNewValue(newValue);
                             }}
-                            defaultValue={defaultValue} // Set the defaultValue prop
+                            onInputChange={(event, newInputValue) => {
+                              setInputValue(newInputValue);
+                            }}
+                            options={option}
+                            getOptionLabel={(option) => option?.title}
                             renderInput={(params) => (
-                              <TextField {...params} placeholder="Search for courses" />
+                              <TextField
+                                {...params}
+                                variant="outlined"
+                                placeholder="Search Course"
+                              />
                             )}
                           />
 
