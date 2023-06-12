@@ -87,7 +87,7 @@ export default function UpdateModule() {
         getModuleData()
         setLoading(false);
         setTimeout(() => {
-          // router.push('/admin/courses/allmodules/')
+          router.push('/admin/courses/allmodules/')
         }, 900)
       } catch (e) {
         console.log(e)

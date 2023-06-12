@@ -49,8 +49,8 @@ export default function UpdateSession() {
   const [getModuleID, setModuleID] = React.useState<string | null>();
   const [inputValue, setInputValue] = useState<any>([]);
   const [value, setNewValue] = useState<any>({});
-
-
+  const [inputValueModule, setInputValueModule] = useState<any>([]);
+  const [valueModule, setNewValueModule] = useState<any>({});
   const {
     register,
     handleSubmit,
@@ -68,8 +68,7 @@ export default function UpdateSession() {
       localData = window.localStorage.getItem("userData");
     }
     if (localData) {
-      getSessionData();
-      getModuleData();
+      getSessionData()
     }
   }, [router.query]);
 
@@ -150,10 +149,21 @@ export default function UpdateSession() {
                 id: findCourse && findCourse[0]?.course?.id,
                 title: findCourse && findCourse[0]?.course?.title ? findCourse[0]?.course?.title : ""
               })
-               console.log("findCourses", findCourse[0]?.course?.title)
-
             }
           })
+
+          HandleModuleGet('', '').then((modules) => {
+            setModules(modules.data)
+
+            const findModule = modules.data?.filter((item: any) => {
+              return item?.module?.id === getSession?.module?.id;
+            });
+            setNewValueModule({
+              id: findModule && findModule[0]?.module?.id,
+              title: findModule && findModule[0]?.module?.title ? findModule[0]?.module?.title : ""
+            })
+          })
+
         }
       })
         .catch((error) => {
@@ -170,13 +180,6 @@ export default function UpdateSession() {
     }
   }
 
-
-
-  const getModuleData = () => {
-    HandleModuleGet('', '').then((modules) => {
-      setModules(modules.data)
-    })
-  }
 
 
 
@@ -211,7 +214,17 @@ export default function UpdateSession() {
       });
     });
 
-  //  console.log("value", value)
+  const optionModule: { id: number; title: string; }[] = [];
+  getModules &&
+    getModules.map((data: any, key: any) => {
+      return option.push({
+        id: data?.module?.id,
+        title: data?.module?.title,
+      });
+    });
+  console.log('optionModule', optionModule)
+  console.log('option', option)
+
   return (
     <>
       <Navbar />
@@ -318,22 +331,27 @@ export default function UpdateSession() {
                                           </FormControl>
                                        )}
                                     /> */}
+
                         <Autocomplete
-                          //  defaultValue={defaultValue}
-                          id="combo-box-demo"
-                          options={getModules}
-                          getOptionLabel={(option: any) => option?.module?.title}
+                          value={valueModule}
+                          inputValue={inputValueModule}
                           onChange={(event, newValue) => {
-                            setModuleID(newValue?.module?.id);
+                            setNewValueModule(newValue);
                           }}
+                          onInputChange={(event, newValue) => {
+                            setInputValueModule(newValue);
+                          }}
+                          options={optionModule}
+                          getOptionLabel={(option) => option?.title}
                           renderInput={(params) => (
                             <TextField
-                              {...register("module_id")}
                               {...params}
-                              placeholder='Search for module'
+                              variant="outlined"
+                              placeholder="Search Module"
                             />
                           )}
                         />
+
                         {errors && errors.module_id ? ErrorShowing(errors?.module_id?.message) : ""}
                       </Grid>
                       <Grid item xs={12} sm={12} md={12} lg={12} mb={2}>
