@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import { HandleCourseGet } from "@/services/course";
 
 export function CourseCard(props: any) {
-    console.log(props)
     const c_id = props?.coursedata?.course?.id || props?.paidcourses?.course?.id || props?.freecourses?.course?.id || props?.enrolledCourses
         .id;
     return (
