@@ -156,7 +156,7 @@ const AllCourses = () => {
       getUserId(userIds?.id);
     }
   };
-
+console.log('rowsrows',rows);
   return (
     <>
       <Navbar />
@@ -238,6 +238,7 @@ const AllCourses = () => {
                               : row?.course?.course?.status === "inactive"
                               ? courseStyle.inactiveClassColor
                               : courseStyle.draftClassColor;
+                              
                           const obj = row?.courseIdCounts;
                           const key = row?.course?.course?.id;
                           const value = obj[key];

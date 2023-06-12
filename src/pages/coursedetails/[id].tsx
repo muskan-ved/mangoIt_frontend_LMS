@@ -1,19 +1,111 @@
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
-import { Box, Button, Card, CardActionArea, CardContent, CardHeader, CardMedia, Container, Divider, Grid, List, ListItem, ListItemIcon, ListItemText, Typography } from "@mui/material";
+import { AccordionSummaryProps, Box, Breadcrumbs, Button, Card, CardActionArea, CardContent, CardMedia, Container, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, IconButton, List, ListItem, ListItemIcon, ListItemText, Typography } from "@mui/material";
 import WebViewNavbar from "@/common/LayoutNavigations/webviewnavbar";
 import WebViewFooter from "@/common/LayoutNavigations/webviewfooter";
 import styles from '../../styles/webview.module.css'
-import { HandleCourseByCourseId, HandleCourseGet, HandleCourseGetByID } from "@/services/course";
+import { HandleCourseByCourseId, HandleCourseGet } from "@/services/course";
 import PeopleIcon from '@mui/icons-material/People';
-import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import Link from "next/link";
 import AlarmOnIcon from '@mui/icons-material/AlarmOn';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import { CourseCard, SubscribtionPanCard } from "@/common/ResuableCardCmp/coursescard";
 import { GetallSubsctions } from "@/services/subscription";
 import { capitalizeFirstLetter } from "../../common/CapitalFirstLetter/capitalizeFirstLetter";
+import ReactPlayer from "react-player";
+import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
+import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
+import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
+import EmojiEventsOutlinedIcon from '@mui/icons-material/EmojiEventsOutlined';
+import { styled } from "@mui/material/styles";
+import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
+import MuiAccordionSummary
+    from '@mui/material/AccordionSummary';
+import MuiAccordionDetails from '@mui/material/AccordionDetails';
+import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
+import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import CloseIcon from '@mui/icons-material/Close';
+import { CheckEnrolledCourses, TopEnrolledCourses, UserEnrolledCourses } from "@/services/course_enroll";
+import { ToastContainer, toast } from "react-toastify";
+
+
+const Accordion = styled((props: AccordionProps) => (
+    <MuiAccordion disableGutters elevation={0} square {...props} />
+))(({ theme }) => ({
+    border: `1px solid ${theme.palette.divider}`,
+    '&:not(:last-child)': {
+        borderBottom: 0,
+    },
+    '&:before': {
+        display: 'none',
+    },
+}));
+
+const AccordionSummary = styled((props: AccordionSummaryProps) => (
+    <MuiAccordionSummary
+        expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
+        {...props}
+    />
+))(({ theme }) => ({
+    backgroundColor:
+        theme.palette.mode === 'dark'
+            ? 'rgba(255, 255, 255, .05)'
+            : 'rgba(0, 0, 0, .03)',
+    flexDirection: 'row-reverse',
+    '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
+        transform: 'rotate(90deg)',
+    },
+    '& .MuiAccordionSummary-content': {
+        marginLeft: theme.spacing(1),
+    },
+}));
+
+const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
+    padding: theme.spacing(2),
+    borderTop: '1px solid rgba(0, 0, 0, .125)',
+}));
+
+
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+    '& .MuiDialogContent-root': {
+        padding: theme.spacing(2),
+    },
+    '& .MuiDialogActions-root': {
+        padding: theme.spacing(1),
+    },
+}));
+
+export interface DialogTitleProps {
+    id: string;
+    children?: React.ReactNode;
+    onClose: () => void;
+}
+
+function BootstrapDialogTitle(props: DialogTitleProps) {
+    const { children, onClose, ...other } = props;
+    return (
+        <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+            {children}
+            {onClose ? (
+                <IconButton
+                    aria-label="close"
+                    onClick={onClose}
+                    sx={{
+                        position: 'absolute',
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
+                >
+                    <CloseIcon />
+                </IconButton>
+            ) : null}
+        </DialogTitle>
+    );
+}
 
 export default function CoursesDetailsPage() {
     const router = useRouter();
@@ -22,16 +114,34 @@ export default function CoursesDetailsPage() {
     const [subsdata, setsubsdata] = useState([]);
     const [Courses, setCourses] = useState([]);
     const [FreeCourses, setFreeCourses] = useState([]);
-    const [PaidCourses, setPaidCourses] = useState([]);
+    // const [PaidCourses, setPaidCourses] = useState([]);
     const [modulesdet, setmodulesdet] = useState([])
-
-    const scollToRef = useRef<any>();
+    const [userData, setUserData] = useState<any>("");
+    const [enrolled, setenrolled] = useState<any>(false);
+    const [expanded, setExpanded] = useState<string | false>('panel1');
+    const [EnrolledCourses, setEnrolledCoursess] = useState([]);
+    const handleChange =
+        (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
+            setExpanded(newExpanded ? panel : false);
+        };
     useEffect(() => {
         if (router.isReady) {
+            let localData: any;
+            if (typeof window !== "undefined") {
+                localData = window.localStorage.getItem("userData");
+            }
+            if (localData) {
+                setUserData(JSON.parse(localData));
+            }
             getCourseDetails();
             getAllCourseData();
             getSubscribtion();
-            //router.push(`/coursedetails/${id}`);
+            getTopEnrolledCourses();
+
+            if (localData) {
+                const dt = JSON.parse(localData)
+                CheckenrolledCourse(dt?.id);
+            }
         }
     }, [router.isReady]);
     //get course details by id
@@ -48,9 +158,9 @@ export default function CoursesDetailsPage() {
             setFreeCourses(courses?.data?.filter((a: any) =>
                 a?.course?.is_chargeable === "free"
             ))
-            setPaidCourses(courses?.data?.filter((a: any) =>
-                a?.course?.is_chargeable === "paid"
-            ))
+            // setPaidCourses(courses?.data?.filter((a: any) =>
+            //     a?.course?.is_chargeable === "paid"
+            // ))
         })
     }
     //get subscription
@@ -60,9 +170,73 @@ export default function CoursesDetailsPage() {
         })
     }
 
-    console.log(modulesdet);
+
+    //get top enrolled courses
+    const getTopEnrolledCourses = () => {
+        TopEnrolledCourses().then((res) => {
+            setEnrolledCoursess(res?.data)
+        })
+    }
+
+    //dialogs
+    const [open, setOpen] = useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const Getsubscription = () => {
+        setOpen(false);
+        router.push('/subscribeplan')
+    }
+
+    const Enrolled = () => {
+        toast.success("You are already enrolled");
+    }
+
+    //enroll course
+    const enrolledCourse = () => {
+        const reqData = {
+            user_id: userData?.id,
+            course_id: id,
+            course_type: coursedet?.is_chargeable,
+        }
+        UserEnrolledCourses(reqData).then(res => {
+            if (res?.status) {
+                toast.success("Course Enrolled successfully");
+                CheckenrolledCourse(userData?.id);
+            }
+        })
+    }
+
+    //check course enrolled or not
+    const CheckenrolledCourse = (dt: any) => {
+        const reqData = {
+            user_id: dt,
+            course_id: id
+        }
+        CheckEnrolledCourses(reqData).then(res => {
+            if (res?.data?.length > 0) {
+                setenrolled(true)
+            };
+        })
+    }
 
 
+    const breadcrumbs = [
+        <Link
+            key="2"
+            color="inherit"
+            href="/courses"
+        >
+            Course
+        </Link>,
+        <Typography key="3" color="text.primary">
+            Course Details
+        </Typography>,
+    ];
     return (
         <>
             {/*header*/}
@@ -70,33 +244,57 @@ export default function CoursesDetailsPage() {
             {/*main part*/}
             <Box className={styles.coursesdetails}>
                 <Container maxWidth="lg">
+                    <Box sx={{ paddingLeft: "1.7rem" }} marginBottom={"25px"}>
+                        <Breadcrumbs
+                            separator={<NavigateNextIcon fontSize="small" />}
+                            aria-label="breadcrumb"
+                        >
+                            {breadcrumbs}
+                        </Breadcrumbs>
+                    </Box>
                     {/*main card content*/}
                     <Grid container spacing={2} className={styles.crsgrid}>
                         <Grid item xs={12} md={8} lg={9}>
                             <Box sx={{ display: 'flex' }}>
                                 <CardMedia
                                     component="img"
-                                    sx={{ width: 300, display: { xs: 'none', sm: 'block' } }}
+                                    sx={{ width: 300, display: { xs: 'none', sm: 'block', borderRadius: "10px" } }}
                                     image="https://leverageedu.com/blog/wp-content/uploads/2020/06/Short-term-Professional-Courses-after-Graduation.jpg"
-                                    alt={"kjho;lih"}
+                                    alt={"image"}
                                 />
-                                <CardContent sx={{ flex: 1 }}>
-                                    <Typography component="h2" variant="h5">
+                                <CardContent sx={{ flex: 1, paddingTop: "0px", paddingBottom: '0px' }} >
+                                    <Typography component="h2" variant="h5" sx={{ fontSize: "2.5rem", fontWeight: "bold" }}>
                                         {capitalizeFirstLetter(coursedet?.title)}
                                     </Typography>
                                     <Typography variant="subtitle1" color="text.secondary">
                                         Type : {capitalizeFirstLetter(coursedet?.is_chargeable)}
                                     </Typography>
                                     <Typography variant="subtitle1" paragraph sx={{ fontFamily: "sans - serif" }}>
-                                        {capitalizeFirstLetter(coursedet?.short_description ? coursedet?.short_description
+                                        {capitalizeFirstLetter(coursedet?.short_description ? coursedet?.short_description?.replace(/(<([^>]+)>)/ig, '')
                                             : "")}
                                     </Typography>
-                                    <Typography variant="subtitle1" paragraph>
-                                        {capitalizeFirstLetter(coursedet?.long_description)}
-                                    </Typography>
-                                    <Button variant="contained" className="authPageButton" id={styles.muibuttonBackgroundColor} onClick={() => scollToRef.current.scrollIntoView({ behavior: "smooth" })} >
-                                        Subscribe Now
-                                    </Button>
+                                    <Typography variant="subtitle1" color="text.secondary" paragraph sx={{ fontFamily: "sans - serif" }}>120 <sup>+</sup> Enrolled Students</Typography>
+                                    {userData ? (
+                                        <>
+                                            {enrolled === true ? (
+                                                <Button variant="contained" className="authPageButton" id={styles.muibuttonBackgroundColor}
+                                                    onClick={Enrolled}
+                                                >
+                                                    Enrolled
+                                                </Button>
+                                            ) : <Button variant="contained" className="authPageButton" id={styles.muibuttonBackgroundColor}
+                                                onClick={enrolledCourse}
+                                            >
+                                                Enroll Now
+                                            </Button>}
+                                        </>
+
+
+                                    ) : <Button variant="contained" className="authPageButton" id={styles.muibuttonBackgroundColor}
+                                        onClick={handleClickOpen}
+                                    >
+                                        Enroll Now
+                                    </Button>}
                                 </CardContent>
                             </Box>
                         </Grid>
@@ -104,27 +302,10 @@ export default function CoursesDetailsPage() {
                             <center>
                                 <Box sx={{ maxWidth: 345, display: 'flex' }} >
                                     <Box sx={{ background: "white", border: "border: 1px solid #80808024", borderRadius: "6px" }}>
-                                        <CardMedia
-                                            component="img"
-                                            height="140"
-                                            image=
-                                            "https://t4.ftcdn.net/jpg/02/93/50/51/240_F_293505190_QACuhlzI4WXOeznVC59LLb2yUcQbf3xv.jpg"
-                                            alt="gfg"
-                                        />
-                                        <CardContent>
-                                            <Typography gutterBottom variant="h5"
-                                                component="div">
-                                                LMS
-                                            </Typography>
-                                            <Typography variant="body2"
-                                                color="text.secondary">
-                                                A Learning Management portal for Learning and Growing Skills.
-                                                It contains well written Courses and Tools.
-                                            </Typography>
-                                            <Button variant="contained" sx={{ marginTop: "20px" }} id={styles.muibuttonBackgroundColor}>
-                                                Enroll Now
-                                            </Button>
-                                        </CardContent>
+                                        <ReactPlayer url='https://youtu.be/yRpLlJmRo2w?t=4' width={"auto"} height={270}
+                                            playing={true}
+                                            muted={true}
+                                            controls={true} />
                                     </Box>
                                 </Box>
                             </center>
@@ -135,50 +316,124 @@ export default function CoursesDetailsPage() {
                         <Grid item xs={12} md={8} lg={9}>
                             <Card sx={{ padding: "20px" }}>
                                 <CardContent>
-                                    <Typography gutterBottom variant="h5" component="div" mt={2}>
+                                    <Typography gutterBottom variant="h5" component="div" sx={{ fontWeight: "bold" }}>
                                         About This Course
                                     </Typography>
                                     <Typography variant="body2" color="text.primary" mt={1} sx={{ lineHeight: "26px" }}>
-                                        {capitalizeFirstLetter(coursedet?.long_description)}
+                                        {capitalizeFirstLetter(coursedet?.long_description?.replace(/(<([^>]+)>)/ig, ''))}
                                     </Typography>
-                                    <Typography gutterBottom variant="h5" component="div" mt={2}>
-                                        What you will learn
-                                    </Typography>
-                                    <List
-                                        sx={{
-                                            listStyleType: 'disc',
-                                            pl: 2.5,
-                                            '& .MuiListItem-root': {
-                                                display: 'list-item',
-                                            },
-                                        }}>
-                                        {modulesdet.map((value: any, key) => {
-                                            return (
-                                                <ListItem key={key} className={styles.listitem}>
-                                                    {value?.title}
-                                                    {value?.sessions.map((session: any, key: any) => {
-                                                        return (
-                                                            <List
-                                                                key={key}
-                                                                sx={{
-                                                                    listStyleType: 'disc',
-                                                                    pl: 2.5,
-                                                                    '& .MuiListItem-root': {
-                                                                        display: 'list-item',
-                                                                    },
-                                                                }}>
-                                                                <ListItem className={styles.listitem}>
-                                                                    {session?.title}
-                                                                </ListItem>
-                                                            </List>
-                                                        )
-
-                                                    })}
+                                    <Box sx={{ border: "1px solid gray", marginTop: "30px", padding: "10px" }}>
+                                        <Typography gutterBottom variant="h5" component="div" sx={{ fontWeight: "bold" }} >
+                                            What you&apos;ll learn
+                                        </Typography>
+                                        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                                            <Grid item xs={6}>
+                                                <ListItem>
+                                                    <ListItemIcon>
+                                                        <CheckOutlinedIcon />
+                                                    </ListItemIcon>
+                                                    <ListItemText
+                                                        primary="Extensive, informative and interesting video lecture"
+                                                    />
                                                 </ListItem>
-                                            )
-                                        })
-                                        }
-                                    </List>
+                                            </Grid>
+                                            <Grid item xs={6}>
+                                                <ListItem>
+                                                    <ListItemIcon>
+                                                        <CheckOutlinedIcon />
+                                                    </ListItemIcon>
+                                                    <ListItemText
+                                                        primary="Complete Code demonstrated in lecture"
+                                                    />
+                                                </ListItem>
+                                            </Grid>
+                                            <Grid item xs={6}>
+                                                <ListItem>
+                                                    <ListItemIcon>
+                                                        <CheckOutlinedIcon />
+                                                    </ListItemIcon>
+                                                    <ListItemText
+                                                        primary="Coverage of all important primary Javascript concepts"
+                                                    />
+                                                </ListItem>
+                                            </Grid>
+                                            <Grid item xs={6}>
+                                                <ListItem>
+                                                    <ListItemIcon>
+                                                        <CheckOutlinedIcon />
+                                                    </ListItemIcon>
+                                                    <ListItemText
+                                                        primary="Lab Solution Sets"
+                                                    />
+                                                </ListItem>
+                                            </Grid>
+                                            <Grid item xs={6}>
+                                                <ListItem>
+                                                    <ListItemIcon>
+                                                        <CheckOutlinedIcon />
+                                                    </ListItemIcon>
+                                                    <ListItemText
+                                                        primary="All Powerpoint Demonstrations Used in Course"
+                                                    />
+                                                </ListItem>
+                                            </Grid>
+                                        </Grid>
+                                    </Box>
+                                    <Typography gutterBottom variant="h5" component="div" mt={3} sx={{ fontWeight: "bold" }} >
+                                        This course includes:
+                                    </Typography>
+                                    <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                                        <Grid item xs={6}>
+                                            <ListItem>
+                                                <ListItemIcon>
+                                                    <OndemandVideoIcon />
+                                                </ListItemIcon>
+                                                <ListItemText
+                                                    primary="7 hours on-demand video"
+                                                />
+                                            </ListItem>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <ListItem>
+                                                <ListItemIcon>
+                                                    <SystemUpdateAltIcon />
+                                                </ListItemIcon>
+                                                <ListItemText
+                                                    primary="25+ downloadable resources"
+                                                />
+                                            </ListItem>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <ListItem>
+                                                <ListItemIcon>
+                                                    <PhoneIphoneIcon />
+                                                </ListItemIcon>
+                                                <ListItemText
+                                                    primary="Access on mobile and computers"
+                                                />
+                                            </ListItem>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <ListItem>
+                                                <ListItemIcon>
+                                                    <LibraryBooksIcon />
+                                                </ListItemIcon>
+                                                <ListItemText
+                                                    primary="100+ Modules and Sessions"
+                                                />
+                                            </ListItem>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <ListItem>
+                                                <ListItemIcon>
+                                                    <EmojiEventsOutlinedIcon />
+                                                </ListItemIcon>
+                                                <ListItemText
+                                                    primary="Certificate of completion"
+                                                />
+                                            </ListItem>
+                                        </Grid>
+                                    </Grid>
                                 </CardContent>
                             </Card>
                         </Grid>
@@ -194,14 +449,6 @@ export default function CoursesDetailsPage() {
                                                     </ListItemIcon>
                                                     <ListItemText
                                                         primary="146 Learner"
-                                                    />
-                                                </ListItem>
-                                                <ListItem>
-                                                    <ListItemIcon>
-                                                        <LocalOfferIcon />
-                                                    </ListItemIcon>
-                                                    <ListItemText
-                                                        primary="$120"
                                                     />
                                                 </ListItem>
                                                 <ListItem>
@@ -247,9 +494,9 @@ export default function CoursesDetailsPage() {
                                                 display: 'list-item',
                                             },
                                         }}>
-                                        {Courses?.slice(0, 5).map((data: any, key: any) => {
+                                        {Courses?.slice(0, 10).map((data: any, key: any) => {
                                             return (<ListItem key={key} >
-                                                <Link href="#" className={styles.listitems}>{data?.course?.title}
+                                                <Link href="#" className={styles.listitems}>{capitalizeFirstLetter(data?.course?.title)}
                                                 </Link>
                                             </ListItem >)
                                         })}
@@ -258,8 +505,42 @@ export default function CoursesDetailsPage() {
                             </Box>
                         </Grid>
                     </Grid>
+                    <Grid container spacing={2} className={styles.crsgrid} mt={5}>
+                        <Grid item xs={12} md={8} lg={9}>
+                            <Typography gutterBottom variant="h4" component="div" sx={{ fontWeight: "bold" }} >
+                                Course content
+                            </Typography>
+                            <Box mt={1}>
+                                <Typography sx={{ fontSize: '15px' }} mb={1}>
+                                    30 Modules, 123 sessions
+                                </Typography>
+                                {modulesdet.map((value: any, key) => {
+                                    return (
+                                        <Accordion key={key} expanded={expanded === 'panel1'} onChange={handleChange('panel1')} >
+                                            <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
+                                                <Typography>  {value?.title}</Typography>
+                                            </AccordionSummary>
+                                            {value?.sessions.map((session: any, key: any) => {
+                                                return (
+                                                    <AccordionDetails key={key}>
+                                                        <Typography>
+                                                            {session?.title}
+                                                        </Typography>
+                                                    </AccordionDetails>
+                                                )
+                                            }
+                                            )}
+                                        </Accordion>
+                                    )
+                                })}
+                            </Box>
+                        </Grid>
+                        <Grid item xs={12} md={3} lg={3}>
+
+                        </Grid>
+                    </Grid>
                     {/*top enrolled course*/}
-                    <Box className={styles.enrolled} ref={scollToRef}>
+                    <Box className={styles.enrolled}>
                         <Container maxWidth="lg">
                             <Box className={styles.headerbox}>
                                 <Typography variant="h6" gutterBottom className={styles.h6}>
@@ -283,8 +564,8 @@ export default function CoursesDetailsPage() {
                                 <Divider className={styles.divder} />
                             </Box>
                             <Box className={styles.articles}>
-                                {PaidCourses?.slice(0, 6).map((data, key) => {
-                                    return (<CourseCard key={key} paidcourses={data} />)
+                                {EnrolledCourses?.slice(0, 6).map((data, key) => {
+                                    return (<CourseCard key={key} enrolledCourses={data} />)
                                 })}
                             </Box>
                         </Container>
@@ -311,6 +592,30 @@ export default function CoursesDetailsPage() {
             </Box >
             {/*footer*/}
             < WebViewFooter />
+            {/*dialouge box*/}
+            <BootstrapDialog
+                onClose={handleClose}
+                aria-labelledby="customized-dialog-title"
+                open={open}
+            >
+                <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
+                    Take Subscription Now
+                </BootstrapDialogTitle>
+                <DialogContent >
+                    <Typography gutterBottom>
+                        Hii, user if you have a already subscriptins in LMS please login and enroll course.
+                    </Typography>
+                    <Typography gutterBottom>
+                        Don&apos;t have a subscriptions please subscribe.
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button autoFocus variant="contained" id={styles.muibuttonBackgroundColor} onClick={Getsubscription}>
+                        Subscribe Now
+                    </Button>
+                </DialogActions>
+            </BootstrapDialog>
+            <ToastContainer />
         </>
     );
 }

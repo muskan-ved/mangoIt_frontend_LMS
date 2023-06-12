@@ -53,7 +53,10 @@ import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { BASE_URL } from "@/config/config";
 import Link from "next/link";
 import Preview from "@/common/PreviewAttachments/previewAttachment";
-import { HandleCourseGetByUserId } from "@/services/course_enroll";
+import {
+  HandleCourseGetByUserId,
+  MarkAsComplete,
+} from "@/services/course_enroll";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -72,6 +75,8 @@ export default function Couseview() {
   const [progress, setProgress] = useState<any>(10);
   const [allData, setAllData] = useState<any>([]);
   const [userId, setUserId] = useState<any>("");
+  // const [completeSession, setCompleteSession] = useState<any>("");
+  var completeSession: any;
 
   useEffect(() => {
     let localData: any;
@@ -97,7 +102,6 @@ export default function Couseview() {
       HandleCourseByCourseId(id).then((data) => {
         setCousedata(data?.data);
       });
-      console.log("userIduserId", userId);
       if (userId && userId) {
         HandleCourseGetByUserId(userId).then((data1) => {
           setAllData(data1.data);
@@ -185,7 +189,15 @@ export default function Couseview() {
   }
 
   const handleMarkAsComplete = () => {
-    console.log("W@@@@@@@@@@@@markAsComplete",sessionData);
+    let reqData = {
+      user_id: userId,
+      course_id: sessionData.course_id,
+      module_id: sessionData.module_id,
+      session_id: sessionData.id,
+    };
+    MarkAsComplete(reqData).then((data: any) => {
+      console.log("@");
+    });
   };
 
   var calculate: any;
@@ -195,9 +207,34 @@ export default function Couseview() {
       const obj = row?.courseIdCounts;
       const key: any = router?.query?.id;
       const value = obj[key];
+      console.log(value, "rowwwwwwwwwww", row.sessionCount);
+
       const sessionValue = row?.sessionCount[0]?.sessionCount;
+      // console.log(value, "sessionValuesessionValue", row?.sessionCount);
       calculate = (value / sessionValue) * 100;
     });
+
+  // const completeMark =
+  //   allData &&
+  //   allData.map((row: any) => {
+  //     let item = row && row.course.view_history;
+  //     let moduleId = sessionData?.module_id;
+  //     let sessionId = sessionData?.id;
+  //     console.log(item,'sessionDatasessionData',sessionData);
+  //     item &&
+  //       item.map((data: any) => {
+  //         console.log("datadatadatadatadatadata", data);
+  //         let findByModule = data && data[moduleId];
+  //         console.log("@@@@@@@@@@@@", findByModule);
+  //         // return false
+  //         for (let i = 0; i < findByModule?.length; i++) {
+  //           console.log("############", findByModule[i]);
+  //           const value = findByModule[i] && findByModule[i] === sessionId;
+  //           completeSession = value;
+  //         }
+  //       });
+  //     console.log("@###########", completeSession);
+  //   });
 
   return (
     <>
@@ -433,6 +470,19 @@ export default function Couseview() {
                         )}
                         {files && (
                           <Box className={courseStyle.backcss}>
+                            {/* {completeSession && completeSession ? (
+                              <Button
+                                type="submit"
+                                size="large"
+                                variant="outlined"
+                                className={courseStyle.backbtncs12}
+                                // onClick={handleMarkAsComplete}
+                                // id={styles.muibuttonBackgroundColor}
+                                disabled
+                              >
+                                Mark as complete
+                              </Button>
+                            ) : ( */}
                             <Button
                               type="submit"
                               size="large"
@@ -443,6 +493,7 @@ export default function Couseview() {
                             >
                               Mark as complete
                             </Button>
+                            {/* )} */}
                           </Box>
                         )}
                       </Item>
@@ -454,7 +505,9 @@ export default function Couseview() {
                         </Typography>
                         <Box sx={{ width: "92%" }}>
                           <LinearProgressWithLabel
-                            value={calculate && calculate !== null ? calculate:0}
+                            value={
+                              calculate && calculate !== null ? calculate : 0
+                            }
                           />
                         </Box>
                         <br />
@@ -534,14 +587,6 @@ export default function Couseview() {
                           ))}
                       </Box>
                     </Grid>
-                    {/* <Button
-                    type="submit"
-                    size="large"
-                    variant="contained"
-                    className={subs.btncss}
-                  >
-                    Enroll Now
-                  </Button> */}
                     <br />
                   </Grid>
                 </Box>

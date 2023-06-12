@@ -13,7 +13,6 @@ import { GenerateToken } from "@/services/auth";
 interface MyAppProps {
   siteConfigData: any; // Replace with the actual type of your site config data
 }
-
 export default function App({ Component, pageProps, siteConfigData }: AppProps | any) {
   const router = useRouter();
   useEffect(() => {
@@ -39,8 +38,11 @@ export default function App({ Component, pageProps, siteConfigData }: AppProps |
           router.push("/paymentcancel");
         } else if (router.asPath.includes('paymentsuccess') || router.asPath.includes('checkout') || router.asPath.includes('coursedetails')) {
           router.push(router.asPath);
+        } else if (window.localStorage.getItem("loginToken") && router.asPath.includes('profile')) {
+          router.push("/user/profile");
         } else {
-          router.push("/home");
+          //router.push("/home");
+          router.push(router.asPath);
         }
       } else {
         router.push(router.asPath);

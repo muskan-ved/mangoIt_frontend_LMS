@@ -42,3 +42,77 @@ export const HandleCourseGetByUserId = async (courseId: any, search?: any) => {
       });
   }
 };
+
+export const UserEnrolledCourses = async (reqData: any) => {
+  return await axios({
+    method: "POST",
+    url: `${API.createenrollcourse}`,
+    headers: LoginHeader(),
+    data: reqData,
+  })
+    .then((request) => {
+      return request;
+    })
+    .catch((error) => {
+      if (error.response.status === 401) {
+        HandleLogout();
+      }
+      return error;
+    });
+};
+
+export const CheckEnrolledCourses = async (reqData: any) => {
+  return await axios({
+    method: "post",
+    url: `${API.checenrollcourses}`,
+    headers: LoginHeader(),
+    data: reqData,
+  })
+    .then((request) => {
+      return request;
+    })
+    .catch((error) => {
+      if (error.response.status === 401) {
+        HandleLogout();
+      }
+      return error;
+    });
+};
+
+export const TopEnrolledCourses = async () => {
+  return await axios({
+    method: "get",
+    url: `${API.topenrolledcourses}`,
+    headers: authHeader(),
+  })
+    .then((request) => {
+      return request;
+    })
+    .catch((error) => {
+      if (error.response.status === 401) {
+        HandleLogout();
+      }
+      return error;
+    });
+};
+
+export const MarkAsComplete = async (reqData: any) => {
+  return await axios({
+    method: "PUT",
+    url: `${API.markascomplete}`,
+    headers: authHeader(),
+    data: reqData,
+  })
+    .then((response) => {
+      toast.success(response?.data);
+      return response;
+    })
+    .catch((error) => {
+      if (error.response.status === 400) {
+        HandleLogout();
+      } else {
+        toast.error("Something went wrong");
+      }
+      return error;
+    });
+};
