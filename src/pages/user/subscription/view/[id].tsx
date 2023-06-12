@@ -405,7 +405,7 @@ export default function View() {
                                 <TableCell>
                                   {monthNames[d.getMonth()]}
                                 </TableCell>
-                                <TableCell>{row?.transaction_id}</TableCell>
+                                <TableCell>{row?.transaction_id?.substring(0, 20) + '.....'}</TableCell>
                                 <TableCell>
                                   {" "}
                                   {capitalizeFirstLetter(row?.payment_type)}
