@@ -118,12 +118,7 @@ export default function CoursesDetailsPage() {
     const [modulesdet, setmodulesdet] = useState([])
     const [userData, setUserData] = useState<any>("");
     const [enrolled, setenrolled] = useState<any>(false);
-    const [expanded, setExpanded] = useState<string | false>('panel1');
     const [EnrolledCourses, setEnrolledCoursess] = useState([]);
-    const handleChange =
-        (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
-            setExpanded(newExpanded ? panel : false);
-        };
     useEffect(() => {
         if (router.isReady) {
             let localData: any;
@@ -143,7 +138,7 @@ export default function CoursesDetailsPage() {
                 CheckenrolledCourse(dt?.id);
             }
         }
-    }, [router.isReady]);
+    }, [router.isReady, id]);
     //get course details by id
     const getCourseDetails = () => {
         HandleCourseByCourseId(id).then((coursedetails) => {
@@ -237,6 +232,16 @@ export default function CoursesDetailsPage() {
             Course Details
         </Typography>,
     ];
+
+
+    let rotalsession = 0;
+    coursedet && coursedet?.modules?.forEach((element: any) => {
+        rotalsession += element?.sessions?.length;
+    });
+
+
+
+
     return (
         <>
             {/*header*/}
@@ -505,40 +510,43 @@ export default function CoursesDetailsPage() {
                             </Box>
                         </Grid>
                     </Grid>
-                    <Grid container spacing={2} className={styles.crsgrid} mt={5}>
-                        <Grid item xs={12} md={8} lg={9}>
-                            <Typography gutterBottom variant="h4" component="div" sx={{ fontWeight: "bold" }} >
-                                Course content
-                            </Typography>
-                            <Box mt={1}>
-                                <Typography sx={{ fontSize: '15px' }} mb={1}>
-                                    30 Modules, 123 sessions
-                                </Typography>
-                                {modulesdet.map((value: any, key) => {
-                                    return (
-                                        <Accordion key={key} expanded={expanded === 'panel1'} onChange={handleChange('panel1')} >
-                                            <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
-                                                <Typography>  {value?.title}</Typography>
-                                            </AccordionSummary>
-                                            {value?.sessions.map((session: any, key: any) => {
-                                                return (
-                                                    <AccordionDetails key={key}>
-                                                        <Typography>
-                                                            {session?.title}
-                                                        </Typography>
-                                                    </AccordionDetails>
-                                                )
-                                            }
-                                            )}
-                                        </Accordion>
-                                    )
-                                })}
-                            </Box>
-                        </Grid>
-                        <Grid item xs={12} md={3} lg={3}>
 
-                        </Grid>
-                    </Grid>
+                    {coursedet ?
+                        (<Grid container spacing={2} className={styles.crsgrid} mt={5}>
+                            <Grid item xs={12} md={8} lg={9}>
+                                <Typography gutterBottom variant="h4" component="div" sx={{ fontWeight: "bold" }} >
+                                    Course content
+                                </Typography>
+                                <Box mt={1}>
+                                    <Typography sx={{ fontSize: '15px' }} mb={1}>
+                                        {coursedet?.modules?.length} Modules, {rotalsession} sessions
+                                    </Typography>
+                                    {modulesdet.map((value: any, key) => {
+                                        return (
+                                            <Accordion key={key}  >
+                                                <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
+                                                    <Typography>  {value?.title}</Typography>
+                                                </AccordionSummary>
+                                                {value?.sessions.map((session: any, key: any) => {
+                                                    return (
+                                                        <AccordionDetails key={key}>
+                                                            <Typography>
+                                                                {session?.title}
+                                                            </Typography>
+                                                        </AccordionDetails>
+                                                    )
+                                                }
+                                                )}
+                                            </Accordion>
+                                        )
+                                    })}
+                                </Box>
+                            </Grid>
+                            <Grid item xs={12} md={3} lg={3}>
+
+                            </Grid>
+                        </Grid>) : ""
+                    }
                     {/*top enrolled course*/}
                     <Box className={styles.enrolled}>
                         <Container maxWidth="lg">
