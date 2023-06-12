@@ -18,36 +18,36 @@ export default function App({ Component, pageProps, siteConfigData }: AppProps |
   useEffect(() => {
     //generate authorizationtoken and set localstorage
     GenerateToken();
-    // if (typeof window !== "undefined") {
-    //   if (!window.localStorage.getItem("loginToken") || window.localStorage.getItem("loginToken")) {
-    //     if (router.asPath.includes('home')) {
-    //       router.push("/home");
-    //     } else if (router.asPath.includes('courses')) {
-    //       router.push("/courses");
-    //     } else if (router.asPath.includes('subscribeplan')) {
-    //       router.push("/subscribeplan");
-    //     } else if (router.asPath.includes('login')) {
-    //       router.push("/login");
-    //     } else if (router.asPath.includes('register')) {
-    //       router.push("/register");
-    //     } else if (router.asPath.includes('forgotpassword')) {
-    //       router.push("/forgotpassword");
-    //     } else if (router.asPath.includes('resetpassword')) {
-    //       router.push("/resetpassword");
-    //     } else if (router.asPath.includes('paymentcancel')) {
-    //       router.push("/paymentcancel");
-    //     } else if (router.asPath.includes('paymentsuccess') || router.asPath.includes('checkout') || router.asPath.includes('coursedetails')) {
-    //       router.push(router.asPath);
-    //     } else if (window.localStorage.getItem("loginToken") && router.asPath.includes('profile')) {
-    //       router.push("/user/profile");
-    //     } else {
-    //       //router.push("/home");
-    //       router.push(router.asPath);
-    //     }
-    //   } else {
-    //     router.push(router.asPath);
-    //   }
-    // }
+    console.log("app @@@@@@@@@@@@@", router?.asPath, "app ##################", router?.asPath.includes("/"))
+    if (typeof window !== "undefined") {
+      router.push(router.asPath);
+      //     if (router.asPath.includes('home')) {
+      //       router.push("/home");
+      //     } else if (router.asPath.includes('courses')) {
+      //       router.push("/courses");
+      //     } else if (router.asPath.includes('subscribeplan')) {
+      //       router.push("/subscribeplan");
+      //     } else if (router.asPath.includes('login')) {
+      //       router.push("/login");
+      //     } else if (router.asPath.includes('register')) {
+      //       router.push("/register");
+      //     } else if (router.asPath.includes('forgotpassword')) {
+      //       router.push("/forgotpassword");
+      //     } else if (router.asPath.includes('resetpassword')) {
+      //       router.push("/resetpassword");
+      //     } else if (router.asPath.includes('paymentcancel')) {
+      //       router.push("/paymentcancel");
+      //     } else if (router.asPath.includes('paymentsuccess') || router.asPath.includes('checkout') || router.asPath.includes('coursedetails')) {
+      //       router.push(router.asPath);
+      //     } else if (window.localStorage.getItem("loginToken") && router.asPath.includes('profile')) {
+      //       router.push("/user/profile");
+      //     } else {
+      //       //router.push("/home");
+      //       router.push(router.asPath);
+      //     }
+      //   } else {
+      //     router.push(router.asPath);
+    }
   }, []);
 
   const lastSegment = router.pathname.substring(router.pathname.lastIndexOf("/") + 1);
