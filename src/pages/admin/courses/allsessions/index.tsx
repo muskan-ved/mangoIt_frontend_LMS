@@ -4,6 +4,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 // MUI Import
 import {
+  Autocomplete,
   Box,
   Button,
   Card,
@@ -85,6 +86,10 @@ const AllSession = () => {
   const [search, setSearch] = React.useState('');
   const [getFilter, setFilter] = React.useState<number>(0);
   const [deleteRow, setDeleteRow] = React.useState<sessionType | any>([])
+  const [getCourseTitle, setCourseTitle] = React.useState<any>("");
+  const [getCourseId, setCourseId] = React.useState<any>(0);
+  const [getModuleTitle, setModuleTitle] = React.useState<any>("");
+  const [getModuleId, setModuleId] = React.useState<any>(0);
   const router = useRouter()
   const {
     handleSubmit,
@@ -105,7 +110,7 @@ const AllSession = () => {
     setPage(p);
     DATA.jump(p);
   };
-
+  //useEffect
   React.useEffect(() => {
     getSessionData();
     getModuleData();
@@ -167,11 +172,11 @@ const AllSession = () => {
     })
     setOpen(!open);
   }
-
+  // submit for filter
   const onSubmit = (event: any) => {
     const filterData: any = {
-      module_id: event.module,
-      course_id: event.course,
+      module_id: getModuleId,
+      course_id: getCourseId,
       status: event.status,
     }
     HandleSessionGet('', filterData).then((itemFiltered) => {
@@ -183,7 +188,7 @@ const AllSession = () => {
     setFilter(0)
     reset({ course: 0, module: 0, status: 0 });
     getSessionData();
- 
+
   }
 
   // console.log(' session rowss', rows)
@@ -268,7 +273,7 @@ const AllSession = () => {
                                         <InputLabel htmlFor="name" className={Sessions.courseInFilter}>
                                           Course
                                         </InputLabel>
-                                        <Controller
+                                        {/* <Controller
                                           name="course"
                                           control={control}
                                           defaultValue={getFilter}
@@ -284,6 +289,25 @@ const AllSession = () => {
                                               </Select>
                                             </FormControl>
                                           )}
+                                        /> */}
+                                        <Autocomplete
+                                     
+                                          id="combo-box-demo"
+                                          // value={getCourseTitle === "" ? null : getCourseTitle}
+                                          options={getCourse}
+                                          getOptionLabel={(option: any) =>
+                                            option?.course?.title
+                                          }
+                                          renderInput={(params) => (
+                                            <TextField
+                                              {...params}
+                                              placeholder="Course Name"
+                                            />
+                                          )}
+                                          onChange={(event, newValue) => {
+                                            setCourseId(newValue?.course?.id);
+                                            setCourseTitle(newValue?.course);
+                                          }}
                                         />
                                       </Stack>
                                     </Grid>
@@ -293,7 +317,7 @@ const AllSession = () => {
                                         <InputLabel htmlFor="name" className={Sessions.moduleInFilter}>
                                           Module
                                         </InputLabel>
-                                        <Controller
+                                        {/* <Controller
                                           name="module"
                                           control={control}
                                           defaultValue={getFilter}
@@ -309,6 +333,25 @@ const AllSession = () => {
                                               </Select>
                                             </FormControl>
                                           )}
+                                        /> */}
+                                        <Autocomplete
+                                      
+                                          id="combo-box-demo"
+                                          // value={getCourseTitle === "" ? null : getCourseTitle}
+                                          options={getModule}
+                                          getOptionLabel={(option: any) =>
+                                            option?.module?.title
+                                          }
+                                          renderInput={(params) => (
+                                            <TextField
+                                              {...params}
+                                              placeholder="Module Name"
+                                            />
+                                          )}
+                                          onChange={(event, newValue) => {
+                                            setModuleId(newValue?.module?.id);
+                                            setModuleTitle(newValue?.module);
+                                          }}
                                         />
                                       </Stack>
                                     </Grid>
@@ -345,7 +388,7 @@ const AllSession = () => {
                                     >
                                       <Box className={Sessions.boxInFilter}>
                                         <Button
-                                      
+
                                           size="medium"
                                           variant="contained"
                                           color="primary"
@@ -413,7 +456,7 @@ const AllSession = () => {
                         ))}
                       </TableRow>
                     </TableHead>
-                    <TableBody>{console.log('row', DATA)}
+                    <TableBody>
                       {rows && rows.length > 0 ? DATA.currentData() &&
                         DATA.currentData()
                           .map((row: any) => {

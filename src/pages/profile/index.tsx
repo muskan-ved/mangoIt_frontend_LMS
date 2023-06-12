@@ -19,19 +19,15 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { LoadingButton } from "@mui/lab";
-
 // validation import
 import { userProfileValidations } from "@/validation_schema/profileValidation";
-
 // Helper Import
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 // Types Import
 import { userType } from "@/types/userType";
-
 // External Components
 import Navbar from "@/common/LayoutNavigations/navbar";
 import SideBar from "@/common/LayoutNavigations/sideBar";
@@ -40,24 +36,24 @@ import Footer from "@/common/LayoutNavigations/footer";
 import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
 import SpinnerProgress from "@/common/CircularProgressComponent/spinnerComponent";
 import CircularProgressBar from "@/common/CircularProcess/circularProgressBar";
-
 // CSS Import
 import profiles from "../../styles/profile.module.css";
 import styles from "../../styles/sidebar.module.css";
-
 // API services
 import { HandleProfile } from "@/services/user";
 import { HandleUpdateProfile } from "@/services/user";
 import { BASE_URL } from "@/config/config";
 
+
 export default function Profile() {
+
   const [previewProfile, setPreviewProfile] = useState<string | any>("");
   const [file, setFile] = useState<string | any>("");
   const [isLoading, setLoading] = useState<boolean>(false);
   const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
   const [getUserData, setUserData] = useState<userType | null>(null);
   const [toggle, setToggle] = useState<boolean>(false);
-
+  const [getProfileId, setProfileId] = useState<any>();
   const {
     register,
     handleSubmit,
@@ -67,11 +63,10 @@ export default function Profile() {
   } = useForm<userType | any>({
     resolver: yupResolver(userProfileValidations),
   });
-
+//Submit update profile
   const onSubmit = async (event: any) => {
     const reqData = { ...event, profile_pic: file };
     const formData = new FormData();
-
     for (var key in reqData) {
       formData.append(key, reqData[key]);
     }
@@ -79,7 +74,6 @@ export default function Profile() {
     await HandleUpdateProfile(reqData.id, formData)
       .then((res) => {
         setLoadingButton(false);
-
         setTimeout(() => {
           setToggle(!toggle);
           getProfileData(res.data.id);
@@ -90,7 +84,7 @@ export default function Profile() {
         setLoadingButton(false);
       });
   };
-
+//get user data
   const getProfileData = (userId: any) => {
     setLoading(true);
     HandleProfile(userId).then((user) => {
@@ -107,6 +101,7 @@ export default function Profile() {
       setLoading(false);
     });
   };
+  //useEffect
   useEffect(() => {
     let localData: any;
     if (typeof window !== "undefined") {
@@ -115,6 +110,7 @@ export default function Profile() {
     if (localData) {
       const userId = JSON.parse(localData);
       getProfileData(userId?.id);
+      setProfileId(userId?.id);
     }
   }, []);
 
@@ -129,8 +125,8 @@ export default function Profile() {
   const handleEdit = async () => {
     setToggle(!toggle);
   };
-
-  const handleChange = (e: any) => {
+//Change Profile pic
+  const handleChange = async (e: any) => {
     const file = e.target.files[0];
     if (e.target.name === "profile_pic") {
       const reader = new FileReader();
@@ -139,9 +135,22 @@ export default function Profile() {
         setFile(file);
       };
       reader.readAsDataURL(file);
+      const reqData: any = {
+        first_name: getUserData?.first_name,
+        last_name: getUserData?.last_name,
+        email: getUserData?.email,
+        role_id: getUserData?.role_id,
+        profile_pic: file
+      };  
+      const formData = new FormData();
+      for (var key in reqData) {
+        formData.append(key, reqData[key]);
+      }  
+       await HandleUpdateProfile(getProfileId, formData)
     }
-  };
 
+  };
+ 
   return (
     <>
       <Navbar />
@@ -195,8 +204,8 @@ export default function Profile() {
                                         previewProfile
                                           ? previewProfile
                                           : getUserData.profile_pic
-                                          ? `${BASE_URL}/${getUserData.profile_pic}`
-                                          : "/profile.png"
+                                            ? `${BASE_URL}/${getUserData.profile_pic}`
+                                            : "/profile.png"
                                       }
                                     />
                                     <IconButton
@@ -226,13 +235,13 @@ export default function Profile() {
                               >
                                 {getUserData
                                   ? capitalizeFirstLetter(
-                                      getUserData?.first_name
-                                    )
+                                    getUserData?.first_name
+                                  )
                                   : ""}{" "}
                                 {getUserData
                                   ? capitalizeFirstLetter(
-                                      getUserData?.last_name
-                                    )
+                                    getUserData?.last_name
+                                  )
                                   : ""}{" "}
                               </Typography>
 

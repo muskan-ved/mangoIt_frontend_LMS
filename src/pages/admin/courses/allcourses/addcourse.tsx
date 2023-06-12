@@ -262,7 +262,7 @@ const AddCourse = () => {
                       </Button>
                     </Grid> */}
                     <Grid item mt={2} className={!errors?.long_description?.message ? styles.addNewCourseButton : styles.SubmitButton} >
-                    <Button className={styles.cancelButton} variant="contained" size="large" onClick={() => router.push('/admin/courses/allcourses')} >Cancel</Button>
+                    <Button className={styles.cancelButton} variant="contained" size="large" onClick={() => router.push('/admin/courses/allcourses')} id={SidebarStyles.muibuttonBackgroundColor}>Cancel</Button>
                       {!isLoadingButton ? <Button type="submit" size="large" variant="contained" id={SidebarStyles.muibuttonBackgroundColor}>
                         Submit
                       </Button> : <LoadingButton loading={isLoadingButton} className={styles.updateLoadingButton}
