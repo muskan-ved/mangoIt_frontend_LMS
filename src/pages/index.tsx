@@ -9,9 +9,8 @@ export default function Home() {
   const router: any = useRouter()
   //getHomeRoute(2)
   GenerateToken();
-  console.log("index @@@@@@@@@@@@@", router?.asPath, "index ##################", router?.asPath.includes("/"))
   if (typeof window !== "undefined") {
-    if (router?.asPath === '/' || router?.asPath.includes("/")) {
+    if (router?.asPath === '/') {
       return (<About />)
     } else {
       router.push(router.asPath);
