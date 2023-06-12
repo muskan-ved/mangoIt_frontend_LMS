@@ -16,11 +16,7 @@ export default function Home() {
     GenerateToken();
     //getHomeRoute(2)
     // if (typeof window !== "undefined") {
-    //   if (window.location.pathname === '/' || window.location.pathname === '/home' && !window.localStorage.getItem('loginToken')) {
-    //     router.push('/home');
-    //   } else if (window.location.pathname === '/' && window.localStorage.getItem('loginToken')) {
-    //     router.push('/profile');
-    //   } else if (window.location.pathname === '/login' && !window.localStorage.getItem('loginToken')) {
+    //   if (window.location.pathname === '/login' && !window.localStorage.getItem('loginToken')) {
     //     router.push('/login');
     //   }
     // }
