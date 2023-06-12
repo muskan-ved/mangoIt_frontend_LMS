@@ -16,7 +16,7 @@ interface MyAppProps {
 export default function App({ Component, pageProps, siteConfigData }: AppProps | any) {
   const router = useRouter();
   useEffect(() => {
-    //generate authorizationtoken and set localstorage
+    //generate authorizationtoken and set  localstorage 
     GenerateToken();
     if (typeof window !== "undefined") {
       router.push(router.asPath);
