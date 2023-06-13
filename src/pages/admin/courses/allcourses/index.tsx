@@ -38,7 +38,6 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { SearchOutlined } from "@mui/icons-material";
 import { useRouter } from "next/router";
@@ -95,7 +94,6 @@ const AllCourses = () => {
     handleSubmit,
     control,
     reset,
-    setValue, getValues,
   } = useForm();
 
   React.useEffect(() => {
@@ -111,7 +109,6 @@ const AllCourses = () => {
 
 
   const handleClickOpen = (row: any) => {
-    // console.log('row', row)
     setDeleteRow(row)
     setOpen(!open);
 
@@ -146,18 +143,14 @@ const AllCourses = () => {
       setSearch(e.target.value)
       getAllCourseData(search, filterObject)
     }
-
   }
 
   const getAllCourseData = (search:any, filterObject:any) => {
     HandleCourseGet(search, filterObject).then((courses) => {
       setRows(courses.data)
-    })
-   
+    })  
   }
 
-
-  // console.log(DATA.currentData(), 'rowww', rows)
   return (
     <>
       <Navbar />

@@ -20,8 +20,6 @@ import styles from "../../../../styles/sidebar.module.css";
 import UserCSS from "../../../../styles/user.module.css";
 import { ToastContainer } from 'react-toastify';
 import { userValidations } from '@/validation_schema/userValidation';
-import { HandleRegister } from '@/services/auth';
-// API services
 // API Service
 import { HandleProfile, HandleUpdateProfile } from '@/services/user';
 
@@ -60,9 +58,6 @@ export default function UpdateUser() {
         fields.forEach((field) => setValue(field, users.data[field]));
       })
     }
-    // if (error) {
-    //   return <Typography >{error}</Typography >;
-    // }
   }
   //handle Update
   const handleUpdate = (e: any) => {
