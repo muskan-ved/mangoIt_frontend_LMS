@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import styles from "../../styles/payment.module.css";
 import { useRouter } from "next/router";
-import { HandlePaymentDetails, UpdaUserSubscription } from "@/services/subscription";
+import { HandlePaymentDetails, HandleSubscriptionUpdate } from "@/services/subscription";
 import { UpdateOrder } from "@/services/order";
 import { CreateTransaction } from "@/services/transaction";
 import Link from "next/link";
@@ -51,7 +51,7 @@ export default function PaymentSuccess() {
                                     status: "active",
                                     start_date: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
                                 }
-                                UpdaUserSubscription(reqdata, orderdatas?.subscription_id).then((subcdet) => {
+                                HandleSubscriptionUpdate(reqdata, orderdatas?.subscription_id).then((subcdet) => {
                                     if (subcdet) {
                                         setTimeout(function () {
                                             router.push(`/user/subscription`);

@@ -21,6 +21,8 @@
 }
 .cancelButton{
     margin: 10px !important;
+    background-color: #1976d2 !important;
+    color: white;
 }
 .subbox{
     border: 1px dashed grey;

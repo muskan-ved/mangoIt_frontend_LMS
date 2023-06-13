@@ -28,9 +28,8 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { Margin, SearchOutlined } from "@mui/icons-material";
+import { SearchOutlined } from "@mui/icons-material";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
@@ -46,23 +45,16 @@ import Footer from "@/common/LayoutNavigations/footer";
 import { handleSortData } from "@/common/Sorting/sorting";
 import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
 import { usePagination } from "@/common/Pagination/paginations";
-//Type Import
-import { sessionType } from "@/types/sessionType";
-import { courseType } from "@/types/courseType";
-import { moduleType } from "@/types/moduleType";
 // CSS Import
 import styles from "../../../styles/sidebar.module.css";
-import subscription from "../../../styles/subscription.module.css"
+import Subscription from "../../../styles/subscription.module.css"
 import { ToastContainer } from "react-toastify";
 // API Service
-import { HandleSessionDelete, HandleSessionGet } from "@/services/session";
-import { HandleCourseGet } from "@/services/course";
-import { HandleModuleGet } from "@/services/module";
 import { AlertDialog } from "@/common/DeleteListRow/deleteRow";
 import { HandleSubscriptionDelete, HandleSubscriptionGet } from "@/services/subscription";
 
 interface Column {
-    id: "id" | "name" | "description" | "price" | "durationTerm" | "durationValue" | "status" | "createdBy" | "action";
+    id: "id" | "name" | "price" | "durationTerm" | "durationValue" | "status" | "createdBy" | "action";
     label: string;
     minWidth?: number;
     align?: "right";
@@ -71,13 +63,12 @@ interface Column {
   
   const columns: Column[] = [
     { id: "id", label: "ID", },
-    { id: "name", label: "SUBSCRIPTION NAME", minWidth: 170 },
-    { id: "description", label: "DESCRIPTION", minWidth: 100 },
+    { id: "name", label: "SUBSCRIPTION NAME", minWidth: 190 },
     { id: "price", label: "PRICE", minWidth: 100 },
-    { id: "durationTerm", label: "DURATION TERM", minWidth: 100 },
-    { id: "durationValue", label: "DURATION VALUE", minWidth: 100 },
+    { id: "durationTerm", label: "DURATION TERM", minWidth: 160 },
+    { id: "durationValue", label: "DURATION VALUE", minWidth: 160 },
     { id: "status", label: "STATUS", minWidth: 100 },
-    { id: "createdBy", label: "CREATED BY", minWidth: 100 },
+    { id: "createdBy", label: "CREATED BY", minWidth: 120 },
     { id: "action", label: "ACTION", minWidth: 100 },
   ];
   
@@ -89,7 +80,7 @@ const Subscriptions = () => {
     const [search, setSearch] = useState('');
     const [deleteRow, setDeleteRow] = useState<any>([])
     const [open, setOpen] = useState(false);
-    const [getFilter, setFilter] = useState<number>(0);
+    const [getFilter, setFilter] = useState<any>({filter:'all'});
     const [filterObject, setFilterObject] = useState<any>('');
 const router = useRouter()
 
@@ -129,8 +120,8 @@ const router = useRouter()
   }
 
   const resetFilterValue = () => {
-    setFilter(0)
-    reset({ is_chargeable: 0, status: 0 });
+    setFilter({filter:'all'})
+    reset({ status: 0 });
   }
 
   const handleSort = (rowsData: any) => {
@@ -144,17 +135,15 @@ const router = useRouter()
     if (identifier === 'reset') {
         getAllSubscriptionData()
       setSearch(e)
-    } else {
-      const search = e.target.value;
+    }else {
       setSearch(e.target.value)
       getAllSubscriptionData(e.target.value)
     }
   }
 
   const getAllSubscriptionData = (search:string='') => {
-    HandleSubscriptionGet(search).then((courses:any) => {
-      console.log(courses.data,"45")
-      setRows(courses.data)
+    HandleSubscriptionGet(search).then((subs:any) => {
+      setRows(subs.data)
     })
   }
 
@@ -162,30 +151,34 @@ const router = useRouter()
     getAllSubscriptionData();
   }, [])
 
+  const onfiltersSubmit = (e: any, identifier: any) => {
+    setFilter(0)
+  }
+
     return ( <>
-    <ToastContainer/>
-        <Navbar />
-        <Box className={styles.combineContentAndSidebar}>
-          <SideBar />
-  
-          <Box className={styles.siteBodyContainer}>
-            {/* breadcumbs */}
-            <BreadcrumbsHeading
-              First="Home"
-              Middle="Subscriptions"
-              Text="SUBSCRIPTIONS"
-              Link="/admin/subscription"
-            />
-  
-            {/* main content */}
-            <Card>
+      <Navbar />
+      <Box className={styles.combineContentAndSidebar}>
+        <SideBar />
+
+        <Box className={styles.siteBodyContainer}>
+          {/* breadcumbs */}
+          <BreadcrumbsHeading
+           First="Home"
+           Middle="Subscriptions"
+           Text="SUBSCRIPTIONS"
+           Link="/admin/subscription"
+          />
+
+          {/* main content */}
+          <Card>
             <CardContent>
-              <TextField
+            <TextField
                 id="standard-search"
                 value={search}
                 variant="outlined"
-                placeholder="Search by subscrip. name"
+                placeholder="Search by 'Subscription Name'"
                 onChange={(e) => handleSearch(e, '')}
+                sx={{width:'25%'}}
                 InputProps={{
                   endAdornment: (
                     !search ? <IconButton>
@@ -195,13 +188,13 @@ const router = useRouter()
                 }}
               />
               <Box
-                className={subscription.mainFilterBox}
+                className={Subscription.mainFilterBox}
               >
                 <PopupState variant="popover" popupId="demo-popup-popover" >
                   {(popupState) => (
-                    <Box>
+                    <Box >
                       <Button
-                        className={subscription.popStateFilterButton}
+                        className={Subscription.popStateFilterButton}
                         {...bindTrigger(popupState)}
                       >
                         <FilterAltOutlinedIcon />
@@ -225,24 +218,20 @@ const router = useRouter()
                             style={{ padding: "15px", width: '100%' }}
                           >
                             <Grid>
-                              <Typography variant="h5" className={subscription.filterBox}>
+                              <Typography variant="h5" className={Subscription.filterBox}>
                                 Filter
                               </Typography>
                               <Box component="form"
-                                // noValidate
-                                // onSubmit={handleSubmit(onSubmit)}
-                                className={subscription.filterForm}
+                                noValidate
+                                onSubmit={handleSubmit(onfiltersSubmit)}
+                                className={Subscription.filterForm}
                               >
-                                <Stack
-                                  style={{ marginTop: "10px" }}
-                                  className="form-filter"
-                                >
+                               
                                   <Grid container spacing={2}>
-                                    
-
-                                    <Grid item xs={12} md={4} lg={4}>
-                                      <Stack spacing={2}>
-                                        <InputLabel htmlFor="enddate" className={subscription.statusInFilter} >
+                                   
+                                    <Grid item xs={12} lg={12}>
+                                      
+                                        <InputLabel className={Subscription.statusInFilter} >
                                           Status
                                         </InputLabel>
                                         <Controller
@@ -263,15 +252,16 @@ const router = useRouter()
                                             </FormControl>
                                           )}
                                         />
-                                      </Stack>
+                                   
                                     </Grid>
                                     <Grid
                                       item
                                       xs={12}
                                       lg={12}
                                     >
-                                      <Box className={subscription.boxInFilter}>
+                                      <Box className={Subscription.boxInFilter}>
                                         <Button
+                                      
                                           size="medium"
                                           variant="contained"
                                           color="primary"
@@ -281,11 +271,12 @@ const router = useRouter()
                                           Reset
                                         </Button>
                                         <Button
+                                          id={styles.muibuttonBackgroundColor}
                                           size="medium"
                                           type="submit"
                                           variant="contained"
                                           color="primary"
-                                          className={subscription.applyButtonInFiltter}
+                                          className={Subscription.applyButtonInFiltter}
                                           onClick={popupState.close}
                                         >
                                           Apply
@@ -293,7 +284,7 @@ const router = useRouter()
                                       </Box>
                                     </Grid>
                                   </Grid>
-                                </Stack>
+                               
                               </Box>
                             </Grid>
                           </Container>
@@ -305,8 +296,8 @@ const router = useRouter()
                 &nbsp;
                 <Button variant="contained" onClick={() => router.push('/admin/subscription/addSubscription')} id={styles.muibuttonBackgroundColor}> + Add Subscription</Button>
               </Box>
-              <Paper className={subscription.papperForTable}>
-                <TableContainer className={subscription.tableContainer}>
+              <Paper className={Subscription.papperForTable}>
+                <TableContainer className={Subscription.tableContainer}>
                   <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                       <TableRow>
@@ -320,18 +311,30 @@ const router = useRouter()
                                 handleSort(rows) :
                                 ''
                             }}
+                            className={Subscription.tableHeadingForId}
                           >
-                            {toggle ? column.label === 'ID' ? <Typography>ID <ArrowDownwardOutlinedIcon fontSize="small" /> </Typography> : column.label : column.label === 'ID' ? <Typography>ID <ArrowUpwardOutlinedIcon fontSize="small" /> </Typography> : column.label}
+                            {column.label === "ID" ? (
+                              <>
+                                {column.label}
+                                {toggle ? (
+                                  <ArrowDownwardOutlinedIcon fontSize="small" />
+                                ) : (
+                                  <ArrowUpwardOutlinedIcon fontSize="small" />
+                                )}
+                              </>
+                            ) : (
+                              column.label
+                            )}
                           </TableCell>
                         ))}
                       </TableRow>
                     </TableHead>
-                    <TableBody>{console.log('row', DATA)}
+                    <TableBody>
                       {rows && rows.length > 0 ? DATA.currentData() &&
                         DATA.currentData()
                           .map((row: any) => {
 
-                            const statusColor = (row.status === "active" ? subscription.activeClassColor : row.status === "inactive" ? subscription.inactiveClassColor : subscription.draftClassColor)
+                            const statusColor = (row.status === "active" ? Subscription.activeClassColor : row.status === "inactive" ? Subscription.inactiveClassColor : Subscription.draftClassColor)
                             return (
                               <TableRow
                                 hover
@@ -341,23 +344,22 @@ const router = useRouter()
                               >
                                 <TableCell>{row.id}</TableCell>
                                 <TableCell>{capitalizeFirstLetter(row.name)}</TableCell>
-                                <TableCell>{capitalizeFirstLetter(row.description)}</TableCell>
                                 <TableCell>{row.price}</TableCell>
-                                <TableCell >{capitalizeFirstLetter(row.duration_term)}</TableCell>
-                                <TableCell >{row.duration_value}</TableCell>
+                                <TableCell>{capitalizeFirstLetter(row.duration_term)}</TableCell>
+                                <TableCell>{row.duration_value}</TableCell>
                                 <TableCell className={statusColor}>{capitalizeFirstLetter(row.status)}</TableCell>
-                                <TableCell >{capitalizeFirstLetter(row?.user?.first_name)} {capitalizeFirstLetter(row?.user?.last_name)}</TableCell>
-                                <TableCell><Button onClick={() => router.push(`/admin/courses/allsessions/updatesession/${row.id}`)} variant="outlined" color="success" className={subscription.editDeleteButton} disabled><ModeEditOutlineIcon /></Button>
-                                  <Button className={subscription.editDeleteButton} variant="outlined" color="error" onClick={() => handleClickOpen(row)}><DeleteOutlineIcon /></Button> 
+                                <TableCell>{capitalizeFirstLetter(row?.user?.first_name)} {capitalizeFirstLetter(row?.user?.last_name)}</TableCell>
+                                 <TableCell><Button onClick={() => router.push(`/admin/subscription/updatesubscription/${row.id}`)} variant="outlined" color="success" className={Subscription.editDeleteButton}><ModeEditOutlineIcon /></Button>
+                                  <Button className={Subscription.editDeleteButton} variant="outlined" color="error" onClick={() => handleClickOpen(row)}><DeleteOutlineIcon /></Button> 
                                  </TableCell>
                               </TableRow>
                             );
                           })
-                        : <TableRow><TableCell colSpan={9} className={subscription.tableLastCell}> <Typography>Record not Found</Typography> </TableCell></TableRow>}
+                        : <TableRow><TableCell colSpan={6} className={Subscription.tableLastCell}> <Typography>Record not Found</Typography> </TableCell></TableRow>}
                     </TableBody>
                   </Table>
                   <Stack
-                    className={subscription.stackStyle}
+                    className={Subscription.stackStyle}
                     direction="row"
                     alignItems="right"
                     justifyContent="space-between"
@@ -391,14 +393,16 @@ const router = useRouter()
                 open={open}
                 onClose={handleClickOpen}
                 onSubmit={handleDeletesRow}
-                title={deleteRow.name}
+                title={deleteRow.title}
                 whatYouDelete='Session'
               />
             </CardContent>
           </Card>
-          </Box>
         </Box>
-      </> );
+      </Box>
+      {/* <Footer/> */}
+      <ToastContainer />
+    </> );
 }
  
 export default Subscriptions;

@@ -6,14 +6,15 @@ import "react-toastify/dist/ReactToastify.css";
 import { HandleLogout } from "./auth";
 import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
 
-export const HandleSubscriptionGet = async (search: string) => {
+export const HandleSubscriptionGet = async (search: string,reqData?:any) => {
   const API_URL = search
     ? `${API.getAllSubscription}/${search}`
     : `${API.getAllSubscription}`;
   return await axios({
-    method: "GET",
+    method: "POST",
     url: API_URL,
     headers: LoginHeader(),
+    data:reqData,
   })
     .then((request) => {
       return request;
@@ -28,7 +29,31 @@ export const HandleSubscriptionGet = async (search: string) => {
     });
 };
 
-export const HandleSubscriptionDelete = async (id: string) => {
+export const HandleSubscriptionPost = async (reqData: any) => {
+  const API_URL = `${API.createsubscription}`;
+  return await axios({
+    method: "POST",
+    url: API_URL,
+    data:reqData,
+    headers: LoginHeader(),
+  })
+    .then((request) => {
+      if(request.status === 201){
+        toast.success("Subscription added successfully");
+      }
+      return request;
+    })
+    .catch((error) => {
+      if (error.response.status === 401) {
+        HandleLogout();
+      } else {
+        toast.error("Something went wrong");
+      }
+      return error;
+    });
+};
+
+export const HandleSubscriptionDelete = async (id:string) => {
   const API_URL = `${API.deleteSubscription}/${id}`;
   return await axios({
     method: "DELETE",
@@ -139,7 +164,7 @@ export const HandleSubscriptionUpdate = async (id: any, reqData: any) => {
   })
     .then((request) => {
       toast.success(
-        `Subscription ${capitalizeFirstLetter(reqData?.status)} Successfully`
+        `Subscription updated successfully`
       );
       return request;
     })
@@ -215,21 +240,21 @@ export const CreateUserSubsction = async (reqData: any) => {
     });
 };
 
-export const UpdaUserSubscription = async (
-  reqData: any,
-  subscription_id: any
-) => {
-  return await axios({
-    method: "PUT",
-    url: `${API.updatesubscription}/${subscription_id}`,
-    headers: authHeader(),
-    data: reqData,
-  })
-    .then((responce) => {
-      return responce?.data;
-    })
-    .catch((error) => {
-      if (error.response.status === 401) HandleLogout();
-      else return error;
-    });
-};
+// export const UpdaUserSubscription = async (
+//   reqData: any,
+//   subscription_id: any
+// ) => {
+//   return await axios({
+//     method: "PUT",
+//     url: `${API.updateSubscription}/${subscription_id}`,
+//     headers: authHeader(),
+//     data: reqData,
+//   })
+//     .then((responce) => {
+//       return responce?.data;
+//     })
+//     .catch((error) => {
+//       if (error.response.status === 401) HandleLogout();
+//       else return error;
+//     });
+// };

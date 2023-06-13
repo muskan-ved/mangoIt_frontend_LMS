@@ -98,7 +98,6 @@ export default function AddSession() {
       );
    }
 
-   console.log("oopps", errors)
    return (
       <>
          <Navbar />

@@ -1,5 +1,5 @@
 // ***** React Import
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 // MUI Import
 import {
@@ -20,7 +20,7 @@ import {
 import SideBar from "@/common/LayoutNavigations/sideBar";
 import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
 import Footer from "@/common/LayoutNavigations/footer";
-import Navbar from "../../../common/LayoutNavigations/navbar";
+import Navbar from "../../../../common/LayoutNavigations/navbar";
 // Helper Import
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -30,19 +30,21 @@ import SpinnerProgress from "@/common/CircularProgressComponent/spinnerComponent
 // Types Import
 import { sessionType } from "@/types/sessionType";
 // CSS Import
-import styles from "../../../styles/sidebar.module.css";
-import Subscription from "../../../styles/subscription.module.css";
+import styles from "../../../../styles/sidebar.module.css";
+import Subscription from "../../../../styles/subscription.module.css";
 import { ToastContainer } from "react-toastify";
 // API services
 import { subscriptionValidations } from "@/validation_schema/subscriptionValidation";
-import { HandleSubscriptionPost } from "@/services/subscription";
+import { HandleSubscriptionGetByID, HandleSubscriptionPost, HandleSubscriptionUpdate } from "@/services/subscription";
+import moment from "moment";
 
 
-export default function AddSubscription() {
+export default function UpdateSubscription() {
   const router: any = useRouter();
+  const [durationTerm,setDurationTerm] = useState<any>('');
   const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
-
+const {id} = router.query;;
   const {
     register,
     handleSubmit,
@@ -54,6 +56,26 @@ export default function AddSubscription() {
     resolver: yupResolver(subscriptionValidations),
   });
 
+  const getSubscriptionById = () => {
+    HandleSubscriptionGetByID(id).then((subscriptions:any) => {
+      const fields = [
+        "name",
+        "price",
+        "duration_value",
+        "status",
+        "description",
+        "duration_term",
+      ];
+      fields.forEach((field) => setValue(field, subscriptions.data[field]));
+      setDurationTerm(subscriptions?.data?.duration_term)
+      setValue('duration',moment(subscriptions?.data?.start_date).format('yyyy-MM-DD'))
+      })
+  }
+
+  useEffect(()=>{
+    getSubscriptionById()
+  },[])
+
   const onSubmit = async (event: any) => {
     let localData: any;
     if (typeof window !== "undefined") {
@@ -61,7 +83,6 @@ export default function AddSubscription() {
       localData = JSON.parse(parsingData);
     }
 
-    
       const reqData: any = {
         name: event.name,
         description: event.description,
@@ -73,18 +94,22 @@ export default function AddSubscription() {
         duration_value: event.duration_value,
       };
 
-      setLoading(true);
-      setLoadingButton(false);
+     
+      setLoadingButton(true);
       try {
-        const res = await HandleSubscriptionPost(reqData);
-        setLoading(false);
-          router.push("/admin/subscription/");
+        const res = await HandleSubscriptionUpdate(id,reqData);
+        setLoadingButton(false);
+        setTimeout(() => {
+          router.replace("/admin/subscription/");
+        }, 2000);
       } catch (e) {
         console.log(e);
-        setLoadingButton(true);
+        setLoadingButton(false);
       }
     
   };
+
+
 
   function ErrorShowing(errorMessage: any) {
     return (
@@ -93,7 +118,7 @@ export default function AddSubscription() {
       </Typography>
     );
   }
-  
+
   return (
     <>
       <Navbar />
@@ -134,7 +159,7 @@ export default function AddSubscription() {
                         mb={3}
                         mt={4}
                       >
-                        ADD SUBSCRIPTION
+                        UPDATE SUBSCRIPTION
                       </Typography>
 
                       <Grid
@@ -186,10 +211,19 @@ export default function AddSubscription() {
                           <InputLabel className={Subscription.InputLabelFont}>
                             Duration Term
                           </InputLabel>
-                          <TextField
-                            placeholder="Duration Term"
-                            {...register("duration_term")}
-                            fullWidth
+                        
+                          <Controller
+                            name="duration_term"
+                            control={control}
+                            render={({ field }) => (
+                              <FormControl fullWidth>
+                                <Select {...field} value={durationTerm} displayEmpty>
+                                  <MenuItem value={"week"}>Week</MenuItem>
+                                  <MenuItem value={"month"}>Month</MenuItem>
+                                  <MenuItem value={"year"}>Year</MenuItem>
+                                </Select>
+                              </FormControl>
+                            )}
                           />
                           {errors && errors.duration_term
                             ? ErrorShowing(errors?.duration_term?.message)
@@ -201,6 +235,7 @@ export default function AddSubscription() {
                             Duration Value
                           </InputLabel>
                           <TextField
+                          type="number"
                             placeholder="Duration Value"
                             {...register("duration_value")}
                             fullWidth
@@ -223,6 +258,7 @@ export default function AddSubscription() {
                           <InputLabel className={Subscription.InputLabelFont}>
                             Duration
                           </InputLabel>
+  
                           <TextField
                             fullWidth
                             type="date"
@@ -293,7 +329,7 @@ export default function AddSubscription() {
                             variant="contained"
                             id={styles.muibuttonBackgroundColor}
                           >
-                            Submit
+                            UPDATE
                           </Button>
                         ) : (
                           <LoadingButton

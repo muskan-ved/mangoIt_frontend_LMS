@@ -102,7 +102,6 @@ export default function UpdateUser() {
     );
   }
 
-  console.log("oopps", rows)
   return (
     <>
       <Navbar />
