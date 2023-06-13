@@ -5,8 +5,7 @@ export const subscriptionValidations = Yup.object().shape({
         Yup.string().required('Subscription name is a required field')
             .min(3, "Subscription name must be at least 3 characters"),
     price:
-        Yup.string().required('Price is required field')
-        .matches(/^[0-9].*/, "Price must be a number"),
+        Yup.string().required('Price is required field'),
     duration:
         Yup.string().required('Duration date is required field'),
     duration_term:

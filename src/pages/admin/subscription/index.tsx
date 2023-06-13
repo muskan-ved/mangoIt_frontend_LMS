@@ -80,7 +80,7 @@ const Subscriptions = () => {
     const [search, setSearch] = useState('');
     const [deleteRow, setDeleteRow] = useState<any>([])
     const [open, setOpen] = useState(false);
-    const [getFilter, setFilter] = useState<number>(0);
+    const [getFilter, setFilter] = useState<any>({filter:'all'});
     const [filterObject, setFilterObject] = useState<any>('');
 const router = useRouter()
 
@@ -120,8 +120,8 @@ const router = useRouter()
   }
 
   const resetFilterValue = () => {
-    setFilter(0)
-    reset({ is_chargeable: 0, status: 0 });
+    setFilter({filter:'all'})
+    reset({ status: 0 });
   }
 
   const handleSort = (rowsData: any) => {
@@ -135,23 +135,25 @@ const router = useRouter()
     if (identifier === 'reset') {
         getAllSubscriptionData()
       setSearch(e)
-    } else {
-      const search = e.target.value;
+    }else {
       setSearch(e.target.value)
       getAllSubscriptionData(e.target.value)
     }
   }
 
   const getAllSubscriptionData = (search:string='') => {
-    HandleSubscriptionGet(search).then((courses:any) => {
-      console.log(courses.data,"45")
-      setRows(courses.data)
+    HandleSubscriptionGet(search).then((subs:any) => {
+      setRows(subs.data)
     })
   }
 
   useEffect(() => {
     getAllSubscriptionData();
   }, [])
+
+  const onfiltersSubmit = (e: any, identifier: any) => {
+    setFilter(0)
+  }
 
     return ( <>
       <Navbar />
@@ -190,7 +192,7 @@ const router = useRouter()
               >
                 <PopupState variant="popover" popupId="demo-popup-popover" >
                   {(popupState) => (
-                    <Box>
+                    <Box >
                       <Button
                         className={Subscription.popStateFilterButton}
                         {...bindTrigger(popupState)}
@@ -220,19 +222,16 @@ const router = useRouter()
                                 Filter
                               </Typography>
                               <Box component="form"
-                                // noValidate
-                                // onSubmit={handleSubmit(onSubmit)}
+                                noValidate
+                                onSubmit={handleSubmit(onfiltersSubmit)}
                                 className={Subscription.filterForm}
                               >
-                                <Stack
-                                  style={{ marginTop: "10px" }}
-                                  className="form-filter"
-                                >
+                               
                                   <Grid container spacing={2}>
                                    
-                                    <Grid item xs={12} md={4} lg={4}>
-                                      <Stack spacing={2}>
-                                        <InputLabel htmlFor="enddate" className={Subscription.statusInFilter} >
+                                    <Grid item xs={12} lg={12}>
+                                      
+                                        <InputLabel className={Subscription.statusInFilter} >
                                           Status
                                         </InputLabel>
                                         <Controller
@@ -253,7 +252,7 @@ const router = useRouter()
                                             </FormControl>
                                           )}
                                         />
-                                      </Stack>
+                                   
                                     </Grid>
                                     <Grid
                                       item
@@ -285,7 +284,7 @@ const router = useRouter()
                                       </Box>
                                     </Grid>
                                   </Grid>
-                                </Stack>
+                               
                               </Box>
                             </Grid>
                           </Container>
