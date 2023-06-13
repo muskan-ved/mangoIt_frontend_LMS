@@ -9,7 +9,7 @@
 }
 .fontCSS {
   padding: 4px !important;
-  color: #646363 !important;
+  font-weight: bold;
 }
 .useNameFront {
   color: #4e4a4a !important;
@@ -61,7 +61,7 @@
   margin-left: 10px !important;
 }
 .btncss1 {
-  text-align: end;
+  text-align: start;
 }
 .subsbtn {
   width: 18%;
@@ -79,6 +79,6 @@
   padding: 10px;
 }
 .useSubsCancell {
-  color: #4e4a4a;
+  color: #242222;
   font-size: 18px;
 }

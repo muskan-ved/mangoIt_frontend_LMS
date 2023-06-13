@@ -169,13 +169,12 @@ width: 70% !important;
   border: 1px solid #e8661b !important;
   color: #e8661b !important;
 }
-.popStateFilterButton1{
+.popStateFilterButton1 {
   /* display: inline-flex; */
-  color: #E8661B !important;
+  color: #e8661b !important;
 }
-.hoverbtn:hover{
+.hoverbtn:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background-color: rgba(255, 255, 255, 0.04) !important;
 }
-

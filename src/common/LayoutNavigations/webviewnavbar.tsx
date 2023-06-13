@@ -31,7 +31,8 @@ export default function WebViewNavbar() {
     let path = router?.pathname;
     let setAboutColor = path === "/" ? textcolor : "";
     let setCoursesColor = path.includes("courses") || path.includes("coursedetails") ? textcolor : "";
-    let setsubscribeplan = path.includes("subscribeplan") ? textcolor : "";
+    let setsubscribeplan = path.includes("subscribeplan") || path.includes("checkout") ? textcolor : "";
+
 
 
     React.useEffect(() => {

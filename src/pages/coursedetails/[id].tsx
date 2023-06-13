@@ -228,7 +228,7 @@ export default function CoursesDetailsPage() {
         >
             Course
         </Link>,
-        <Typography key="3" color="text.primary">
+        <Typography key="3" sx={{ color: "#e8661b" }}>
             Course Details
         </Typography>,
     ];
@@ -501,7 +501,7 @@ export default function CoursesDetailsPage() {
                                         }}>
                                         {Courses?.slice(0, 10).map((data: any, key: any) => {
                                             return (<ListItem key={key} >
-                                                <Link href="#" className={styles.listitems}>{capitalizeFirstLetter(data?.course?.title)}
+                                                <Link href={`/coursedetails/${data?.course.id}`} className={styles.listitems}>{capitalizeFirstLetter(data?.course?.title)}
                                                 </Link>
                                             </ListItem >)
                                         })}
