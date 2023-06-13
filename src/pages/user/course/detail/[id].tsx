@@ -75,8 +75,8 @@ export default function Couseview() {
   const [progress, setProgress] = useState<any>(10);
   const [allData, setAllData] = useState<any>([]);
   const [userId, setUserId] = useState<any>("");
-  // const [completeSession, setCompleteSession] = useState<any>("");
-  var completeSession: any;
+
+  var fileViewComplete: any = 0;
 
   useEffect(() => {
     let localData: any;
@@ -95,11 +95,12 @@ export default function Couseview() {
   }, [userId]);
 
   const router = useRouter();
+  const { id } = router?.query;
 
   const getCourseData = async () => {
-    const id = router?.query?.id;
-    if (id) {
-      HandleCourseByCourseId(id).then((data) => {
+    const idd = router?.query?.id;
+    if (idd) {
+      HandleCourseByCourseId(idd).then((data) => {
         setCousedata(data?.data);
       });
       if (userId && userId) {
@@ -187,6 +188,22 @@ export default function Couseview() {
       </Box>
     );
   }
+  function LinearProgressWithLabel1(
+    props: LinearProgressProps & { value: number }
+  ) {
+    return (
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Box sx={{ width: "100%", mr: 1 }}>
+          <LinearProgress variant="determinate" {...props} />
+        </Box>
+        <Box sx={{ minWidth: -1 }} className="varruu">
+          <Typography variant="body2" color="text.secondary">
+            {`${Math.round(props.value)}%`}&nbsp;Complete
+          </Typography>
+        </Box>
+      </Box>
+    );
+  }
 
   const handleMarkAsComplete = () => {
     let reqData = {
@@ -197,44 +214,84 @@ export default function Couseview() {
     };
     MarkAsComplete(reqData).then((data: any) => {
       console.log("@");
+      getCourseData();
     });
   };
 
   var calculate: any;
+  var isMatchFound: any;
   const getPercentage =
     allData &&
     allData.map((row: any) => {
       const obj = row?.courseIdCounts;
       const key: any = router?.query?.id;
       const value = obj[key];
-      console.log(value, "rowwwwwwwwwww", row.sessionCount);
+      if (id && id) {
+        let courseId: any = router?.query?.id;
+        const item =
+          row &&
+          row?.sessionCount.find(
+            (item: any) => item.course_id === parseInt(courseId)
+          );
 
-      const sessionValue = row?.sessionCount[0]?.sessionCount;
-      // console.log(value, "sessionValuesessionValue", row?.sessionCount);
-      calculate = (value / sessionValue) * 100;
+        const sessionCount = item ? item.sessionCount : null;
+        if (sessionCount) {
+          calculate = (value / sessionCount) * 100;
+        }
+      }
     });
 
-  // const completeMark =
-  //   allData &&
-  //   allData.map((row: any) => {
-  //     let item = row && row.course.view_history;
-  //     let moduleId = sessionData?.module_id;
-  //     let sessionId = sessionData?.id;
-  //     console.log(item,'sessionDatasessionData',sessionData);
-  //     item &&
-  //       item.map((data: any) => {
-  //         console.log("datadatadatadatadatadata", data);
-  //         let findByModule = data && data[moduleId];
-  //         console.log("@@@@@@@@@@@@", findByModule);
-  //         // return false
-  //         for (let i = 0; i < findByModule?.length; i++) {
-  //           console.log("############", findByModule[i]);
-  //           const value = findByModule[i] && findByModule[i] === sessionId;
-  //           completeSession = value;
-  //         }
-  //       });
-  //     console.log("@###########", completeSession);
-  //   });
+  const completeMark =
+    allData &&
+    allData.map((row: any) => {
+      let item = row && row.course.view_history;
+      let moduleId = sessionData?.module_id;
+      let sessionId: any = sessionData?.id;
+      item &&
+        item.map((data: any) => {
+          isMatchFound = Object.entries(data).some(([key, value]: any) => {
+            return key == moduleId && value.includes(sessionId);
+          });
+        });
+      if (isMatchFound === true) {
+        fileViewComplete = 1;
+      }
+    });
+  var calculate1: any;
+  let courseIdd: any = router?.query?.id;
+
+  const filteredData =
+    allData &&
+    allData.filter((item: any) => item.course.id === parseInt(courseIdd));
+  const moduleIdd = couseData && couseData?.modules;
+  if (moduleIdd) {
+    for (let i = 0; i < moduleIdd.length; i++) {
+      const module = moduleIdd[i].id;
+      const session = moduleIdd[i].sessions.length;
+      const viewHistory = filteredData && filteredData[0]?.course.view_history;
+
+      for (let j = 0; j < viewHistory?.length; j++) {
+        Object.entries(viewHistory[j]).map(([key, value]: any) => {
+          const sameModule = parseInt(key) === module ? key : "";
+          console.log(
+            "module",
+            sameModule,
+            "seession",
+            session,
+            "lengthhhhh",
+            value.length
+          );
+          // calculate1 = (ss * 100) / 2;
+
+          return console.log("d");
+        });
+      }
+    }
+  }
+
+  if (!id) {
+    return null;
+  }
 
   return (
     <>
@@ -470,30 +527,28 @@ export default function Couseview() {
                         )}
                         {files && (
                           <Box className={courseStyle.backcss}>
-                            {/* {completeSession && completeSession ? (
+                            {fileViewComplete && fileViewComplete ? (
                               <Button
                                 type="submit"
                                 size="large"
                                 variant="outlined"
                                 className={courseStyle.backbtncs12}
-                                // onClick={handleMarkAsComplete}
-                                // id={styles.muibuttonBackgroundColor}
                                 disabled
                               >
                                 Mark as complete
                               </Button>
-                            ) : ( */}
-                            <Button
-                              type="submit"
-                              size="large"
-                              variant="contained"
-                              className={courseStyle.backbtncs12}
-                              onClick={handleMarkAsComplete}
-                              id={styles.muibuttonBackgroundColor}
-                            >
-                              Mark as complete
-                            </Button>
-                            {/* )} */}
+                            ) : (
+                              <Button
+                                type="submit"
+                                size="large"
+                                variant="contained"
+                                className={courseStyle.backbtncs12}
+                                onClick={handleMarkAsComplete}
+                                id={styles.muibuttonBackgroundColor}
+                              >
+                                Mark as complete
+                              </Button>
+                            )}
                           </Box>
                         )}
                       </Item>
@@ -525,6 +580,11 @@ export default function Couseview() {
                                 </Typography>
                               </AccordionSummary>
                               <AccordionDetails className="vvv">
+                                {/* <Box sx={{ width: "92%" }}>
+                                  <LinearProgressWithLabel1
+                                    value={calculate1 && calculate1}
+                                  />
+                                </Box> */}
                                 {item?.sessions.map((itemData: any) => {
                                   const togglee =
                                     itemData?.id === activeToggle
@@ -532,11 +592,6 @@ export default function Couseview() {
                                       : "";
                                   return (
                                     <Fragment>
-                                      {/* <Box sx={{ width: "92%" }}>
-                                        <LinearProgressWithLabel
-                                          value={progress}
-                                        />
-                                      </Box> */}
                                       <Box
                                         sx={{
                                           width: "100%",

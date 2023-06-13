@@ -123,8 +123,7 @@ const AllCourses = () => {
   };
 
   const handleSearch = (e: any, identifier: any) => {
-    const search = e.target.value;
-    console.log("search", search);
+    const search = e?.target?.value;
     setPage(1);
     DATA.jump(1);
     if (identifier === "reset") {
@@ -147,16 +146,15 @@ const AllCourses = () => {
     if (typeof window !== "undefined") {
       localData = window.localStorage.getItem("userData");
     }
+
     if (localData) {
       const userIds = JSON.parse(localData);
-
       HandleCourseGetByUserId(userIds?.id).then((courses) => {
         setRows(courses.data);
       });
       getUserId(userIds?.id);
     }
   };
-console.log('rowsrows',rows);
   return (
     <>
       <Navbar />
@@ -238,7 +236,7 @@ console.log('rowsrows',rows);
                               : row?.course?.course?.status === "inactive"
                               ? courseStyle.inactiveClassColor
                               : courseStyle.draftClassColor;
-                              
+
                           const obj = row?.courseIdCounts;
                           const key = row?.course?.course?.id;
                           const value = obj[key];
@@ -279,7 +277,7 @@ console.log('rowsrows',rows);
                               >
                                 {`${
                                   calculate && calculate
-                                    ? calculate?.toFixed(2)
+                                    ? calculate?.toFixed(0)
                                     : 0
                                 }%`}
                               </TableCell>

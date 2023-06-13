@@ -22,6 +22,7 @@ import { BASE_URL } from "@/config/config";
 
 interface appbar {
   portalData?: any;
+  profilePic?:any;
 }
 
 function stringAvatar(first_name: string, last_name: string) {
@@ -35,7 +36,7 @@ function stringAvatar(first_name: string, last_name: string) {
   };
 }
 
-export default function Navbar({ portalData }: appbar) {
+export default function Navbar({ portalData ,profilePic}: appbar) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
@@ -210,7 +211,6 @@ export default function Navbar({ portalData }: appbar) {
       </MenuItem>
     </Menu>
   );
-
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" className={styles.appBarCss}>
@@ -242,7 +242,9 @@ export default function Navbar({ portalData }: appbar) {
 
             <Avatar
               src={
-                userData && userData?.profile_pic !== null
+                profilePic && profilePic
+                  ? `${BASE_URL}/${profilePic}`
+                  : userData && userData?.profile_pic !== null
                   ? `${BASE_URL}/${userData?.profile_pic}`
                   : "/"
               }
