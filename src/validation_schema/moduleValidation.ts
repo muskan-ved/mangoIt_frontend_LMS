@@ -10,6 +10,8 @@ export const moduleValidations = Yup.object().shape({
     status:
         Yup.string().required('Status is required field'),
     description:
-        Yup.string().required('Description is a required field').min(27, "Description must be at least 20 characters"),
+        Yup.string().required('Description is a required field')
+        .min(257,"Description must be at least 250 characters")
+        .max(507,"Description must be Maximum 500 characters"),
 
 });

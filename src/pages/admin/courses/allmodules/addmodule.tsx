@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from "next/router";
 // MUI Import
-import { Box, Button, Card, CardContent, FormControl, Grid, IconButton, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, Button, Card, CardContent, FormControl, Grid, IconButton, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
 // External Components
 import SideBar from "@/common/LayoutNavigations/sideBar";
 import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
@@ -35,6 +35,8 @@ export default function AddSession() {
    const [getCourses, setCourses] = useState<courseType | any>();
    const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
    const [isLoading, setLoading] = useState<boolean>(false);
+   const [getCourseTitle, setCourseTitle] = React.useState<any>("");
+   const [getCourseId, setCourseId] = React.useState<any>(0);
 
    const {
       register,
@@ -68,11 +70,11 @@ export default function AddSession() {
       setLoading(true);
       setLoadingButton(false)
       try {
-         const res = await HandleModuleCreate(event)
+         const res = await HandleModuleCreate({ ...event, course_id: getCourseId })
          setLoading(false);
          setTimeout(() => {
             router.push('/admin/courses/allmodules/')
-         }, 1000)
+         },900)
       } catch (e) {
          console.log(e)
          setLoadingButton(true)
@@ -96,7 +98,6 @@ export default function AddSession() {
       );
    }
 
-   console.log("oopps", errors)
    return (
       <>
          <Navbar />
@@ -146,7 +147,7 @@ export default function AddSession() {
 
                                     <Grid item xs={12} sm={12} md={6} lg={6}>
                                        <InputLabel className={ModuleCss.InputLabelFont}>Course of Module</InputLabel>
-                                       <Controller
+                                       {/* <Controller
                                           name="course_id"
                                           control={control}
                                           defaultValue=""
@@ -162,7 +163,26 @@ export default function AddSession() {
                                                 </Select>
                                              </FormControl>
                                           )}
+                                       /> */}
+                                       <Autocomplete
+                                          id="combo-box-demo"
+                                          options={getCourses}
+                                          getOptionLabel={(option: any) =>
+                                             option?.course?.title
+                                          }
+                                          renderInput={(params) => (
+                                             <TextField
+                                                {...register("course_id")}
+                                                {...params}
+                                                placeholder="Select Course"
+                                             />
+                                          )}
+                                          onChange={(event, newValue) => {
+                                             setCourseId(newValue?.course?.id);
+                                             setCourseTitle(newValue?.course);
+                                          }}
                                        />
+
                                        {errors && errors.course_id
                                           ? ErrorShowing(errors?.course_id?.message)
                                           : ""}
@@ -209,7 +229,7 @@ export default function AddSession() {
 
 
                                  <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"right"} >
-                                    <Button className={ModuleCss.cancelButton} variant="contained" size="large" onClick={() => router.push('/admin/courses/allmodules')} >Cancel</Button>
+                                    <Button className={ModuleCss.cancelButton} variant="contained" size="large" onClick={() => router.push('/admin/courses/allmodules')} id={styles.muibuttonBackgroundColor}>Cancel</Button>
                                     {!isLoadingButton ? <Button type="submit" size="large" variant="contained" id={styles.muibuttonBackgroundColor}>
                                        Submit
                                     </Button> : <LoadingButton loading={isLoadingButton} className={ModuleCss.updateLoadingButton}

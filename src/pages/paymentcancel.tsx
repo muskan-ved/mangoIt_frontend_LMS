@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Button, Typography } from "@mui/material";
 import styles from "../styles/payment.module.css";
+import Link from "next/link";
 export default function PaymentCancel() {
     return (
         <Box>
@@ -10,11 +11,13 @@ export default function PaymentCancel() {
                         <Typography variant="h3" color={"error"}>
                             Payment failed due to some reason.
                         </Typography>
-                        <Button
-                            className={styles.gohome}
-                        >
-                            go to dashboard
-                        </Button>
+                        <Link href={"/home"} >
+                            <Button
+                                className={styles.gohome}
+                            >
+                                go to home
+                            </Button>
+                        </Link>
                     </Box>
                 </Box>
             </Box>

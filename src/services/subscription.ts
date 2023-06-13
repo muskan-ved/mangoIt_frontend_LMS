@@ -61,7 +61,7 @@ export const HandleSubscriptionDelete = async (id:string) => {
   })
     .then((request) => {
       if (request.status === 200) {
-      toast.success("Deleted successfully.");
+        toast.success("Deleted successfully.");
       }
       return request;
     })
@@ -116,7 +116,7 @@ export const HandleSubscriptionPayment = async (reqData: any) => {
   return await axios({
     method: "POST",
     url: `${API.acceptpayment}`,
-    headers: LoginHeader(),
+    headers: authHeader(),
     data: reqData,
   })
     .then((responce) => {

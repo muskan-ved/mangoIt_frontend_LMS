@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import WebViewNavbar from "@/common/LayoutNavigations/webviewnavbar";
 import WebViewFooter from "@/common/LayoutNavigations/webviewfooter";
-import styles from '../../styles/webview.module.css'
+import styles from '../styles/webview.module.css'
 import Carousel from 'react-material-ui-carousel'
 import LockIcon from '@mui/icons-material/Lock';
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
@@ -12,14 +12,17 @@ import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
 import SchoolIcon from '@mui/icons-material/School';
 import { HandleCourseGet } from "@/services/course";
 import { CourseCard } from "@/common/ResuableCardCmp/coursescard";
-import Image from "next/image";
+import Link from "next/link";
+import { TopEnrolledCourses } from "@/services/course_enroll";
 
-export default function HomePage() {
+export default function About() {
     const [FreeCourses, setFreeCourses] = React.useState([]);
-    const [PaidCourses, setPaidCourses] = React.useState([]);
+    // const [PaidCourses, setPaidCourses] = React.useState([]);
+    const [EnrolledCourses, setEnrolledCoursess] = React.useState([]);
 
     React.useEffect(() => {
         getAllCourseData();
+        getTopEnrolledCourses();
     }, [])
 
     //get courses
@@ -28,9 +31,9 @@ export default function HomePage() {
             setFreeCourses(courses?.data?.filter((a: any) =>
                 a?.course?.is_chargeable === "free"
             ))
-            setPaidCourses(courses?.data?.filter((a: any) =>
-                a?.course?.is_chargeable === "paid"
-            ))
+            // setPaidCourses(courses?.data?.filter((a: any) =>
+            //     a?.course?.is_chargeable === "paid"
+            // ))
         })
     }
     var items = [
@@ -42,12 +45,12 @@ export default function HomePage() {
         {
             heading: "Random Name #2",
             description: "Hello World!",
-            image: "https://www.skillsfuture.gov.sg/images/default-source/initiatives/individuals/sctp1.png?sfvrsn=3d02f3e3_3"
+            image: "https://www.skillsfuture.gov.sg/images/default-source/carousel/student-initiatives-banner-img.png?Status=Master&sfvrsn=7f86b81f_0"
         },
         {
             heading: "Random Name #3",
             description: "Hello World!",
-            image: "https://www.skillsfuture.gov.sg/images/default-source/carousel/student-initiatives-banner-img.png?Status=Master&sfvrsn=7f86b81f_0"
+            image: "https://www.skillsfuture.gov.sg/images/default-source/carousel/banner-img-3.png?Status=Master&sfvrsn=d474dd3d_0"
         }
     ]
 
@@ -74,9 +77,11 @@ export default function HomePage() {
                         modern website with flexible from scratch.
                     </Typography>
                     <Box className={styles.btnwrapper}>
-                        <Button className={styles.viewmorebtn}>
-                            View More
-                        </Button>
+                        <Link href={"/"}>
+                            <Button className={styles.viewmorebtn}>
+                                View More
+                            </Button>
+                        </Link>
                     </Box>
                 </Box>
                 <Box className={styles.griditem2}>
@@ -88,6 +93,13 @@ export default function HomePage() {
         )
     }
 
+    //get top enrolled courses
+    const getTopEnrolledCourses = () => {
+        TopEnrolledCourses().then((res) => {
+            setEnrolledCoursess(res?.data)
+        })
+    }
+
     return (
         <>
             {/*header*/}
@@ -96,6 +108,9 @@ export default function HomePage() {
             <Box className={styles.landingpagecarousel}>
                 <Container maxWidth="lg">
                     <Carousel
+                        autoPlay={true}
+                        animation="slide"
+                        //navButtonsAlwaysVisible={true}
                         IndicatorIcon={<HorizontalRuleIcon />}
                         indicatorIconButtonProps={{
                             style: {
@@ -106,12 +121,13 @@ export default function HomePage() {
                         indicatorContainerProps={{
                             style: {
                                 textAlign: 'center',
-                                position: "absolute",
-                                zIndex: 999999,
-                                right: "278px !important",
-                                top: "350px !important"
+                                // position: "absolute",
+                                //zIndex: 999999,
+                                // right: "278px !important",
+                                // top: "350px !important"
                             }
                         }}
+
                         activeIndicatorIconButtonProps={{
                             style: {
                                 color: '#e8661b' // 2
@@ -189,8 +205,8 @@ export default function HomePage() {
                         <Divider className={styles.divder} />
                     </Box>
                     <Box className={styles.articles}>
-                        {PaidCourses?.slice(0, 4).map((data, key) => {
-                            return (<CourseCard key={key} paidcourses={data} />)
+                        {EnrolledCourses?.slice(0, 8).map((data, key) => {
+                            return (<CourseCard key={key} enrolledCourses={data} />)
                         })}
                     </Box>
                 </Container>
@@ -205,7 +221,7 @@ export default function HomePage() {
                         <Divider className={styles.divder} />
                     </Box>
                     <Box className={styles.articles}>
-                        {FreeCourses?.slice(0, 4).map((data, key) => {
+                        {FreeCourses?.slice(0, 8).map((data, key) => {
                             return (
                                 <CourseCard key={key} freecourses={data} />
                             )

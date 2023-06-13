@@ -8,9 +8,10 @@ import { useEffect, useState } from "react";
 import { HandleCourseGet } from "@/services/course";
 
 export function CourseCard(props: any) {
-    const c_id = props?.coursedata?.course?.id || props?.paidcourses?.course?.id || props?.freecourses?.course?.id;
+    const c_id = props?.coursedata?.course?.id || props?.paidcourses?.course?.id || props?.freecourses?.course?.id || props?.enrolledCourses
+        .id;
     return (
-        <Link href={`/user/coursedetails/${c_id}`}>
+        <Link href={`/coursedetails/${c_id}`}>
             <CardActionArea component="a" >
                 <Box className={styles.article}>
                     <Box className={styles.articlewrapper}>
@@ -19,8 +20,9 @@ export function CourseCard(props: any) {
                         </Box>
                         <Box className={styles.articlebody}>
                             <Typography className={styles.h2}>{capitalizeFirstLetter(props?.paidcourses?.course?.title) || capitalizeFirstLetter(props?.freecourses?.course?.title) || capitalizeFirstLetter(props?.coursedata
-                                ?.course?.title)}</Typography>
-                            <Typography className={styles.h5}>Type : {capitalizeFirstLetter(props?.paidcourses?.course?.is_chargeable) || capitalizeFirstLetter(props?.freecourses?.course?.is_chargeable) || capitalizeFirstLetter(props?.coursedata?.course?.is_chargeable)}</Typography>
+                                ?.course?.title) || capitalizeFirstLetter(props?.enrolledCourses
+                                    .title)}</Typography>
+                            <Typography className={styles.h5}>Type : {capitalizeFirstLetter(props?.paidcourses?.course?.is_chargeable) || capitalizeFirstLetter(props?.freecourses?.course?.is_chargeable) || capitalizeFirstLetter(props?.coursedata?.course?.is_chargeable) || capitalizeFirstLetter(props?.enrolledCourses.is_chargeable)}</Typography>
                         </Box>
                     </Box>
                 </Box>
@@ -33,7 +35,7 @@ export function CourseCardListView(props: any) {
     const c_id = props?.coursedata?.course?.id || props?.paidcourses?.course?.id || props?.freecourses?.course?.id;
     return (
         <Grid item xs={12} md={6}>
-            <Link href={`/user/coursedetails/${c_id}`}>
+            <Link href={`/coursedetails/${c_id}`}>
                 <CardActionArea component="a">
                     <Card sx={{ display: 'flex', marginTop: "40px", borderRadius: '15px' }} >
                         <CardMedia
@@ -119,8 +121,8 @@ export function SubscribtionPanCard(props: any) {
                             <Typography color="textSecondary" variant="subtitle1" component="p" mt={2}>{totalsessionscount} Sessions</Typography>
                         </Box>
                         <Box px={1} mt={2}>
-                            <Link href={`/user/Checkout/${props?.subsdata?.id}`} >
-                                <Button variant="contained" className="authPageButton" id={styles.muibuttonBackgroundColor}
+                            <Link href={`/checkout/${props?.subsdata?.id}`} >
+                                <Button variant="contained" id={styles.muibuttonBackgroundColor}
                                 >Subscribe Now</Button></Link>
                         </Box>
                     </CardContent>

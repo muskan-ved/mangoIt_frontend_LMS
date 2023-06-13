@@ -13,6 +13,10 @@ import {
 import Tooltip, { TooltipProps, tooltipClasses } from "@mui/material/Tooltip";
 import { styled } from "@mui/material/styles";
 
+import LinearProgress, {
+  LinearProgressProps,
+} from "@mui/material/LinearProgress";
+
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -42,7 +46,7 @@ import MenuBookIcon from "@mui/icons-material/MenuBook";
 
 // CSS Import
 import styles from "../../../../styles/sidebar.module.css";
-import subs from "../../../../styles/subsciption.module.css";
+import subs from "../../../../styles/subscription.module.css";
 import courseStyle from "../../../../styles/course.module.css";
 import Image from "next/image";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
@@ -64,6 +68,7 @@ export default function Couseview() {
   const [files, setFiles] = useState<any>("");
   const [activeToggle, setActiveToggle] = useState<any>("");
   const [sessionData, setSessionData] = useState<any>([]);
+  const [progress, setProgress] = React.useState(10);
 
   useEffect(() => {
     let localData: any;
@@ -75,6 +80,9 @@ export default function Couseview() {
       getId = JSON.parse(localData);
     }
     getCourseData();
+    setProgress((prevProgress) =>
+      prevProgress >= 100 ? 10 : prevProgress + 10
+    );
   }, []);
 
   const router = useRouter();
@@ -89,7 +97,6 @@ export default function Couseview() {
   };
 
   //tooltip
-
   const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
   ))(({ theme }) => ({
@@ -150,6 +157,23 @@ export default function Couseview() {
     }
   };
 
+  function LinearProgressWithLabel(
+    props: LinearProgressProps & { value: number }
+  ) {
+    return (
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Box sx={{ width: "100%", mr: 1 }}>
+          <LinearProgress variant="determinate" {...props} />
+        </Box>
+        <Box sx={{ minWidth: 35 }}>
+          <Typography variant="body2" color="text.secondary">
+            {`${Math.round(props.value)}%`}&nbsp;Complete
+          </Typography>
+        </Box>
+      </Box>
+    );
+  }
+
   const handleMarkAsComplete = () => {
     console.log("W@@@@@@@@@@@@markAsComplete");
   };
@@ -158,7 +182,7 @@ export default function Couseview() {
     <>
       <Navbar />
       <Box className={styles.combineContentAndSidebar}>
-        <SideBar />
+        {/* <SideBar /> */}
 
         <Box className={styles.siteBodyContainer}>
           {/* breadcumbs */}
@@ -189,7 +213,7 @@ export default function Couseview() {
             <CardContent>
               <Box sx={{ flexGrow: 1 }}>
                 <Grid container spacing={2}>
-                  <Grid item xs={7}>
+                  <Grid item xs={9}>
                     <Item className={subs.shadoww}>
                       {(files && files?.includes("mp4")) ||
                       files?.includes("3gp") ||
@@ -204,6 +228,8 @@ export default function Couseview() {
                               }}
                               controls={true}
                               url={`${BASE_URL}/${files}`}
+                              width="167%"
+                              height="100%"
                             />
                             {/* <Item> */}
                             <Box className={subs.maindisplay}>
@@ -230,22 +256,9 @@ export default function Couseview() {
                             </Typography>
                             {/* </Item> */}
                           </Grid>
-
-                          <Box className={courseStyle.backcss}>
-                            <Button
-                              type="submit"
-                              size="large"
-                              variant="contained"
-                              className={courseStyle.backbtncs12}
-                              onClick={handleMarkAsComplete}
-                              id={styles.muibuttonBackgroundColor}
-                            >
-                              Mark as complete
-                            </Button>
-                          </Box>
                         </Fragment>
                       ) : files && files?.includes("pdf") ? (
-                        <Grid item xs={7}>
+                        <Grid item xs={12}>
                           <Box className={subs.maindisplay}>
                             <Typography
                               variant="h5"
@@ -279,7 +292,7 @@ export default function Couseview() {
                           {/* </Item> */}
                         </Grid>
                       ) : files && files?.includes("txt") ? (
-                        <Grid item xs={7}>
+                        <Grid item xs={12}>
                           <Box className={subs.maindisplay}>
                             <Typography
                               variant="h5"
@@ -316,14 +329,14 @@ export default function Couseview() {
                         (files && files?.includes("jpg")) ||
                         (files && files?.includes("png")) ||
                         (files && files?.includes("gif")) ? (
-                        <Grid item xs={8}>
+                        <Grid item xs={12}>
                           <Item>
                             <Image
                               className={courseStyle.imgwidth}
                               alt="image"
                               src={`${BASE_URL}/${files}`}
                               width={350}
-                              height={400}
+                              height={500}
                             />
                             <Box className={subs.maindisplay}>
                               <Typography
@@ -336,7 +349,10 @@ export default function Couseview() {
                               </Typography>
                               &nbsp;
                               <LightTooltip title="Download Image">
-                                <Button onClick={() => download("image")}>
+                                <Button
+                                  className={courseStyle.hoverbtn}
+                                  onClick={() => download("image")}
+                                >
                                   <FileDownloadOutlinedIcon
                                     className={courseStyle.filedownloadcss}
                                   />
@@ -389,13 +405,29 @@ export default function Couseview() {
                       ) : (
                         ""
                       )}
+                      <Box className={courseStyle.backcss}>
+                        <Button
+                          type="submit"
+                          size="large"
+                          variant="contained"
+                          className={courseStyle.backbtncs12}
+                          onClick={handleMarkAsComplete}
+                          id={styles.muibuttonBackgroundColor}
+                        >
+                          Mark as complete
+                        </Button>
+                      </Box>
                     </Item>
                   </Grid>
-                  <Grid item xs={5}>
+                  <Grid item xs={3}>
                     <Box className={subs.maindiv}>
                       <Typography variant="h5" className={subs.useNameFront2}>
                         Course Curriculum
                       </Typography>
+                      <Box sx={{ width: "92%" }}>
+                        <LinearProgressWithLabel value={progress} />
+                      </Box>
+                      <br />
                       {couseData &&
                         couseData?.modules?.map((item: any) => (
                           <Accordion key={item?.id}>

@@ -7,6 +7,7 @@ import {
   Button,
   Card,
   CardContent,
+  CircularProgress,
   FormControl,
   MenuItem,
   Pagination,
@@ -32,11 +33,13 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { useRouter } from "next/router";
+import CreditCardIcon from '@mui/icons-material/CreditCard';
 import {
   HandleSubscriptionGetByID,
+  HandleSubscriptionPayment,
   HandleSubscriptionUpdate,
 } from "@/services/subscription";
-import { HandleOrderGetByUserID } from "@/services/order";
+import { CreateOrderForSubscription, HandleOrderGetByUserID } from "@/services/order";
 import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
 import { usePagination } from "@/common/Pagination/paginations";
 import moment from "moment";
@@ -46,13 +49,19 @@ import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 // CSS Import
 import profiles from "../../../../styles/profile.module.css";
 import styles from "../../../../styles/sidebar.module.css";
-import subs from "../../../../styles/subsciption.module.css";
+import subs from "../../../../styles/subscription.module.css";
 import Link from "next/link";
 import CircularProgressBar from "@/common/CircularProcess/circularProgressBar";
 import { AlertSubscriptionDialog } from "@/common/SubscriptionStatus/subscriptionManage";
 
 interface Column {
-  id: "id" | "amount" | "date" | "transaction_id" | "payment_method" | "pay_of_month";
+  id:
+  | "id"
+  | "amount"
+  | "date"
+  | "transaction_id"
+  | "payment_method"
+  | "pay_of_month";
   label: string;
   minWidth?: number;
   align?: "right";
@@ -68,8 +77,19 @@ const columns: Column[] = [
   { id: "payment_method", label: "PAYMENT METHOD", minWidth: 120 },
 ];
 
-const monthNames = ["January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
+const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 const d = new Date();
 
@@ -80,6 +100,9 @@ export default function View() {
   const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
   const [subsId, setSubId] = useState<any>();
+  const [userId, setuserId] = useState<any>();
+  const [spinner, setshowspinner] = React.useState(false);
+
 
   useEffect(() => {
     let localData: any;
@@ -93,6 +116,7 @@ export default function View() {
     }
     getAllCourseData(getId?.id);
     getSubsData();
+    setuserId(getId?.id)
   }, []);
 
   const router = useRouter();
@@ -105,6 +129,8 @@ export default function View() {
       });
     }
   };
+
+
 
   //pagination
   const [row_per_page, set_row_per_page] = React.useState(5);
@@ -150,6 +176,32 @@ export default function View() {
         setLoadingButton(false);
       });
   };
+
+  //acccept payment
+  const AcceptPayment = () => {
+    setshowspinner(true)
+    const reqData = {
+      userId: userId,
+      subscriptioId: subsData?.id
+    }
+    CreateOrderForSubscription(reqData).then((result) => {
+      if (result?.status === 201 && result?.data) {
+        localStorage.setItem("orderId", result?.data?.id)
+        const data = {
+          productName: subsData?.name,
+          amount: result?.data?.amount,
+          quantity: 1
+        }
+        HandleSubscriptionPayment(data).then((result) => {
+          if (result) {
+            setshowspinner(false)
+            router.push(result);
+          }
+        })
+      }
+    })
+  }
+
   return (
     <>
       <Navbar />
@@ -219,8 +271,12 @@ export default function View() {
                     Status :
                   </Typography>
                   &emsp;
-                  <Typography variant="subtitle2" className={subs.fontCSS} sx={{ color: "green" }}>
-                    {subsData && subsData?.status}
+                  <Typography
+                    variant="subtitle2"
+                    className={subs.fontCSS}
+                    sx={{ color: "green" }}
+                  >
+                    {capitalizeFirstLetter(subsData && subsData?.status)}
                   </Typography>
                 </Box>
                 <Box className={subs.maindisplay}>
@@ -229,7 +285,9 @@ export default function View() {
                   </Typography>
                   &emsp;
                   <Typography variant="subtitle2" className={subs.fontCSS}>
-                    {subsData?.start_date ? moment(subsData?.start_date).format("DD MMM YYYY") : ""}
+                    {subsData?.start_date
+                      ? moment(subsData?.start_date).format("DD MMM YYYY")
+                      : ""}
                   </Typography>
                 </Box>
                 <Box className={subs.maindisplay}>
@@ -253,7 +311,7 @@ export default function View() {
                         If you want to activate this subscription
                       </Typography>
                       &nbsp;
-                      <Link href="/user/subscription">
+                      <Link href="/user/subscribeplan">
                         <Typography
                           variant="subtitle1"
                           className={subs.useSubsMessage}
@@ -263,6 +321,8 @@ export default function View() {
                       </Link>
                     </Box>
                   </Fragment>
+                ) : subsData.status === "inactive" ? (
+                  ""
                 ) : (
                   // </Link>
                   <Box className={subs.btncss1}>
@@ -271,7 +331,6 @@ export default function View() {
                         variant="contained"
                         onClick={() => cancelSubscription(subsData?.id)}
                         id={styles.muibuttonBackgroundColor}
-
                       >
                         Cancel Subscription
                       </Button>
@@ -289,6 +348,9 @@ export default function View() {
                   </Box>
                 )}
               </Box>
+              <Button variant="contained" endIcon={<CreditCardIcon />} onClick={AcceptPayment}>
+                Renew Subscription  {spinner === true ? <CircularProgress color="inherit" /> : ""}
+              </Button>
             </CardContent>
           </Card>
           <br />
@@ -343,7 +405,7 @@ export default function View() {
                                 <TableCell>
                                   {monthNames[d.getMonth()]}
                                 </TableCell>
-                                <TableCell>{row?.transaction_id}</TableCell>
+                                <TableCell>{row?.transaction_id?.substring(0, 20) + '.....'}</TableCell>
                                 <TableCell>
                                   {" "}
                                   {capitalizeFirstLetter(row?.payment_type)}
@@ -405,9 +467,9 @@ export default function View() {
             </CardContent>
           </Card>
         </Box>
-      </Box >
+      </Box>
       {/* <Footer /> */}
-      < ToastContainer />
+      <ToastContainer />
     </>
   );
 }

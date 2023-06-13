@@ -6,7 +6,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { googleLogout } from "@react-oauth/google";
 
 export const GenerateToken = async() =>{
-
   return await axios({
         method: "GET",
         url: `${API.authToken}`,
