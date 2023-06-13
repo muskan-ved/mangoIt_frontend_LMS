@@ -1,5 +1,5 @@
 // ***** React Import
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 // MUI Import
 import {
@@ -20,7 +20,7 @@ import {
 import SideBar from "@/common/LayoutNavigations/sideBar";
 import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
 import Footer from "@/common/LayoutNavigations/footer";
-import Navbar from "../../../common/LayoutNavigations/navbar";
+import Navbar from "../../../../common/LayoutNavigations/navbar";
 // Helper Import
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -30,19 +30,20 @@ import SpinnerProgress from "@/common/CircularProgressComponent/spinnerComponent
 // Types Import
 import { sessionType } from "@/types/sessionType";
 // CSS Import
-import styles from "../../../styles/sidebar.module.css";
-import Subscription from "../../../styles/subscription.module.css";
+import styles from "../../../../styles/sidebar.module.css";
+import Subscription from "../../../../styles/subscription.module.css";
 import { ToastContainer } from "react-toastify";
 // API services
 import { subscriptionValidations } from "@/validation_schema/subscriptionValidation";
-import { HandleSubscriptionPost } from "@/services/subscription";
+import { HandleSubscriptionGetByID, HandleSubscriptionPost } from "@/services/subscription";
 
 
-export default function AddSubscription() {
+export default function UpdateSubscription() {
   const router: any = useRouter();
+  const [row,setRows] = useState<any>([]);
   const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
-
+const {id} = router.query;;
   const {
     register,
     handleSubmit,
@@ -53,6 +54,26 @@ export default function AddSubscription() {
   } = useForm<sessionType | any>({
     resolver: yupResolver(subscriptionValidations),
   });
+
+  const getSubscriptionById = () => {
+    HandleSubscriptionGetByID(id).then((subscriptions:any) => {
+        const fields = [
+            "name",
+            "price",
+            "duration_term",
+            "duration_value",
+            "description",
+            "status",
+            "duration"
+         ];
+         fields.forEach((field) => setValue(field, subscriptions.data[field]));
+        // setRows(subscriptions.data)
+      })
+  }
+
+  useEffect(()=>{
+    getSubscriptionById()
+  },[])
 
   const onSubmit = async (event: any) => {
     let localData: any;
@@ -85,6 +106,8 @@ export default function AddSubscription() {
       }
     
   };
+
+
 
   function ErrorShowing(errorMessage: any) {
     return (

@@ -65,7 +65,6 @@ export default function AddUser() {
     );
   }
 
-   console.log("oopps", errors)
   return (
     <>
       <Navbar />
