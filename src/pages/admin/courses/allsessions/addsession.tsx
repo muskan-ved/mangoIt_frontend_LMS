@@ -16,7 +16,6 @@ import { sessionValidations } from '@/validation_schema/sessionValidation';
 import { LoadingButton } from "@mui/lab";
 import CircularProgressBar from '@/common/CircularProcess/circularProgressBar';
 import SpinnerProgress from '@/common/CircularProgressComponent/spinnerComponent';
-import { capitalizeFirstLetter } from '@/common/CapitalFirstLetter/capitalizeFirstLetter';
 // Types Import
 import { sessionType } from '@/types/sessionType';
 import { courseType } from '@/types/courseType';
@@ -134,7 +133,6 @@ export default function AddSession() {
 
   const handleChange = (e: any) => {
     const file = e.target.files[0];
-
       if (e.target.name === "attachment") {
          const reader = new FileReader();
          reader.onload = (e: any) => {

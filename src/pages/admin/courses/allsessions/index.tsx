@@ -387,7 +387,7 @@ const AllSession = () => {
                                     >
                                       <Box className={Sessions.boxInFilter}>
                                         <Button
-
+                                          id={styles.muibuttonBackgroundColor}
                                           size="medium"
                                           variant="contained"
                                           color="primary"

@@ -250,13 +250,6 @@ const AddCourse = () => {
                           : ""}
                       </Grid>
                     </Box>
-                    {/* {const showErrorMessage = errors?.long_description?.message ? className={styles.addNewCourseButton} : className={styles.SubmitButton}}
-                    <Grid item mt={3} className={showErrorMessage}> */}
-                    {/* <Grid item mt={3} className={!errors?.long_description?.message ? styles.addNewCourseButton : styles.SubmitButton} >
-                      <Button type="submit" variant="contained">
-                        ADD NEW COURSE
-                      </Button>
-                    </Grid> */}
                     <Grid item mt={2} className={!errors?.long_description?.message ? styles.addNewCourseButton : styles.SubmitButton} >
                     <Button className={styles.cancelButton} variant="contained" size="large" onClick={() => router.push('/admin/courses/allcourses')} id={SidebarStyles.muibuttonBackgroundColor}>Cancel</Button>
                       {!isLoadingButton ? <Button type="submit" size="large" variant="contained" id={SidebarStyles.muibuttonBackgroundColor}>
