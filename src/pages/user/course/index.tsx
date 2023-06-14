@@ -125,7 +125,6 @@ const AllCourses = () => {
   const handleSearch = (e: any, identifier: any) => {
     const search = e?.target?.value;
     setPage(1);
-
     if (identifier === "reset") {
       getAllCourseData();
       setSearch(e);
