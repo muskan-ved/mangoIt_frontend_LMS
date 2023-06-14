@@ -29,7 +29,7 @@ export const AlertDialog = ({ open, onClose, onSubmit, title,whatYouDelete }: al
             </DialogTitle>
             <DialogContent >
                 <DialogContentText id="alert-dialog-description" >
-                    Are you sure you want delete <Typography component={'span'} sx={{ fontWeight: 'bold' }}>'{capitalizeFirstLetter(title)}'</Typography>?
+                    Are you sure you want delete <Typography component={'span'} sx={{ fontWeight: 'bold' }}>&apos;{capitalizeFirstLetter(title)}&apos;</Typography>?
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
