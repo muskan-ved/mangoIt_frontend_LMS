@@ -75,7 +75,6 @@ const columns: Column[] = [
 const AllUsers = () => {
 	const [rows, setRows] = React.useState<any>([]);
 	const [search, setSearch] = React.useState('');
-	const [getCourse, setCourse] = React.useState<any>([]);
 	const [toggle, setToggle] = React.useState<boolean>(false);
 	const [deleteRow, setDeleteRow] = React.useState<any>([])
 	const [open, setOpen] = React.useState(false);
@@ -148,7 +147,6 @@ const AllUsers = () => {
 	}
 
 	const onSubmit = (event: any) => {
-		console.log("eventdata", event)
 		HandleUserGet('', event).then((itemFiltered) => {
 			setRows(itemFiltered.data)
 		})
@@ -158,7 +156,6 @@ const AllUsers = () => {
 		setFilter(0)
 		reset({ role_id: 0, status: 0 });
 	}
-	// console.log('oops', rows)
 
 	return (
 		<>

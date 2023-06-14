@@ -83,7 +83,6 @@ export default function AddSession() {
 
    const getCourseData = () => {
       HandleCourseGet('', '').then((courses) => {
-         // console.log('courses', courses)
          setCourses(courses.data)
       })
    };
@@ -147,23 +146,6 @@ export default function AddSession() {
 
                                     <Grid item xs={12} sm={12} md={6} lg={6}>
                                        <InputLabel className={ModuleCss.InputLabelFont}>Course of Module</InputLabel>
-                                       {/* <Controller
-                                          name="course_id"
-                                          control={control}
-                                          defaultValue=""
-                                          render={({ field }) => (
-                                             <FormControl fullWidth>
-                                                <Select {...field} displayEmpty>
-                                                   <MenuItem disabled value="">
-                                                      Select Course
-                                                   </MenuItem>
-                                                   {getCourses?.map((course: any) => {
-                                                      return (<MenuItem key={course?.course.id} value={course?.course.id}>{capitalizeFirstLetter(course?.course.title)}</MenuItem>)
-                                                   })}
-                                                </Select>
-                                             </FormControl>
-                                          )}
-                                       /> */}
                                        <Autocomplete
                                           id="combo-box-demo"
                                           options={getCourses}
@@ -179,7 +161,6 @@ export default function AddSession() {
                                           )}
                                           onChange={(event, newValue) => {
                                              setCourseId(newValue?.course?.id);
-                                             setCourseTitle(newValue?.course);
                                           }}
                                        />
 

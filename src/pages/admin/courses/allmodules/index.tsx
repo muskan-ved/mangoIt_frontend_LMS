@@ -41,6 +41,7 @@ import ArrowUpwardOutlinedIcon from '@mui/icons-material/ArrowUpwardOutlined';
 import styles from "../../../../styles/sidebar.module.css";
 import ModulCss from "../../../../styles/modules.module.css";
 import { ToastContainer } from "react-toastify";
+import { moduleType } from '@/types/moduleType';
 // External Components
 import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
 import { handleSortData } from "@/common/Sorting/sorting";
@@ -53,6 +54,8 @@ import Autocomplete from "@mui/material/Autocomplete";
 // API Service
 import { HandleCourseGet } from "@/services/course";
 import { HandleModuleDelete, HandleModuleGet } from "@/services/module";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { moduleValidations } from "@/validation_schema/moduleValidation";
 
 interface Column {
   id: "id" | "title" | "course_id" | "module_id" | "is_deleted" | "action";
@@ -79,14 +82,18 @@ const AllModules = () => {
   const [deleteRow, setDeleteRow] = React.useState<any>([])
   const [open, setOpen] = React.useState(false);
   const [getFilter, setFilter] = React.useState<number>(0);
-  const [getCourseTitle, setCourseTitle] = React.useState<any>("");
-  const [getCourseId, setCourseId] = React.useState<any>(0);
-  const [getTitle, setTitle] = React.useState<any>("");
+  const [value, setNewValue] = React.useState<any>({
+    id: 0,
+    title: 'All',
+  });
+  const [inputValue, setInputValue] = React.useState<any>([]);
 
 
   const router = useRouter()
   const {
+    register,
     handleSubmit,
+    formState: { errors },
     control,
     reset,
   } = useForm();
@@ -104,6 +111,7 @@ const AllModules = () => {
     setPage(p);
     DATA.jump(p);
   };
+  //useEffect 
   React.useEffect(() => {
     getModuleData();
     getCourseData();
@@ -128,7 +136,6 @@ const AllModules = () => {
   //search modules
   const handleSearch = (e: any, identifier: any) => {
     setPage(1);
-    // DATA.jump(1);
     if (identifier === 'reset') {
       HandleModuleGet('', '').then((itemSeached) => {
         setRows(itemSeached.data);
@@ -156,26 +163,37 @@ const AllModules = () => {
     })
     setOpen(!open);
   }
-  //submit form
+  //submit form for filtering
   const onSubmit = (event: any) => {
     const filterData: any = {
-      course_id: getCourseId,
+      course_id: value?.id,
       status: event.status,
     }
     HandleModuleGet('', filterData).then((itemFiltered) => {
       setRows(itemFiltered.data)
     })
-    setCourseTitle("");
+
   }
 
   const resetFilterValue = () => {
     setFilter(0)
+    setNewValue({
+      id: 0,
+      title: 'All',
+    })
     reset({ course: 0, status: 0 });
     getModuleData()
   }
 
-  // console.log("parentvalue[", getTitle)
 
+  const option: { id: number; title: string; }[] = [{ id: 0, title: 'All' }];
+  getCourse &&
+    getCourse.map((data: any, key: any) => {
+      return option.push({
+        id: data?.course?.id,
+        title: data?.course?.title,
+      });
+    });
   return (
     <>
       <Navbar />
@@ -256,43 +274,27 @@ const AllModules = () => {
                                         <InputLabel htmlFor="name" className={ModulCss.courseInFilter}>
                                           Course
                                         </InputLabel>
-                                        {/*	<Controller
-																					name="course"
-																					control={control}
-																					defaultValue={getFilter}
-																					render={({ field }) => (
-																						<FormControl fullWidth>
-																							<Select {...field} displayEmpty>
-																								<MenuItem value={0}>
-																									All
-																								</MenuItem>
-																								{getCourse?.map((data: any) => {
-																									return (<MenuItem key={data.course.id} value={data.course.id}>{capitalizeFirstLetter(data?.course.title)}</MenuItem>)
-																								})}
-																							</Select>
-																						</FormControl>
-																					)}
-																				/>
-																			 */}
-
                                         <Autocomplete
-                                          id="combo-box-demo"
-                                          defaultValue={getCourseTitle === "" || 'undefined' || null ? null : getCourseTitle}
-                                          options={getCourse}
-                                          getOptionLabel={(option: any) =>
-                                            option?.course?.title
-                                          }
+                                          value={value}
+                                          inputValue={inputValue}
+                                          onChange={(event, newValue) => {
+                                            setNewValue(newValue);
+                                          }}
+                                          onInputChange={(event, newInputValue) => {
+                                            setInputValue(newInputValue);
+                                          }}
+                                          options={option}
+                                          getOptionLabel={(option) => option?.title}
                                           renderInput={(params) => (
                                             <TextField
+                                              {...register("course_id")}
                                               {...params}
-                                              placeholder="Course Name"
+                                              variant="outlined"
+                                              placeholder="Search Course"
                                             />
                                           )}
-                                          onChange={(event, newValue) => {
-                                            setCourseId(newValue?.course.id);
-                                            setCourseTitle(newValue?.course);
-                                          }}
                                         />
+                                       
                                       </Stack>
                                     </Grid>
                                     <Grid item xs={12} md={6} lg={6}>
