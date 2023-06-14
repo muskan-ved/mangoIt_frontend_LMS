@@ -512,6 +512,8 @@ export default function View() {
                                   </Button>) : < Button
                                     variant="outlined"
                                     onClick={() => handleClickOpenDialouge(row)}
+                                    className={courseStyle.editDeleteButton}
+                                    id={courseStyle.viewIcon}
                                   >
                                     <RemoveRedEyeOutlinedIcon />
                                   </Button>}
