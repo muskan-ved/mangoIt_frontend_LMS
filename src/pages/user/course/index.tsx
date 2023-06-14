@@ -125,7 +125,6 @@ const AllCourses = () => {
   const handleSearch = (e: any, identifier: any) => {
     const search = e?.target?.value;
     setPage(1);
-    DATA.jump(1);
     if (identifier === "reset") {
       getAllCourseData();
       setSearch(e);
@@ -177,7 +176,7 @@ const AllCourses = () => {
                 id="standard-search"
                 value={search}
                 variant="outlined"
-                placeholder="Search by course"
+                placeholder="Search by 'Course Name'"
                 onChange={(e) => handleSearch(e, "")}
                 InputProps={{
                   endAdornment: !search ? (

@@ -3,6 +3,7 @@ import { Button ,TextField,Box,Grid,Typography, InputAdornment, IconButton} from
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useRouter } from "next/navigation";
 import AuthSidebar from "../../common/LayoutNavigations/authSideLayout";
+import sidebarStyles from "../../styles/sidebar.module.css";
 import { LoadingButton } from "@mui/lab";
 import CircularProgressBar from "@/common/CircularProcess/circularProgressBar";
 import { resetPasswordType } from "@/types/authType";
@@ -131,6 +132,8 @@ export default function ResetPassword() {
                 variant="contained"
                 className="authPageButton"
                 sx={{ mt: 3, mb: 2 }}
+              id={sidebarStyles.muibuttonBackgroundColor}
+
               >
                 Save
               </Button> : <LoadingButton loading={loading}  fullWidth

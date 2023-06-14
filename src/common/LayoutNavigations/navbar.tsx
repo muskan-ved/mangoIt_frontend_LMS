@@ -3,8 +3,6 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
-import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -15,14 +13,12 @@ import { useRouter } from "next/navigation";
 import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDownOutlined";
 import styles from "../../styles/appbar.module.css";
 import { HandleLogout } from "@/services/auth";
-import PowerSettingsNewOutlinedIcon from "@mui/icons-material/PowerSettingsNewOutlined";
-import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import { capitalizeFirstLetter } from "../CapitalFirstLetter/capitalizeFirstLetter";
 import { BASE_URL } from "@/config/config";
 
 interface appbar {
   portalData?: any;
-  profilePic?:any;
+  profilePic?: any;
 }
 
 function stringAvatar(first_name: string, last_name: string) {
@@ -36,7 +32,7 @@ function stringAvatar(first_name: string, last_name: string) {
   };
 }
 
-export default function Navbar({ portalData ,profilePic}: appbar) {
+export default function Navbar({ portalData, profilePic }: appbar) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
@@ -97,6 +93,7 @@ export default function Navbar({ portalData ,profilePic}: appbar) {
         horizontal: "right",
       }}
       open={isMenuOpen}
+      sx={{marginTop: "25px !important"}}
       onClose={handleMenuClose}
     >
       {userData && userData?.role_id === 1 ? (
@@ -105,15 +102,6 @@ export default function Navbar({ portalData ,profilePic}: appbar) {
             router.push("/profile"), handleMenuClose();
           }}
         >
-          <IconButton
-            size="large"
-            aria-label="account of current user"
-            aria-controls="primary-search-account-menu"
-            aria-haspopup="true"
-            color="inherit"
-          >
-            {/* <AccountCircleOutlinedIcon /> */}
-          </IconButton>
           <Typography>Profile</Typography>
         </MenuItem>
       ) : (
@@ -122,28 +110,10 @@ export default function Navbar({ portalData ,profilePic}: appbar) {
             router.push("/user/profile"), handleMenuClose();
           }}
         >
-          {/* <IconButton
-            size="large"
-            aria-label="account of current user"
-            aria-controls="primary-search-account-menu"
-            aria-haspopup="true"
-            color="inherit"
-          > */}
-          {/* <AccountCircleOutlinedIcon /> */}
-          {/* </IconButton> */}
           <Typography>Profile</Typography>
         </MenuItem>
       )}
       <MenuItem onClick={HandleLogout}>
-        {/* <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-      <PowerSettingsNewOutlinedIcon />
-      </IconButton> */}
         <Typography>Logout</Typography>
       </MenuItem>
     </Menu>
@@ -164,6 +134,7 @@ export default function Navbar({ portalData ,profilePic}: appbar) {
         horizontal: "right",
       }}
       open={isMobileMenuOpen}
+      sx={{marginTop: "25px !important"}}
       onClose={handleMobileMenuClose}
     >
       <MenuItem onClick={() => router.push("/profile")}>
@@ -173,40 +144,9 @@ export default function Navbar({ portalData ,profilePic}: appbar) {
           {capitalizeFirstLetter(userData?.last_name)}
         </Typography>
       </MenuItem>
-      {/* <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={17} color="error">
-            <NotificationsNoneOutlinedIcon />
-          </Badge>
-        </IconButton>
-        <Typography>Notifications</Typography>
-      </MenuItem> */}
-      <MenuItem onClick={() => router.push("/profile")}>
-        {/* <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircleOutlinedIcon />
-        </IconButton> */}
-        <Typography>Profile</Typography>
-      </MenuItem>
+
+      <MenuItem onClick={() => router.push("/profile")}>Profile</MenuItem>
       <MenuItem onClick={HandleLogout}>
-        {/* <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <PowerSettingsNewOutlinedIcon />
-        </IconButton> */}
         <Typography>Logout</Typography>
       </MenuItem>
     </Menu>
@@ -229,15 +169,6 @@ export default function Navbar({ portalData ,profilePic}: appbar) {
           />
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            {/* <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-            >
-              <Badge badgeContent={17} color="error">
-                <NotificationsNoneOutlinedIcon />
-              </Badge>
-            </IconButton> */}
             <Box className={styles.createVrLine}></Box>
 
             <Avatar

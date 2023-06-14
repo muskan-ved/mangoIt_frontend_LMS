@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button, Divider, TextField, Box, Grid, Typography, IconButton, } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
 import styles from "../../styles/login.module.css";
+import sidebarStyles from "../../styles/sidebar.module.css";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import GoogleIcon from "@mui/icons-material/Google";
 import { useForm } from "react-hook-form";
@@ -81,7 +82,7 @@ export default function Register() {
                   href="/login"
                   className={styles.signInUpColor}
                 >
-                  Login
+                 {" "} Login
                 </Link>
               </Grid>
             </Grid>
@@ -168,6 +169,7 @@ export default function Register() {
                 size="large"
                 variant="contained"
                 className="authPageButton"
+                id={sidebarStyles.muibuttonBackgroundColor}
                 sx={{ mt: 3, mb: 2 }}
               >
                 Register
@@ -192,7 +194,7 @@ export default function Register() {
                   fullWidth
                   variant="outlined"
                   startIcon={<GoogleIcon />}
-                  sx={{ mt: 3 }}
+                  sx={{ mt: 3 , color: "#000",borderColor: "#e8661b"}}
                 >
                   Continue with Google
                 </Button>
