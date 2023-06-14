@@ -61,7 +61,7 @@ export const HandleSubscriptionDelete = async (id: string) => {
     headers: LoginHeader(),
   })
     .then((request) => {
-      if (request.status === 200) {
+      if (request.status === 201) {
         toast.success("Deleted successfully.");
       }
       return request;
