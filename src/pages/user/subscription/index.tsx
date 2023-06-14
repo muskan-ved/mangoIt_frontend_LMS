@@ -44,16 +44,25 @@ import moment from "moment";
 import { GetdateAfterOneMonth } from "@/common/commonfunctions/connonfun";
 
 interface Column {
-  id: "id" | "name" | "amount" | 'subsc_date' | "next_pay_date" | "status" | "action" | "type" | "last_pay_date";
+  id:
+    | "id"
+    | "name"
+    | "amount"
+    | "subsc_date"
+    | "next_pay_date"
+    | "status"
+    | "action"
+    | "type"
+    | "last_pay_date";
   label: string;
   minWidth?: number;
   align?: "right";
   format?: (value: number) => string;
 }
 const columns: Column[] = [
-  { id: "id", label: "ID", minWidth: 20, },
+  { id: "id", label: "ID", minWidth: 20 },
   { id: "name", label: "NAME", minWidth: 50 },
-  { id: "type", label: "NAME", minWidth: 50 },
+  { id: "type", label: "TYPE", minWidth: 50 },
   { id: "amount", label: "AMOUNT", minWidth: 100 },
   { id: "subsc_date", label: " SUBS. DATE", minWidth: 100 },
   { id: "last_pay_date", label: "LAST PAY DATE", minWidth: 100 },
@@ -106,7 +115,6 @@ const Subscription = () => {
   };
   const handleSearch = (e: any, identifier: any) => {
     setPage(1);
-  
     if (identifier === "reset") {
       HandleSubscriptionGetByUserID(userId?.id).then((subs) => {
         setRows(subs.data);
@@ -134,7 +142,7 @@ const Subscription = () => {
     });
   };
 
-  console.log(rows)
+  console.log(rows);
 
   return (
     <>
@@ -177,7 +185,7 @@ const Subscription = () => {
               <Paper>
                 <TableContainer className={courseStyle.tableContainer}>
                   <Table stickyHeader aria-label="sticky table">
-                    <TableHead >
+                    <TableHead>
                       <TableRow>
                         {columns.map((column) => (
                           <TableCell
@@ -191,7 +199,9 @@ const Subscription = () => {
                           >
                             {toggle ? (
                               column.label === "ID" ? (
-                                <Typography className={courseStyle.tableHeadingForId}>
+                                <Typography
+                                  className={courseStyle.tableHeadingForId}
+                                >
                                   ID{" "}
                                   <ArrowDownwardOutlinedIcon fontSize="small" />{" "}
                                 </Typography>
@@ -199,7 +209,9 @@ const Subscription = () => {
                                 column.label
                               )
                             ) : column.label === "ID" ? (
-                              <Typography className={courseStyle.tableHeadingForId}>
+                              <Typography
+                                className={courseStyle.tableHeadingForId}
+                              >
                                 ID <ArrowUpwardOutlinedIcon fontSize="small" />{" "}
                               </Typography>
                             ) : (
@@ -218,8 +230,8 @@ const Subscription = () => {
                             color === "active"
                               ? courseStyle.activeClassColor
                               : color === "canceled"
-                                ? courseStyle.inactiveClassColor
-                                : courseStyle.draftClassColor;
+                              ? courseStyle.inactiveClassColor
+                              : courseStyle.draftClassColor;
                           return (
                             <TableRow
                               hover
@@ -239,10 +251,14 @@ const Subscription = () => {
                                 {moment(row?.createdAt).format("DD, MMMM YYYY")}
                               </TableCell>
                               <TableCell>
-                                {moment(row?.start_date).format("DD, MMMM YYYY")}
+                                {moment(row?.start_date).format(
+                                  "DD, MMMM YYYY"
+                                )}
                               </TableCell>
                               <TableCell>
-                                {moment(GetdateAfterOneMonth(row?.start_date)).format("DD, MMMM YYYY")}
+                                {moment(
+                                  GetdateAfterOneMonth(row?.start_date)
+                                ).format("DD, MMMM YYYY")}
                               </TableCell>
                               <TableCell className={statusColor}>
                                 {capitalizeFirstLetter(row?.status)}
@@ -265,7 +281,7 @@ const Subscription = () => {
                       ) : (
                         <TableRow>
                           <TableCell
-                            colSpan={7}
+                            colSpan={12}
                             sx={{ fontWeight: 600, textAlign: "center" }}
                           >
                             {" "}
