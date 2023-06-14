@@ -8,16 +8,24 @@ import {
   Card,
   CardContent,
   CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Divider,
   FormControl,
+  Grid,
   MenuItem,
   Pagination,
   Select,
   Stack,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 
 // Helper Import
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { LoadingButton } from "@mui/lab";
 
@@ -40,6 +48,7 @@ import {
   HandleSubscriptionUpdate,
 } from "@/services/subscription";
 import { CreateOrderForSubscription, HandleOrderGetByUserID } from "@/services/order";
+import { GetTransactiondet } from "@/services/transaction";
 import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
 import { usePagination } from "@/common/Pagination/paginations";
 import moment from "moment";
@@ -53,7 +62,14 @@ import subs from "../../../../styles/subscription.module.css";
 import Link from "next/link";
 import CircularProgressBar from "@/common/CircularProcess/circularProgressBar";
 import { AlertSubscriptionDialog } from "@/common/SubscriptionStatus/subscriptionManage";
-
+import { handleSortData } from "@/common/Sorting/sorting";
+import ArrowDownwardOutlinedIcon from "@mui/icons-material/ArrowDownwardOutlined";
+import ArrowUpwardOutlinedIcon from "@mui/icons-material/ArrowUpwardOutlined";
+import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
+import { GetdateAfterOneMonth } from "@/common/commonfunctions/connonfun";
+import { Dateformat } from "../../../../common/commonfunctions/connonfun";
+import { useTheme } from '@mui/material/styles';
+import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined';
 interface Column {
   id:
   | "id"
@@ -61,7 +77,7 @@ interface Column {
   | "date"
   | "transaction_id"
   | "payment_method"
-  | "pay_of_month";
+  | "pay_of_month" | "action" | "status";
   label: string;
   minWidth?: number;
   align?: "right";
@@ -69,14 +85,15 @@ interface Column {
 }
 
 const columns: Column[] = [
-  { id: "id", label: "ID", minWidth: 120 },
+  { id: "id", label: "ID", minWidth: 100 },
   { id: "amount", label: "AMOUNT", minWidth: 120 },
-  { id: "date", label: "DATE", minWidth: 120 },
-  { id: "pay_of_month", label: "PAY OF MONTH", minWidth: 120 },
-  { id: "transaction_id", label: "TRANSACTION ID", minWidth: 120 },
-  { id: "payment_method", label: "PAYMENT METHOD", minWidth: 120 },
+  { id: "date", label: "ORDER DATE", minWidth: 150 },
+  { id: "pay_of_month", label: "PAY OF MONTH", minWidth: 150 },
+  { id: "transaction_id", label: "TRX. ID", minWidth: 120 },
+  { id: "payment_method", label: "PAY. METHOD", minWidth: 130 },
+  { id: "status", label: "STATUS", minWidth: 120 },
+  { id: "action", label: "ACTION", minWidth: 120 },
 ];
-
 const monthNames = [
   "January",
   "February",
@@ -96,13 +113,16 @@ const d = new Date();
 export default function View() {
   const [rows, setRows] = useState<any>([]);
   const [subsData, setSubsdata] = useState<any>([]);
+  const [trxdata, settrxdata] = useState<any>([]);
   const [toggle, setToggle] = useState<boolean>(false);
   const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
+  const [dialougeopen, setDialougeopenOpen] = useState(false);
   const [subsId, setSubId] = useState<any>();
   const [userId, setuserId] = useState<any>();
   const [spinner, setshowspinner] = React.useState(false);
-
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('lg'));
 
   useEffect(() => {
     let localData: any;
@@ -120,7 +140,6 @@ export default function View() {
   }, []);
 
   const router = useRouter();
-
   const getSubsData = async () => {
     const id = router?.query?.id;
     if (id) {
@@ -129,8 +148,6 @@ export default function View() {
       });
     }
   };
-
-
 
   //pagination
   const [row_per_page, set_row_per_page] = React.useState(5);
@@ -148,7 +165,7 @@ export default function View() {
 
   const getAllCourseData = (id: any) => {
     HandleOrderGetByUserID(id).then((subs) => {
-      setRows(subs.data);
+      setRows(subs.data.reverse());
     });
   };
 
@@ -167,9 +184,10 @@ export default function View() {
       .then((res) => {
         setTimeout(() => {
           setToggle(!toggle);
+          toast.success(`Subscription updated successfully`);
           router.push("/user/subscription");
           setLoadingButton(false);
-        }, 2000);
+        }, 500);
       })
       .catch((err) => {
         console.log(err);
@@ -201,13 +219,46 @@ export default function View() {
       }
     })
   }
+  //acept payment by order renew subscription
+  const AcceptPaymentByorder = (order_id: any, order_amount: any) => {
+    setshowspinner(true)
+    localStorage.setItem("orderId", order_id)
+    const data = {
+      productName: subsData?.name,
+      amount: order_amount,
+      quantity: 1
+    }
+    HandleSubscriptionPayment(data).then((result) => {
+      if (result) {
+        setshowspinner(false)
+        router.push(result);
+      }
+    })
+  }
+  const handleSort = (rowsData: any) => {
+    const sortData = handleSortData(rowsData);
+    setRows(sortData);
+    setToggle(!toggle);
+  };
+  //open dialouge box view popup
+  const handleClickOpenDialouge = (item: any) => {
+    setDialougeopenOpen(true)
+    GetTransactiondet(item?.id).then((result) => {
+      if (result) {
+        settrxdata(result?.data)
+      }
+    })
+
+  }
+  const handleClose = () => {
+    setDialougeopenOpen(false);
+  };
 
   return (
     <>
       <Navbar />
       <Box className={styles.combineContentAndSidebar}>
         <SideBar />
-
         <Box className={styles.siteBodyContainer}>
           {/* breadcumbs */}
           <Box className={subs.maindisplay}>
@@ -241,16 +292,7 @@ export default function View() {
               <Box className={profiles.userData}>
                 <Box className={subs.maindisplay}>
                   <Typography variant="subtitle1" className={subs.useNameFront}>
-                    Subscription Id :
-                  </Typography>
-                  &emsp;
-                  <Typography variant="subtitle2" className={subs.fontCSS}>
-                    {subsData && subsData?.id}
-                  </Typography>
-                </Box>
-                <Box className={subs.maindisplay}>
-                  <Typography variant="subtitle1" className={subs.useNameFront}>
-                    Name :
+                    Subscription Name&nbsp;&nbsp;&emsp;&emsp;:
                   </Typography>
                   &emsp;
                   <Typography variant="subtitle2" className={subs.fontCSS}>
@@ -259,7 +301,7 @@ export default function View() {
                 </Box>
                 <Box className={subs.maindisplay}>
                   <Typography variant="subtitle1" className={subs.useNameFront}>
-                    Amount :
+                    Subscription Amount &emsp; :
                   </Typography>
                   &emsp;
                   <Typography variant="subtitle2" className={subs.fontCSS}>
@@ -268,96 +310,136 @@ export default function View() {
                 </Box>
                 <Box className={subs.maindisplay}>
                   <Typography variant="subtitle1" className={subs.useNameFront}>
-                    Status :
+                    Subscription  Status&nbsp;&emsp;&emsp;:
                   </Typography>
-                  &emsp;
-                  <Typography
+                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  {subsData && subsData?.status === "active" ? <Typography
                     variant="subtitle2"
                     className={subs.fontCSS}
-                    sx={{ color: "green" }}
+                    style={{ color: "green" }}
                   >
-                    {capitalizeFirstLetter(subsData && subsData?.status)}
+                    {subsData && capitalizeFirstLetter(subsData?.status)}
+                  </Typography> : subsData && subsData?.status === "inactive" ?
+                    <Typography
+                      variant="subtitle2"
+                      className={subs.fontCSS}
+                      style={{ color: "#0006ff" }}
+                    >
+                      {subsData && capitalizeFirstLetter(subsData?.status)}
+                    </Typography> : <Typography
+                      variant="subtitle2"
+                      className={subs.fontCSS}
+                      style={{ color: "red" }}
+                    >
+                      {subsData && capitalizeFirstLetter(subsData?.status)}
+                    </Typography>}
+
+                </Box>
+                <Box className={subs.maindisplay}>
+                  <Typography variant="subtitle1" className={subs.useNameFront}>
+                    Subscription Type &nbsp;&nbsp;&emsp;&emsp; :
+                  </Typography>
+                  &emsp;
+                  <Typography variant="subtitle2" className={subs.fontCSS}>
+                    {capitalizeFirstLetter(subsData && subsData?.duration_term)}
                   </Typography>
                 </Box>
                 <Box className={subs.maindisplay}>
                   <Typography variant="subtitle1" className={subs.useNameFront}>
-                    Start Date :
+                    Subscription date &emsp;&emsp;&emsp;:
                   </Typography>
                   &emsp;
                   <Typography variant="subtitle2" className={subs.fontCSS}>
-                    {subsData?.start_date
-                      ? moment(subsData?.start_date).format("DD MMM YYYY")
+                    {subsData?.createdAt
+                      ? moment(subsData?.createdAt
+                      ).format("DD, MMM YYYY")
                       : ""}
                   </Typography>
                 </Box>
                 <Box className={subs.maindisplay}>
                   <Typography variant="subtitle1" className={subs.useNameFront}>
-                    Next Pay :
+                    Last Pay date&nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;:
                   </Typography>
                   &emsp;
                   <Typography variant="subtitle2" className={subs.fontCSS}>
-                    5 June 2023
+                    {subsData?.start_date
+                      ? moment(subsData?.start_date
+                      ).format("DD, MMM YYYY")
+                      : ""}
                   </Typography>
                 </Box>
-                <br />
-                {subsData.status === "canceled" ? (
-                  // <Link href="www.google.com">
-                  <Fragment>
-                    <Box className={subs.maindisplay1}>
-                      <Typography
-                        variant="subtitle1"
-                        className={subs.useSubsCancell}
-                      >
-                        If you want to activate this subscription
-                      </Typography>
-                      &nbsp;
-                      <Link href="/user/subscribeplan">
-                        <Typography
-                          variant="subtitle1"
-                          className={subs.useSubsMessage}
-                        >
-                          Click here
-                        </Typography>
-                      </Link>
-                    </Box>
-                  </Fragment>
-                ) : subsData.status === "inactive" ? (
-                  ""
-                ) : (
-                  // </Link>
-                  <Box className={subs.btncss1}>
-                    {!isLoadingButton ? (
-                      <Button
-                        variant="contained"
-                        onClick={() => cancelSubscription(subsData?.id)}
-                        id={styles.muibuttonBackgroundColor}
-                      >
-                        Cancel Subscription
-                      </Button>
-                    ) : (
-                      <LoadingButton
-                        loading={isLoadingButton}
-                        size="large"
-                        className={subs.subsbtn}
-                        variant="contained"
-                        disabled
-                      >
-                        <CircularProgressBar />
-                      </LoadingButton>
-                    )}
-                  </Box>
-                )}
+                <Box className={subs.maindisplay}>
+                  <Typography variant="subtitle1" className={subs.useNameFront}>
+                    Next pay date&nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;:
+                  </Typography>
+                  &emsp;
+                  <Typography variant="subtitle2" className={subs.fontCSS}>
+                    {moment(GetdateAfterOneMonth(subsData?.start_date)).format("DD, MMMM YYYY")}
+                  </Typography>
+                </Box>
+                <Box sx={{ flexGrow: 1 }} mt={3}>
+                  <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+                    <Grid item xs={2} sm={4} md={11.8} >
+                      {Dateformat(new Date()) > Dateformat(GetdateAfterOneMonth(subsData?.start_date)) ? (<Button variant="contained" endIcon={<CreditCardIcon />} onClick={AcceptPayment}>
+                        Renew Subscription  {spinner === true ? <CircularProgress color="inherit" /> : ""}
+                      </Button>) : <>{subsData?.status === "canceled" ? (
+                        // <Link href="www.google.com">
+                        <Fragment>
+                          <Box className={subs.maindisplay1}>
+                            <Typography
+                              variant="subtitle1"
+                              className={subs.useSubsCancell}
+                            >
+                              If you want to activate this subscription
+                            </Typography>
+                            &nbsp; &nbsp;
+                            <Link href="/user/subscribeplan">
+                              <Typography
+                                variant="subtitle1"
+                                className={subs.useSubsMessage}
+                              >
+                                Click here
+                              </Typography>
+                            </Link>
+                          </Box>
+                        </Fragment>
+                      ) : subsData.status === "inactive" ? (
+                        ""
+                      ) : (
+                        // </Link>
+                        <Box className={subs.btncss1}>
+                          {!isLoadingButton ? (
+                            <Button
+                              variant="contained"
+                              onClick={() => cancelSubscription(subsData?.id)}
+                              id={styles.muibuttonBackgroundColor}
+                            >
+                              Cancel Subscription
+                            </Button>
+                          ) : (
+                            <LoadingButton
+                              loading={isLoadingButton}
+                              size="large"
+                              className={subs.subsbtn}
+                              variant="contained"
+                              disabled
+                            >
+                              <CircularProgressBar />
+                            </LoadingButton>
+                          )}
+                        </Box>
+                      )}</>}
+                    </Grid>
+                  </Grid>
+                </Box>
               </Box>
-              <Button variant="contained" endIcon={<CreditCardIcon />} onClick={AcceptPayment}>
-                Renew Subscription  {spinner === true ? <CircularProgress color="inherit" /> : ""}
-              </Button>
             </CardContent>
           </Card>
           <br />
           <Card>
             <CardContent>
               <Typography variant="h5" className={subs.headingcss}>
-                Orders
+                Orders Details
               </Typography>
               <Box className={profiles.userData}>
                 <Paper>
@@ -370,15 +452,19 @@ export default function View() {
                               key={column.id}
                               align={column.align}
                               style={{ top: 0, minWidth: column.minWidth }}
+                              className={courseStyle.tableHeadingForId}
+                              onClick={() => {
+                                column.label === "ID" ? handleSort(rows) : "";
+                              }}
                             >
                               {toggle ? (
                                 column.label === "ID" ? (
-                                  <Typography>ID </Typography>
+                                  <Typography className={courseStyle.tableHeadingForId}>ID  <ArrowDownwardOutlinedIcon fontSize="small" />{" "} </Typography>
                                 ) : (
                                   column.label
                                 )
                               ) : column.label === "ID" ? (
-                                <Typography>ID </Typography>
+                                <Typography className={courseStyle.tableHeadingForId}>ID  <ArrowUpwardOutlinedIcon fontSize="small" />{" "}</Typography>
                               ) : (
                                 column.label
                               )}
@@ -405,10 +491,30 @@ export default function View() {
                                 <TableCell>
                                   {monthNames[d.getMonth()]}
                                 </TableCell>
-                                <TableCell>{row?.transaction_id?.substring(0, 20) + '.....'}</TableCell>
+                                <TableCell>{row?.transaction_id ? row?.transaction_id?.substring(0, 15) + '...' : ""}</TableCell>
                                 <TableCell>
                                   {" "}
-                                  {capitalizeFirstLetter(row?.payment_type)}
+                                  {capitalizeFirstLetter(row?.payment_type ? row?.payment_type : "")}
+                                </TableCell>
+                                <TableCell>
+                                  {row?.status === 'paid' ? (<Typography style={{ color: "green" }}>{capitalizeFirstLetter(row?.status
+                                    ? row?.status
+                                    : "")}</Typography>) : <Typography style={{ color: "red" }}>{capitalizeFirstLetter(row?.status
+                                      ? row?.status
+                                      : "")}</Typography>}
+                                </TableCell>
+                                <TableCell>
+                                  {row?.status !== "paid" ? (< Button
+                                    variant="outlined"
+                                    onClick={() => AcceptPaymentByorder(row?.id, row?.amount)}
+                                  >
+                                    <b>Pay</b>
+                                  </Button>) : < Button
+                                    variant="outlined"
+                                    onClick={() => handleClickOpenDialouge(row)}
+                                  >
+                                    <RemoveRedEyeOutlinedIcon />
+                                  </Button>}
                                 </TableCell>
                               </TableRow>
                             );
@@ -467,9 +573,101 @@ export default function View() {
             </CardContent>
           </Card>
         </Box>
-      </Box>
+        <Dialog
+          fullScreen={fullScreen}
+          open={dialougeopen}
+          onClose={handleClose}
+          fullWidth
+          aria-labelledby="responsive-dialog-title"
+        >
+          <DialogTitle id="responsive-dialog-title">
+            <Typography variant="h5" sx={{ fontWeight: "bold" }}>Subscription Order / Transaction  Details</Typography>
+          </DialogTitle>
+          <DialogContent>
+            <Box
+              sx={{
+                display: 'grid',
+                gap: 1,
+                gridTemplateColumns: 'repeat(1, 1fr)',
+
+              }}
+              mt={2}
+            >
+              <Box className={subs.maindisplay}>
+                <Typography variant="subtitle1" className={subs.useNameFront}>
+                  Order Id&nbsp;&nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;-
+                </Typography>
+                &emsp;
+                <Typography variant="subtitle2" className={subs.fontCSS}>
+                  {trxdata?.order_id}
+                </Typography>
+              </Box>
+              {/* <Box className={subs.maindisplay}>
+                <Typography variant="subtitle1" className={subs.useNameFront}>
+                  Order date &nbsp; &nbsp;&emsp;&emsp;&emsp;&emsp; -
+                </Typography>
+                &emsp;
+                <Typography variant="subtitle2" className={subs.fontCSS}>
+                  02 March 2023
+                </Typography>
+              </Box> */}
+              <Box className={subs.maindisplay}>
+                <Typography variant="subtitle1" className={subs.useNameFront}>
+                  Transaction Id&emsp; &emsp;&emsp; -
+                </Typography>
+                &emsp;
+                <Typography variant="subtitle2" className={subs.fontCSS}>
+                  {trxdata?.transaction_id?.substring(0, 40)}
+                </Typography>
+              </Box>
+              <Box className={subs.maindisplay}>
+                <Typography variant="subtitle1" className={subs.useNameFront}>
+                  Trx. / Payment Date &nbsp;&nbsp; -
+                </Typography>
+                &emsp;
+                <Typography variant="subtitle2" className={subs.fontCSS}>
+                  {moment(trxdata?.createdAt
+                  ).format("DD, MMM YYYY")}
+                </Typography>
+              </Box>
+              <Box className={subs.maindisplay}>
+                <Typography variant="subtitle1" className={subs.useNameFront}>
+                  Transaction Amount &nbsp;&nbsp;-
+                </Typography>
+                &emsp;
+                <Typography variant="subtitle2" className={subs.fontCSS}>
+                  {trxdata?.trx_amount}
+                </Typography>
+              </Box>
+              <Box className={subs.maindisplay}>
+                <Typography variant="subtitle1" className={subs.useNameFront}>
+                  Transaction Method &nbsp;&nbsp; -
+                </Typography>
+                &emsp;
+                <Typography variant="subtitle2" className={subs.fontCSS}>
+                  {trxdata?.payment_method}
+                </Typography>
+              </Box>
+            </Box>
+            <Box textAlign='center' mt={4} mb={2}>
+              <Button variant='contained' startIcon={<CloudDownloadOutlinedIcon />}>
+                DownLoad Receipt
+              </Button>
+              <Button variant='contained' id={styles.muibuttonBackgroundColor} sx={{ marginLeft: "20px" }} startIcon={<CloudDownloadOutlinedIcon />}>
+                DownLoad Invoice
+              </Button>
+            </Box>
+          </DialogContent>
+          <Divider />
+          <DialogActions>
+            <Button onClick={handleClose} variant="contained" autoFocus>
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Box >
       {/* <Footer /> */}
-      <ToastContainer />
+      < ToastContainer />
     </>
   );
 }

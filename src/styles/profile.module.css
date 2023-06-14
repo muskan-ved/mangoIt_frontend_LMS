@@ -1,53 +1,53 @@
 .profileImageBox {
-    float: left;
-    justify-content: center;
-    display: flex;
-    padding: 10px;
-    flex-wrap: wrap;
+  float: left;
+  justify-content: center;
+  display: flex;
+  padding: 10px;
+  flex-wrap: wrap;
 }
 
 .profileCameraIcon {
-    right: 17px !important;
-    color: white !important;
-    position: relative !important;
-    background: #1a73e8 !important;
-    padding: 5px !important;
-    border-radius: 50% !important;
+  right: 17px !important;
+  color: white !important;
+  position: relative !important;
+  background: #1a73e8 !important;
+  padding: 5px !important;
+  border-radius: 50% !important;
 }
 
 .imageComponent {
-    width: 120px;
-    height: 120px;
-    border-radius: 6px;
+  width: 120px;
+  height: 120px;
+  border-radius: 6px;
 }
 
 .userDetailGrid {
-    max-width: 50%;
-    width: 100%;
-    float: right;
-    margin-right: 100px;
-    margin-bottom: 32px;
+  max-width: 50%;
+  width: 100%;
+  float: right;
+  margin-right: 100px;
+  margin-bottom: 32px;
 }
 
 .userDetailFront {
-    color: #7C7C7C;
+  color: #7c7c7c;
 }
 
 .useNameFront {
-    color: #7C7C7C !important;
-    font-weight: bold !important;
+  color: #7c7c7c !important;
+  font-weight: bold !important;
 }
 
 .cameraAltIcon {
-    font-size: medium !important;
+  font-size: medium !important;
 }
 
 .updateLoadingButton {
-    width: 178px;
+  width: 178px !important;
 }
-.userData{
-    margin-left: 15px;
+.userData {
+  margin-left: 15px;
 }
-.InputLabelFont{
-    font-weight:700
+.InputLabelFont {
+  font-weight: 700;
 }
