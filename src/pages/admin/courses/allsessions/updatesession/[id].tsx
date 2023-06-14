@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from "next/router";
 // MUI Import
-import { Autocomplete, Box, Button, Card, CardContent, Grid, IconButton, InputLabel, MenuItem, NativeSelect, Select, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, Button, Card, CardContent, FormControl, Grid, IconButton, InputLabel, MenuItem, NativeSelect, Select, TextField, Typography } from "@mui/material";
 // External Components
 import SideBar from "@/common/LayoutNavigations/sideBar";
 import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
@@ -17,6 +17,7 @@ import { sessionUpdateValidation } from '@/validation_schema/sessionValidation';
 import { LoadingButton } from "@mui/lab";
 import CircularProgressBar from '@/common/CircularProcess/circularProgressBar';
 import SpinnerProgress from '@/common/CircularProgressComponent/spinnerComponent';
+import { capitalizeFirstLetter } from '@/common/CapitalFirstLetter/capitalizeFirstLetter';
 // Types Import
 import { sessionType } from '@/types/sessionType';
 import { courseType } from '@/types/courseType';
@@ -29,6 +30,8 @@ import { ToastContainer } from 'react-toastify';
 import { HandleCourseGet } from '@/services/course';
 import { HandleModuleGet } from '@/services/module';
 import { HandleSessionUpdate, HandleSessionGetByID } from '@/services/session';
+
+
 
 export default function UpdateSession() {
   const router: any = useRouter();
@@ -45,12 +48,11 @@ export default function UpdateSession() {
   const [mdinputValue, setmdInputValue] = useState<any>([]);
   const [value, setNewValue] = useState<any>({});
   const [mdvalue, setmdvalue] = useState<any>({});
-
   const {
     register,
     handleSubmit,
     reset,
-    setValue,
+    setValue, getValues,
     control,
     formState: { errors }, setError
   } = useForm<sessionType | any>({
@@ -114,8 +116,7 @@ export default function UpdateSession() {
     }
 
   }
-
-
+  // console.log('getvalue', getValues())
   const handleContentChange = (value: string, identifier: string) => {
     if (value === '<p><br></p>') {
       setError(identifier, { message: 'Description is a required field' });
@@ -132,11 +133,13 @@ export default function UpdateSession() {
     // const reqData = { ...event, 'attachment': file }
     if (errors.description?.message === '' || (typeof errors === 'object' && errors !== null)) {
       const reqData: any = {
-        ...event,
+        description: event.description,
         module_id: mdvalue?.id,
         course_id: value?.id,
+        title: event.title,
         attachment: file
       }
+
       const formData = new FormData()
       for (var key in reqData) {
         formData.append(key, reqData[key]);
@@ -150,7 +153,7 @@ export default function UpdateSession() {
         setLoading(false);
         setTimeout(() => {
           router.push('/admin/courses/allsessions/')
-        }, 900)
+        }, 1000)
       } catch (e) {
         console.log(e)
         setLoadingButton(true)
@@ -163,6 +166,8 @@ export default function UpdateSession() {
   const handleUpdate = (e: any) => {
     setUpdateSession(e.target.value)
   }
+
+
   function ErrorShowing(errorMessage: any) {
     return (
       <Typography variant="body2" color={"error"} gutterBottom>
@@ -170,6 +175,7 @@ export default function UpdateSession() {
       </Typography>
     );
   }
+
   const handleChange = (e: any) => {
     const file = e.target.files[0];
     if (e.target.name === "attachment") {
@@ -183,6 +189,7 @@ export default function UpdateSession() {
       }
     }
   }
+
   const option: { id: number; title: string; }[] = [];
   getCourses &&
     getCourses.map((data: any, key: any) => {
@@ -191,6 +198,7 @@ export default function UpdateSession() {
         title: data?.course?.title,
       });
     });
+
   const mdoption: { id: number; title: string; }[] = [];
   getModules &&
     getModules.map((data: any, key: any) => {
@@ -230,9 +238,11 @@ export default function UpdateSession() {
                     <Grid item xs={12} sm={12} md={12} lg={6} >
                       <Box component="img" src="/Images/pages/addFeature.jpg" width={'100%'} />
                     </Grid>
+
                     <Grid item xs={12} sm={12} md={12} lg={6} >
                       <Typography className={Sessions.InputLabelFont} mb={1}>EDIT SESSION</Typography>
                       <Grid item xs={12} sm={12} md={12} lg={12} className={Sessions.sessionNameGride} >
+
                         <Grid item xs={12} sm={12} md={6} lg={6}>
                           <InputLabel className={Sessions.InputLabelFont}>
                             Session Name
@@ -246,6 +256,7 @@ export default function UpdateSession() {
                             ? ErrorShowing(errors?.title?.message)
                             : ""}
                         </Grid>
+
                         <Grid item xs={12} sm={12} md={6} lg={6}>
                           <InputLabel className={Sessions.InputLabelFont}>Course of session</InputLabel>
                           <Autocomplete
@@ -274,6 +285,7 @@ export default function UpdateSession() {
                             : ""}
                         </Grid>
                       </Grid>
+
                       <Grid item xs={12} sm={12} md={12} lg={12} mb={2} >
                         <InputLabel className={Sessions.InputLabelFont}>Module of session</InputLabel>
                         <Autocomplete
@@ -308,6 +320,7 @@ export default function UpdateSession() {
                           }
                         />
                         {errors && errors.description ? ErrorShowing(errors?.description?.message) : ""}
+                        {/* {despcriptionContent ? '' : errors && errors.description ? ErrorShowing(errors?.description?.message) : ""} */}
                       </Grid>
 
                       <Grid item xs={12} sm={12} md={12} lg={12} mb={2} >
