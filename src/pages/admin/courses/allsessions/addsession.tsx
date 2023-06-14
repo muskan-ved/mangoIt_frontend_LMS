@@ -135,46 +135,48 @@ export default function AddSession() {
   const handleChange = (e: any) => {
     const file = e.target.files[0];
 
-    if (e.target.name === "attachment") {
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        setFile(file);
-        setValue("file", file);
+      if (e.target.name === "attachment") {
+         const reader = new FileReader();
+         reader.onload = (e: any) => {
+            setFile(file);
+            setValue("file", file);
+         }
+         if (file) {
+            reader.readAsDataURL(file);
+         }
       }
-      if (file) {
-        reader.readAsDataURL(file);
-      }
-    }
-  }
-  return (
-    <>
-      <Navbar />
-      <Box className={styles.combineContentAndSidebar}>
-        <SideBar />
-        <Box className={styles.siteBodyContainer}>
-          {/* breadcumbs */}
-          <BreadcrumbsHeading
-            First="Home"
-            Middle="Session"
-            Text="SESSION"
-            Link="/admin/courses/allsessions"
-          />
-          {/* main content */}
-          <Card>
-            <CardContent>
-              {!isLoading ?
-                <Box
-                  component="form"
-                  method="POST"
-                  noValidate
-                  autoComplete="off"
-                  onSubmit={handleSubmit(onSubmit)}
-                  onReset={reset}
-                >
-                  <Grid container spacing={2}>
-                    <Grid item xs={12} sm={12} md={12} lg={6} >
-                      <Box component="img" src="/Images/pages/addFeature.jpg" width={'100%'} />
-                    </Grid>
+   }
+
+   // console.log("oopps", errors)
+   return (
+      <>
+         <Navbar />
+         <Box className={styles.combineContentAndSidebar}>
+            <SideBar />
+            <Box className={styles.siteBodyContainer}>
+               {/* breadcumbs */}
+               <BreadcrumbsHeading
+                  First="Home"
+                  Middle="Session"
+                  Text="SESSION"
+                  Link="/admin/courses/allsessions"
+               />
+               {/* main content */}
+               <Card>
+                  <CardContent>
+                     {!isLoading ?
+                        <Box
+                           component="form"
+                           method="POST"
+                           noValidate
+                           autoComplete="off"
+                           onSubmit={handleSubmit(onSubmit)}
+                           onReset={reset}
+                        >
+                           <Grid container spacing={2}>
+                              <Grid item xs={12} sm={12} md={12} lg={6} >
+                                 <Box component="img" src="/Images/pages/addFeature.jpg" width={'100%'} />
+                              </Grid>
 
                     <Grid item xs={12} sm={12} md={12} lg={6} >
                       <Typography className={Sessions.InputLabelFont} mb={1}>ADD SESSION</Typography>

@@ -35,12 +35,13 @@ import Subscription from "../../../../styles/subscription.module.css";
 import { ToastContainer } from "react-toastify";
 // API services
 import { subscriptionValidations } from "@/validation_schema/subscriptionValidation";
-import { HandleSubscriptionGetByID, HandleSubscriptionPost } from "@/services/subscription";
+import { HandleSubscriptionGetByID, HandleSubscriptionPost, HandleSubscriptionUpdate } from "@/services/subscription";
+import moment from "moment";
 
 
 export default function UpdateSubscription() {
   const router: any = useRouter();
-  const [row,setRows] = useState<any>([]);
+  const [durationTerm,setDurationTerm] = useState<any>('');
   const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
 const {id} = router.query;;
@@ -57,17 +58,17 @@ const {id} = router.query;;
 
   const getSubscriptionById = () => {
     HandleSubscriptionGetByID(id).then((subscriptions:any) => {
-        const fields = [
-            "name",
-            "price",
-            "duration_term",
-            "duration_value",
-            "description",
-            "status",
-            "duration"
-         ];
-         fields.forEach((field) => setValue(field, subscriptions.data[field]));
-        // setRows(subscriptions.data)
+      const fields = [
+        "name",
+        "price",
+        "duration_value",
+        "status",
+        "description",
+        "duration_term",
+      ];
+      fields.forEach((field) => setValue(field, subscriptions.data[field]));
+      setDurationTerm(subscriptions?.data?.duration_term)
+      setValue('duration',moment(subscriptions?.data?.start_date).format('yyyy-MM-DD'))
       })
   }
 
@@ -82,7 +83,6 @@ const {id} = router.query;;
       localData = JSON.parse(parsingData);
     }
 
-    
       const reqData: any = {
         name: event.name,
         description: event.description,
@@ -94,15 +94,17 @@ const {id} = router.query;;
         duration_value: event.duration_value,
       };
 
-      setLoading(true);
-      setLoadingButton(false);
+     
+      setLoadingButton(true);
       try {
-        const res = await HandleSubscriptionPost(reqData);
-        setLoading(false);
-          router.push("/admin/subscription/");
+        const res = await HandleSubscriptionUpdate(id,reqData);
+        setLoadingButton(false);
+        setTimeout(() => {
+          router.replace("/admin/subscription/");
+        }, 2000);
       } catch (e) {
         console.log(e);
-        setLoadingButton(true);
+        setLoadingButton(false);
       }
     
   };
@@ -116,7 +118,7 @@ const {id} = router.query;;
       </Typography>
     );
   }
-  
+
   return (
     <>
       <Navbar />
@@ -157,7 +159,7 @@ const {id} = router.query;;
                         mb={3}
                         mt={4}
                       >
-                        ADD SUBSCRIPTION
+                        UPDATE SUBSCRIPTION
                       </Typography>
 
                       <Grid
@@ -209,10 +211,19 @@ const {id} = router.query;;
                           <InputLabel className={Subscription.InputLabelFont}>
                             Duration Term
                           </InputLabel>
-                          <TextField
-                            placeholder="Duration Term"
-                            {...register("duration_term")}
-                            fullWidth
+                        
+                          <Controller
+                            name="duration_term"
+                            control={control}
+                            render={({ field }) => (
+                              <FormControl fullWidth>
+                                <Select {...field} value={durationTerm} displayEmpty>
+                                  <MenuItem value={"week"}>Week</MenuItem>
+                                  <MenuItem value={"month"}>Month</MenuItem>
+                                  <MenuItem value={"year"}>Year</MenuItem>
+                                </Select>
+                              </FormControl>
+                            )}
                           />
                           {errors && errors.duration_term
                             ? ErrorShowing(errors?.duration_term?.message)
@@ -224,6 +235,7 @@ const {id} = router.query;;
                             Duration Value
                           </InputLabel>
                           <TextField
+                          type="number"
                             placeholder="Duration Value"
                             {...register("duration_value")}
                             fullWidth
@@ -246,6 +258,7 @@ const {id} = router.query;;
                           <InputLabel className={Subscription.InputLabelFont}>
                             Duration
                           </InputLabel>
+  
                           <TextField
                             fullWidth
                             type="date"
@@ -316,7 +329,7 @@ const {id} = router.query;;
                             variant="contained"
                             id={styles.muibuttonBackgroundColor}
                           >
-                            Submit
+                            UPDATE
                           </Button>
                         ) : (
                           <LoadingButton

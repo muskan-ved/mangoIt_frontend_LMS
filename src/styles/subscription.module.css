@@ -173,6 +173,7 @@ width: 70% !important;
     color: white;
 }
 .updateLoadingButton {
-    width: 178px;
+    width: 105px !important;
+    padding: 9px 22px !important;
 }
 
