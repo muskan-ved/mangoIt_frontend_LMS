@@ -51,7 +51,7 @@ export default function Profile() {
   const [file, setFile] = useState<string | any>("");
   const [isLoading, setLoading] = useState<boolean>(false);
   const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
-  const [getUserData, setUserData] = useState<userType | null>(null);
+  const [getUserData, setUserData] = useState<userType | any>(null);
   const [toggle, setToggle] = useState<boolean>(false);
 
   const {
@@ -89,6 +89,7 @@ export default function Profile() {
 
   const getProfileData = (userId: any) => {
     setLoading(true);
+    let localData1: any;
     HandleProfile(userId).then((user) => {
       setUserData(user.data);
       const fields = [
@@ -101,8 +102,20 @@ export default function Profile() {
       ];
       fields.forEach((field) => setValue(field, user.data[field]));
       setLoading(false);
+      if (typeof window !== "undefined") {
+        localData1 = window.localStorage.getItem("userData");
+      }
+      if (localData1) {
+        const userId = JSON.parse(localData1);
+        profile_picManage = { ...userId, profile_pic: user.data?.profile_pic };
+        window.localStorage.setItem(
+          "userData",
+          JSON.stringify(profile_picManage)
+        );
+      }
     });
   };
+  var profile_picManage: any;
   useEffect(() => {
     let localData: any;
     if (typeof window !== "undefined") {
@@ -140,7 +153,7 @@ export default function Profile() {
 
   return (
     <>
-      <Navbar />
+      <Navbar profilePic={getUserData?.profile_pic} />
       <Box className={styles.combineContentAndSidebar}>
         <SideBar />
 
@@ -224,8 +237,13 @@ export default function Profile() {
                                   ? capitalizeFirstLetter(
                                       getUserData?.first_name
                                     )
-                                  : ""}{" "}
-                                {getUserData?.last_name}
+                                  : ""}
+                                &nbsp;
+                                {getUserData
+                                  ? capitalizeFirstLetter(
+                                      getUserData?.last_name
+                                    )
+                                  : ""}
                               </Typography>
 
                               <Typography
@@ -273,9 +291,7 @@ export default function Profile() {
                             fullWidth
                             label="Last Name"
                             {...register("last_name")}
-                            defaultValue={capitalizeFirstLetter(
-                              getUserData?.last_name
-                            )}
+                            defaultValue={getUserData?.last_name}
                             disabled={!toggle}
                           />
                           {errors && errors.last_name
@@ -301,9 +317,7 @@ export default function Profile() {
                             fullWidth
                             label="Role"
                             {...register("role")}
-                            defaultValue={capitalizeFirstLetter(
-                              "learner"
-                            )}
+                            defaultValue={capitalizeFirstLetter("learner")}
                             disabled={true}
                           />
                         </Grid>
