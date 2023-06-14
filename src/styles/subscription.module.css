@@ -12,6 +12,13 @@
   color: #646363 !important;
   font-weight: 600 !important;
 }
+
+.fontCSSsubsc {
+  padding: 4px !important;
+  color: #000000;
+  font-weight: 600 !important;
+}
+
 .useNameFront {
   color: #4e4a4a !important;
   font-weight: bold !important;

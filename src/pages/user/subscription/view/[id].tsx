@@ -315,25 +315,24 @@ export default function View() {
                   &nbsp;&nbsp;&nbsp;&nbsp;
                   {subsData && subsData?.status === "active" ? <Typography
                     variant="subtitle2"
-                    className={subs.fontCSS}
+                    className={subs.fontCSSsubsc}
                     style={{ color: "green" }}
                   >
                     {subsData && capitalizeFirstLetter(subsData?.status)}
                   </Typography> : subsData && subsData?.status === "inactive" ?
                     <Typography
                       variant="subtitle2"
-                      className={subs.fontCSS}
+                      className={subs.fontCSSsubsc}
                       style={{ color: "#0006ff" }}
                     >
                       {subsData && capitalizeFirstLetter(subsData?.status)}
                     </Typography> : <Typography
                       variant="subtitle2"
-                      className={subs.fontCSS}
+                      className={subs.fontCSSsubsc}
                       style={{ color: "red" }}
                     >
                       {subsData && capitalizeFirstLetter(subsData?.status)}
                     </Typography>}
-
                 </Box>
                 <Box className={subs.maindisplay}>
                   <Typography variant="subtitle1" className={subs.useNameFront}>

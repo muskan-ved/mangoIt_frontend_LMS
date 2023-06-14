@@ -156,9 +156,9 @@ export default function Courses() {
                             <Grid item xs={12} md={3} lg={3}>
                                 <Stack spacing={1}>
                                     <Pagination
+                                        className="pagination"
                                         count={count}
                                         page={page}
-                                        color="primary"
                                         onChange={handlePageChange}
                                     />
                                 </Stack>
