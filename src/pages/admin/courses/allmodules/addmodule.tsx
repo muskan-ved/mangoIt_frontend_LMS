@@ -16,7 +16,6 @@ import { moduleValidations } from '@/validation_schema/moduleValidation';
 import { LoadingButton } from "@mui/lab";
 import CircularProgressBar from '@/common/CircularProcess/circularProgressBar';
 import SpinnerProgress from '@/common/CircularProgressComponent/spinnerComponent';
-import { capitalizeFirstLetter } from '@/common/CapitalFirstLetter/capitalizeFirstLetter';
 // Types Import
 import { courseType } from '@/types/courseType';
 import { moduleType } from '@/types/moduleType';
@@ -205,7 +204,6 @@ export default function AddSession() {
                                        }
                                     />
                                     {errors && errors.description ? ErrorShowing(errors?.description?.message) : ""}
-                                    {/* {despcriptionContent ? '' : errors && errors.description ? ErrorShowing(errors?.description?.message) : ""} */}
                                  </Grid>
 
 

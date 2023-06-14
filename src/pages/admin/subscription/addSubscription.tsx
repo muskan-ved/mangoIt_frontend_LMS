@@ -61,29 +61,29 @@ export default function AddSubscription() {
       localData = JSON.parse(parsingData);
     }
 
-    
-      const reqData: any = {
-        name: event.name,
-        description: event.description,
-        price: event.price,
-        userId: localData.id,
-        startDate: event.duration,
-        status: event.status,
-        duration_term: event.duration_term,
-        duration_value: event.duration_value,
-      };
 
-      setLoading(true);
-      setLoadingButton(false);
-      try {
-        const res = await HandleSubscriptionPost(reqData);
-        setLoading(false);
-          router.push("/admin/subscription/");
-      } catch (e) {
-        console.log(e);
-        setLoadingButton(true);
-      }
-    
+    const reqData: any = {
+      name: event.name,
+      description: event.description,
+      price: event.price,
+      userId: localData.id,
+      startDate: event.duration,
+      status: event.status,
+      duration_term: event.duration_term,
+      duration_value: event.duration_value,
+    };
+
+    setLoading(true);
+    setLoadingButton(false);
+    try {
+      const res = await HandleSubscriptionPost(reqData);
+      setLoading(false);
+      router.push("/admin/subscription/");
+    } catch (e) {
+      console.log(e);
+      setLoadingButton(true);
+    }
+
   };
 
   function ErrorShowing(errorMessage: any) {
@@ -93,7 +93,7 @@ export default function AddSubscription() {
       </Typography>
     );
   }
-  
+
   return (
     <>
       <Navbar />
@@ -263,8 +263,8 @@ export default function AddSubscription() {
                         <InputLabel className={Subscription.InputLabelFont}>
                           Description
                         </InputLabel>
-                        <TextareaAutosize minRows={4} aria-label="empty textarea" placeholder="Empty" {...register("description")}  className={Subscription.textareaManuallyStyle} />
-                      
+                        <TextareaAutosize minRows={4} aria-label="empty textarea" placeholder="Empty" {...register("description")} className={Subscription.textareaManuallyStyle} />
+
                         {errors && errors.description
                           ? ErrorShowing(errors?.description?.message)
                           : ""}
@@ -283,6 +283,7 @@ export default function AddSubscription() {
                           variant="contained"
                           size="large"
                           onClick={() => router.push("/admin/subscription")}
+                          id={styles.muibuttonBackgroundColor}
                         >
                           Cancel
                         </Button>

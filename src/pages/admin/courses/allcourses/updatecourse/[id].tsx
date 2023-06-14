@@ -18,16 +18,13 @@ import CircularProgressBar from '@/common/CircularProcess/circularProgressBar';
 import SpinnerProgress from '@/common/CircularProgressComponent/spinnerComponent';
 import { capitalizeFirstLetter } from '@/common/CapitalFirstLetter/capitalizeFirstLetter';
 // Types Import
-import { sessionType } from '@/types/sessionType';
 import { courseType } from '@/types/courseType';
-import { moduleType } from '@/types/moduleType';
 // CSS Import
 import styles from "../../../../../styles/sidebar.module.css";
-import Sessions from "../../../../styles/session.module.css";
 import courseStyle from "../../../../../styles/course.module.css";
 import { ToastContainer } from 'react-toastify';
 // API services
-import { HandleCourseGet, HandleCourseGetByID, HandleCourseUpdate } from '@/services/course';
+import { HandleCourseGetByID, HandleCourseUpdate } from '@/services/course';
 
 
 
@@ -35,7 +32,6 @@ export default function UpdateCourse() {
   const router: any = useRouter();
   const [getLongDespcriptionContent, setLongDespcriptionContent] = useState("");
   const [getShortDespcriptionContent, setShortDespcriptionContent] = useState("");
-  const [getUpdateCourse, setUpdateCourse] = useState<courseType | any>([]);
   const [getCourse, setCourse] = useState<courseType | any>();
   const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
@@ -45,7 +41,7 @@ export default function UpdateCourse() {
     register,
     handleSubmit,
     reset,
-    setValue, getValues,
+    setValue,
     control,
     formState: { errors }, setError
   } = useForm<courseType | any>({
@@ -78,17 +74,6 @@ export default function UpdateCourse() {
     const id = router.query.id
     // const reqData = { ...event }
     if (errors.description?.message === '' || (typeof errors === 'object' && errors !== null)) {
-      // const reqData: any = {
-      //   description: event.description,
-      //   title: event.title,
-
-      // }
-
-      // const formData = new FormData()
-      // for (var key in reqData) {
-      //   formData.append(key, reqData[key]);
-      // }
-
       setLoading(true);
       setLoadingButton(false)
       try {

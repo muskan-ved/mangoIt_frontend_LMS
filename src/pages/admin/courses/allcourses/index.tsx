@@ -145,10 +145,10 @@ const AllCourses = () => {
     }
   }
 
-  const getAllCourseData = (search:any, filterObject:any) => {
+  const getAllCourseData = (search: any, filterObject: any) => {
     HandleCourseGet(search, filterObject).then((courses) => {
       setRows(courses.data)
-    })  
+    })
   }
 
   return (
@@ -281,7 +281,7 @@ const AllCourses = () => {
                                     >
                                       <Box className={courseStyle.boxInFilter}>
                                         <Button
-
+                                          id={styles.muibuttonBackgroundColor}
                                           size="medium"
                                           variant="contained"
                                           color="primary"
