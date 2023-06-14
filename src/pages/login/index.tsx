@@ -241,7 +241,13 @@ export default function Login() {
                   type="button"
                   fullWidth
                   variant="outlined"
-                  startIcon={<GoogleIcon />}
+                  startIcon={ <Box
+                    component={"img"}
+                    src={"/Images/pages/google.svg"}
+                    width={"18px"}
+                    height={"18px"}
+                 
+                  />}
                   disabled={googleLoading}
                   onClick={() => googleLogin()}
                   sx={{ mt: 3 }}

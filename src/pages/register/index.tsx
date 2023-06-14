@@ -191,7 +191,13 @@ export default function Register() {
                   type="button"
                   fullWidth
                   variant="outlined"
-                  startIcon={<GoogleIcon />}
+                  startIcon={ <Box
+                    component={"img"}
+                    src={"/Images/pages/google.svg"}
+                    width={"18px"}
+                    height={"18px"}
+                 
+                  />}
                   sx={{ mt: 3 }}
                 >
                   Continue with Google

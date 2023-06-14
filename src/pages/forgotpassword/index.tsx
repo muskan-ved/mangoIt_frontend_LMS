@@ -3,7 +3,6 @@ import { Button, Divider, Box, Typography, Grid, TextField } from "@mui/material
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import GoogleIcon from "@mui/icons-material/Google";
 import AuthSidebar from "../../common/LayoutNavigations/authSideLayout";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -125,7 +124,13 @@ export default function ForgotPassword() {
                   type="submit"
                   fullWidth
                   variant="outlined"
-                  startIcon={<GoogleIcon />}
+                  startIcon={ <Box
+                    component={"img"}
+                    src={"/Images/pages/google.svg"}
+                    width={"18px"}
+                    height={"18px"}
+                 
+                  />}
                   sx={{ mt: 3 }}
                 >
                   Continue with Google
