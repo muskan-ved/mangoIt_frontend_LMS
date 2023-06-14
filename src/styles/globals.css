@@ -51,16 +51,10 @@ a {
   background-color: #e8661b !important;
 }
 
-.GlobalTextColor {
-  color: #e8661b !important;
-}
-
 .css-ttwr4n {
   background-color: #e8661b !important;
 }
-.GlobalTextColor {
-  color: #e8661b !important;
-}
+
 .css-1e6y48t-MuiButtonBase-root-MuiButton-root:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
@@ -114,7 +108,12 @@ a {
   border-color: #e8661b !important;
 } */
 .css-1jy569b-MuiFormLabel-root-MuiInputLabel-root.Mui-focused {
-  color: #e8661b !important;
+  color: #000 !important;
+}
+
+.css-yjsfm1{
+  color: #000 !important;
+
 }
 
 .css-1e6y48t-MuiButtonBase-root-MuiButton-root {
@@ -140,4 +139,9 @@ a {
 }
 .linercss .css-t752vm {
   background-color: #e8661b !important;
+}
+
+.css-1ujsas3:hover {
+  text-decoration: none !important;
+  background-color: rgb(255, 255, 255) !important;
 }

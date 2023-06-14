@@ -5,6 +5,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import styles from "../../styles/login.module.css";
+import sidebarStyles from "../../styles/sidebar.module.css";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import GoogleIcon from "@mui/icons-material/Google";
 import AuthSidebar from "../../common/LayoutNavigations/authSideLayout";
@@ -150,7 +151,7 @@ export default function Login() {
                   href="/register"
                   className={styles.signInUpColor}
                 >
-                  Create Now
+                  {" "} Create Now
                 </Link>
               </Grid>
             </Grid>
@@ -202,7 +203,7 @@ export default function Login() {
                   fullWidth
                   size="large"
                   variant="contained"
-                 
+                 id={sidebarStyles.muibuttonBackgroundColor}
                   sx={{ mt: 3, mb: 2 }}
                 >
                   Sign In
@@ -244,7 +245,7 @@ export default function Login() {
                   startIcon={<GoogleIcon />}
                   disabled={googleLoading}
                   onClick={() => googleLogin()}
-                  sx={{ mt: 3 }}
+                  sx={{ mt: 3 , color: "#000",borderColor: "#e8661b"}}
                 >
                   Continue with Google
                 </Button>
