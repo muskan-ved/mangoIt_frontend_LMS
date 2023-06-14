@@ -178,9 +178,9 @@ export default function Couseview() {
     return (
       <Box sx={{ display: "flex", alignItems: "center" }}>
         <Box sx={{ width: "100%", mr: 1 }}>
-          <LinearProgress variant="determinate" {...props} />
+          <LinearProgress variant="determinate" {...props} className="linercss"/>
         </Box>
-        <Box sx={{ minWidth: -1 }} className="varruu">
+        <Box sx={{ minWidth: -1 }} className="progressCss">
           <Typography variant="body2" color="text.secondary">
             {`${Math.round(props.value)}%`}&nbsp;Complete
           </Typography>
@@ -194,9 +194,9 @@ export default function Couseview() {
     return (
       <Box sx={{ display: "flex", alignItems: "center" }}>
         <Box sx={{ width: "100%", mr: 1 }}>
-          <LinearProgress variant="determinate" {...props} />
+          <LinearProgress variant="determinate" {...props} className="linercss"/>
         </Box>
-        <Box sx={{ minWidth: -1 }} className="varruu">
+        <Box sx={{ minWidth: -1 }} className="progressCss">
           <Typography variant="body2" color="text.secondary">
             {`${Math.round(props.value)}%`}&nbsp;Complete
           </Typography>
@@ -260,7 +260,9 @@ export default function Couseview() {
         fileViewComplete = 1;
       }
     });
-  var calculate1: any;
+
+  var moduleCheckId: any = [];
+  var viewhistoryLength: any;
   let courseIdd: any = router?.query?.id;
 
   const filteredData =
@@ -269,23 +271,16 @@ export default function Couseview() {
   const moduleIdd = couseData && couseData?.modules;
   if (moduleIdd) {
     for (let i = 0; i < moduleIdd.length; i++) {
-      const modulee = moduleIdd[i].id;
-      const session = moduleIdd[i].sessions;
-      const viewHistory = filteredData && filteredData[0]?.course.view_history;
-
-      for (let j = 0; j < viewHistory?.length; j++) {
-        Object.entries(viewHistory[j]).map(([key, value]: any) => {
-          const sameModule = parseInt(key) === modulee ? key : "";
-          console.log(
-            "module",
-            typeof parseInt(sameModule),
-            "seession",
-            session,
-            "lengthhhhh",
-            value
-          );
-          return console.log("d");
-        });
+      const viewHistory = filteredData && filteredData[0]?.course?.view_history;
+      if (viewHistory === null) {
+        console.log("ViewHistory Empty");
+      } else {
+        for (let j = 0; j < viewHistory?.length; j++) {
+          Object.entries(viewHistory[j]).map(([key, value]: any) => {
+            viewhistoryLength = value.length;
+            moduleCheckId.push(parseInt(key));
+          });
+        }
       }
     }
   }
@@ -293,6 +288,7 @@ export default function Couseview() {
   if (!id) {
     return null;
   }
+  var moduleCheckIdManage = Array.from(new Set(moduleCheckId));
 
   return (
     <>
@@ -569,8 +565,6 @@ export default function Couseview() {
                         <br />
                         {couseData &&
                           couseData?.modules?.map((item: any) => (
-                            //   console.log("itemitem", item),
-                            //   (
                             <Accordion key={item?.id}>
                               <AccordionSummary
                                 expandIcon={<ExpandMoreIcon />}
@@ -583,11 +577,18 @@ export default function Couseview() {
                                 </Typography>
                               </AccordionSummary>
                               <AccordionDetails className="vvv">
-                                {/* <Box sx={{ width: "92%" }}>
+                                <Box sx={{ width: "92%" }}>
                                   <LinearProgressWithLabel1
-                                    value={calculate1 && calculate1}
+                                    value={
+                                      moduleCheckIdManage &&
+                                      moduleCheckIdManage.includes(item.id)
+                                        ? (viewhistoryLength /
+                                            item?.sessions?.length) *
+                                          100
+                                        : 0
+                                    }
                                   />
-                                </Box> */}
+                                </Box>
                                 {item?.sessions.map((itemData: any) => {
                                   const togglee =
                                     itemData?.id === activeToggle
@@ -641,7 +642,6 @@ export default function Couseview() {
                                 })}
                               </AccordionDetails>
                             </Accordion>
-                            //   )
                           ))}
                       </Box>
                     </Grid>
