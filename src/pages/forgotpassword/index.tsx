@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import GoogleIcon from "@mui/icons-material/Google";
 import AuthSidebar from "../../common/LayoutNavigations/authSideLayout";
+import sidebarStyles from "../../styles/sidebar.module.css";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { forgotPasswordType } from "@/types/authType";
@@ -94,7 +95,9 @@ export default function ForgotPassword() {
                 size="large"
                 variant="contained"
                 className="authPageButton"
+                id={sidebarStyles.muibuttonBackgroundColor}
                 sx={{ mt: 3, mb: 2 }}
+
               >
                 Send
               </Button>
@@ -126,7 +129,7 @@ export default function ForgotPassword() {
                   fullWidth
                   variant="outlined"
                   startIcon={<GoogleIcon />}
-                  sx={{ mt: 3 }}
+                  sx={{ mt: 3 , color: "#000",borderColor: "#e8661b"}}
                 >
                   Continue with Google
                 </Button>

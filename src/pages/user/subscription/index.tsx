@@ -106,7 +106,7 @@ const Subscription = () => {
   };
   const handleSearch = (e: any, identifier: any) => {
     setPage(1);
-    DATA.jump(1);
+  
     if (identifier === "reset") {
       HandleSubscriptionGetByUserID(userId?.id).then((subs) => {
         setRows(subs.data);
@@ -158,7 +158,7 @@ const Subscription = () => {
                 id="standard-search"
                 value={search}
                 variant="outlined"
-                placeholder="Search by id, name"
+                placeholder="Search by 'Id or Name'"
                 size="small"
                 onChange={(e: any) => handleSearch(e, "")}
                 InputProps={{
