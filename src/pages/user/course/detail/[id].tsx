@@ -220,6 +220,8 @@ export default function Couseview() {
 
   var calculate: any;
   var isMatchFound: any;
+
+  //Dont remove 'getPercentage' variable
   const getPercentage =
     allData &&
     allData.map((row: any) => {
@@ -241,6 +243,7 @@ export default function Couseview() {
       }
     });
 
+  //Dont remove 'completeMark' variable
   const completeMark =
     allData &&
     allData.map((row: any) => {
@@ -266,23 +269,21 @@ export default function Couseview() {
   const moduleIdd = couseData && couseData?.modules;
   if (moduleIdd) {
     for (let i = 0; i < moduleIdd.length; i++) {
-      const module = moduleIdd[i].id;
-      const session = moduleIdd[i].sessions.length;
+      const modulee = moduleIdd[i].id;
+      const session = moduleIdd[i].sessions;
       const viewHistory = filteredData && filteredData[0]?.course.view_history;
 
       for (let j = 0; j < viewHistory?.length; j++) {
         Object.entries(viewHistory[j]).map(([key, value]: any) => {
-          const sameModule = parseInt(key) === module ? key : "";
+          const sameModule = parseInt(key) === modulee ? key : "";
           console.log(
             "module",
-            sameModule,
+            typeof parseInt(sameModule),
             "seession",
             session,
             "lengthhhhh",
-            value.length
+            value
           );
-          // calculate1 = (ss * 100) / 2;
-
           return console.log("d");
         });
       }
@@ -568,6 +569,8 @@ export default function Couseview() {
                         <br />
                         {couseData &&
                           couseData?.modules?.map((item: any) => (
+                            //   console.log("itemitem", item),
+                            //   (
                             <Accordion key={item?.id}>
                               <AccordionSummary
                                 expandIcon={<ExpandMoreIcon />}
@@ -591,13 +594,12 @@ export default function Couseview() {
                                       ? "active"
                                       : "";
                                   return (
-                                    <Fragment>
+                                    <Fragment key={itemData?.id}>
                                       <Box
                                         sx={{
                                           width: "100%",
                                           bgcolor: "background.paper",
                                         }}
-                                        key={itemData?.id}
                                       >
                                         <nav aria-label="main mailbox folders">
                                           <List>
@@ -639,6 +641,7 @@ export default function Couseview() {
                                 })}
                               </AccordionDetails>
                             </Accordion>
+                            //   )
                           ))}
                       </Box>
                     </Grid>
