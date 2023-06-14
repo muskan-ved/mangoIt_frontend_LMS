@@ -43,8 +43,10 @@
   min-width: 30px !important;
   margin: 3px !important;
 }
-.cancelButton {
-  margin: 10px !important;
+.cancelButton{
+    margin: 10px !important;
+    background-color: #1976d2 !important;
+    color: white;
 }
 
 /* .MuiPaper-root .MuiPaper-elevation .MuiPaper-rounded .MuiPaper-elevation8 .MuiPopover-paper .css-3bmhjh-MuiPaper-root-MuiPopover-paper{
@@ -153,7 +155,7 @@ width: 70% !important;
   height: 37px;
   text-align: end;
   margin-right: 1px;
-  margin-top: 20px;
+  margin-top: 20px !important;
 }
 .backcss {
   text-align: end;

@@ -49,7 +49,7 @@ import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 // CSS Import
 import profiles from "../../../../styles/profile.module.css";
 import styles from "../../../../styles/sidebar.module.css";
-import subs from "../../../../styles/subsciption.module.css";
+import subs from "../../../../styles/subscription.module.css";
 import Link from "next/link";
 import CircularProgressBar from "@/common/CircularProcess/circularProgressBar";
 import { AlertSubscriptionDialog } from "@/common/SubscriptionStatus/subscriptionManage";
@@ -405,7 +405,7 @@ export default function View() {
                                 <TableCell>
                                   {monthNames[d.getMonth()]}
                                 </TableCell>
-                                <TableCell>{row?.transaction_id}</TableCell>
+                                <TableCell>{row?.transaction_id?.substring(0, 20) + '.....'}</TableCell>
                                 <TableCell>
                                   {" "}
                                   {capitalizeFirstLetter(row?.payment_type)}

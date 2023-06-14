@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from "next/router";
 // MUI Import
-import { Box, Button, Card, CardContent, FormControl, Grid, IconButton, InputLabel, MenuItem, NativeSelect, Select, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, Button, Card, CardContent, FormControl, Grid, IconButton, InputLabel, MenuItem, NativeSelect, Select, TextField, Typography } from "@mui/material";
 // External Components
 import SideBar from "@/common/LayoutNavigations/sideBar";
 import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
@@ -27,23 +27,18 @@ import ModuleCss from "../../../../../styles/modules.module.css";
 import { ToastContainer } from 'react-toastify';
 // API services
 import { HandleCourseGet, HandleCourseGetByID, HandleCourseUpdate } from '@/services/course';
-import { Attachment, Description, Image, Movie, PictureAsPdf } from '@mui/icons-material';
-import { type } from 'os';
 import { HandleModuleGetByID, HandleModuleUpdate } from '@/services/module';
 import { moduleValidations } from '@/validation_schema/moduleValidation';
-
-
-
 export default function UpdateModule() {
   const router: any = useRouter();
   const [getDespcriptionContent, setDespcriptionContent] = useState("");
-  const [getUpdateModule, setUpdateModule] = useState<moduleType | any>([]);
   const [getModule, setModule] = useState<moduleType | any>();
-  const [getCourses, setCourses] = useState<courseType | any>();
-  const [getCourseId, setCourseId] = useState<any>("");
+  const [getCourses, setCourses] = useState<any>([]);
+  const [inputValue, setInputValue] = useState<any>([]);
   const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [error, setErrors] = useState<string>();
+  const [value, setNewValue] = useState<any>({});
   const {
     register,
     handleSubmit,
@@ -54,7 +49,6 @@ export default function UpdateModule() {
   } = useForm<moduleType | any>({
     resolver: yupResolver(moduleValidations),
   });
-  console.log('getvalue', getValues())
 
   useEffect(() => {
     let localData: any;
@@ -63,10 +57,11 @@ export default function UpdateModule() {
     }
     if (localData) {
       getModuleData();
-      getCourseData();
     }
   }, [router.query]);
 
+
+  // handle changes for decriptions
   const handleContentChange = (value: string, identifier: string) => {
     if (identifier === 'description') {
       if (value === '<p><br></p>') {
@@ -79,23 +74,21 @@ export default function UpdateModule() {
       }
       setDespcriptionContent(value);
     }
-
   };
-
+  //submit form
   const onSubmit = async (event: any) => {
     const id = router.query.id
-  console.log(event,"onsubmit",errors )
-    
+    const reqData = { ...event, course_id: value?.id }
     if (errors.description?.message === '' || (typeof errors === 'object' && errors !== null)) {
       setLoading(true);
       setLoadingButton(false)
       try {
-        const res = await HandleModuleUpdate(id, event)
+        const res = await HandleModuleUpdate(id, reqData)
         getModuleData()
         setLoading(false);
         setTimeout(() => {
-          router.push('/admin/courses/allmodules/')
-        }, 1000)
+          // router.push('/admin/courses/allmodules/')
+        }, 900)
       } catch (e) {
         console.log(e)
         setLoadingButton(true)
@@ -106,17 +99,16 @@ export default function UpdateModule() {
   };
 
   const handleUpdate = (e: any) => {
-    // if(e.target.name === 'title'){
-    setModule({ ...getModule, title: e.target.value })
-    // }
+    if (e.target.name === 'title') {
+      setModule({ ...getModule, title: e.target.value })
+    }
   }
-
+  // get module data
   const getModuleData = async () => {
     const id = router.query.id
     if (id) {
       HandleModuleGetByID(id).then((module) => {
         setModule(module.data)
-        setCourseId(module.data?.course_id)
         const fields = [
           "course_id",
           "title",
@@ -124,33 +116,34 @@ export default function UpdateModule() {
           "description",
         ];
         fields.forEach((field) => setValue(field, module.data[field]));
-        // setCourseId(module.data?.course_id)
+        if (module?.data?.id > 0) {
+          HandleCourseGet('', '').then((courses) => {
+            if (courses?.data.length > 0) {
+              setCourses(courses.data)
+
+              const findCourse = courses.data?.filter((item: any) => {
+                return item?.course?.id === module?.data?.course_id;
+              });
+              setNewValue({
+                id: findCourse && findCourse[0]?.course?.id,
+                title: findCourse && findCourse[0]?.course?.title ? findCourse[0]?.course?.title : ""
+              })
+            }
+          })
+        };
       })
         .catch((error) => {
           setErrors(error.message);
         });
     }
-    // console.log('Course', getCourse)
     if (error) {
       return <Typography >{error}</Typography >;
     }
-
     if (!getModule) {
       return <Typography >Loading...</Typography >;
     }
   }
 
-
-  const getCourseData = () => {
-    HandleCourseGet('', '').then((courses) => {
-      setCourses(courses.data)
-    })
-  };
-
-
- 
-
-  
   function ErrorShowing(errorMessage: any) {
     return (
       <Typography variant="body2" color={"error"} gutterBottom>
@@ -158,7 +151,16 @@ export default function UpdateModule() {
       </Typography>
     );
   }
-  // console.log(getDespcriptionContent,"opps",errors,getModule?.description )
+
+  const option: { id: number; title: string; }[] = [];
+  getCourses &&
+    getCourses.map((data: any, key: any) => {
+      return option.push({
+        id: data?.course?.id,
+        title: data?.course?.title,
+      });
+    });
+
   return (
     <>
       <Navbar />
@@ -177,14 +179,8 @@ export default function UpdateModule() {
           <Card>
             <CardContent>
               {!isLoading ?
-                <Box
-                  component="form"
-                  method="POST"
-                  noValidate
-                  autoComplete="off"
-                  onSubmit={handleSubmit(onSubmit)}
-                  onReset={reset}
-                >
+                <form onSubmit={handleSubmit(onSubmit)}>
+
                   <Grid container spacing={2}>
                     <Grid item xs={12} sm={12} md={12} lg={6} >
                       <Box component="img" src="/Images/pages/addFeature.jpg" width={'100%'} />
@@ -210,23 +206,26 @@ export default function UpdateModule() {
 
                         <Grid item xs={12} sm={12} md={6} lg={6}>
                           <InputLabel className={ModuleCss.InputLabelFont}>Course of Module</InputLabel>
-                          <Controller
-                            name="course_id"
-                            control={control}
-                            defaultValue={getCourseId}                          
-                            render={({ field }) => (
-                              <FormControl fullWidth>
-                                <Select {...field} displayEmpty>
-                                  <MenuItem disabled value="">
-                                    Select Course
-                                  </MenuItem>
-                                  {getCourses?.map((course: any) => {
-                                    return (<MenuItem key={course?.course.id} value={course?.course.id}>{capitalizeFirstLetter(course?.course.title)}</MenuItem>)
-                                  })}
-                                </Select>
-                              </FormControl>
+                          <Autocomplete
+                            value={value}
+                            inputValue={inputValue}
+                            onChange={(event, newValue) => {
+                              setNewValue(newValue);
+                            }}
+                            onInputChange={(event, newInputValue) => {
+                              setInputValue(newInputValue);
+                            }}
+                            options={option}
+                            getOptionLabel={(option) => option?.title}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                variant="outlined"
+                                placeholder="Search Course"
+                              />
                             )}
                           />
+
                           {errors && errors.course
                             ? ErrorShowing(errors?.course?.message)
                             : ""}
@@ -271,7 +270,7 @@ export default function UpdateModule() {
                       </Grid>
 
                       <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"right"} >
-                      <Button className={ModuleCss.cancelButton} variant="contained" size="large" onClick={() => router.push('/admin/courses/allmodules')} >Cancel</Button>
+                        <Button className={ModuleCss.cancelButton} variant="contained" size="large" onClick={() => router.push('/admin/courses/allmodules')} id={styles.muibuttonBackgroundColor}>Cancel</Button>
                         {!isLoadingButton ? <Button type="submit" size="large" variant="contained" id={styles.muibuttonBackgroundColor}>
                           UPDATE
                         </Button> : <LoadingButton loading={isLoadingButton} className={ModuleCss.updateLoadingButton}
@@ -282,7 +281,8 @@ export default function UpdateModule() {
                     </Grid>
 
                   </Grid>
-                </Box>
+                  {/* </Box> */}
+                </form>
                 : <SpinnerProgress />}
             </CardContent>
           </Card>

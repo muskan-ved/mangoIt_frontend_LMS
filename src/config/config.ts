@@ -48,7 +48,6 @@ export const API = {
   deleteSubscription: `${BASE_URL}/${process.env.NEXT_PUBLIC_DELETE_SUBSCRIPTION}`,
   getSubscription: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_SUBSCRIPTION_BY_URSEID}`,
   getSubsById: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_SUBSCRIPTION_BY_ID}`,
-  updateSubscription: `${BASE_URL}/${process.env.NEXT_PUBLIC_UPDATE_SUBSCRIPTION}`,
 
   downloadPDF: `${BASE_URL}/${process.env.NEXT_PUBLIC_DOWNLOAD_RECEIPT}`,
 
@@ -74,7 +73,7 @@ export const API = {
 
   //create user subscription
   createsubscription: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_CREATESUBSCRIPTION}`,
-  updatesubscription: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_UPDATESUBSCRIPTION}`,
+  updateSubscription: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_UPDATESUBSCRIPTION}`,
 
   //create order
   createsubscriptionorder: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_CREATEORDER}`,

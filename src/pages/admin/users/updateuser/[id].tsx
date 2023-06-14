@@ -22,14 +22,15 @@ import { ToastContainer } from 'react-toastify';
 import { userValidations } from '@/validation_schema/userValidation';
 import { HandleRegister } from '@/services/auth';
 // API services
-
+// API Service
+import { HandleProfile, HandleUpdateProfile } from '@/services/user';
 
 
 export default function UpdateUser() {
   const router: any = useRouter();
   const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
-
+  const [rows, setRows] = useState<any>();
   const {
     register,
     handleSubmit,
@@ -41,13 +42,48 @@ export default function UpdateUser() {
     resolver: yupResolver(userValidations),
   });
 
+  useEffect(() => {
+    getUsereData();
+  }, [])
+  //get user data
+  const getUsereData = () => {
+    const id = router.query.id
+    if (id) {
+      HandleProfile(id).then((users) => {
+        setRows(users.data);
+        const fields = [
+          "first_name",
+          "last_name",
+          "email",
+          "role_id",
+        ];
+        fields.forEach((field) => setValue(field, users.data[field]));
+      })
+    }
+    // if (error) {
+    //   return <Typography >{error}</Typography >;
+    // }
+  }
+  //handle Update
+  const handleUpdate = (e: any) => {
+    if (e.target.name === 'first_name') {
+      setRows({ ...rows, first_name: e.target.value })
+    }
+    if (e.target.name === 'last_name') {
+      setRows({ ...rows, last_name: e.target.value })
+    }
+    if (e.target.name === 'email') {
+      setRows({ ...rows, email: e.target.value })
+    }
+  }
 
+  //submit form
   const onSubmit = async (event: any) => {
-    console.log("event", event);
+    const id = router.query.id
     setLoading(true);
     setLoadingButton(false)
     try {
-      const res = await HandleRegister(event)
+      const res = await HandleUpdateProfile(id, event)
       setLoading(false);
       setTimeout(() => {
         router.push('/admin/users')
@@ -57,7 +93,7 @@ export default function UpdateUser() {
       setLoadingButton(true)
     }
   };
-
+  //Errors
   function ErrorShowing(errorMessage: any) {
     return (
       <Typography variant="body2" color={"error"} gutterBottom>
@@ -66,7 +102,6 @@ export default function UpdateUser() {
     );
   }
 
-   console.log("oopps", errors)
   return (
     <>
       <Navbar />
@@ -106,8 +141,10 @@ export default function UpdateUser() {
                             First Name
                           </InputLabel>
                           <TextField
-                            placeholder="First Name"
                             {...register("first_name")}
+                            value={rows?.first_name}
+                            onChange={handleUpdate}
+                            placeholder="First Name"
                           />
                           {errors && errors.first_name
                             ? ErrorShowing(errors?.first_name?.message)
@@ -119,8 +156,10 @@ export default function UpdateUser() {
                             Last Name
                           </InputLabel>
                           <TextField
+                            value={rows?.last_name}
                             placeholder="Last Name"
                             {...register("last_name")}
+                            onChange={handleUpdate}
                           />
                           {errors && errors.last_name
                             ? ErrorShowing(errors?.last_name?.message)
@@ -134,8 +173,10 @@ export default function UpdateUser() {
                             Email Id
                           </InputLabel>
                           <TextField
+                            value={rows?.email}
                             placeholder="Email Id"
                             {...register("email")}
+                            onChange={handleUpdate}
                           />
                           {errors && errors.email
                             ? ErrorShowing(errors?.email?.message)
@@ -143,18 +184,15 @@ export default function UpdateUser() {
                         </Grid>
 
                         <Grid item xs={12} sm={12} md={6} lg={6}>
-                        <InputLabel className={UserCSS.InputLabelFont}>Role</InputLabel>
+                          <InputLabel className={UserCSS.InputLabelFont}>Role</InputLabel>
                           <Controller
                             name="role_id"
                             control={control}
-                            defaultValue=""
+                            defaultValue={rows?.role_id || ""}
                             render={({ field }) => (
                               <FormControl fullWidth>
                                 <Select {...field} displayEmpty>
-                                  <MenuItem disabled value="">
-                                    Role
-                                  </MenuItem>
-                                  <MenuItem value={1} >
+                                  <MenuItem value={1}>
                                     Admin
                                   </MenuItem>
                                   <MenuItem value={2}>
@@ -171,7 +209,7 @@ export default function UpdateUser() {
                       </Grid>
 
                       <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"right"} >
-                        <Button className={UserCSS.cancelButton} variant="contained" size="large" onClick={() => router.push('/admin/users')} >Cancel</Button>
+                        <Button className={UserCSS.cancelButton} variant="contained" size="large" onClick={() => router.push('/admin/users')} id={styles.muibuttonBackgroundColor}>Cancel</Button>
                         {!isLoadingButton ? <Button type="submit" size="large" variant="contained" id={styles.muibuttonBackgroundColor}>
                           Submit
                         </Button> : <LoadingButton loading={isLoadingButton} className={UserCSS.updateLoadingButton}

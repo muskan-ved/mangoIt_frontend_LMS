@@ -289,7 +289,7 @@ export default function UpdateCourse() {
                         {errors && errors.long_description ? ErrorShowing(errors?.long_description?.message) : ""}
                       </Grid>
                       <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"right"} >
-                      <Button className={courseStyle.cancelButton} variant="contained" size="large" onClick={() => router.push('/admin/courses/allcourses')} >Cancel</Button>
+                      <Button className={courseStyle.cancelButton} variant="contained" size="large" onClick={() => router.push('/admin/courses/allcourses')} id={styles.muibuttonBackgroundColor}>Cancel</Button>
                         {!isLoadingButton ? <Button type="submit" size="large" variant="contained" id={styles.muibuttonBackgroundColor}>
                           UPDATE
                         </Button> : <LoadingButton loading={isLoadingButton} className={courseStyle.updateLoadingButton}

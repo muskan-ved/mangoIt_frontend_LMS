@@ -46,7 +46,7 @@ import MenuBookIcon from "@mui/icons-material/MenuBook";
 
 // CSS Import
 import styles from "../../../../styles/sidebar.module.css";
-import subs from "../../../../styles/subsciption.module.css";
+import subs from "../../../../styles/subscription.module.css";
 import courseStyle from "../../../../styles/course.module.css";
 import Image from "next/image";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
