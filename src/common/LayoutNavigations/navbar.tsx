@@ -22,6 +22,7 @@ import { BASE_URL } from "@/config/config";
 
 interface appbar {
   portalData?: any;
+  profilePic?:any;
 }
 
 function stringAvatar(first_name: string, last_name: string) {
@@ -35,7 +36,7 @@ function stringAvatar(first_name: string, last_name: string) {
   };
 }
 
-export default function Navbar({ portalData }: appbar) {
+export default function Navbar({ portalData, profilePic}: appbar) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
@@ -241,11 +242,13 @@ export default function Navbar({ portalData }: appbar) {
             <Box className={styles.createVrLine}></Box>
 
             <Avatar
-              src={
-                userData && userData?.profile_pic !== null
-                  ? `${BASE_URL}/${userData?.profile_pic}`
-                  : "/"
-              }
+             src={
+              profilePic && profilePic
+                ? `${BASE_URL}/${profilePic}`
+                : userData && userData?.profile_pic !== null
+                ? `${BASE_URL}/${userData?.profile_pic}`
+                : "/"
+            }
               {...stringAvatar(userData?.first_name, userData?.last_name)}
               alt={userData && userData?.first_name}
               className={styles.windowFullWidthAvatar}
