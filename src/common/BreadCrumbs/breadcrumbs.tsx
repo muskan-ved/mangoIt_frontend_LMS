@@ -1,25 +1,21 @@
-
 import Link from "next/link";
 import { Breadcrumbs, Stack, Typography } from "@mui/material";
 import { FC } from "react";
 import { breadcrumbsVariableTypes } from "@/types/breadcrumbs";
 import { FRONTEND_BASE_URL } from "@/config/config";
 
-
 const BreadcrumbsHeading: FC<breadcrumbsVariableTypes> = (props): any => {
   return (
-    <Stack
-      direction="row"
-      spacing={2}
-      justifyContent="space-between"
-    >
+    <Stack direction="row" spacing={2} justifyContent="space-between">
       <Stack>
         <Stack spacing={3}>
           <Breadcrumbs separator="›" aria-label="breadcrumb">
             <Link
               key="1"
               color="inherit"
-              href="admin/dashboard"
+              href={
+                props && props?.Link?.includes("user") ? "/" : "admin/dashboard"
+              }
               style={{ color: "#E8661B", textDecoration: "none" }}
             >
               {props.First}
@@ -44,6 +40,6 @@ const BreadcrumbsHeading: FC<breadcrumbsVariableTypes> = (props): any => {
       </Stack>
     </Stack>
   );
-}
+};
 
 export default BreadcrumbsHeading;

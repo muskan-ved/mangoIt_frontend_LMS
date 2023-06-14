@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import Navbar from "@/common/LayoutNavigations/navbar";
 import SideBar from "@/common/LayoutNavigations/sideBar";
 import {
@@ -30,7 +31,6 @@ import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import ArrowDownwardOutlinedIcon from "@mui/icons-material/ArrowDownwardOutlined";
 import ArrowUpwardOutlinedIcon from "@mui/icons-material/ArrowUpwardOutlined";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import * as React from "react";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -41,7 +41,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { SearchOutlined } from "@mui/icons-material";
 import { useRouter } from "next/router";
-import { HandleCourseGet } from "@/services/course";
+import { HandleCourseGetByUserId } from "@/services/course_enroll";
+
 import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
 import { usePagination } from "@/common/Pagination/paginations";
 import { Controller, useForm } from "react-hook-form";
@@ -73,18 +74,23 @@ const columns: Column[] = [
 ];
 
 const AllCourses = () => {
-  const [rows, setRows] = React.useState<any>([]);
-  const [toggle, setToggle] = React.useState<boolean>(false);
-  const [search, setSearch] = React.useState("");
-  const [deleteRow, setDeleteRow] = React.useState<any>([]);
-  const [open, setOpen] = React.useState(false);
-  const [getFilter, setFilter] = React.useState<number>(0);
-  const [filterObject, setFilterObject] = React.useState<any>("");
-
+  const [rows, setRows] = useState<any>([]);
+  const [toggle, setToggle] = useState<boolean>(false);
+  const [search, setSearch] = useState("");
+  const [deleteRow, setDeleteRow] = useState<any>([]);
+  const [open, setOpen] = useState(false);
+  const [getFilter, setFilter] = useState<number>(0);
+  const [filterObject, setFilterObject] = useState<any>("");
+  const [userId, getUserId] = useState<any>("");
   const router = useRouter();
+
+  useEffect(() => {
+    getAllCourseData();
+  }, [router]);
+
   //pagination
-  const [row_per_page, set_row_per_page] = React.useState(5);
-  let [page, setPage] = React.useState<any>(1);
+  const [row_per_page, set_row_per_page] = useState(5);
+  let [page, setPage] = useState<any>(1);
   function handlerowchange(e: any) {
     set_row_per_page(e.target.value);
   }
@@ -99,10 +105,10 @@ const AllCourses = () => {
   const { handleSubmit, control, reset } = useForm();
 
   const onSubmit = (event: any) => {
-    HandleCourseGet("", event).then((itemFiltered) => {
-      setRows(itemFiltered.data);
-      setFilterObject(event);
-    });
+    // HandleCourseGet("", event).then((itemFiltered) => {
+    //   setRows(itemFiltered.data);
+    //   setFilterObject(event);
+    // });
   };
 
   const handleClickOpen = (row: any) => {
@@ -110,13 +116,6 @@ const AllCourses = () => {
     setOpen(!open);
   };
 
-  const resetFilterValue = () => {
-    setFilter(0);
-    reset({ is_chargeable: 0, status: 0 });
-    HandleCourseGet("", { is_chargeable: 0, status: 0 }).then((itemSeached) => {
-      setRows(itemSeached.data);
-    });
-  };
   const handleSort = (rowsData: any) => {
     const sortData = handleSortData(rowsData);
     setRows(sortData);
@@ -124,34 +123,38 @@ const AllCourses = () => {
   };
 
   const handleSearch = (e: any, identifier: any) => {
+    const search = e?.target?.value;
     setPage(1);
     DATA.jump(1);
     if (identifier === "reset") {
-      HandleCourseGet("", { is_chargeable: 0, status: 0 }).then(
-        (itemSeached) => {
-          setRows(itemSeached.data);
-        }
-      );
+      getAllCourseData();
       setSearch(e);
-    } else {
-      const search = e.target.value;
+    } else if (search !== null) {
       setSearch(e.target.value);
-      HandleCourseGet(search, filterObject).then((itemSeached) => {
-        setRows(itemSeached.data);
+      HandleCourseGetByUserId(userId, search).then((courses) => {
+        setRows(courses.data);
+      });
+    } else {
+      HandleCourseGetByUserId(userId).then((courses) => {
+        setRows(courses.data);
       });
     }
   };
 
   const getAllCourseData = () => {
-    HandleCourseGet("", filterObject).then((courses) => {
-      setRows(courses.data);
-    });
+    let localData: any;
+    if (typeof window !== "undefined") {
+      localData = window.localStorage.getItem("userData");
+    }
+
+    if (localData) {
+      const userIds = JSON.parse(localData);
+      HandleCourseGetByUserId(userIds?.id).then((courses) => {
+        setRows(courses.data);
+      });
+      getUserId(userIds?.id);
+    }
   };
-
-  React.useEffect(() => {
-    getAllCourseData();
-  }, []);
-
   return (
     <>
       <Navbar />
@@ -189,165 +192,6 @@ const AllCourses = () => {
                   ),
                 }}
               />
-              {/* <Box
-                sx={{ float: "right", display: "flex", alignItems: "center" }}
-              >
-                <PopupState variant="popover" popupId="demo-popup-popover">
-                  {(popupState) => (
-                    <Box>
-                      <Button
-                        sx={{ display: "inline-flex", color: "#1976d2" }}
-                        className={courseStyle.popStateFilterButton1}
-                        {...bindTrigger(popupState)}
-                      >
-                        <FilterAltOutlinedIcon />
-                        Filter
-                      </Button>
-                      <Popover
-                        {...bindPopover(popupState)}
-                        style={{ width: "35% !important" }}
-                        anchorOrigin={{
-                          vertical: "bottom",
-                          horizontal: "left",
-                        }}
-                        transformOrigin={{
-                          vertical: "top",
-                          horizontal: "center",
-                        }}
-                      >
-                        <Box>
-                          <Container
-                            className="filter-box"
-                            style={{ padding: "15px" }}
-                          >
-                            <Grid>
-                              <Typography
-                                variant="h5"
-                                sx={{ fontWeight: "bold" }}
-                              >
-                                Filter
-                              </Typography>
-                              <Box
-                                component="form"
-                                noValidate
-                                onSubmit={handleSubmit(onSubmit)}
-                                sx={{ mt: 1 }}
-                              >
-                                <Stack
-                                  style={{ marginTop: "10px" }}
-                                  className="form-filter"
-                                >
-                                  <Grid container spacing={2}>
-                                    <Grid item xs={12} md={6} lg={6}>
-                                      <Stack spacing={2}>
-                                        <InputLabel
-                                          htmlFor="enddate"
-                                          sx={{ fontWeight: "bold" }}
-                                        >
-                                          Type
-                                        </InputLabel>
-                                        <Controller
-                                          name="is_chargeable"
-                                          control={control}
-                                          defaultValue={getFilter}
-                                          render={({ field }) => (
-                                            <FormControl fullWidth>
-                                              <Select {...field} displayEmpty>
-                                                <MenuItem value={0}>
-                                                  All
-                                                </MenuItem>
-                                                <MenuItem value={"free"}>
-                                                  Free
-                                                </MenuItem>
-                                                <MenuItem value={"paid"}>
-                                                  Paid
-                                                </MenuItem>
-                                              </Select>
-                                            </FormControl>
-                                          )}
-                                        />
-                                      </Stack>
-                                    </Grid>
-                                    <Grid item xs={12} md={6} lg={6}>
-                                      <Stack spacing={2}>
-                                        <InputLabel
-                                          htmlFor="enddate"
-                                          sx={{ fontWeight: "bold" }}
-                                        >
-                                          Status
-                                        </InputLabel>
-                                        <Controller
-                                          name="status"
-                                          control={control}
-                                          defaultValue={getFilter}
-                                          render={({ field }) => (
-                                            <FormControl fullWidth>
-                                              <Select
-                                                {...field}
-                                                displayEmpty
-                                                disabled
-                                              >
-                                                <MenuItem value={0}>
-                                                  All
-                                                </MenuItem>
-                                                <MenuItem value={"active"}>
-                                                  Active
-                                                </MenuItem>
-                                                <MenuItem value={"inactive"}>
-                                                  In-active
-                                                </MenuItem>
-                                              </Select>
-                                            </FormControl>
-                                          )}
-                                        />
-                                      </Stack>
-                                    </Grid>
-
-                                    <Grid item xs={12} lg={12}>
-                                      <Box>
-                                        <div
-                                          onClick={popupState.close}
-                                          className={courseStyle.divcss}
-                                        >
-                                          <Button
-                                            className={courseStyle.boxInFilter}
-                                            size="medium"
-                                            variant="contained"
-                                            color="primary"
-                                            type="button"
-                                            onClick={resetFilterValue}
-                                            id={styles.muibuttonBackgroundColor}
-                                          >
-                                            Reset
-                                          </Button>
-                                        </div>
-                                        <Button
-                                          size="medium"
-                                          type="submit"
-                                          variant="contained"
-                                          color="primary"
-                                          id={styles.muibuttonBackgroundColor}
-                                          className={
-                                            courseStyle.applyButtonInFiltter
-                                          }
-                                          onClick={popupState.close}
-                                        >
-                                          Apply
-                                        </Button>
-                                      </Box>
-                                    </Grid>
-                                  </Grid>
-                                </Stack>
-                              </Box>
-                            </Grid>
-                          </Container>
-                        </Box>
-                      </Popover>
-                    </Box>
-                  )}
-                </PopupState>
-                &nbsp;
-              </Box> */}
               <Paper>
                 <TableContainer className={courseStyle.tableContainer}>
                   <Table stickyHeader aria-label="sticky table">
@@ -387,21 +231,31 @@ const AllCourses = () => {
                         DATA.currentData() &&
                         DATA.currentData().map((row: any) => {
                           const statusColor =
-                            row.course.status === "active"
+                            row?.course?.course?.status === "active"
                               ? courseStyle.activeClassColor
-                              : row.course.status === "inactive"
+                              : row?.course?.course?.status === "inactive"
                               ? courseStyle.inactiveClassColor
                               : courseStyle.draftClassColor;
+
+                          const obj = row?.courseIdCounts;
+                          const key = row?.course?.course?.id;
+                          const value = obj[key];
+                          const sessionValue =
+                            row?.sessionCount[0]?.sessionCount;
+                          let calculate = (value / sessionValue) * 100;
+
                           return (
                             <TableRow
                               hover
                               role="checkbox"
                               tabIndex={-1}
-                              key={row.id}
+                              key={row?.course?.course?.id}
                             >
-                              <TableCell>{row.course.id}</TableCell>
+                              <TableCell>{row?.course?.course?.id}</TableCell>
                               <TableCell>
-                                {capitalizeFirstLetter(row?.course?.title)}
+                                {capitalizeFirstLetter(
+                                  row?.course?.course?.title
+                                )}
                               </TableCell>
                               <TableCell>
                                 {row?.moduleCount?.length !== 0
@@ -415,15 +269,17 @@ const AllCourses = () => {
                               </TableCell>
                               <TableCell>
                                 {capitalizeFirstLetter(
-                                  row?.course?.is_chargeable
+                                  row?.course?.course_type
                                 )}
                               </TableCell>
                               <TableCell
                               //  className={statusColor}
                               >
-                                {row?.course?.complete_percent === null
-                                  ? "0%"
-                                  : `${row?.course?.complete_percent}%`}
+                                {`${
+                                  calculate && calculate
+                                    ? calculate?.toFixed(0)
+                                    : 0
+                                }%`}
                               </TableCell>
                               <TableCell>
                                 <Button
@@ -432,7 +288,7 @@ const AllCourses = () => {
                                   variant="outlined"
                                   color="primary"
                                   onClick={() =>
-                                    handleClickOpen(row?.course?.id)
+                                    handleClickOpen(row?.course?.course?.id)
                                   }
                                 >
                                   <VisibilityIcon />

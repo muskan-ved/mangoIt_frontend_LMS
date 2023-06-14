@@ -1,48 +1,52 @@
-.combineContentAndSidebar{
+.combineContentAndSidebar {
   height: 100%;
   display: flex;
   top: 65px;
   width: 100%;
 }
 
-.activeMenuItem{
+.activeMenuItem {
   border-top-right-radius: 23px !important;
   border-bottom-right-radius: 23px !important;
   max-width: 200px !important;
   color: white !important;
-  background-color: #E8661B !important;
+  background-color: #e8661b !important;
 }
 
-.nonActiveMenuItem{
+.nonActiveMenuItem {
   border-top-right-radius: 23px !important;
   border-bottom-right-radius: 23px !important;
   max-width: 200px !important;
   /* color:#E8661B !important; */
 }
 
-.footerContainercss{
-    width: 100%;
-    padding: 15px;
-    position: absolute;
-    background: white;
-    bottom: 0px;
-    border-top: 1px solid #685f601f;
-    text-align: center;
-    color:#7C7C7C;
+.footerContainercss {
+  width: 100%;
+  padding: 15px;
+  position: absolute;
+  background: white;
+  bottom: 0px;
+  border-top: 1px solid #685f601f;
+  text-align: center;
+  color: #7c7c7c;
 }
 
-.siteBodyContainer{
+.siteBodyContainer {
   padding: 16px;
   width: 100%;
   background: #685f600d;
 }
 
-.asideTag{
+.asideTag {
   min-height: calc(100vh - 65px);
 }
 
-.wholeWebsiteButtonColor{
-  color: #E8661B !important;
+.wholeWebsiteButtonColor {
+  color: #e8661b !important;
+}
+
+#muibuttonBackgroundColor {
+  background-color: #e8661b !important;
 }
 
 #muibuttonBackgroundColor{

@@ -36,7 +36,7 @@ function stringAvatar(first_name: string, last_name: string) {
   };
 }
 
-export default function Navbar({ portalData, profilePic}: appbar) {
+export default function Navbar({ portalData ,profilePic}: appbar) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
@@ -211,7 +211,6 @@ export default function Navbar({ portalData, profilePic}: appbar) {
       </MenuItem>
     </Menu>
   );
-
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" className={styles.appBarCss}>
@@ -242,13 +241,13 @@ export default function Navbar({ portalData, profilePic}: appbar) {
             <Box className={styles.createVrLine}></Box>
 
             <Avatar
-             src={
-              profilePic && profilePic
-                ? `${BASE_URL}/${profilePic}`
-                : userData && userData?.profile_pic !== null
-                ? `${BASE_URL}/${userData?.profile_pic}`
-                : "/"
-            }
+              src={
+                profilePic && profilePic
+                  ? `${BASE_URL}/${profilePic}`
+                  : userData && userData?.profile_pic !== null
+                  ? `${BASE_URL}/${userData?.profile_pic}`
+                  : "/"
+              }
               {...stringAvatar(userData?.first_name, userData?.last_name)}
               alt={userData && userData?.first_name}
               className={styles.windowFullWidthAvatar}
