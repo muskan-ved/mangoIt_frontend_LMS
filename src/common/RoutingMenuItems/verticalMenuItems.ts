@@ -67,7 +67,7 @@ export const VerticalMenuItems = () => {
         title: "Dashboard",
         icon: HomeOutlinedIcon,
         path: "/admin/dashboard",
-        disable: false,
+        disable: true,
       },
       {
         title: "Courses",
