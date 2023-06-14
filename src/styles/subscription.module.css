@@ -1,32 +1,32 @@
 .subscription {
-  text-align: center;
+  text-align: center !important;
 }
 .mainSubsDiv {
-  background-color: #e5e5e5;
+  background-color: #e5e5e5 !important;
 }
 .maindisplay {
-  display: flex;
+  display: flex !important;
 }
 .fontCSS {
-  padding: 4px;
-  color: #646363;
+  padding: 4px !important;
+  color: #646363 !important;
 }
 .useNameFront {
   color: #4e4a4a !important;
   font-weight: bold !important;
 }
 .btncss {
-  text-align: end;
+  text-align: end !important;
 }
 .headingcss {
   font-weight: bold !important;
 }
 
 .fontCSS1 {
-  font-weight: 400;
-  line-height: 1.6;
-  color: #333;
-  font-size: 20px;
+  font-weight: 400 !important;
+  line-height: 1.6 !important;
+  color: #333 !important;
+  font-size: 20px !important;
   font-family: Inter, sans-serif !important;
 }
 .useNameFront1 {
@@ -39,73 +39,73 @@
   box-shadow: none !important;
 }
 .moduletextcss {
-  font-size: 18px;
-  color: #232323;
-  font-weight: 500;
-  text-transform: uppercase;
+  font-size: 18px !important;
+  color: #232323 !important;
+  font-weight: 500 !important;
+  text-transform: uppercase !important;
 }
 .iconcss {
-  color: #e8661b;
-  position: relative;
-  top: 5px;
+  color: #e8661b !important;
+  position: relative !important;
+  top: 5px !important;
 }
 .btncss {
-  margin-left: 23px;
-  margin-top: 19px;
-  background: #e8661b;
+  margin-left: 23px !important;
+  margin-top: 19px !important;
+  background: #e8661b !important;
 }
 .useNameFront2 {
-  color: #242222;
-  font-weight: 700;
-  margin-top: 30px;
-  margin-bottom: 15px;
-  margin-left: 10px;
+  color: #242222 !important;
+  font-weight: 700 !important;
+  margin-top: 30px !important;
+  margin-bottom: 15px !important;
+  margin-left: 10px !important;
 }
 .btncss1 {
-  text-align: end;
+  text-align: end !important;
 }
 .subsbtn {
-  width: 18%;
+  width: 18% !important;
 }
 
 .useSubsMessage {
-  color: #e8661b;
-  font-weight: bold;
-  text-decoration: underline;
-  font-size: 18px;
+  color: #e8661b !important;
+  font-weight: bold !important;
+  text-decoration: underline !important;
+  font-size: 18px !important;
 }
 .maindisplay1 {
-  display: flex;
-  float: right;
-  padding: 10px;
+  display: flex !important;
+  float: right !important;
+  padding: 10px !important;
 }
 .useSubsCancell {
-  color: #4e4a4a;
-  font-size: 18px;
+  color: #4e4a4a !important;
+  font-size: 18px !important;
 }
 
 @media (min-width: 1400px) and (max-width: 1700px) {
   .mediaque {
-    margin-left: 10%;
-    margin-right: 10%;
+    margin-left: 10% !important;
+    margin-right: 10% !important;
   }
 }
 @media (min-width: 1700px) and (max-width: 2000px) {
   .mediaque {
-    margin-left: 15%;
-    margin-right: 15%;
+    margin-left: 15% !important;
+    margin-right: 15% !important;
   }
 }
 @media (min-width: 2000px) and (max-width: 2300px) {
   .mediaque {
-    margin-left: 20%;
-    margin-right: 20%;
+    margin-left: 20% !important;
+    margin-right: 20% !important;
   }
 }
 @media (min-width: 2300px) {
   .mediaque {
-    margin-left: 25%;
-    margin-right: 25%;
+    margin-left: 25% !important;
+    margin-right: 25% !important;
   }
 }
 
@@ -115,23 +115,23 @@
 
 /* admin page css */
 .filterBox {
-  font-weight: bold;
+  font-weight: bold !important;
 }
 .filterForm {
-  margin-top: 8px;
+  margin-top: 8px !important;
 }
 .mainFilterBox {
-  float: right;
-  display: flex;
-  align-items: center;
+  float: right !important;
+  display: flex !important;
+  align-items: center !important;
 }
 .popStateFilterButton {
-  display: inline-flex;
+  display: inline-flex !important;
   color: #e8661b !important;
 }
 .editDeleteButton {
   padding: 5px 9px !important;
-  min-width: 30px;
+  min-width: 30px !important;
   margin: 3px !important;
 }
 
@@ -145,10 +145,10 @@
 }
 
 .statusInFilter {
-  font-weight: bold;
+  font-weight: bold !important;
 }
 .boxInFilter {
-  float: right;
+  float: right !important;
 }
 .applyButtonInFiltter {
   margin-left: 10px !important;
@@ -160,10 +160,10 @@
   font-weight: bold !important;
 }
 .tableContainer {
-  margin-top: 24px;
+  margin-top: 24px !important;
 }
 .tableCellMargin {
-  margin: 5px;
+  margin: 5px !important;
 }
 .tableLastCell {
   text-align: center !important;
@@ -178,29 +178,29 @@
   color: orange !important;
 }
 .stackStyle {
-  margin-bottom: 10px;
-  margin-top: 10px;
+  margin-bottom: 10px !important;
+  margin-top: 10px !important;
 }
 .textareaManuallyStyle {
-  height: 64px;
-  width: 100%;
-  border: 1px solid #d3d3d3d4;
-  padding: 16.5px 14px;
-  border-radius: 4px;
-  font: inherit;
-  letter-spacing: inherit;
+  height: 64px !important;
+  width: 100% !important;
+  border: 1px solid #d3d3d3d4 !important;
+  padding: 16.5px 14px !important;
+  border-radius: 4px !important;
+  font: inherit !important;
+  letter-spacing: inherit !important;
 }
 .InputLabelFont {
   font-weight: 700 !important;
 }
 .sessionNameGride {
-  display: flex;
-  margin-bottom: 16px;
+  display: flex !important;
+  margin-bottom: 16px !important;
 }
 .cancelButton {
   margin: 10px !important;
   background-color: #1976d2 !important;
-  color: white;
+  color: white !important;
 }
 .updateLoadingButton {
   width: 105px !important;

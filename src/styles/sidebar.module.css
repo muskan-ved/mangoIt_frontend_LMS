@@ -32,9 +32,9 @@
 }
 
 .siteBodyContainer {
-  padding: 16px;
-  width: 100%;
-  background: #685f600d;
+  padding: 16px !important;
+  width: 100% !important;
+  background: #685f600d !important;
 }
 
 .asideTag {
