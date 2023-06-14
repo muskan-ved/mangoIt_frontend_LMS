@@ -14,7 +14,7 @@ const BreadcrumbsHeading: FC<breadcrumbsVariableTypes> = (props): any => {
               key="1"
               color="inherit"
               href={
-                props && props?.Link?.includes("user") ? "/" : "admin/dashboard"
+                props && props?.Link?.includes("user") ? "dashboard" : "dashboard"
               }
               style={{ color: "#E8661B", textDecoration: "none" }}
             >

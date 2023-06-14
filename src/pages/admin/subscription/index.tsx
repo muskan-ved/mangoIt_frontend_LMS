@@ -344,7 +344,7 @@ const Subscriptions = () => {
                             >
                               <TableCell>{row.id}</TableCell>
                               <TableCell>{capitalizeFirstLetter(row.name)}</TableCell>
-                              <TableCell>{row.price}</TableCell>
+                              <TableCell>$ {row.price}</TableCell>
                               <TableCell>{capitalizeFirstLetter(row.duration_term)}</TableCell>
                               <TableCell>{row.duration_value}</TableCell>
                               <TableCell className={statusColor}>{capitalizeFirstLetter(row.status)}</TableCell>
@@ -393,8 +393,8 @@ const Subscriptions = () => {
               open={open}
               onClose={handleClickOpen}
               onSubmit={handleDeletesRow}
-              title={deleteRow.title}
-              whatYouDelete='Session'
+              title={deleteRow.name}
+              whatYouDelete='Subscription'
             />
           </CardContent>
         </Card>
