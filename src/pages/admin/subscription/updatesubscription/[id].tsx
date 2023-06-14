@@ -41,10 +41,10 @@ import moment from "moment";
 
 export default function UpdateSubscription() {
   const router: any = useRouter();
-  const [durationTerm,setDurationTerm] = useState<any>('');
+  const [durationTerm, setDurationTerm] = useState<any>('');
   const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
-const {id} = router.query;;
+  const { id } = router.query;;
   const {
     register,
     handleSubmit,
@@ -57,7 +57,7 @@ const {id} = router.query;;
   });
 
   const getSubscriptionById = () => {
-    HandleSubscriptionGetByID(id).then((subscriptions:any) => {
+    HandleSubscriptionGetByID(id).then((subscriptions: any) => {
       const fields = [
         "name",
         "price",
@@ -68,13 +68,13 @@ const {id} = router.query;;
       ];
       fields.forEach((field) => setValue(field, subscriptions.data[field]));
       setDurationTerm(subscriptions?.data?.duration_term)
-      setValue('duration',moment(subscriptions?.data?.start_date).format('yyyy-MM-DD'))
-      })
+      setValue('duration', moment(subscriptions?.data?.start_date).format('yyyy-MM-DD'))
+    })
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     getSubscriptionById()
-  },[])
+  }, [])
 
   const onSubmit = async (event: any) => {
     let localData: any;
@@ -83,30 +83,30 @@ const {id} = router.query;;
       localData = JSON.parse(parsingData);
     }
 
-      const reqData: any = {
-        name: event.name,
-        description: event.description,
-        price: event.price,
-        userId: localData.id,
-        startDate: event.duration,
-        status: event.status,
-        duration_term: event.duration_term,
-        duration_value: event.duration_value,
-      };
+    const reqData: any = {
+      name: event.name,
+      description: event.description,
+      price: event.price,
+      userId: localData.id,
+      startDate: event.duration,
+      status: event.status,
+      duration_term: event.duration_term,
+      duration_value: event.duration_value,
+    };
 
-     
-      setLoadingButton(true);
-      try {
-        const res = await HandleSubscriptionUpdate(id,reqData);
-        setLoadingButton(false);
-        setTimeout(() => {
-          router.replace("/admin/subscription/");
-        }, 2000);
-      } catch (e) {
-        console.log(e);
-        setLoadingButton(false);
-      }
-    
+
+    setLoadingButton(true);
+    try {
+      const res = await HandleSubscriptionUpdate(id, reqData);
+      setLoadingButton(false);
+      setTimeout(() => {
+        router.replace("/admin/subscription/");
+      }, 2000);
+    } catch (e) {
+      console.log(e);
+      setLoadingButton(false);
+    }
+
   };
 
 
@@ -211,7 +211,7 @@ const {id} = router.query;;
                           <InputLabel className={Subscription.InputLabelFont}>
                             Duration Term
                           </InputLabel>
-                        
+
                           <Controller
                             name="duration_term"
                             control={control}
@@ -235,7 +235,7 @@ const {id} = router.query;;
                             Duration Value
                           </InputLabel>
                           <TextField
-                          type="number"
+                            type="number"
                             placeholder="Duration Value"
                             {...register("duration_value")}
                             fullWidth
@@ -258,7 +258,7 @@ const {id} = router.query;;
                           <InputLabel className={Subscription.InputLabelFont}>
                             Duration
                           </InputLabel>
-  
+
                           <TextField
                             fullWidth
                             type="date"
@@ -299,8 +299,8 @@ const {id} = router.query;;
                         <InputLabel className={Subscription.InputLabelFont}>
                           Description
                         </InputLabel>
-                        <TextareaAutosize minRows={4} aria-label="empty textarea" placeholder="Empty" {...register("description")}  className={Subscription.textareaManuallyStyle} />
-                      
+                        <TextareaAutosize minRows={4} aria-label="empty textarea" placeholder="Empty" {...register("description")} className={Subscription.textareaManuallyStyle} />
+
                         {errors && errors.description
                           ? ErrorShowing(errors?.description?.message)
                           : ""}
@@ -319,6 +319,7 @@ const {id} = router.query;;
                           variant="contained"
                           size="large"
                           onClick={() => router.push("/admin/subscription")}
+                          id={styles.muibuttonBackgroundColor}
                         >
                           Cancel
                         </Button>

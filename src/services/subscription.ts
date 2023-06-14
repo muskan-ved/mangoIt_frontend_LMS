@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { HandleLogout } from "./auth";
 import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
 
-export const HandleSubscriptionGet = async (search: string,reqData?:any) => {
+export const HandleSubscriptionGet = async (search: string, reqData?: any) => {
   const API_URL = search
     ? `${API.getAllSubscription}/${search}`
     : `${API.getAllSubscription}`;
@@ -14,7 +14,7 @@ export const HandleSubscriptionGet = async (search: string,reqData?:any) => {
     method: "POST",
     url: API_URL,
     headers: LoginHeader(),
-    data:reqData,
+    data: reqData,
   })
     .then((request) => {
       return request;
@@ -34,11 +34,11 @@ export const HandleSubscriptionPost = async (reqData: any) => {
   return await axios({
     method: "POST",
     url: API_URL,
-    data:reqData,
+    data: reqData,
     headers: LoginHeader(),
   })
     .then((request) => {
-      if(request.status === 201){
+      if (request.status === 201) {
         toast.success("Subscription added successfully");
       }
       return request;
@@ -53,7 +53,7 @@ export const HandleSubscriptionPost = async (reqData: any) => {
     });
 };
 
-export const HandleSubscriptionDelete = async (id:string) => {
+export const HandleSubscriptionDelete = async (id: string) => {
   const API_URL = `${API.deleteSubscription}/${id}`;
   return await axios({
     method: "DELETE",
@@ -94,6 +94,7 @@ export const HandleSubscriptionGetByID = async (subId: any) => {
       return error;
     });
 };
+
 export const HandleSubscriptionGetByUserID = async (subId: any) => {
   return await axios({
     method: "GET",
@@ -163,9 +164,6 @@ export const HandleSubscriptionUpdate = async (id: any, reqData: any) => {
     data: reqData,
   })
     .then((request) => {
-      toast.success(
-        `Subscription updated successfully`
-      );
       return request;
     })
     .catch((error) => {

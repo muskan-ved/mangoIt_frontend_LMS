@@ -21,7 +21,7 @@ interface previewAttach {
 }
 
 const Preview = ({ name, identifier }: previewAttach) => {
-  const extension = name.split(".").pop();
+  const extension = name?.split(".").pop();
   if (
     extension === "jpg" ||
     extension === "gif" ||

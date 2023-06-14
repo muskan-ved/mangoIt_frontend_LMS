@@ -1,13 +1,13 @@
 .InputLabelFont {
-  font-weight: 700;
+  font-weight: 700 !important;
 }
 .upperFilterBox {
-  float: right;
-  display: flex;
-  align-items: center;
+  float: right !important;
+  display: flex !important;
+  align-items: center !important;
 }
 .filterAltOutlinedIcon {
-  display: inline-flex;
+  display: inline-flex !important;
   color: #e8661b !important;
 }
 .filterTypography {
@@ -24,19 +24,19 @@
     height: 80px;
 } */
 .quillDescription > div > div {
-  height: 70px;
+  height: 70px !important;
 }
 .wrapShortAndLongDescription {
-  display: flex;
-  flex-wrap: wrap;
+  display: flex !important;
+  flex-wrap: wrap !important;
 }
 
 .SubmitButton {
-  float: right;
+  float: right !important;
 }
 .stackStyle {
-  margin-bottom: 10px;
-  margin-top: 10px;
+  margin-bottom: 10px !important;
+  margin-top: 10px !important;
 }
 .editDeleteButton {
   padding: 5px 9px !important;
@@ -49,8 +49,8 @@
   color: white;
 }
 
-/* .MuiPaper-root .MuiPaper-elevation .MuiPaper-rounded .MuiPaper-elevation8 .MuiPopover-paper .css-3bmhjh-MuiPaper-root-MuiPopover-paper{
-width: 70% !important;
+/* .MuiPaper-root  .MuiPaper-elevation .MuiPaper-rounded .MuiPaper-elevation8 .MuiPopover-paper .css-3bmhjh-MuiPaper-root-MuiPopover-paper{
+width: 70% !important hai;
 } */
 .courseInFilter {
   font-weight: bold !important;
@@ -62,19 +62,19 @@ width: 70% !important;
   font-weight: bold !important;
 }
 .boxInFilter {
-  float: right;
+  float: right !important;
 }
 .applyButtonInFiltter {
   margin-left: 10px !important;
 }
 .papperForTable {
-  width: 100%;
+  width: 100% !important;
 }
 .tableContainer {
-  margin-top: 24px;
+  margin-top: 24px !important;
 }
 .tableCellMargin {
-  margin: 5px;
+  margin: 5px !important;
 }
 .tableLastCell {
   text-align: center !important;
@@ -104,7 +104,7 @@ width: 70% !important;
   display: contents !important;
 }
 .widthCss {
-  width: 30% !important;
+  width: 30% !important;  
 }
 .typoTitle {
   font-size: 18px !important;
@@ -146,7 +146,7 @@ width: 70% !important;
 }
 .backbtn {
   position: absolute !important;
-  right: 25px !important;
+  right: 25px;
 }
 .backbtncs {
   height: 37px !important;
@@ -175,7 +175,7 @@ width: 70% !important;
   /* display: inline-flex; */
   color: #e8661b !important;
 }
-.hoverbtn:hover {
+.hoverbtn:hover{
   -webkit-text-decoration: none !important;
   text-decoration: none !important;
   background-color: rgba(255, 255, 255, 0.04) !important;

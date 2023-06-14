@@ -40,20 +40,24 @@ import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFir
 import { usePagination } from "@/common/Pagination/paginations";
 import { handleSortData } from "@/common/Sorting/sorting";
 import { SearchOutlined } from "@mui/icons-material";
+import moment from "moment";
+import { GetdateAfterOneMonth } from "@/common/commonfunctions/connonfun";
 
 interface Column {
-  id: "id" | "name" | "amount" | "next_pay" | "status" | "action";
+  id: "id" | "name" | "amount" | 'subsc_date' | "next_pay_date" | "status" | "action" | "type" | "last_pay_date";
   label: string;
   minWidth?: number;
   align?: "right";
   format?: (value: number) => string;
 }
-
 const columns: Column[] = [
-  { id: "id", label: "ID", minWidth: 100 },
-  { id: "name", label: "NAME", minWidth: 100 },
+  { id: "id", label: "ID", minWidth: 20, },
+  { id: "name", label: "NAME", minWidth: 50 },
+  { id: "type", label: "NAME", minWidth: 50 },
   { id: "amount", label: "AMOUNT", minWidth: 100 },
-  { id: "next_pay", label: "NEXT PAY", minWidth: 100 },
+  { id: "subsc_date", label: " SUBS. DATE", minWidth: 100 },
+  { id: "last_pay_date", label: "LAST PAY DATE", minWidth: 100 },
+  { id: "next_pay_date", label: "NEXT PAY DATE", minWidth: 100 },
   { id: "status", label: "STATUS", minWidth: 100 },
   { id: "action", label: "ACTION", minWidth: 100 },
 ];
@@ -63,7 +67,6 @@ const Subscription = () => {
   const [toggle, setToggle] = React.useState<boolean>(false);
   const [search, setSearch] = React.useState("");
   const [userId, setUserId] = React.useState<any>("");
-
   const router = useRouter();
   //pagination
   const [row_per_page, set_row_per_page] = React.useState(5);
@@ -86,7 +89,6 @@ const Subscription = () => {
   React.useEffect(() => {
     let localData: any;
     let getId: any;
-
     if (typeof window !== "undefined") {
       localData = window.localStorage.getItem("userData");
     }
@@ -132,6 +134,8 @@ const Subscription = () => {
     });
   };
 
+  console.log(rows)
+
   return (
     <>
       <Navbar />
@@ -154,7 +158,8 @@ const Subscription = () => {
                 id="standard-search"
                 value={search}
                 variant="outlined"
-                placeholder="Search by course"
+                placeholder="Search by id, name"
+                size="small"
                 onChange={(e: any) => handleSearch(e, "")}
                 InputProps={{
                   endAdornment: !search ? (
@@ -172,7 +177,7 @@ const Subscription = () => {
               <Paper>
                 <TableContainer className={courseStyle.tableContainer}>
                   <Table stickyHeader aria-label="sticky table">
-                    <TableHead>
+                    <TableHead >
                       <TableRow>
                         {columns.map((column) => (
                           <TableCell
@@ -182,10 +187,11 @@ const Subscription = () => {
                             onClick={() => {
                               column.label === "ID" ? handleSort(rows) : "";
                             }}
+                            className={courseStyle.tableHeadingForId}
                           >
                             {toggle ? (
                               column.label === "ID" ? (
-                                <Typography>
+                                <Typography className={courseStyle.tableHeadingForId}>
                                   ID{" "}
                                   <ArrowDownwardOutlinedIcon fontSize="small" />{" "}
                                 </Typography>
@@ -193,7 +199,7 @@ const Subscription = () => {
                                 column.label
                               )
                             ) : column.label === "ID" ? (
-                              <Typography>
+                              <Typography className={courseStyle.tableHeadingForId}>
                                 ID <ArrowUpwardOutlinedIcon fontSize="small" />{" "}
                               </Typography>
                             ) : (
@@ -207,14 +213,13 @@ const Subscription = () => {
                       {rows && rows.length > 0 ? (
                         DATA.currentData() &&
                         DATA.currentData().map((row: any) => {
-                          console.log(row)
                           let color = row?.status;
                           const statusColor =
                             color === "active"
                               ? courseStyle.activeClassColor
                               : color === "canceled"
-                              ? courseStyle.inactiveClassColor
-                              : courseStyle.draftClassColor;
+                                ? courseStyle.inactiveClassColor
+                                : courseStyle.draftClassColor;
                           return (
                             <TableRow
                               hover
@@ -226,10 +231,18 @@ const Subscription = () => {
                               <TableCell>
                                 {capitalizeFirstLetter(row?.name)}
                               </TableCell>
+                              <TableCell>
+                                {capitalizeFirstLetter(row?.duration_term)}
+                              </TableCell>
                               <TableCell>${row?.price}</TableCell>
                               <TableCell>
-                             
-                                25 May 2023
+                                {moment(row?.createdAt).format("DD, MMMM YYYY")}
+                              </TableCell>
+                              <TableCell>
+                                {moment(row?.start_date).format("DD, MMMM YYYY")}
+                              </TableCell>
+                              <TableCell>
+                                {moment(GetdateAfterOneMonth(row?.start_date)).format("DD, MMMM YYYY")}
                               </TableCell>
                               <TableCell className={statusColor}>
                                 {capitalizeFirstLetter(row?.status)}

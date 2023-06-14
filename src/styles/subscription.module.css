@@ -10,13 +10,14 @@
 .fontCSS {
   padding: 4px !important;
   color: #646363 !important;
+  font-weight: 600 !important;
 }
 .useNameFront {
   color: #4e4a4a !important;
   font-weight: bold !important;
 }
 .btncss {
-  text-align: end !important;
+  text-align: start;
 }
 .headingcss {
   font-weight: bold !important;
@@ -62,7 +63,7 @@
   margin-left: 10px !important;
 }
 .btncss1 {
-  text-align: end !important;
+  text-align: start !important;
 }
 .subsbtn {
   width: 18% !important;
