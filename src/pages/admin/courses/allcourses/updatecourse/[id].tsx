@@ -162,7 +162,7 @@ export default function UpdateCourse() {
       </Typography>
     );
   }
-  // console.log("opps", errors)
+
   return (
     <>
       <Navbar />

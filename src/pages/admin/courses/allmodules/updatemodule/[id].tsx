@@ -16,10 +16,7 @@ import { courseValidations } from '@/validation_schema/courseValidation';
 import { LoadingButton } from "@mui/lab";
 import CircularProgressBar from '@/common/CircularProcess/circularProgressBar';
 import SpinnerProgress from '@/common/CircularProgressComponent/spinnerComponent';
-import { capitalizeFirstLetter } from '@/common/CapitalFirstLetter/capitalizeFirstLetter';
 // Types Import
-import { sessionType } from '@/types/sessionType';
-import { courseType } from '@/types/courseType';
 import { moduleType } from '@/types/moduleType';
 // CSS Import
 import styles from "../../../../../styles/sidebar.module.css";
@@ -87,7 +84,7 @@ export default function UpdateModule() {
         getModuleData()
         setLoading(false);
         setTimeout(() => {
-          // router.push('/admin/courses/allmodules/')
+          router.push('/admin/courses/allmodules/')
         }, 900)
       } catch (e) {
         console.log(e)
@@ -219,6 +216,7 @@ export default function UpdateModule() {
                             getOptionLabel={(option) => option?.title}
                             renderInput={(params) => (
                               <TextField
+                                {...register("course_id")}
                                 {...params}
                                 variant="outlined"
                                 placeholder="Search Course"
@@ -226,8 +224,8 @@ export default function UpdateModule() {
                             )}
                           />
 
-                          {errors && errors.course
-                            ? ErrorShowing(errors?.course?.message)
+                          {errors && errors.course_id
+                            ? ErrorShowing(errors?.course_id?.message)
                             : ""}
                         </Grid>
                       </Grid>
@@ -266,7 +264,6 @@ export default function UpdateModule() {
                           }
                         />
                         {errors && errors.description ? ErrorShowing(errors?.description?.message) : ""}
-                        {/* {getDespcriptionContent ? '' : errors && errors.description ? ErrorShowing(errors?.description?.message) : ""} */}
                       </Grid>
 
                       <Grid item xs={12} sm={12} md={12} lg={12} textAlign={"right"} >

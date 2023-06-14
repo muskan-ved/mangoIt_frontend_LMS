@@ -86,12 +86,19 @@ const AllSession = () => {
   const [search, setSearch] = React.useState('');
   const [getFilter, setFilter] = React.useState<number>(0);
   const [deleteRow, setDeleteRow] = React.useState<sessionType | any>([])
-  const [getCourseTitle, setCourseTitle] = React.useState<any>("");
-  const [getCourseId, setCourseId] = React.useState<any>(0);
-  const [getModuleTitle, setModuleTitle] = React.useState<any>("");
-  const [getModuleId, setModuleId] = React.useState<any>(0);
+  const [value, setNewValue] = React.useState<any>({
+    id: 0,
+    title: 'All',
+  });
+  const [inputValue, setInputValue] = React.useState<any>([]);
+  const [mdvalue, setmdvalue] = React.useState<any>({
+    id: 0,
+    title: 'All',
+  });
+  const [mdinputValue, setmdInputValue] = React.useState<any>([]);
   const router = useRouter()
   const {
+    register,
     handleSubmit,
     control,
     reset,
@@ -175,8 +182,8 @@ const AllSession = () => {
   // submit for filter
   const onSubmit = (event: any) => {
     const filterData: any = {
-      module_id: getModuleId,
-      course_id: getCourseId,
+      module_id: mdvalue?.id,
+      course_id: value.id,
       status: event.status,
     }
     HandleSessionGet('', filterData).then((itemFiltered) => {
@@ -186,12 +193,36 @@ const AllSession = () => {
 
   const resetFilterValue = () => {
     setFilter(0)
+    setNewValue({
+      id: 0,
+      title: 'All',
+    })
+    setmdvalue({
+      id: 0,
+      title: 'All',
+    })
     reset({ course: 0, module: 0, status: 0 });
     getSessionData();
 
   }
 
-  // console.log(' session rowss', rows)
+  const option: { id: number; title: string; }[] = [{ id: 0, title: 'All' }];
+  getCourse &&
+    getCourse.map((data: any, key: any) => {
+      return option.push({
+        id: data?.course?.id,
+        title: data?.course?.title,
+      });
+    });
+
+  const mdoption: { id: number; title: string; }[] = [{ id: 0, title: 'All' }];
+  getModule &&
+    getModule.map((data: any, key: any) => {
+      return mdoption.push({
+        id: data?.module?.id,
+        title: data?.module?.title,
+      });
+    });
   return (
     <>
       <Navbar />
@@ -273,41 +304,25 @@ const AllSession = () => {
                                         <InputLabel htmlFor="name" className={Sessions.courseInFilter}>
                                           Course
                                         </InputLabel>
-                                        {/* <Controller
-                                          name="course"
-                                          control={control}
-                                          defaultValue={getFilter}
-                                          render={({ field }) => (
-                                            <FormControl fullWidth>
-                                              <Select {...field} displayEmpty>
-                                                <MenuItem value={0}>
-                                                  All
-                                                </MenuItem>
-                                                {getCourse?.map((data: any) => {
-                                                  return (<MenuItem key={data.course.id} value={data.course.id}>{capitalizeFirstLetter(data?.course.title)}</MenuItem>)
-                                                })}
-                                              </Select>
-                                            </FormControl>
-                                          )}
-                                        /> */}
                                         <Autocomplete
-                                     
-                                          id="combo-box-demo"
-                                          // value={getCourseTitle === "" ? null : getCourseTitle}
-                                          options={getCourse}
-                                          getOptionLabel={(option: any) =>
-                                            option?.course?.title
-                                          }
+                                          value={value}
+                                          inputValue={inputValue}
+                                          onChange={(event, newValue) => {
+                                            setNewValue(newValue);
+                                          }}
+                                          onInputChange={(event, newInputValue) => {
+                                            setInputValue(newInputValue);
+                                          }}
+                                          options={option}
+                                          getOptionLabel={(option) => option?.title}
                                           renderInput={(params) => (
                                             <TextField
+                                              {...register("course_id")}
                                               {...params}
-                                              placeholder="Course Name"
+                                              variant="outlined"
+                                              placeholder="Search Course"
                                             />
                                           )}
-                                          onChange={(event, newValue) => {
-                                            setCourseId(newValue?.course?.id);
-                                            setCourseTitle(newValue?.course);
-                                          }}
                                         />
                                       </Stack>
                                     </Grid>
@@ -317,41 +332,25 @@ const AllSession = () => {
                                         <InputLabel htmlFor="name" className={Sessions.moduleInFilter}>
                                           Module
                                         </InputLabel>
-                                        {/* <Controller
-                                          name="module"
-                                          control={control}
-                                          defaultValue={getFilter}
-                                          render={({ field }) => (
-                                            <FormControl fullWidth>
-                                              <Select {...field} displayEmpty>
-                                                <MenuItem value={0}>
-                                                  All
-                                                </MenuItem>
-                                                {getModule?.map((data: any) => {
-                                                  return (<MenuItem key={data.module.id} value={data.module.id}>{capitalizeFirstLetter(data?.module.title)}</MenuItem>)
-                                                })}
-                                              </Select>
-                                            </FormControl>
-                                          )}
-                                        /> */}
                                         <Autocomplete
-                                      
                                           id="combo-box-demo"
-                                          // value={getCourseTitle === "" ? null : getCourseTitle}
-                                          options={getModule}
-                                          getOptionLabel={(option: any) =>
-                                            option?.module?.title
-                                          }
+                                          value={mdvalue}
+                                          inputValue={mdinputValue}
+                                          options={mdoption}
+                                          getOptionLabel={(mdoption: any) => mdoption?.title}
+                                          onChange={(event, newValue) => {
+                                            setmdvalue(newValue);
+                                          }}
+                                          onInputChange={(event, newInputValue) => {
+                                            setmdInputValue(newInputValue);
+                                          }}
                                           renderInput={(params) => (
                                             <TextField
+                                              {...register("module_id")}
                                               {...params}
-                                              placeholder="Module Name"
+                                              placeholder='Search for module'
                                             />
                                           )}
-                                          onChange={(event, newValue) => {
-                                            setModuleId(newValue?.module?.id);
-                                            setModuleTitle(newValue?.module);
-                                          }}
                                         />
                                       </Stack>
                                     </Grid>

@@ -31,7 +31,6 @@ import { HandleCourseCreate } from "@/services/course";
 import { useRouter } from "next/router";
 import CircularProgressBar from "@/common/CircularProcess/circularProgressBar";
 import { LoadingButton } from "@mui/lab";
-import { Margin } from "@mui/icons-material";
 
 
 const AddCourse = () => {
@@ -71,11 +70,9 @@ const AddCourse = () => {
       }
       setShortDespcriptionContent(value);
     }
-
   };
 
   const onSubmit = async (value: any) => {
-    console.log("course submit", value);
     try {
       const courseCreated = await HandleCourseCreate(value)
       setLoading(false);
@@ -104,7 +101,6 @@ const AddCourse = () => {
       );
     }
   }
-  // console.log('err', errors)
   return (
     <>
       <Navbar />

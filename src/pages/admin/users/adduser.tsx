@@ -42,7 +42,6 @@ export default function AddUser() {
 
 
   const onSubmit = async (event: any) => {
-    console.log("event", event);
     setLoading(true);
     setLoadingButton(false)
     try {
