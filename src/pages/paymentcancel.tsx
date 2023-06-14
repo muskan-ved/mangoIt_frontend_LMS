@@ -11,7 +11,7 @@ export default function PaymentCancel() {
                         <Typography variant="h3" color={"error"}>
                             Payment failed due to some reason.
                         </Typography>
-                        <Link href={"/home"} >
+                        <Link href={"/"} >
                             <Button
                                 className={styles.gohome}
                             >

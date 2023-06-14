@@ -83,6 +83,8 @@ export const API = {
 
   //create transaction
   createtransaction: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_CREATETRANSACTION}`,
+  //GET TRANSACTION BY OD
+  getTransaction: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_TRANSACTIONDET}`,
 
   //create enrolled courses
   createenrollcourse: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_CREATETENROLLEDCOURSE}`,

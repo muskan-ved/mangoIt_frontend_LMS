@@ -11,7 +11,7 @@ import Link from "next/link";
 import AlarmOnIcon from '@mui/icons-material/AlarmOn';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import { CourseCard, SubscribtionPanCard } from "@/common/ResuableCardCmp/coursescard";
-import { GetallSubsctions } from "@/services/subscription";
+import { GetallSubsctions, HandleSubscriptionGetByUserID } from "@/services/subscription";
 import { capitalizeFirstLetter } from "../../common/CapitalFirstLetter/capitalizeFirstLetter";
 import ReactPlayer from "react-player";
 import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
@@ -119,6 +119,7 @@ export default function CoursesDetailsPage() {
     const [userData, setUserData] = useState<any>("");
     const [enrolled, setenrolled] = useState<any>(false);
     const [EnrolledCourses, setEnrolledCoursess] = useState([]);
+    const [checkuserSubscStatus, setcheckuserSubscStatus] = useState([]);
     useEffect(() => {
         if (router.isReady) {
             let localData: any;
@@ -136,6 +137,7 @@ export default function CoursesDetailsPage() {
             if (localData) {
                 const dt = JSON.parse(localData)
                 CheckenrolledCourse(dt?.id);
+                ChecUserSubscription(dt?.id)
             }
         }
     }, [router.isReady, id]);
@@ -178,8 +180,18 @@ export default function CoursesDetailsPage() {
     const handleClickOpen = () => {
         setOpen(true);
     };
+
+    const [open1, setOpen1] = useState(false);
+    const handleClickOpenCheckSubsc = () => {
+        setOpen1(true);
+    };
+
     const handleClose = () => {
         setOpen(false);
+    };
+
+    const handleClose1 = () => {
+        setOpen1(false);
     };
 
     const Getsubscription = () => {
@@ -233,14 +245,21 @@ export default function CoursesDetailsPage() {
         </Typography>,
     ];
 
-
     let rotalsession = 0;
     coursedet && coursedet?.modules?.forEach((element: any) => {
         rotalsession += element?.sessions?.length;
     });
 
 
-
+    //check user subscription 
+    //check course enrolled or not
+    const ChecUserSubscription = (user_id: any) => {
+        HandleSubscriptionGetByUserID(user_id).then(res => {
+            if (res) {
+                setcheckuserSubscStatus(res?.data)
+            };
+        })
+    }
 
     return (
         <>
@@ -287,14 +306,19 @@ export default function CoursesDetailsPage() {
                                                 >
                                                     Enrolled
                                                 </Button>
-                                            ) : <Button variant="contained" className="authPageButton" id={styles.muibuttonBackgroundColor}
-                                                onClick={enrolledCourse}
-                                            >
-                                                Enroll Now
-                                            </Button>}
+                                            ) :
+                                                checkuserSubscStatus.length > 0 || coursedet?.is_chargeable === "free" ? (<Button variant="contained" className="authPageButton" id={styles.muibuttonBackgroundColor}
+                                                    onClick={enrolledCourse}
+                                                >
+                                                    Enroll Now
+                                                </Button>)
+                                                    : <Button variant="contained" className="authPageButton" id={styles.muibuttonBackgroundColor}
+                                                        onClick={handleClickOpenCheckSubsc}
+                                                    >
+                                                        Enroll Now
+                                                    </Button>
+                                            }
                                         </>
-
-
                                     ) : <Button variant="contained" className="authPageButton" id={styles.muibuttonBackgroundColor}
                                         onClick={handleClickOpen}
                                     >
@@ -600,7 +624,7 @@ export default function CoursesDetailsPage() {
             </Box >
             {/*footer*/}
             < WebViewFooter />
-            {/*dialouge box*/}
+            {/*dialouge box1*/}
             <BootstrapDialog
                 onClose={handleClose}
                 aria-labelledby="customized-dialog-title"
@@ -619,6 +643,28 @@ export default function CoursesDetailsPage() {
                 </DialogContent>
                 <DialogActions>
                     <Button autoFocus variant="contained" id={styles.muibuttonBackgroundColor} onClick={Getsubscription}>
+                        Subscribe Now
+                    </Button>
+                </DialogActions>
+            </BootstrapDialog>
+            {/*  {/*dialouge box2 */}
+            <BootstrapDialog
+                onClose={handleClose1}
+                aria-labelledby="customized-dialog-title"
+                open={open1}
+            >
+                <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose1}>
+                    Take Subscription Now
+                </BootstrapDialogTitle>
+                <DialogContent >
+                    <Typography gutterBottom>
+                        Hii,  <Typography gutterBottom sx={{ fontWeight: "bold" }}> {userData?.first_name} </Typography> You Don&apos;t have a any subscriptions in LMS portal. Please subscribe and enroll paid courses.
+                    </Typography>
+                    <Typography gutterBottom>
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button autoFocus variant="contained" id={styles.muibuttonBackgroundColor} onClick={Getsubscription} >
                         Subscribe Now
                     </Button>
                 </DialogActions>

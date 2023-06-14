@@ -8,8 +8,5 @@ export function GetdateAfterOneMonth(startdate: any) {
 
 export function Dateformat(date: any) {
   const formatdate = moment(date).format("DD, MMMM YYYY");
-
-  console.log(formatdate);
-
   return date;
 }
