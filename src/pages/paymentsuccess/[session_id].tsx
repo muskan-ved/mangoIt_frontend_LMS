@@ -51,7 +51,7 @@ export default function PaymentSuccess() {
                                     status: "active",
                                     start_date: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
                                 }
-                                HandleSubscriptionUpdate(reqdata, orderdatas?.subscription_id).then((subcdet) => {
+                                HandleSubscriptionUpdate(orderdatas?.subscription_id, reqdata).then((subcdet) => {
                                     if (subcdet) {
                                         setTimeout(function () {
                                             router.push(`/user/subscription`);

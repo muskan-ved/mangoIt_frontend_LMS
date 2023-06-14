@@ -49,8 +49,8 @@
     color: white;
 }
 
-/* .MuiPaper-root .MuiPaper-elevation .MuiPaper-rounded .MuiPaper-elevation8 .MuiPopover-paper .css-3bmhjh-MuiPaper-root-MuiPopover-paper{
-width: 70% !important;
+/* .MuiPaper-root  .MuiPaper-elevation .MuiPaper-rounded .MuiPaper-elevation8 .MuiPopover-paper .css-3bmhjh-MuiPaper-root-MuiPopover-paper{
+width: 70% !important hai;
 } */
 .courseInFilter {
   font-weight: bold !important;
@@ -171,13 +171,12 @@ width: 70% !important;
   border: 1px solid #e8661b !important;
   color: #e8661b !important;
 }
-.popStateFilterButton1{
+.popStateFilterButton1 {
   /* display: inline-flex; */
-  color: #E8661B !important;
+  color: #e8661b !important;
 }
 .hoverbtn:hover{
   -webkit-text-decoration: none !important;
   text-decoration: none !important;
   background-color: rgba(255, 255, 255, 0.04) !important;
 }
-
