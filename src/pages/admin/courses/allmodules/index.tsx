@@ -24,7 +24,6 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TablePagination,
   TableRow,
   TextField,
   Typography,
@@ -41,7 +40,6 @@ import ArrowUpwardOutlinedIcon from '@mui/icons-material/ArrowUpwardOutlined';
 import styles from "../../../../styles/sidebar.module.css";
 import ModulCss from "../../../../styles/modules.module.css";
 import { ToastContainer } from "react-toastify";
-import { moduleType } from '@/types/moduleType';
 // External Components
 import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
 import { handleSortData } from "@/common/Sorting/sorting";
@@ -54,8 +52,6 @@ import Autocomplete from "@mui/material/Autocomplete";
 // API Service
 import { HandleCourseGet } from "@/services/course";
 import { HandleModuleDelete, HandleModuleGet } from "@/services/module";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { moduleValidations } from "@/validation_schema/moduleValidation";
 
 interface Column {
   id: "id" | "title" | "course_id" | "module_id" | "is_deleted" | "action";
@@ -87,8 +83,6 @@ const AllModules = () => {
     title: 'All',
   });
   const [inputValue, setInputValue] = React.useState<any>([]);
-
-
   const router = useRouter()
   const {
     register,
@@ -294,7 +288,7 @@ const AllModules = () => {
                                             />
                                           )}
                                         />
-                                       
+
                                       </Stack>
                                     </Grid>
                                     <Grid item xs={12} md={6} lg={6}>
@@ -330,7 +324,7 @@ const AllModules = () => {
                                     >
                                       <Box className={ModulCss.boxInFilter}>
                                         <Button
-
+                                          id={styles.muibuttonBackgroundColor}
                                           size="medium"
                                           variant="contained"
                                           color="primary"

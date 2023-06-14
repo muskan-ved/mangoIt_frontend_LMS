@@ -12,7 +12,6 @@ import RichEditor from "@/common/RichTextEditor/textEditor";
 // Helper Import
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { courseValidations } from '@/validation_schema/courseValidation';
 import { LoadingButton } from "@mui/lab";
 import CircularProgressBar from '@/common/CircularProcess/circularProgressBar';
 import SpinnerProgress from '@/common/CircularProgressComponent/spinnerComponent';
@@ -26,6 +25,7 @@ import { ToastContainer } from 'react-toastify';
 import { HandleCourseGet, HandleCourseGetByID, HandleCourseUpdate } from '@/services/course';
 import { HandleModuleGetByID, HandleModuleUpdate } from '@/services/module';
 import { moduleValidations } from '@/validation_schema/moduleValidation';
+
 export default function UpdateModule() {
   const router: any = useRouter();
   const [getDespcriptionContent, setDespcriptionContent] = useState("");
@@ -40,7 +40,7 @@ export default function UpdateModule() {
     register,
     handleSubmit,
     reset,
-    setValue, getValues,
+    setValue,
     control,
     formState: { errors }, setError
   } = useForm<moduleType | any>({

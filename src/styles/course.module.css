@@ -1,13 +1,13 @@
 .InputLabelFont {
-  font-weight: 700;
+  font-weight: 700 !important;
 }
 .upperFilterBox {
-  float: right;
-  display: flex;
-  align-items: center;
+  float: right !important;
+  display: flex !important;
+  align-items: center !important;
 }
 .filterAltOutlinedIcon {
-  display: inline-flex;
+  display: inline-flex !important;
   color: #e8661b !important;
 }
 .filterTypography {
@@ -24,19 +24,19 @@
     height: 80px;
 } */
 .quillDescription > div > div {
-  height: 70px;
+  height: 70px !important;
 }
 .wrapShortAndLongDescription {
-  display: flex;
-  flex-wrap: wrap;
+  display: flex !important;
+  flex-wrap: wrap !important;
 }
 
 .SubmitButton {
-  float: right;
+  float: right !important;
 }
 .stackStyle {
-  margin-bottom: 10px;
-  margin-top: 10px;
+  margin-bottom: 10px !important;
+  margin-top: 10px !important;
 }
 .editDeleteButton {
   padding: 5px 9px !important;
@@ -62,19 +62,19 @@ width: 70% !important hai;
   font-weight: bold !important;
 }
 .boxInFilter {
-  float: right;
+  float: right !important;
 }
 .applyButtonInFiltter {
   margin-left: 10px !important;
 }
 .papperForTable {
-  width: 100%;
+  width: 100% !important;
 }
 .tableContainer {
-  margin-top: 24px;
+  margin-top: 24px !important;
 }
 .tableCellMargin {
-  margin: 5px;
+  margin: 5px !important;
 }
 .tableLastCell {
   text-align: center !important;
@@ -94,17 +94,17 @@ width: 70% !important hai;
 }
 /* ----------------- UPDATE COURSE CSS ----------------------- */
 .courseNameGride {
-  display: flex;
-  margin-bottom: 16px;
+  display: flex !important;
+  margin-bottom: 16px !important;
 }
 .updateLoadingButton {
-  width: 178px;
+  width: 178px !important;
 }
 .divcss {
-  display: contents;
+  display: contents !important;
 }
 .widthCss {
-  width: 30%;
+  width: 30% !important;  
 }
 .typoTitle {
   font-size: 18px !important;
@@ -115,8 +115,8 @@ width: 70% !important hai;
   background: #e8661b !important;
 }
 .typolist {
-  font-size: large;
-  font-family: serif;
+  font-size: large !important;
+  font-family: serif !important;
 }
 .backgroundClick {
   background: #e8661b !important;
@@ -145,23 +145,23 @@ width: 70% !important hai;
   color: #e8661b !important;
 }
 .backbtn {
-  position: absolute;
+  position: absolute !important;
   right: 25px;
 }
 .backbtncs {
-  height: 37px;
+  height: 37px !important;
 }
 .backbtncs12 {
-  height: 37px;
-  text-align: end;
-  margin-right: 1px;
+  height: 37px !important;
+  text-align: end !important;
+  margin-right: 32px !important;
   margin-top: 20px !important;
 }
 .backcss {
-  text-align: end;
+  text-align: end !important;
 }
 .divcss {
-  display: contents;
+  display: contents !important;
 }
 .tableHeadingForId {
   font-weight: bold !important;
@@ -175,8 +175,8 @@ width: 70% !important hai;
   /* display: inline-flex; */
   color: #e8661b !important;
 }
-.hoverbtn:hover {
-  -webkit-text-decoration: none;
-  text-decoration: none;
+.hoverbtn:hover{
+  -webkit-text-decoration: none !important;
+  text-decoration: none !important;
   background-color: rgba(255, 255, 255, 0.04) !important;
 }
