@@ -24,10 +24,11 @@ export const API = {
   //Courses
   getCourses: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_COURSES}`,
   getCoursesByCouseId: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_COURSES_BY_COURSE_ID}`,
-  getCoursesByUserId: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_COURSES_BY_USER_ID}`,
   createCourse: `${BASE_URL}/${process.env.NEXT_PUBLIC_CREATE_COURSE}`,
   updateCourse: `${BASE_URL}/${process.env.NEXT_PUBLIC_UPDATE_COURSE}`,
   deleteCourse: `${BASE_URL}/${process.env.NEXT_PUBLIC_DELETE_COURSE}`,
+  getCoursesByUserId: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_COURSES_BY_USER_ID}`,
+
   //Modules
   getAllModules: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_ALL_MODULES}`,
   createModule: `${BASE_URL}/${process.env.NEXT_PUBLIC_CREATE_MODULE}`,
@@ -50,7 +51,7 @@ export const API = {
   getSubsById: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_SUBSCRIPTION_BY_ID}`,
 
   downloadPDF: `${BASE_URL}/${process.env.NEXT_PUBLIC_DOWNLOAD_RECEIPT}`,
-
+  markascomplete: `${BASE_URL}/${process.env.NEXT_PUBLIC_MARK_AS_COMPLETE}`,
   getEmailContent: `${BASE_URL}/${process.env.NEXT_PUBLIC_EMAIL_CONTENT_GET}`,
   createEmailContent: `${BASE_URL}/${process.env.NEXT_PUBLIC_EMAIL_CONTENT_CREATE}`,
   updateEmailContent: `${BASE_URL}/${process.env.NEXT_PUBLIC_EMAIL_CONTENT_UPDATE}`,
@@ -58,6 +59,8 @@ export const API = {
   getEmailType: `${BASE_URL}/${process.env.NEXT_PUBLIC_EMAIL_TYPE_GET}`,
   createEmailType: `${BASE_URL}/${process.env.NEXT_PUBLIC_EMAIL_TYPE_CREATE}`,
   updateEmailType: `${BASE_URL}/${process.env.NEXT_PUBLIC_EMAIL_TYPE_UPDATE}`,
+
+  getInvoices: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_INVOICES}`,
 
   getOrder: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_ORDER_BY_USER_ID}`,
 
@@ -89,8 +92,6 @@ export const API = {
 
   //create enrolled courses
   createenrollcourse: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_CREATETENROLLEDCOURSE}`,
-  markascomplete: `${BASE_URL}/${process.env.NEXT_PUBLIC_MARK_AS_COMPLETE}`,
-
   //check enrolled courses
   checenrollcourses: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_CHECKENROLLEDCOURSE}`,
   //get top enrolled courses

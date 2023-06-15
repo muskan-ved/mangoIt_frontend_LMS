@@ -2,7 +2,6 @@
 // React Import
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useRouter } from "next/router";
 // MUI Import
 import {
   Box,
@@ -46,15 +45,15 @@ import { handleSortData } from "@/common/Sorting/sorting";
 import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
 import { usePagination } from "@/common/Pagination/paginations";
 // CSS Import
-import styles from "../../../styles/sidebar.module.css";
-import Subscription from "../../../styles/subscription.module.css"
+import styles from "../../../../styles/sidebar.module.css";
+import Subscription from "../../../../styles/subscription.module.css"
 import { ToastContainer } from "react-toastify";
 // API Service
 import { AlertDialog } from "@/common/DeleteListRow/deleteRow";
 import { HandleSubscriptionDelete, HandleSubscriptionGet } from "@/services/subscription";
 
 interface Column {
-  id: "id" | "name" | "price" | "durationTerm" | "durationValue" | "status" | "createdBy" | "action";
+  id: "id" | "name" | "price" | "durationTerm" | "durationValue" | "status" | "username" | "action";
   label: string;
   minWidth?: number;
   align?: "right";
@@ -68,8 +67,8 @@ const columns: Column[] = [
   { id: "durationTerm", label: "DURATION TERM", minWidth: 160 },
   { id: "durationValue", label: "DURATION VALUE", minWidth: 160 },
   { id: "status", label: "STATUS", minWidth: 100 },
-  { id: "createdBy", label: "CREATED BY", minWidth: 120 },
-  { id: "action", label: "ACTION", minWidth: 100 },
+  { id: "username", label: "USERNAME", minWidth: 120 },
+  // { id: "action", label: "ACTION", minWidth: 100 },
 ];
 
 
@@ -80,10 +79,7 @@ const Subscriptions = () => {
   const [search, setSearch] = useState('');
   const [deleteRow, setDeleteRow] = useState<any>([])
   const [open, setOpen] = useState(false);
-  const [getFilter, setFilter] = useState<any>({ filter: 'all' });
-  const [filterObject, setFilterObject] = useState<any>('');
-  const router = useRouter()
-
+  const [getFilter, setFilter] = useState<any>('all');
 
   //pagination
   const [row_per_page, set_row_per_page] = useState(5);
@@ -120,8 +116,8 @@ const Subscriptions = () => {
   }
 
   const resetFilterValue = () => {
-    setFilter({ filter: 'all' })
-    reset({ status: 0 });
+    setFilter('all')
+    reset({ status: 'all' });
   }
 
   const handleSort = (rowsData: any) => {
@@ -141,8 +137,8 @@ const Subscriptions = () => {
     }
   }
 
-  const getAllSubscriptionData = (search: string = '') => {
-    HandleSubscriptionGet(search).then((subs: any) => {
+  const getAllSubscriptionData = (search: string = '',payload?:any) => {
+    HandleSubscriptionGet(search,payload).then((subs: any) => {
       setRows(subs.data)
     })
   }
@@ -151,8 +147,9 @@ const Subscriptions = () => {
     getAllSubscriptionData();
   }, [])
 
-  const onfiltersSubmit = (e: any, identifier: any) => {
-    setFilter(0)
+  const onfiltersSubmit = (e: any) => {
+    getAllSubscriptionData('',e);
+    setFilter('all')
   }
 
   return (<>
@@ -164,9 +161,9 @@ const Subscriptions = () => {
         {/* breadcumbs */}
         <BreadcrumbsHeading
           First="Home"
-          Middle="Subscriptions"
+          Current="Subscriptions"
           Text="SUBSCRIPTIONS"
-          Link="/admin/subscription"
+          Link="/admin/subscriptions/allsubscription/"
         />
 
         {/* main content */}
@@ -205,11 +202,11 @@ const Subscriptions = () => {
                       style={{ width: '35% !important' }}
                       anchorOrigin={{
                         vertical: "bottom",
-                        horizontal: "left",
+                        horizontal: "right",
                       }}
                       transformOrigin={{
                         vertical: "top",
-                        horizontal: "center",
+                        horizontal: "right",
                       }}
                     >
                       <Box>
@@ -241,12 +238,18 @@ const Subscriptions = () => {
                                     render={({ field }) => (
                                       <FormControl fullWidth>
                                         <Select {...field} displayEmpty>
-                                          <MenuItem value={0}>All</MenuItem>
+                                          <MenuItem value={'all'}>All</MenuItem>
                                           <MenuItem value={'active'}>
                                             Active
                                           </MenuItem>
                                           <MenuItem value={'inactive'}>
                                             In-active
+                                          </MenuItem>
+                                          <MenuItem value={'canceled'}>
+                                            Cancel
+                                          </MenuItem>
+                                          <MenuItem value={'expired'}>
+                                            Expired
                                           </MenuItem>
                                         </Select>
                                       </FormControl>
@@ -294,7 +297,7 @@ const Subscriptions = () => {
                 )}
               </PopupState>
               &nbsp;
-              <Button variant="contained" onClick={() => router.push('/admin/subscription/addSubscription')} id={styles.muibuttonBackgroundColor}> + Add Subscription</Button>
+              {/* <Button variant="contained" onClick={() => router.push('/admin/subscriptions/allsubscription/addSubscription')} id={styles.muibuttonBackgroundColor}> + Add Subscription</Button> */}
             </Box>
             <Paper className={Subscription.papperForTable}>
               <TableContainer className={Subscription.tableContainer}>
@@ -338,8 +341,6 @@ const Subscriptions = () => {
                           return (
                             <TableRow
                               hover
-                              // role="checkbox"
-                              // tabIndex={-1}
                               key={row.id}
                             >
                               <TableCell>{row.id}</TableCell>
@@ -349,13 +350,13 @@ const Subscriptions = () => {
                               <TableCell>{row.duration_value}</TableCell>
                               <TableCell className={statusColor}>{capitalizeFirstLetter(row.status)}</TableCell>
                               <TableCell>{capitalizeFirstLetter(row?.user?.first_name)} {capitalizeFirstLetter(row?.user?.last_name)}</TableCell>
-                              <TableCell><Button onClick={() => router.push(`/admin/subscription/updatesubscription/${row.id}`)} variant="outlined" color="success" className={Subscription.editDeleteButton}><ModeEditOutlineIcon /></Button>
+                              {/* <TableCell><Button onClick={() => router.push(`/admin/subscription/updatesubscription/${row.id}`)} variant="outlined" color="success" className={Subscription.editDeleteButton}><ModeEditOutlineIcon /></Button>
                                 <Button className={Subscription.editDeleteButton} variant="outlined" color="error" onClick={() => handleClickOpen(row)}><DeleteOutlineIcon /></Button>
-                              </TableCell>
+                              </TableCell> */}
                             </TableRow>
                           );
                         })
-                      : <TableRow><TableCell colSpan={8} className={Subscription.tableLastCell}> <Typography>Record not Found</Typography> </TableCell></TableRow>}
+                      : <TableRow><TableCell colSpan={columns?.length} className={Subscription.tableLastCell}> <Typography>Record not Found</Typography> </TableCell></TableRow>}
                   </TableBody>
                 </Table>
                 <Stack

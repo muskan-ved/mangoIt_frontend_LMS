@@ -19,6 +19,7 @@ export default function HomePage() {
             setsubsdata(subscdata)
         })
     }
+
     return (
         <>
             {/*header*/}
@@ -33,7 +34,7 @@ export default function HomePage() {
                         <Divider className={styles.divder} />
                     </Box>
                     <Box p={5}>
-                        {subsdata.map((data, key) => {
+                        {subsdata?.map((data, key) => {
                             return (<SubscribtionPanCard subsdata={data} key={key} />)
                         })
                         }
