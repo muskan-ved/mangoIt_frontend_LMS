@@ -19,6 +19,7 @@ export default function HomePage() {
             setsubsdata(subscdata)
         })
     }
+
     return (
         <>
             {/*header*/}

@@ -31,6 +31,16 @@ export default function Checkout() {
         if (router.isReady) {
             getSubscribtion(id);
             router.push(`/checkout/${id}`);
+            let localData: any;
+            if (typeof window !== "undefined") {
+                localData = window.localStorage.getItem("userData");
+            }
+            if (localData) {
+                const userData = JSON.parse(localData);
+                setValue("firstname", userData?.first_name)
+                setValue("lastname", userData?.last_name)
+                setValue("email", userData?.email)
+            }
         }
     }, [router.isReady]);
 
@@ -40,6 +50,7 @@ export default function Checkout() {
             setsubscriptionplandet(subscdata)
         })
     }
+
     const {
         register,
         handleSubmit,

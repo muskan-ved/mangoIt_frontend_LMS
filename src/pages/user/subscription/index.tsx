@@ -45,15 +45,15 @@ import { GetdateAfterOneMonth } from "@/common/commonfunctions/connonfun";
 
 interface Column {
   id:
-    | "id"
-    | "name"
-    | "amount"
-    | "subsc_date"
-    | "next_pay_date"
-    | "status"
-    | "action"
-    | "type"
-    | "last_pay_date";
+  | "id"
+  | "name"
+  | "amount"
+  | "subsc_date"
+  | "next_pay_date"
+  | "status"
+  | "action"
+  | "type"
+  | "last_pay_date";
   label: string;
   minWidth?: number;
   align?: "right";
@@ -108,11 +108,14 @@ const Subscription = () => {
     getAllCourseData(getId);
   }, []);
 
+  //handle sort table
   const handleSort = (rowsData: any) => {
     const sortData = handleSortData(rowsData);
     setRows(sortData);
     setToggle(!toggle);
   };
+
+  //handle serch
   const handleSearch = (e: any, identifier: any) => {
     setPage(1);
     if (identifier === "reset") {
@@ -136,14 +139,14 @@ const Subscription = () => {
     }
   };
 
+  //get subscription det
   const getAllCourseData = (data: any) => {
     HandleSubscriptionGetByUserID(data?.id).then((subs) => {
-      setRows(subs.data);
+      setRows(subs?.data?.reverse());
     });
   };
 
-  console.log(rows);
-
+ 
   return (
     <>
       <Navbar />
@@ -225,13 +228,6 @@ const Subscription = () => {
                       {rows && rows.length > 0 ? (
                         DATA.currentData() &&
                         DATA.currentData().map((row: any) => {
-                          let color = row?.status;
-                          const statusColor =
-                            color === "active"
-                              ? courseStyle.activeClassColor
-                              : color === "canceled"
-                              ? courseStyle.inactiveClassColor
-                              : courseStyle.draftClassColor;
                           return (
                             <TableRow
                               hover
@@ -250,19 +246,26 @@ const Subscription = () => {
                               <TableCell>
                                 {moment(row?.createdAt).format("DD, MMMM YYYY")}
                               </TableCell>
-                              <TableCell>
-                                {moment(row?.start_date).format(
+                              <TableCell align="center">
+                                {row?.start_date ? moment(row?.start_date).format(
                                   "DD, MMMM YYYY"
-                                )}
+                                ) : ""}
                               </TableCell>
                               <TableCell>
-                                {moment(
+                                {row?.start_date ? moment(
                                   GetdateAfterOneMonth(row?.start_date)
-                                ).format("DD, MMMM YYYY")}
+                                ).format("DD, MMMM YYYY") : ""}
                               </TableCell>
-                              <TableCell className={statusColor}>
-                                {capitalizeFirstLetter(row?.status)}
-                              </TableCell>
+                              {row?.status === "active" ? (<TableCell>
+                                <Typography style={{ color: "green" }}>{capitalizeFirstLetter(row?.status)}</Typography>
+                              </TableCell>)
+                                : row?.status === "inactive" ? (<TableCell style={{ color: "red" }}>
+                                  {capitalizeFirstLetter(row?.status)}
+                                </TableCell>) : row?.status === "canceled" ? (<TableCell style={{ color: "red" }}>
+                                  {capitalizeFirstLetter(row?.status)}
+                                </TableCell>) : <TableCell style={{ color: "red" }}>
+                                  {capitalizeFirstLetter(row?.status)}
+                                </TableCell>}
                               <TableCell>
                                 <Button
                                   className={courseStyle.editDeleteButton}

@@ -120,6 +120,7 @@ export default function CoursesDetailsPage() {
     const [enrolled, setenrolled] = useState<any>(false);
     const [EnrolledCourses, setEnrolledCoursess] = useState([]);
     const [checkuserSubscStatus, setcheckuserSubscStatus] = useState([]);
+
     useEffect(() => {
         if (router.isReady) {
             let localData: any;
@@ -141,6 +142,7 @@ export default function CoursesDetailsPage() {
             }
         }
     }, [router.isReady, id]);
+
     //get course details by id
     const getCourseDetails = () => {
         HandleCourseByCourseId(id).then((coursedetails) => {
@@ -166,12 +168,47 @@ export default function CoursesDetailsPage() {
             setsubsdata(subscdata)
         })
     }
-
-
     //get top enrolled courses
     const getTopEnrolledCourses = () => {
         TopEnrolledCourses().then((res) => {
             setEnrolledCoursess(res?.data)
+        })
+    }
+    //enroll course
+    const enrolledCourse = () => {
+        const reqData = {
+            user_id: userData?.id,
+            course_id: id,
+            course_type: coursedet?.is_chargeable,
+        }
+        UserEnrolledCourses(reqData).then(res => {
+            if (res?.status) {
+                toast.success("Course Enrolled successfully");
+                CheckenrolledCourse(userData?.id);
+            }
+        })
+    }
+    //check course enrolled or not
+    const CheckenrolledCourse = (dt: any) => {
+        const reqData = {
+            user_id: dt,
+            course_id: id
+        }
+        CheckEnrolledCourses(reqData).then(res => {
+            if (res?.data?.length > 0) {
+                setenrolled(true)
+            } else {
+                setenrolled(false)
+            };
+        })
+    }
+
+    //check user subscription 
+    const ChecUserSubscription = (user_id: any) => {
+        HandleSubscriptionGetByUserID(user_id).then(res => {
+            if (res) {
+                setcheckuserSubscStatus(res?.data?.reverse())
+            };
         })
     }
 
@@ -194,43 +231,25 @@ export default function CoursesDetailsPage() {
         setOpen1(false);
     };
 
+    const LoginforSubsc = () => {
+        setOpen(false);
+        router.push('/login')
+    }
+
     const Getsubscription = () => {
         setOpen(false);
-        router.push('/subscribeplan')
+        if (checkuserSubscStatus[0]?.status === 'inactive') {
+            router.push(`/user/subscription/view/${checkuserSubscStatus[0]?.id}`)
+        } else if (checkuserSubscStatus[0]?.status === 'expired') {
+            router.push(`/user/subscription/view/${checkuserSubscStatus[0]?.id}`)
+        } else {
+            router.push('/subscribeplan')
+        }
     }
 
     const Enrolled = () => {
         toast.success("You are already enrolled");
     }
-
-    //enroll course
-    const enrolledCourse = () => {
-        const reqData = {
-            user_id: userData?.id,
-            course_id: id,
-            course_type: coursedet?.is_chargeable,
-        }
-        UserEnrolledCourses(reqData).then(res => {
-            if (res?.status) {
-                toast.success("Course Enrolled successfully");
-                CheckenrolledCourse(userData?.id);
-            }
-        })
-    }
-
-    //check course enrolled or not
-    const CheckenrolledCourse = (dt: any) => {
-        const reqData = {
-            user_id: dt,
-            course_id: id
-        }
-        CheckEnrolledCourses(reqData).then(res => {
-            if (res?.data?.length > 0) {
-                setenrolled(true)
-            };
-        })
-    }
-
 
     const breadcrumbs = [
         <Link
@@ -249,17 +268,6 @@ export default function CoursesDetailsPage() {
     coursedet && coursedet?.modules?.forEach((element: any) => {
         rotalsession += element?.sessions?.length;
     });
-
-
-    //check user subscription 
-    //check course enrolled or not
-    const ChecUserSubscription = (user_id: any) => {
-        HandleSubscriptionGetByUserID(user_id).then(res => {
-            if (res) {
-                setcheckuserSubscStatus(res?.data)
-            };
-        })
-    }
 
     return (
         <>
@@ -288,42 +296,48 @@ export default function CoursesDetailsPage() {
                                 />
                                 <CardContent sx={{ flex: 1, paddingTop: "0px", paddingBottom: '0px' }} >
                                     <Typography component="h2" variant="h5" sx={{ fontSize: "2.5rem", fontWeight: "bold" }}>
-                                        {capitalizeFirstLetter(coursedet?.title)}
+                                        {coursedet?.title ? capitalizeFirstLetter(coursedet?.title) : ""}
                                     </Typography>
                                     <Typography variant="subtitle1" color="text.secondary">
-                                        Type : {capitalizeFirstLetter(coursedet?.is_chargeable)}
+                                        Type : {coursedet?.is_chargeable ? capitalizeFirstLetter(coursedet?.is_chargeable) : ""}
                                     </Typography>
                                     <Typography variant="subtitle1" paragraph sx={{ fontFamily: "sans - serif" }}>
-                                        {capitalizeFirstLetter(coursedet?.short_description ? coursedet?.short_description?.replace(/(<([^>]+)>)/ig, '')
-                                            : "")}
+                                        {coursedet?.short_description ? capitalizeFirstLetter(coursedet?.short_description ? coursedet?.short_description?.replace(/(<([^>]+)>)/ig, '')
+                                            : "") : ""}
                                     </Typography>
                                     <Typography variant="subtitle1" color="text.secondary" paragraph sx={{ fontFamily: "sans - serif" }}>120 <sup>+</sup> Enrolled Students</Typography>
-                                    {userData ? (
-                                        <>
-                                            {enrolled === true ? (
-                                                <Button variant="contained" className="authPageButton" id={styles.muibuttonBackgroundColor}
-                                                    onClick={Enrolled}
-                                                >
-                                                    Enrolled
-                                                </Button>
-                                            ) :
-                                                checkuserSubscStatus.length > 0 || coursedet?.is_chargeable === "free" ? (<Button variant="contained" className="authPageButton" id={styles.muibuttonBackgroundColor}
-                                                    onClick={enrolledCourse}
-                                                >
-                                                    Enroll Now
-                                                </Button>)
-                                                    : <Button variant="contained" className="authPageButton" id={styles.muibuttonBackgroundColor}
-                                                        onClick={handleClickOpenCheckSubsc}
+                                    {userData ?
+                                        (
+                                            <>
+                                                {enrolled === true ?
+                                                    (
+                                                        <Button variant="contained" className="authPageButton" id={styles.muibuttonBackgroundColor}
+                                                            onClick={Enrolled}
+                                                        >
+                                                            Enrolled
+                                                        </Button>
+                                                    ) :
+                                                    checkuserSubscStatus.length <= 0 && coursedet?.is_chargeable === "free" ? (<Button variant="contained" className="authPageButton" id={styles.muibuttonBackgroundColor}
+                                                        onClick={enrolledCourse}
                                                     >
                                                         Enroll Now
-                                                    </Button>
-                                            }
-                                        </>
-                                    ) : <Button variant="contained" className="authPageButton" id={styles.muibuttonBackgroundColor}
-                                        onClick={handleClickOpen}
-                                    >
-                                        Enroll Now
-                                    </Button>}
+                                                    </Button>)
+                                                        : checkuserSubscStatus.length > 0 && coursedet?.is_chargeable === "paid" && (checkuserSubscStatus[0]?.status === "active") ? (<Button variant="contained" className="authPageButton" id={styles.muibuttonBackgroundColor}
+                                                            onClick={enrolledCourse}
+                                                        >
+                                                            Enroll Now
+                                                        </Button>) : (<Button variant="contained" className="authPageButton" id={styles.muibuttonBackgroundColor}
+                                                            onClick={handleClickOpenCheckSubsc}
+                                                        >
+                                                            Enroll Now
+                                                        </Button>)
+                                                }
+                                            </>
+                                        ) : <Button variant="contained" className="authPageButton" id={styles.muibuttonBackgroundColor}
+                                            onClick={handleClickOpen}
+                                        >
+                                            Enroll Now
+                                        </Button>}
                                 </CardContent>
                             </Box>
                         </Grid>
@@ -349,7 +363,7 @@ export default function CoursesDetailsPage() {
                                         About This Course
                                     </Typography>
                                     <Typography variant="body2" color="text.primary" mt={1} sx={{ lineHeight: "26px" }}>
-                                        {capitalizeFirstLetter(coursedet?.long_description?.replace(/(<([^>]+)>)/ig, ''))}
+                                        {coursedet?.long_description ? capitalizeFirstLetter(coursedet?.long_description?.replace(/(<([^>]+)>)/ig, '')) : ""}
                                     </Typography>
                                     <Box sx={{ border: "1px solid gray", marginTop: "30px", padding: "10px" }}>
                                         <Typography gutterBottom variant="h5" component="div" sx={{ fontWeight: "bold" }} >
@@ -525,7 +539,7 @@ export default function CoursesDetailsPage() {
                                         }}>
                                         {Courses?.slice(0, 10).map((data: any, key: any) => {
                                             return (<ListItem key={key} >
-                                                <Link href={`/coursedetails/${data?.course.id}`} className={styles.listitems}>{capitalizeFirstLetter(data?.course?.title)}
+                                                <Link href={`/coursedetails/${data?.course.id}`} className={styles.listitems}>{data?.course?.title ? capitalizeFirstLetter(data?.course?.title) : ""}
                                                 </Link>
                                             </ListItem >)
                                         })}
@@ -630,20 +644,22 @@ export default function CoursesDetailsPage() {
                 aria-labelledby="customized-dialog-title"
                 open={open}
             >
-                <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
+                {/* <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
                     Take Subscription Now
-                </BootstrapDialogTitle>
+                </BootstrapDialogTitle> */}
                 <DialogContent >
                     <Typography gutterBottom>
-                        Hii, user if you have a already subscriptins in LMS please login and enroll course.
+                        {/* Hii, user if you have a already subscriptins in LMS Portal.  */}
+                        Please login to enroll in courses.
                     </Typography>
-                    <Typography gutterBottom>
+                    {/* <Typography gutterBottom>
                         Don&apos;t have a subscriptions please subscribe.
-                    </Typography>
+                    </Typography> */}
                 </DialogContent>
-                <DialogActions>
-                    <Button autoFocus variant="contained" id={styles.muibuttonBackgroundColor} onClick={Getsubscription}>
-                        Subscribe Now
+                <DialogActions style={{ padding: "0px 10px 10px 0px" }}>
+                    <Button autoFocus variant="contained" id={styles.muibuttonBackgroundColor} onClick={LoginforSubsc}>
+                        {/* Subscribe Now */}
+                        Login
                     </Button>
                 </DialogActions>
             </BootstrapDialog>
@@ -653,19 +669,20 @@ export default function CoursesDetailsPage() {
                 aria-labelledby="customized-dialog-title"
                 open={open1}
             >
-                <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose1}>
+                {/* <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose1}>
                     Take Subscription Now
-                </BootstrapDialogTitle>
+                </BootstrapDialogTitle> */}
                 <DialogContent >
                     <Typography gutterBottom>
-                        Hii,  <Typography gutterBottom sx={{ fontWeight: "bold" }}> {userData?.first_name} </Typography> You Don&apos;t have a any subscriptions in LMS portal. Please subscribe and enroll paid courses.
+                        {/* Hii,  <Typography gutterBottom sx={{ fontWeight: "bold" }}> {userData?.first_name} </Typography> You Don&apos;t have a any subscriptions in LMS portal. Please subscribe and enroll paid courses. */}
+                        Please Subscribe to paid courses and enroll
                     </Typography>
                     <Typography gutterBottom>
                     </Typography>
                 </DialogContent>
-                <DialogActions>
+                <DialogActions style={{ padding: "0px 10px 10px 0px" }}>
                     <Button autoFocus variant="contained" id={styles.muibuttonBackgroundColor} onClick={Getsubscription} >
-                        Subscribe Now
+                        Subscribe
                     </Button>
                 </DialogActions>
             </BootstrapDialog>
