@@ -14,8 +14,6 @@ import {
   CardContent,
   Grid,
   InputLabel,
-  Tab,
-  Tabs,
   TextField,
   Typography,
 } from "@mui/material";
@@ -24,8 +22,8 @@ import { LoadingButton } from "@mui/lab";
 import CircularProgressBar from "@/common/CircularProcess/circularProgressBar";
 
 // ** CSS Imports
-import styles from "../../../styles/sidebar.module.css";
-import siteStyles from "../../../styles/allConfigurations.module.css";
+import styles from "../../../../styles/sidebar.module.css";
+import siteStyles from "../../../../styles/allConfigurations.module.css";
 import { ToastContainer } from "react-toastify";
 
 // ** React Imports
@@ -43,43 +41,9 @@ import {
   HandleSiteGetByID,
 } from "@/services/site";
 import { NextPageContext } from "next";
-import Stripe from "./stripeConfiguration";
 
 interface SiteConfigPageProps {
   siteConfigData: any; // Replace with the actual type of your site config data
-}
-
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
-
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          {children}
-        </Box>
-      )}
-    </div>
-  );
-}
-
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
 }
 
 const SiteConfiguration = () => {
@@ -91,7 +55,6 @@ const SiteConfiguration = () => {
   const [isLoading, setLoading] = useState<boolean>(false);
   const [isAddOrEdit, setIsAddOrEdit] = useState<boolean>(false);
   const [portalData, setPortalData] = useState<siteType | any>("");
-  const [tabs, setTab] = useState(0);
 
   const {
     register,
@@ -102,10 +65,6 @@ const SiteConfiguration = () => {
   } = useForm<siteType | any>({
     resolver: yupResolver(siteConfigValidations),
   });
-
-  const handleChangeTab = (event: React.SyntheticEvent, newValue: number) => {
-    setTab(newValue);
-  };
 
   const onSubmit = async (event: any) => {
     const formData = new FormData();
@@ -258,7 +217,7 @@ const SiteConfiguration = () => {
           {/* breadcumbs */}
           <BreadcrumbsHeading
             First="Home"
-            Middle="Configuration"
+            Middle="Site Configuration"
             Text="CONFIGURATION"
             Link="/admin/configuration/"
           />
@@ -266,17 +225,6 @@ const SiteConfiguration = () => {
           {/* main content */}
           <Card>
             <CardContent>
-              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                <Tabs
-                  value={tabs}
-                  onChange={handleChangeTab}
-                  aria-label="basic tabs example"
-                >
-                  <Tab label="Organisation" className={styles.wholeWebsiteButtonColor} {...a11yProps(0)} />
-                  <Tab label="Stripe" className={styles.wholeWebsiteButtonColor} {...a11yProps(1)} />
-                </Tabs>
-              </Box>
-              <TabPanel value={tabs} index={0}>
                 {!isLoading ? (
                   !isAddOrEdit ? (
                     // Save data in portal
@@ -682,10 +630,6 @@ const SiteConfiguration = () => {
                 ) : (
                   <SpinnerProgress />
                 )}
-              </TabPanel>
-              <TabPanel value={tabs} index={1}>
-                <Stripe />
-              </TabPanel>
             </CardContent>
           </Card>
         </Box>

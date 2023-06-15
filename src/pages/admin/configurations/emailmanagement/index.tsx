@@ -2,7 +2,7 @@ import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
 import Navbar from "@/common/LayoutNavigations/navbar";
 import SideBar from "@/common/LayoutNavigations/sideBar";
 import { Box } from "@mui/system";
-import styles from "../../../styles/sidebar.module.css";
+import styles from "../../../../styles/sidebar.module.css";
 import {
   Button,
   Card,
@@ -24,7 +24,7 @@ import { handleSortData } from "@/common/Sorting/sorting";
 import ArrowDownwardOutlinedIcon from "@mui/icons-material/ArrowDownwardOutlined";
 import ArrowUpwardOutlinedIcon from "@mui/icons-material/ArrowUpwardOutlined";
 import { emailmanagementType } from "@/types/siteType";
-import emailStyles from "../../../styles/allConfigurations.module.css";
+import emailStyles from "../../../../styles/allConfigurations.module.css";
 import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
 import SpinnerProgress from "@/common/CircularProgressComponent/spinnerComponent";
 
@@ -83,9 +83,9 @@ const EmailConfiguration = () => {
           {/* breadcumbs */}
           <BreadcrumbsHeading
             First="Home"
-            Middle="Email"
-            Text="EMAIL MANAGEMENT"
-            Link="/admin/emailmanagement"
+            Current="Email Management"
+            Text="EMAIL"
+            Link="admin/configurations/emailmanagement/"
           />
 
           {/* main content */}
@@ -99,7 +99,7 @@ const EmailConfiguration = () => {
                       variant="contained"
                       id={styles.muibuttonBackgroundColor}
                       onClick={() =>
-                        router.push("/admin/emailmanagement/addemailcontent")
+                        router.push("/admin/configurations/emailmanagement/addemailcontent")
                       }
                     >
                       + Add New{" "}
@@ -161,7 +161,7 @@ const EmailConfiguration = () => {
                                     <Button
                                       onClick={() =>
                                         router.push(
-                                          `/admin/emailmanagement/emailcontentmanage/${row.id}`
+                                          `/admin/configurations/emailmanagement/emailcontentmanage/${row.id}`
                                         )
                                       }
                                       variant="outlined"

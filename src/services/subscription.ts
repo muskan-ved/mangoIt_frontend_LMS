@@ -4,9 +4,9 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { HandleLogout } from "./auth";
-import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
 
 export const HandleSubscriptionGet = async (search: string, reqData?: any) => {
+
   const API_URL = search
     ? `${API.getAllSubscription}/${search}`
     : `${API.getAllSubscription}`;
@@ -238,21 +238,26 @@ export const CreateUserSubsction = async (reqData: any) => {
     });
 };
 
-// export const UpdaUserSubscription = async (
-//   reqData: any,
-//   subscription_id: any
-// ) => {
-//   return await axios({
-//     method: "PUT",
-//     url: `${API.updateSubscription}/${subscription_id}`,
-//     headers: authHeader(),
-//     data: reqData,
-//   })
-//     .then((responce) => {
-//       return responce?.data;
-//     })
-//     .catch((error) => {
-//       if (error.response.status === 401) HandleLogout();
-//       else return error;
-//     });
-// };
+export const HandleInvoicesGet = async (search: string, reqData?: any) => {
+
+  const API_URL = search
+    ? `${API.getInvoices}/${search}`
+    : `${API.getInvoices}`;
+  return await axios({
+    method: "POST",
+    url: API_URL,
+    headers: LoginHeader(),
+    data: reqData,
+  })
+    .then((request) => {
+      return request;
+    })
+    .catch((error) => {
+      if (error.response.status === 401) {
+        HandleLogout();
+      } else {
+        toast.error("Something went wrong");
+      }
+      return error;
+    });
+};

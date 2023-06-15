@@ -4,6 +4,14 @@ import { FC } from "react";
 import { breadcrumbsVariableTypes } from "@/types/breadcrumbs";
 import { FRONTEND_BASE_URL } from "@/config/config";
 
+interface BreadcrumbsType{
+  First:string
+  Middle?:string
+  Current:string
+  Text:string
+  Link:string
+}
+
 const BreadcrumbsHeading: FC<breadcrumbsVariableTypes> = (props): any => {
   return (
     <Stack direction="row" spacing={2} justifyContent="space-between">
@@ -14,12 +22,13 @@ const BreadcrumbsHeading: FC<breadcrumbsVariableTypes> = (props): any => {
               key="1"
               color="inherit"
               href={
-                props && props?.Link?.includes("user") ? "dashboard" : "dashboard"
+                props && props?.Link?.includes("user") ? `${FRONTEND_BASE_URL}/user/dashboard` : `${FRONTEND_BASE_URL}/admin/dashboard`
               }
-              style={{ color: "#E8661B", textDecoration: "none" }}
-            >
+              style={{ color: "#7D86A5", textDecoration: "none" }}
+              >
               {props.First}
             </Link>
+            {props.Middle ? 
             <Link
               key="2"
               color="inherit"
@@ -27,7 +36,17 @@ const BreadcrumbsHeading: FC<breadcrumbsVariableTypes> = (props): any => {
               style={{ color: "#7D86A5", textDecoration: "none" }}
             >
               {props.Middle}
-            </Link>
+            </Link>:
+            ''}
+            
+            <Link
+            key="2"
+            color="inherit"
+            href={'#'}
+            style={{ color: "#E8661B", textDecoration: "none" }}
+          >
+            {props.Current}
+          </Link>
           </Breadcrumbs>
         </Stack>
         <Typography
