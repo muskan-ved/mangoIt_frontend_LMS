@@ -104,7 +104,8 @@ const AllUsers = () => {
 	}, []);
 
 	const getUsereData = () => {
-		HandleUserGet('', '').then((users) => {;
+		HandleUserGet('', '').then((users) => {
+			;
 			setRows(users.data);
 		})
 	}
@@ -222,7 +223,7 @@ const AllUsers = () => {
 															<Box component="form"
 																noValidate
 																onSubmit={handleSubmit(onSubmit)}
-																>
+															>
 																<Stack
 																	style={{ marginTop: "10px" }}
 																	className="form-filter"
@@ -286,7 +287,7 @@ const AllUsers = () => {
 																		>
 																			<Box className={UserCss.boxInFilter}>
 																				<Button
-																			
+																					id={styles.muibuttonBackgroundColor}
 																					size="medium"
 																					variant="contained"
 																					color="primary"
@@ -358,7 +359,7 @@ const AllUsers = () => {
 											{rows && rows.length > 0 ? DATA.currentData() &&
 												DATA.currentData()
 													.map((row: any) => {
-														 const statusColor = (row.status === "active" ? UserCss.activeClassColor : row.status === "inactive" ? UserCss.inactiveClassColor : UserCss.draftClassColor)
+														const statusColor = (row.status === "active" ? UserCss.activeClassColor : row.status === "inactive" ? UserCss.inactiveClassColor : UserCss.draftClassColor)
 
 														return (
 															<TableRow
@@ -371,7 +372,7 @@ const AllUsers = () => {
 																<TableCell>{capitalizeFirstLetter(row?.first_name)}</TableCell>
 																<TableCell>{capitalizeFirstLetter(row?.last_name)}</TableCell>
 																<TableCell>{row?.email}</TableCell>
-																<TableCell>{row?.role_id == 1 ? 'Admin' : 'Learner'}</TableCell> 
+																<TableCell>{row?.role_id == 1 ? 'Admin' : 'Learner'}</TableCell>
 																<TableCell className={statusColor}>{capitalizeFirstLetter(row?.status)}</TableCell>
 																<TableCell><Button onClick={() => router.push(`/admin/users/updateuser/${row.id}`)} variant="outlined" color="success" className={UserCss.editDeleteButton} ><ModeEditOutlineIcon /></Button>
 																	<Button className={UserCss.editDeleteButton} variant="outlined" color="error" onClick={() => handleClickOpen(row)}><DeleteOutlineIcon /></Button>

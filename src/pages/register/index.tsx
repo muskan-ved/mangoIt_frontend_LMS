@@ -4,7 +4,6 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import styles from "../../styles/login.module.css";
 import sidebarStyles from "../../styles/sidebar.module.css";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import GoogleIcon from "@mui/icons-material/Google";
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { registerType } from "../../types/authType";
@@ -193,7 +192,13 @@ export default function Register() {
                   type="button"
                   fullWidth
                   variant="outlined"
-                  startIcon={<GoogleIcon />}
+                  startIcon={ <Box
+                    component={"img"}
+                    src={"/Images/pages/google.svg"}
+                    width={"18px"}
+                    height={"18px"}
+                 
+                  />}
                   sx={{ mt: 3 , color: "#000",borderColor: "#e8661b"}}
                 >
                   Continue with Google
