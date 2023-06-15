@@ -159,6 +159,7 @@ export default function Courses() {
                                         className="pagination"
                                         count={count}
                                         page={page}
+                                        color="primary"
                                         onChange={handlePageChange}
                                     />
                                 </Stack>

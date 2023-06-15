@@ -5,10 +5,10 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { HandleLogout } from "./auth";
 
-export const HandleOrderGetByUserID = async (orderId: any) => {
+export const HandleOrderGetByUserID = async (subscription_id: any) => {
   return await axios({
     method: "GET",
-    url: `${API.getOrder}/${orderId}`,
+    url: `${API.getOrder}/${subscription_id}`,
     headers: LoginHeader(),
   })
     .then((request) => {
@@ -23,8 +23,6 @@ export const HandleOrderGetByUserID = async (orderId: any) => {
       return error;
     });
 };
-
-
 
 export const CreateOrder = async (reqdata: any) => {
   return await axios({
