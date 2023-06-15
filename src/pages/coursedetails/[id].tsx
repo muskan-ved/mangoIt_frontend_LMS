@@ -119,7 +119,7 @@ export default function CoursesDetailsPage() {
     const [userData, setUserData] = useState<any>("");
     const [enrolled, setenrolled] = useState<any>(false);
     const [EnrolledCourses, setEnrolledCoursess] = useState([]);
-    const [checkuserSubscStatus, setcheckuserSubscStatus] = useState([]);
+    const [checkuserSubscStatus, setcheckuserSubscStatus] = useState<any>([]);
 
     useEffect(() => {
         if (router.isReady) {
