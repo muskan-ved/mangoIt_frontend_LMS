@@ -7,7 +7,6 @@ import Typography from "@mui/material/Typography";
 import styles from "../../styles/login.module.css";
 import sidebarStyles from "../../styles/sidebar.module.css";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import GoogleIcon from "@mui/icons-material/Google";
 import AuthSidebar from "../../common/LayoutNavigations/authSideLayout";
 import CircularProgressBar from "@/common/CircularProcess/circularProgressBar";
 import { LoadingButton } from "@mui/lab";
@@ -242,7 +241,13 @@ export default function Login() {
                   type="button"
                   fullWidth
                   variant="outlined"
-                  startIcon={<GoogleIcon />}
+                  startIcon={ <Box
+                    component={"img"}
+                    src={"/Images/pages/google.svg"}
+                    width={"18px"}
+                    height={"18px"}
+                 
+                  />}
                   disabled={googleLoading}
                   onClick={() => googleLogin()}
                   sx={{ mt: 3 , color: "#000",borderColor: "#e8661b"}}

@@ -15,6 +15,7 @@ import styles from "../../styles/appbar.module.css";
 import { HandleLogout } from "@/services/auth";
 import { capitalizeFirstLetter } from "../CapitalFirstLetter/capitalizeFirstLetter";
 import { BASE_URL } from "@/config/config";
+import Link from "next/link";
 
 interface appbar {
   portalData?: any;
@@ -155,6 +156,7 @@ export default function Navbar({ portalData, profilePic }: appbar) {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" className={styles.appBarCss}>
         <Toolbar>
+        <Link href={"dashboard"} >
           <Box
             component="img"
             src={
@@ -167,6 +169,7 @@ export default function Navbar({ portalData, profilePic }: appbar) {
             sx={{ display: { xs: "block", sm: "block" } }}
             alt="Company logo"
           />
+           </Link>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <Box className={styles.createVrLine}></Box>
