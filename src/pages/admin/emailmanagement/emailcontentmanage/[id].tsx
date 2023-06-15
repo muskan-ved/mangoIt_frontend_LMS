@@ -278,6 +278,7 @@ const EmailContentManage = () => {
                       type="button"
                       size="large"
                       className={emailStyle.bothButtonSpace}
+                      id={styles.muibuttonBackgroundColor}
                       variant="contained"
                       onClick={() => router.back()}
                     >
