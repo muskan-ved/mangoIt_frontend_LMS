@@ -3,18 +3,17 @@ import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import ContentPasteOutlinedIcon from "@mui/icons-material/ContentPasteOutlined";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
-import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import QueryStatsOutlinedIcon from "@mui/icons-material/QueryStatsOutlined";
 import PowerSettingsNewOutlinedIcon from "@mui/icons-material/PowerSettingsNewOutlined";
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import ViewModuleOutlinedIcon from "@mui/icons-material/ViewModuleOutlined";
 import SubscriptionsOutlinedIcon from "@mui/icons-material/SubscriptionsOutlined";
 import ManageAccountsOutlinedIcon from "@mui/icons-material/ManageAccountsOutlined";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
 import PaymentOutlinedIcon from "@mui/icons-material/PaymentOutlined";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import GradingOutlinedIcon from '@mui/icons-material/GradingOutlined';
+import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
 
 export const VerticalMenuItems = () => {
   const [userData, setUserData] = React.useState<any>("");
@@ -70,6 +69,12 @@ export const VerticalMenuItems = () => {
         disable: true,
       },
       {
+        title: "Users",
+        icon: PeopleAltOutlinedIcon,
+        path: "/admin/users",
+        disable: false,
+      },
+      {
         title: "Courses",
         icon: DescriptionOutlinedIcon,
         children: [
@@ -94,41 +99,57 @@ export const VerticalMenuItems = () => {
         ],
       },
       {
-        title: "Users",
-        icon: PeopleAltOutlinedIcon,
-        path: "/admin/users",
-        disable: false,
-      },
-      {
-        title: "Subscriptions",
+        title: 'Subscriptions',
         icon: SubscriptionsOutlinedIcon,
-        path: "/admin/subscription",
-        disable: false,
-      },
+        children: [
+          {
+            title: 'All Subs.',
+            icon: PaidOutlinedIcon,
+            path: "/admin/subscriptions/allsubscription",
+            disable: false,
+          },
+          {
+            title: 'Subs. Plans',
+            icon: GradingOutlinedIcon,
+            path: "/admin/subscriptions/plans",
+            disable: false,
 
-      {
-        title: "Email Mngmt",
-        icon: EmailOutlinedIcon,
-        path: "/admin/emailmanagement",
-        disable: false,
+          },
+          {
+            title: 'Invoices',
+            icon: DescriptionOutlinedIcon,
+            path: "/admin/subscriptions/invoices",
+            disable: false,
+
+          }
+        ]
       },
       {
-        title: "Configurations",
-        icon: LanguageOutlinedIcon,
-        path: "/admin/configuration",
-        disable: false,
-      },
-      {
-        title: "Invoices",
-        icon: InsertDriveFileOutlinedIcon,
-        path: "/admin/invoices",
-        disable: true,
-      },
-      {
-        title: "Settings",
-        icon: SettingsOutlinedIcon,
-        path: "/admin/settings",
-        disable: true,
+        title: 'Configurations',
+        icon: QueryStatsOutlinedIcon,
+        children: [
+          {
+            title: 'Email Mngmt',
+            icon: EmailOutlinedIcon,
+            path: "/admin/configurations/emailmanagement",
+            disable: false,
+
+          },
+          {
+            title: 'Site Config',
+            icon: LanguageOutlinedIcon,
+            path: "/admin/configurations/site",
+            disable: false,
+
+          },
+          {
+            title: 'Stripe Config',
+            icon: PaymentOutlinedIcon,
+            path: "/admin/configurations/stripe",
+            disable: false,
+
+          }
+        ]
       },
       {
         title: "Logout",

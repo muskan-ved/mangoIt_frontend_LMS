@@ -13,7 +13,7 @@ const Dashboard = () => {
             <Box className={styles.siteBodyContainer}>
 
                 {/* breadcumbs */}
-                <BreadcrumbsHeading First='Home' Middle='Dashboard' Text="DASHBOARD" Link="/dashboard" />
+                <BreadcrumbsHeading First='Home' Current='Dashboard' Text="DASHBOARD" Link="/dashboard" />
 
                 {/* main content */}
                 <Box > dashboard</Box>

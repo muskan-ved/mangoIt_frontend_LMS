@@ -2,7 +2,7 @@ import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
 import Navbar from "@/common/LayoutNavigations/navbar";
 import SideBar from "@/common/LayoutNavigations/sideBar";
 import { Box } from "@mui/system";
-import styles from "../../../../styles/sidebar.module.css";
+import styles from "../../../../../styles/sidebar.module.css";
 import {
   Button,
   Card,
@@ -20,7 +20,7 @@ import CircularProgressBar from "@/common/CircularProcess/circularProgressBar";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { emailmanagementConfigValidations } from "@/validation_schema/configurationValidation";
-import emailStyle from "../../../../styles/allConfigurations.module.css";
+import emailStyle from "../../../../../styles/allConfigurations.module.css";
 import { emailmanagementType } from "@/types/siteType";
 import {
   HandleEmailContentGetByID,
@@ -121,7 +121,7 @@ const EmailContentManage = () => {
         handleGetData();
         if (res?.status === 201) {
           setTimeout(() => {
-            router.replace("/admin/emailmanagement/");
+            router.replace("admin/configurations/emailmanagement/");
           }, 2000);
         }
       })
@@ -141,9 +141,10 @@ const EmailContentManage = () => {
           {/* breadcumbs */}
           <BreadcrumbsHeading
             First="Home"
-            Middle="Email"
-            Text="EMAIL MANAGEMENT"
-            Link="/admin/emailmanagement"
+            Middle="Email Management"
+            Link="/admin/configurations/emailmanagement"
+            Current="Update Email Management"
+            Text="EMAIL"
           />
 
           {/* main content */}
