@@ -58,6 +58,8 @@ export const API = {
   createEmailType: `${BASE_URL}/${process.env.NEXT_PUBLIC_EMAIL_TYPE_CREATE}`,
   updateEmailType: `${BASE_URL}/${process.env.NEXT_PUBLIC_EMAIL_TYPE_UPDATE}`,
 
+  getInvoices: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_INVOICES}`,
+
   getOrder: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_ORDER_BY_USER_ID}`,
 
   //accept payment

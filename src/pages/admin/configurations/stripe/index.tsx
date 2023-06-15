@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import {
   Box,
   Button,
+  Card,
+  CardContent,
   Grid,
   InputLabel,
   TextField,
@@ -14,8 +16,8 @@ import { LoadingButton } from "@mui/lab";
 import CircularProgressBar from "@/common/CircularProcess/circularProgressBar";
 
 // ** CSS Imports
-import siteStyles from "../../../styles/allConfigurations.module.css";
-import styles from "../../../styles/sidebar.module.css";
+import siteStyles from "../../../../styles/allConfigurations.module.css";
+import styles from "../../../../styles/sidebar.module.css";
 import { ToastContainer } from "react-toastify";
 
 // ** React Imports
@@ -32,10 +34,15 @@ import {
   HandleSiteConfigUpdate,
   HandleSiteGetByID,
 } from "@/services/site";
+import Navbar from "@/common/LayoutNavigations/navbar";
+import SideBar from "@/common/LayoutNavigations/sideBar";
+import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
+import SpinnerProgress from "@/common/CircularProgressComponent/spinnerComponent";
 
 const Stripe = () => {
   const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
   const [isAddOrEdit, setIsAddOrEdit] = useState<boolean>(false);
+  const [isLoading, setLoading] = useState<boolean>(false);
 
   const {
     register,
@@ -63,6 +70,7 @@ const Stripe = () => {
     await HandleSiteConfigCreate(formData, "stripe saved")
       .then((res) => {
         setLoadingButton(false);
+
         handleGetDataById(res?.data?.user_id);
         setIsAddOrEdit(true);
       })
@@ -102,6 +110,7 @@ const Stripe = () => {
       .catch((err) => {
         console.log(err);
       });
+      setLoading(false)
   };
 
   useEffect(() => {
@@ -110,6 +119,7 @@ const Stripe = () => {
       localData = window.localStorage.getItem("userData");
     }
     const user_id = JSON.parse(localData);
+    setLoading(true)
     handleGetDataById(user_id?.id);
   }, []);
 
@@ -137,8 +147,25 @@ const Stripe = () => {
   };
 
   return (
-    <>
-      {!isAddOrEdit ? (
+    <>      <Navbar />
+    <ToastContainer />
+    <Box className={styles.combineContentAndSidebar}>
+      <SideBar />
+
+      <Box className={styles.siteBodyContainer}>
+        {/* breadcumbs */}
+        <BreadcrumbsHeading
+          First="Home"
+          Middle="Stripe Configuration"
+          Text="CONFIGURATION"
+          Link="/admin/configuration/"
+        />
+
+        {/* main content */}
+        <Card>
+          <CardContent>
+          {!isLoading ? (
+      !isAddOrEdit ? (
         // Save data in portal
         <Box
           component="form"
@@ -305,7 +332,14 @@ const Stripe = () => {
             </Grid>
           </Grid>
         </Box>
+      )): (
+        <SpinnerProgress />
       )}
+  </CardContent>
+</Card>
+</Box>
+</Box>
+
       <ToastContainer />{" "}
     </>
   );
