@@ -77,6 +77,7 @@ export default function Couseview() {
   const [userId, setUserId] = useState<any>("");
 
   var fileViewComplete: any = 0;
+  var viewhistoryLength: any = [];
 
   useEffect(() => {
     let localData: any;
@@ -129,7 +130,6 @@ export default function Couseview() {
     if (rowData.attachment !== null) {
       setFiles(rowData.attachment);
     } else {
-      console.log("emptyl");
     }
   };
 
@@ -140,33 +140,25 @@ export default function Couseview() {
         imagename: files,
         identifier: "image",
       };
-      HandlePDF(reqData).then((itemSeached: any) => {
-        console.log("@");
-      });
+      HandlePDF(reqData).then((itemSeached: any) => {});
     } else if (identifier === "pdf") {
       let reqData = {
         imagename: files,
         identifier: "pdf",
       };
-      HandlePDF(reqData).then((itemSeached: any) => {
-        console.log("@");
-      });
+      HandlePDF(reqData).then((itemSeached: any) => {});
     } else if (identifier === "txt") {
       let reqData = {
         imagename: files,
         identifier: "txt",
       };
-      HandlePDF(reqData).then((itemSeached: any) => {
-        console.log("@");
-      });
+      HandlePDF(reqData).then((itemSeached: any) => {});
     } else if (identifier === "mp4") {
       let reqData = {
         imagename: files,
         identifier: "mp4",
       };
-      HandlePDF(reqData).then((itemSeached: any) => {
-        console.log("@");
-      });
+      HandlePDF(reqData).then((itemSeached: any) => {});
     } else {
       toast.warn("Something went wrong");
     }
@@ -178,7 +170,11 @@ export default function Couseview() {
     return (
       <Box sx={{ display: "flex", alignItems: "center" }}>
         <Box sx={{ width: "100%", mr: 1 }}>
-          <LinearProgress variant="determinate" {...props} className="linercss"/>
+          <LinearProgress
+            variant="determinate"
+            {...props}
+            className="linercss"
+          />
         </Box>
         <Box sx={{ minWidth: -1 }} className="progressCss">
           <Typography variant="body2" color="text.secondary">
@@ -194,7 +190,11 @@ export default function Couseview() {
     return (
       <Box sx={{ display: "flex", alignItems: "center" }}>
         <Box sx={{ width: "100%", mr: 1 }}>
-          <LinearProgress variant="determinate" {...props} className="linercss"/>
+          <LinearProgress
+            variant="determinate"
+            {...props}
+            className="linercss"
+          />
         </Box>
         <Box sx={{ minWidth: -1 }} className="progressCss">
           <Typography variant="body2" color="text.secondary">
@@ -213,7 +213,6 @@ export default function Couseview() {
       session_id: sessionData.id,
     };
     MarkAsComplete(reqData).then((data: any) => {
-      console.log("@");
       getCourseData();
     });
   };
@@ -262,13 +261,15 @@ export default function Couseview() {
     });
 
   var moduleCheckId: any = [];
-  var viewhistoryLength: any;
   let courseIdd: any = router?.query?.id;
 
   const filteredData =
     allData &&
-    allData.filter((item: any) => item.course.id === parseInt(courseIdd));
+    allData.filter(
+      (item: any) => item.course.course.id === parseInt(courseIdd)
+    );
   const moduleIdd = couseData && couseData?.modules;
+
   if (moduleIdd) {
     for (let i = 0; i < moduleIdd.length; i++) {
       const viewHistory = filteredData && filteredData[0]?.course?.view_history;
@@ -277,7 +278,10 @@ export default function Couseview() {
       } else {
         for (let j = 0; j < viewHistory?.length; j++) {
           Object.entries(viewHistory[j]).map(([key, value]: any) => {
-            viewhistoryLength = value.length;
+            viewhistoryLength.push({
+              viewPercent: value.length,
+              module_id: moduleIdd[i].id,
+            });
             moduleCheckId.push(parseInt(key));
           });
         }
@@ -289,6 +293,7 @@ export default function Couseview() {
     return null;
   }
   var moduleCheckIdManage = Array.from(new Set(moduleCheckId));
+  var viewhistoryLengthManage: any = Array.from(new Set(viewhistoryLength));
 
   return (
     <>
@@ -564,85 +569,100 @@ export default function Couseview() {
                         </Box>
                         <br />
                         {couseData &&
-                          couseData?.modules?.map((item: any) => (
-                            <Accordion key={item?.id}>
-                              <AccordionSummary
-                                expandIcon={<ExpandMoreIcon />}
-                                aria-controls="panel1a-content"
-                                id="panel1a-header"
-                              >
-                                <Typography className={courseStyle.typoTitle}>
-                                  <MenuBookIcon className={subs.iconcss} />{" "}
-                                  &nbsp; {capitalizeFirstLetter(item?.title)}
-                                </Typography>
-                              </AccordionSummary>
-                              <AccordionDetails className="vvv">
-                                <Box sx={{ width: "92%" }}>
-                                  <LinearProgressWithLabel1
-                                    value={
-                                      moduleCheckIdManage &&
-                                      moduleCheckIdManage.includes(item.id)
-                                        ? (viewhistoryLength /
-                                            item?.sessions?.length) *
-                                          100
-                                        : 0
-                                    }
-                                  />
-                                </Box>
-                                {item?.sessions.map((itemData: any) => {
-                                  const togglee =
-                                    itemData?.id === activeToggle
-                                      ? "active"
-                                      : "";
-                                  return (
-                                    <Fragment key={itemData?.id}>
-                                      <Box
-                                        sx={{
-                                          width: "100%",
-                                          bgcolor: "background.paper",
-                                        }}
-                                      >
-                                        <nav aria-label="main mailbox folders">
-                                          <List>
-                                            <ListItem disablePadding>
-                                              <ListItemButton
-                                                className={
-                                                  togglee &&
-                                                  courseStyle.backgroundClick
-                                                }
-                                                onClick={() =>
-                                                  handlebtnClick(itemData)
-                                                }
-                                              >
-                                                {itemData.attachment && (
-                                                  <Preview
-                                                    name={itemData.attachment}
-                                                    identifier="user"
-                                                  />
-                                                )}
-                                                <Typography
-                                                  variant="subtitle2"
-                                                  className={
-                                                    courseStyle.typolist
-                                                  }
-                                                >
-                                                  &nbsp;
-                                                  {capitalizeFirstLetter(
-                                                    itemData?.title
-                                                  )}
-                                                </Typography>
-                                              </ListItemButton>
-                                            </ListItem>
-                                          </List>
-                                        </nav>
-                                        <Divider />
-                                      </Box>
-                                    </Fragment>
-                                  );
-                                })}
-                              </AccordionDetails>
-                            </Accordion>
-                          ))}
+                          couseData?.modules?.map(
+                            (item: any, index: number) => {
+                              const numberConversion: any =
+                                viewhistoryLengthManage[index]?.module_id ===
+                                item.id
+                                  ? viewhistoryLengthManage[index]?.viewPercent
+                                  : viewhistoryLengthManage[index]?.viewPercent;
+
+                              return (
+                                <Accordion key={item?.id}>
+                                  <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel1a-content"
+                                    id="panel1a-header"
+                                  >
+                                    <Typography
+                                      className={courseStyle.typoTitle}
+                                    >
+                                      <MenuBookIcon className={subs.iconcss} />{" "}
+                                      &nbsp;{" "}
+                                      {capitalizeFirstLetter(item?.title)}
+                                    </Typography>
+                                  </AccordionSummary>
+                                  <AccordionDetails className="vvv">
+                                    <Box sx={{ width: "92%" }}>
+                                      <LinearProgressWithLabel1
+                                        value={
+                                          moduleCheckIdManage &&
+                                          moduleCheckIdManage.includes(item.id)
+                                            ? (numberConversion /
+                                                item?.sessions?.length) *
+                                              100
+                                            : 0
+                                        }
+                                      />
+                                    </Box>
+                                    {item?.sessions.map((itemData: any) => {
+                                      const togglee =
+                                        itemData?.id === activeToggle
+                                          ? "active"
+                                          : "";
+                                      return (
+                                        <Fragment key={itemData?.id}>
+                                          <Box
+                                            sx={{
+                                              width: "100%",
+                                              bgcolor: "background.paper",
+                                            }}
+                                          >
+                                            <nav aria-label="main mailbox folders">
+                                              <List>
+                                                <ListItem disablePadding>
+                                                  <ListItemButton
+                                                    className={
+                                                      togglee &&
+                                                      courseStyle.backgroundClick
+                                                    }
+                                                    onClick={() =>
+                                                      handlebtnClick(itemData)
+                                                    }
+                                                  >
+                                                    {itemData.attachment && (
+                                                      <Preview
+                                                        name={
+                                                          itemData.attachment
+                                                        }
+                                                        identifier="user"
+                                                      />
+                                                    )}
+                                                    <Typography
+                                                      variant="subtitle2"
+                                                      className={
+                                                        courseStyle.typolist
+                                                      }
+                                                    >
+                                                      &nbsp;
+                                                      {capitalizeFirstLetter(
+                                                        itemData?.title
+                                                      )}
+                                                    </Typography>
+                                                  </ListItemButton>
+                                                </ListItem>
+                                              </List>
+                                            </nav>
+                                            <Divider />
+                                          </Box>
+                                        </Fragment>
+                                      );
+                                    })}
+                                  </AccordionDetails>
+                                </Accordion>
+                              );
+                            }
+                          )}
                       </Box>
                     </Grid>
                     <br />
