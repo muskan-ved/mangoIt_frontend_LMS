@@ -238,6 +238,25 @@ export const CreateUserSubsction = async (reqData: any) => {
     });
 };
 
+export const SubscriptionGetByUserID = async (subId: any) => {
+  return await axios({
+    method: "GET",
+    url: `${API.subscriptionByUserId}/${subId}`,
+    headers: LoginHeader(),
+  })
+    .then((request) => {
+      return request;
+    })
+    .catch((error) => {
+      if (error.response.status === 401) {
+        HandleLogout();
+      } else {
+        toast.error("subscription failed");
+      }
+      return error;
+    });
+};
+
 // export const UpdaUserSubscription = async (
 //   reqData: any,
 //   subscription_id: any

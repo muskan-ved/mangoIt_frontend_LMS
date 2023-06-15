@@ -116,3 +116,24 @@ export const MarkAsComplete = async (reqData: any) => {
       return error;
     });
 };
+
+
+export const UpdateMarkAsComplete = async (reqData: any) => {
+  return await axios({
+    method: "PUT",
+    url: `${API.updatemarkascomplete}`,
+    headers: authHeader(),
+    data: reqData,
+  })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      if (error.response.status === 400) {
+        HandleLogout();
+      } else {
+        toast.error("Something went wrong");
+      }
+      return error;
+    });
+};
