@@ -543,8 +543,11 @@ export default function View() {
                                 </TableCell>
                                 <TableCell>
                                   {row?.status !== "paid" ? (< Button
+                                    id={courseStyle.viewIcon}
+                                    className={courseStyle.editDeleteButton}
                                     variant="outlined"
                                     onClick={() => AcceptPaymentByorder(row?.id, row?.amount)}
+
                                   >
                                     <b>Pay</b>
                                   </Button>) : < Button
@@ -690,7 +693,7 @@ export default function View() {
               </Box>
             </Box>
             <Box textAlign='center' mt={4} mb={2}>
-              <Button variant='contained' startIcon={<CloudDownloadOutlinedIcon />}>
+              <Button variant='contained' startIcon={<CloudDownloadOutlinedIcon />} id={styles.muibuttonBackgroundColor}>
                 DownLoad Receipt
               </Button>
               <Button variant='contained' id={styles.muibuttonBackgroundColor} sx={{ marginLeft: "20px" }} startIcon={<CloudDownloadOutlinedIcon />}>
@@ -700,7 +703,7 @@ export default function View() {
           </DialogContent>
           <Divider />
           <DialogActions>
-            <Button onClick={handleClose} variant="contained" autoFocus>
+            <Button onClick={handleClose} variant="contained" autoFocus id={styles.muibuttonBackgroundColor}>
               Close
             </Button>
           </DialogActions>
