@@ -45,15 +45,15 @@ import { GetdateAfterOneMonth } from "@/common/commonfunctions/connonfun";
 
 interface Column {
   id:
-  | "id"
-  | "name"
-  | "amount"
-  | "subsc_date"
-  | "next_pay_date"
-  | "status"
-  | "action"
-  | "type"
-  | "last_pay_date";
+    | "id"
+    | "name"
+    | "amount"
+    | "subsc_date"
+    | "next_pay_date"
+    | "status"
+    | "action"
+    | "type"
+    | "last_pay_date";
   label: string;
   minWidth?: number;
   align?: "right";
@@ -146,7 +146,6 @@ const Subscription = () => {
     });
   };
 
- 
   return (
     <>
       <Navbar />
@@ -157,7 +156,7 @@ const Subscription = () => {
           {/* breadcumbs */}
           <BreadcrumbsHeading
             First="Home"
-            Middle="Subscription"
+            Current="Subscription"
             Text="SUBSCRIPTION"
             Link="/user/subscription"
           />
@@ -247,25 +246,38 @@ const Subscription = () => {
                                 {moment(row?.createdAt).format("DD, MMMM YYYY")}
                               </TableCell>
                               <TableCell align="center">
-                                {row?.start_date ? moment(row?.start_date).format(
-                                  "DD, MMMM YYYY"
-                                ) : ""}
+                                {row?.start_date
+                                  ? moment(row?.start_date).format(
+                                      "DD, MMMM YYYY"
+                                    )
+                                  : ""}
                               </TableCell>
                               <TableCell>
-                                {row?.start_date ? moment(
-                                  GetdateAfterOneMonth(row?.start_date)
-                                ).format("DD, MMMM YYYY") : ""}
+                                {row?.start_date
+                                  ? moment(
+                                      GetdateAfterOneMonth(row?.start_date)
+                                    ).format("DD, MMMM YYYY")
+                                  : ""}
                               </TableCell>
-                              {row?.status === "active" ? (<TableCell>
-                                <Typography style={{ color: "green" }}>{capitalizeFirstLetter(row?.status)}</Typography>
-                              </TableCell>)
-                                : row?.status === "inactive" ? (<TableCell style={{ color: "red" }}>
+                              {row?.status === "active" ? (
+                                <TableCell>
+                                  <Typography style={{ color: "green" }}>
+                                    {capitalizeFirstLetter(row?.status)}
+                                  </Typography>
+                                </TableCell>
+                              ) : row?.status === "inactive" ? (
+                                <TableCell style={{ color: "red" }}>
                                   {capitalizeFirstLetter(row?.status)}
-                                </TableCell>) : row?.status === "canceled" ? (<TableCell style={{ color: "red" }}>
+                                </TableCell>
+                              ) : row?.status === "canceled" ? (
+                                <TableCell style={{ color: "red" }}>
                                   {capitalizeFirstLetter(row?.status)}
-                                </TableCell>) : <TableCell style={{ color: "red" }}>
+                                </TableCell>
+                              ) : (
+                                <TableCell style={{ color: "red" }}>
                                   {capitalizeFirstLetter(row?.status)}
-                                </TableCell>}
+                                </TableCell>
+                              )}
                               <TableCell>
                                 <Button
                                   className={courseStyle.editDeleteButton}

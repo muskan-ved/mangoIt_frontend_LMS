@@ -330,6 +330,7 @@ export default function Couseview() {
             <BreadcrumbsHeading
               First="Home"
               Middle="Courses"
+              Current="Course View"
               Text="VIEW"
               Link="/user/course"
             />

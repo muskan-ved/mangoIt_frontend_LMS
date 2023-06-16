@@ -250,7 +250,8 @@ export const SubscriptionGetByUserID = async (subId: any) => {
       if (error.response.status === 401) {
         HandleLogout();
       } else {
-        toast.error("Something went wrong");
+        console.log('something went wrong');
+        // toast.error("Something went wrong");
       }
       return error;
     });
