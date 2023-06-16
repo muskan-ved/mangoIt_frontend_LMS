@@ -117,7 +117,6 @@ export const MarkAsComplete = async (reqData: any) => {
     });
 };
 
-
 export const UpdateMarkAsComplete = async (reqData: any) => {
   return await axios({
     method: "PUT",
@@ -133,6 +132,25 @@ export const UpdateMarkAsComplete = async (reqData: any) => {
         HandleLogout();
       } else {
         toast.error("Something went wrong");
+      }
+      return error;
+    });
+};
+
+export const GetEnrolledCoursesByUserId = async (userId: any) => {
+  return await axios({
+    method: "GET",
+    url: `${API.getEnrollCoursesByUserId}/${userId}`,
+    headers: LoginHeader(),
+  })
+    .then((request) => {
+      return request;
+    })
+    .catch((error) => {
+      if (error.response.status === 401) {
+        HandleLogout();
+      } else {
+        toast.error("Course added failed");
       }
       return error;
     });

@@ -1,14 +1,14 @@
 //SERVER API URL
-// export const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
+export const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
 // FRONTEND SERVER URL
-// export const FRONTEND_BASE_URL = `${process.env.NEXT_PUBLIC_FRONTEND_BASE_URL}`;
+export const FRONTEND_BASE_URL = `${process.env.NEXT_PUBLIC_FRONTEND_BASE_URL}`;
 
 // //FRONTEND LOCAL URL
-export const FRONTEND_BASE_URL = `${process.env.NEXT_PUBLIC_LOCAL_FRONTEND_BASE_URL}`;
+// export const FRONTEND_BASE_URL = `${process.env.NEXT_PUBLIC_LOCAL_FRONTEND_BASE_URL}`;
 
 // // LOCAL API URL
-export const BASE_URL = `${process.env.NEXT_PUBLIC_LOCAL_BASE_URL}`;
+// export const BASE_URL = `${process.env.NEXT_PUBLIC_LOCAL_BASE_URL}`;
 
 export const API = {
   authToken: `${BASE_URL}/${process.env.NEXT_PUBLIC_AUTH_TOKEN}`,
@@ -53,6 +53,9 @@ export const API = {
 
   downloadPDF: `${BASE_URL}/${process.env.NEXT_PUBLIC_DOWNLOAD_RECEIPT}`,
 
+  //ENROLL
+  getEnrollCoursesByUserId: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_ENROLLED_COURSE_BY_USERID}`,
+
   getEmailContent: `${BASE_URL}/${process.env.NEXT_PUBLIC_EMAIL_CONTENT_GET}`,
   createEmailContent: `${BASE_URL}/${process.env.NEXT_PUBLIC_EMAIL_CONTENT_CREATE}`,
   updateEmailContent: `${BASE_URL}/${process.env.NEXT_PUBLIC_EMAIL_CONTENT_UPDATE}`,
@@ -93,7 +96,7 @@ export const API = {
   createenrollcourse: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_CREATETENROLLEDCOURSE}`,
   markascomplete: `${BASE_URL}/${process.env.NEXT_PUBLIC_MARK_AS_COMPLETE}`,
   updatemarkascomplete: `${BASE_URL}/${process.env.NEXT_PUBLIC_UPDATE_MARK_AS_COMPLETE}`,
-  
+
   //check enrolled courses
   checenrollcourses: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_CHECKENROLLEDCOURSE}`,
   //get top enrolled courses

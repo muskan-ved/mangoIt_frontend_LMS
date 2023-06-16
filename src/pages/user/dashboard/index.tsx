@@ -162,7 +162,7 @@ export default function View() {
               </Typography>
               <br />
               <Box sx={{ flexGrow: 1 }}>
-                <Grid container spacing={2}>
+                <Grid container spacing={6}>
                   <Grid item xs={4}>
                     <Item className={subs.maindisplay}>
                       <Typography
