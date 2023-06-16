@@ -272,6 +272,7 @@ export default function View() {
           <Box className={subs.maindisplay}>
             <BreadcrumbsHeading
               First="Home"
+              Current="Subscription View"
               Middle="Subscription"
               Text="VIEW"
               Link="/user/subscription"

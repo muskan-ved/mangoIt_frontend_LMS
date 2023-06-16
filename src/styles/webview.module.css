@@ -458,3 +458,95 @@
     padding-top: "20px" !important;
   }
 }
+.displayBox {
+  display: flex !important;
+}
+
+.actionview1 {
+  background-color: #e8661b !important;
+  border-radius: inherit !important;
+  margin-right: 20px !important;
+  margin-top: 0px !important;
+  border-radius: 5px !important;
+  width: 20px !important;
+  height: 20px !important;
+  padding: 15px !important;
+}
+
+.iconColor {
+  color: white !important;
+  width: 20px !important;
+}
+.headingcss {
+  font-weight: bold !important;
+  color: #e8661b !important;
+}
+.headingcssError{
+ margin-left: 20px !important;
+  text-align: center !important;
+  margin-top: 15px !important;
+  font-size: 20px !important;
+}
+.courses1 {
+  padding-top: 3px !important;
+}
+.alignendcss {
+  position: absolute !important;
+  right: 15px !important;
+}
+.articles1 {
+  padding-top: 2rem !important;
+  margin-bottom: 2rem !important;
+  display: grid !important;
+  /* max-width: 1200px !important; */
+  margin-inline: auto !important;
+  padding-inline: 24px !important;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)) !important;
+  gap: 30px !important;
+  flex-wrap: wrap !important;
+}
+
+.iconColor:hover {
+  color: white !important;
+  width: 23px !important;
+}
+.imgcss {
+  border-radius: 30px !important;
+  margin-top: 5px !important;
+  margin-left: 10px !important;
+}
+.useNameFront {
+  color: #4e4a4a !important;
+  font-weight: bold !important;
+  margin-left: 20px !important;
+  margin-top: 3px !important;
+  /* color: #362f2f !important; */
+  font-size: 17px !important;
+}
+.useNameFront1 {
+  font-weight: bold !important;
+  margin-left: 6px !important;
+  margin-top: 3px !important;
+  /* color: #362f2f !important; */
+  color: #4e4a4a !important;
+  font-size: 17px !important;
+}
+.fontCSS {
+  padding: 2px !important;
+  color: #1426a9 !important;
+  margin-left: 10px !important;
+  font-weight: 600 !important;
+}
+.fontCSS1 {
+  padding: 2px !important;
+  color: #e57502 !important;
+  margin-left: -36px !important;
+  font-weight: 600 !important;
+}
+.fontCSS2 {
+  padding: 2px !important;
+  color: #e30000 !important;
+  margin-left: 24px !important;
+  font-weight: 600 !important;
+}
+
