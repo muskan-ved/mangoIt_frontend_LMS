@@ -150,6 +150,7 @@ const AddEmailContent = () => {
           <BreadcrumbsHeading
             First="Home"
             Middle="Email"
+            Current="Add Email"
             Text="EMAIL MANAGEMENT"
             Link="admin/configurations/emailmanagement/"
           />

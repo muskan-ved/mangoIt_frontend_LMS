@@ -156,7 +156,7 @@ const Stripe = () => {
         {/* breadcumbs */}
         <BreadcrumbsHeading
           First="Home"
-          Middle="Stripe Configuration"
+          Current="Stripe Configuration"
           Text="CONFIGURATION"
           Link="/admin/configuration/"
         />

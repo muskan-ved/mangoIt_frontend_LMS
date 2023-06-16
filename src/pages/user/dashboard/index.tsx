@@ -149,7 +149,7 @@ export default function View() {
           <Box className={subs.maindisplay}>
             <BreadcrumbsHeading
               First="Home"
-              Middle="Dashboard"
+              Current="Dashboard"
               Text="DASHBOARD"
               Link="/user/dashboard"
             />

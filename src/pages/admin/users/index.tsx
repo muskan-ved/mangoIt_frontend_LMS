@@ -167,7 +167,7 @@ const AllUsers = () => {
 					{/* breadcumbs */}
 					<BreadcrumbsHeading
 						First="Home"
-						Middle="User"
+						Current="User"
 						Text="USER"
 						Link="/admin/users"
 					/>

@@ -11,7 +11,7 @@ import Link from "next/link";
 import AlarmOnIcon from '@mui/icons-material/AlarmOn';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import { CourseCard, SubscribtionPanCard } from "@/common/ResuableCardCmp/coursescard";
-import { GetallSubsctions, HandleSubscriptionGetByUserID } from "@/services/subscription";
+import { GetAllSubsctionPlans, HandleSubscriptionGetByUserID } from "@/services/subscription";
 import { capitalizeFirstLetter } from "../../common/CapitalFirstLetter/capitalizeFirstLetter";
 import ReactPlayer from "react-player";
 import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
@@ -164,7 +164,7 @@ export default function CoursesDetailsPage() {
     }
     //get subscription
     const getSubscribtion = () => {
-        GetallSubsctions().then((subscdata) => {
+        GetAllSubsctionPlans().then((subscdata) => {
             setsubsdata(subscdata)
         })
     }

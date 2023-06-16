@@ -169,6 +169,7 @@ export default function UpdateModule() {
           <BreadcrumbsHeading
             First="Home"
             Middle="Module"
+            Current='Update Module'
             Text="MODULE"
             Link="/admin/courses/allmodules"
           />

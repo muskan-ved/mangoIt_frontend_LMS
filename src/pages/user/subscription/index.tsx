@@ -157,7 +157,7 @@ const Subscription = () => {
           {/* breadcumbs */}
           <BreadcrumbsHeading
             First="Home"
-            Middle="Subscription"
+            Current="Subscription"
             Text="SUBSCRIPTION"
             Link="/user/subscription"
           />

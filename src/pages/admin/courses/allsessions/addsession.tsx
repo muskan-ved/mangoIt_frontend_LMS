@@ -156,6 +156,7 @@ export default function AddSession() {
                <BreadcrumbsHeading
                   First="Home"
                   Middle="Session"
+                  Current='Add Session'
                   Text="SESSION"
                   Link="/admin/courses/allsessions"
                />

@@ -1,105 +1,114 @@
 //SERVER API URL
-export const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
+export const BASE_URL = 'https://api-mangoit-lms.mangoitsol.com';
 
 // FRONTEND SERVER URL
-export const FRONTEND_BASE_URL = `${process.env.NEXT_PUBLIC_FRONTEND_BASE_URL}`;
+export const FRONTEND_BASE_URL = 'https://mangoit-lms.mangoitsol.com';
 
 // //FRONTEND LOCAL URL
-// export const FRONTEND_BASE_URL = `${process.env.NEXT_PUBLIC_LOCAL_FRONTEND_BASE_URL}`;
+// export const FRONTEND_BASE_URL = 'http://localhost:3000';
 
 // // LOCAL API URL
-// export const BASE_URL = `${process.env.NEXT_PUBLIC_LOCAL_BASE_URL}`;
+// export const BASE_URL = 'http://localhost:6030';
 
 export const API = {
-  authToken: `${BASE_URL}/${process.env.NEXT_PUBLIC_AUTH_TOKEN}`,
-  register: `${BASE_URL}/${process.env.NEXT_PUBLIC_REGISTER}`,
-  login: `${BASE_URL}/${process.env.NEXT_PUBLIC_LOGIN}`,
-  forgotPassword: `${BASE_URL}/${process.env.NEXT_PUBLIC_FORGOT_PASSWORD}`,
-  resetPassword: `${BASE_URL}/${process.env.NEXT_PUBLIC_RESET_PASSWORD}`,
+
+  authToken: `${BASE_URL}/generatetoken`,
+  register: `${BASE_URL}/registration`,
+  login: `${BASE_URL}/loginuser`,
+  forgotPassword: `${BASE_URL}/sendgmail`,
+  resetPassword: `${BASE_URL}/resetpassword`,
+
   // User
-  userAllUsers: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_ALL_USERS}`,
-  userInfoById: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_USER_BY_ID}`,
-  userUpdateById: `${BASE_URL}/${process.env.NEXT_PUBLIC_UPDATE_USER_BY_ID}`,
-  deleteUser: `${BASE_URL}/${process.env.NEXT_PUBLIC_DELETE_USER}`,
+  userAllUsers: `${BASE_URL}/getusers`,
+  userInfoById: `${BASE_URL}/getuser`,
+  userUpdateById: `${BASE_URL}/updateuser`,
+  deleteUser: `${BASE_URL}/deleteuser`,
+
   //Courses
-  getCourses: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_COURSES}`,
-  getCoursesByCouseId: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_COURSES_BY_COURSE_ID}`,
-  createCourse: `${BASE_URL}/${process.env.NEXT_PUBLIC_CREATE_COURSE}`,
-  updateCourse: `${BASE_URL}/${process.env.NEXT_PUBLIC_UPDATE_COURSE}`,
-  deleteCourse: `${BASE_URL}/${process.env.NEXT_PUBLIC_DELETE_COURSE}`,
-  getCoursesByUserId: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_COURSES_BY_USER_ID}`,
+  getCourses: `${BASE_URL}/getcourse`,
+  getCoursesByCouseId: `${BASE_URL}/get_course_by_id`,
+  createCourse: `${BASE_URL}/createcourse`,
+  updateCourse: `${BASE_URL}/updatecourse`,
+  deleteCourse: `${BASE_URL}/deletecourse`,
+  getCoursesByUserId: `${BASE_URL}/get_course_by_user_id`,
 
   //Modules
-  getAllModules: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_ALL_MODULES}`,
-  createModule: `${BASE_URL}/${process.env.NEXT_PUBLIC_CREATE_MODULE}`,
-  updateModule: `${BASE_URL}/${process.env.NEXT_PUBLIC_UPDATE_MODULE}`,
-  deleteModule: `${BASE_URL}/${process.env.NEXT_PUBLIC_DELETE_MODULE}`,
+  getAllModules: `${BASE_URL}/getmodules`,
+  createModule: `${BASE_URL}/createmodule`,
+  updateModule: `${BASE_URL}/updatemodule`,
+  deleteModule: `${BASE_URL}/deletemodule`,
+
   //Sessions
-  getSessions: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_SESSION}`,
-  createSession: `${BASE_URL}/${process.env.NEXT_PUBLIC_CREATE_SESSION}`,
-  deleteSession: `${BASE_URL}/${process.env.NEXT_PUBLIC_DELETE_SESSION}`,
-  updateSession: `${BASE_URL}/${process.env.NEXT_PUBLIC_UPDATE_SESSION}`,
+  getSessions: `${BASE_URL}/getsession`,
+  createSession: `${BASE_URL}/createsession`,
+  updateSession: `${BASE_URL}/updatesession`,
+  deleteSession: `${BASE_URL}/deletesession`,
+
   //Site Options
-  getSite: `${BASE_URL}/${process.env.NEXT_PUBLIC_SITE_CONFIG_GET}`,
-  createSite: `${BASE_URL}/${process.env.NEXT_PUBLIC_SITE_CONFIG_CREATE}`,
-  deleteSite: `${BASE_URL}/${process.env.NEXT_PUBLIC_SITE_CONFIG_DELETE}`,
-  updateSite: `${BASE_URL}/${process.env.NEXT_PUBLIC_SITE_CONFIG_UPDATE}`,
+  getSite: `${BASE_URL}/getsiteconfigs`,
+  createSite: `${BASE_URL}/createsiteconfig`,
+  updateSite: `${BASE_URL}/updatesiteconfigs`,
+  deleteSite: `${BASE_URL}/deletesiteconfigs`,
 
   //subscription
-  getAllSubscription: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_SUBSCRIPTION}`,
-  deleteSubscription: `${BASE_URL}/${process.env.NEXT_PUBLIC_DELETE_SUBSCRIPTION}`,
-  getSubscription: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_SUBSCRIPTION_BY_URSEID}`,
-  getSubsById: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_SUBSCRIPTION_BY_ID}`,
-  subscriptionByUserId: `${BASE_URL}/${process.env.NEXT_PUBLIC_SUBSCRIPTION_BY_USERID}`,
-
-  downloadPDF: `${BASE_URL}/${process.env.NEXT_PUBLIC_DOWNLOAD_RECEIPT}`,
-
-  getEmailContent: `${BASE_URL}/${process.env.NEXT_PUBLIC_EMAIL_CONTENT_GET}`,
-  createEmailContent: `${BASE_URL}/${process.env.NEXT_PUBLIC_EMAIL_CONTENT_CREATE}`,
-  updateEmailContent: `${BASE_URL}/${process.env.NEXT_PUBLIC_EMAIL_CONTENT_UPDATE}`,
-
-  getEmailType: `${BASE_URL}/${process.env.NEXT_PUBLIC_EMAIL_TYPE_GET}`,
-  createEmailType: `${BASE_URL}/${process.env.NEXT_PUBLIC_EMAIL_TYPE_CREATE}`,
-  updateEmailType: `${BASE_URL}/${process.env.NEXT_PUBLIC_EMAIL_TYPE_UPDATE}`,
-
-  getInvoices: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_INVOICES}`,
-
-  getOrder: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_ORDER_BY_USER_ID}`,
-
-  //accept payment
-  acceptpayment: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_PAYMENT}`,
-  getpaymentdetails: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_PAYMENTDETAILS}`,
-  //get all subscriptions
-  allsubscriptions: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_ALLSUBSCRIPYIONS}`,
-  getsubscriptionplandet: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_SUBSCRIPTIONPLANDET}`,
-
-  //grt user by email
-  getuserdetbyemail: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_GETUSERBYEMAIL}`,
+  getAllSubscription: `${BASE_URL}/getsubscription`,
+  deleteSubscription: `${BASE_URL}/deletesubscription`,
+  getSubscription: `${BASE_URL}/getsubscriptionbyuserid`,
+  getSubsById: `${BASE_URL}/getsubscriptionbyid`,
+  subscriptionByUserId: `${BASE_URL}/subscriptionbyuserid`,
 
   //create user subscription
-  createsubscription: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_CREATESUBSCRIPTION}`,
-  updateSubscription: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_UPDATESUBSCRIPTION}`,
+  createsubscription: `${BASE_URL}/createsubscription`,
+  updateSubscription: `${BASE_URL}/updatesubscription`,
+
+  // email content manage
+  getEmailContent: `${BASE_URL}/getemailmanage`,
+  createEmailContent: `${BASE_URL}/createemailmanage`,
+  updateEmailContent: `${BASE_URL}/updateemailmanage`,
+  
+  // email type manage
+  getEmailType: `${BASE_URL}/getemailtype`,
+  createEmailType: `${BASE_URL}/createemailtype`,
+  updateEmailType: `${BASE_URL}/updateemailtype`,
+  
+  // invoices and orders
+  getInvoices: `${BASE_URL}/getorders`,
+  downloadPDF: `${BASE_URL}/downloadreceipt`,
+  getOrder: `${BASE_URL}/getorderbyuserid`,
+
+  //accept payment
+  acceptpayment: `${BASE_URL}/acceptpayment`,
+  getpaymentdetails: `${BASE_URL}/getpaymentdetails`,
+
+  //subscriptions Plan manage
+  allsubscriptions: `${BASE_URL}/subscriptionplans`,
+  getsubscriptionplandet: `${BASE_URL}/subscriptionplandetbyid`,
+  addSubscriptionPlans: `${BASE_URL}/addsubscriptionplans`,
+  updateSubscriptionPlans: `${BASE_URL}/updatesubscriptionplans`,
+  deleteSubscriptionPlans: `${BASE_URL}/deletesubscriptionplans`,
+
+  //get user by email
+  getuserdetbyemail: `${BASE_URL}/getuserbyemail`,
 
   //create order
-  createsubscriptionorder: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_CREATEORDER}`,
-  //update order
-  updateorder: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_UPDATEORDER}`,
+  createsubscriptionorder: `${BASE_URL}/createorder`,
+  updateorder: `${BASE_URL}/updateorder`,
+
   //create order for subscription
-  createorderforsubscription: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_CREATETORDERFORSUBSCRIPTION}`,
+  createorderforsubscription: `${BASE_URL}/createorderforrenewsubscriptio`,
 
   //create transaction
-  createtransaction: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_CREATETRANSACTION}`,
-  //GET TRANSACTION BY OD
-  getTransaction: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_TRANSACTIONDET}`,
+  createtransaction: `${BASE_URL}/createtransaction`,
+  getTransaction: `${BASE_URL}/transactiondet`,
 
   //create enrolled courses
-  createenrollcourse: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_CREATETENROLLEDCOURSE}`,
-  markascomplete: `${BASE_URL}/${process.env.NEXT_PUBLIC_MARK_AS_COMPLETE}`,
-  updatemarkascomplete: `${BASE_URL}/${process.env.NEXT_PUBLIC_UPDATE_MARK_AS_COMPLETE}`,
+  createenrollcourse: `${BASE_URL}/createenrollcourse`,
+  markascomplete: `${BASE_URL}/markascompletecourse`,
+  updatemarkascomplete: `${BASE_URL}/updatemarkascompletecourse`,
 
   //check enrolled courses
-  checenrollcourses: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_CHECKENROLLEDCOURSE}`,
-  //get top enrolled courses
-  topenrolledcourses: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_TOPENROLLEDCOURSE}`,
-  getEnrollCoursesByUserId: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_ENROLLED_COURSE_BY_USERID}`,
+  checenrollcourses: `${BASE_URL}/checenrollcourses`,
+  topenrolledcourses: `${BASE_URL}/topenrolledcourses`,
+  getEnrollCoursesByUserId: `${BASE_URL}/get_enrollcourse_by_user_id`,
+
 };

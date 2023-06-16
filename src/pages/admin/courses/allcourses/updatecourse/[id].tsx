@@ -159,6 +159,7 @@ export default function UpdateCourse() {
           <BreadcrumbsHeading
             First="Home"
             Middle="Course"
+            Current='Update Course'
             Text="COURSE"
             Link="/admin/courses/allcourses"
           />
