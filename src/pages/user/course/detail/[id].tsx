@@ -329,8 +329,8 @@ export default function Couseview() {
           <Box className={subs.maindisplay}>
             <BreadcrumbsHeading
               First="Home"
-              Current="Courses"
-Middle="Course View"
+              Middle="Courses"
+              Current="Course View"
               Text="VIEW"
               Link="/user/course"
             />
