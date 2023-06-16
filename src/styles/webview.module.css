@@ -355,7 +355,6 @@
 }
 
 .filterinput {
-  background-color: aliceblue !important;
   width: 300px !important;
   height: 45px !important;
 }
@@ -392,12 +391,17 @@
 }
 
 .actionview {
-  background-color: aliceblue !important;
+  background-color: #e76012d9 !important;
   border-radius: inherit !important;
   margin-right: 20px !important;
   border: 1px solid rgb(204, 204, 204) !important;
   margin-top: 0px !important;
   border-radius: 5px !important;
+  color: white !important;
+}
+
+.actionview:hover {
+  background-color: #e8661b !important ;
 }
 
 .paignation {
