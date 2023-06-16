@@ -45,13 +45,15 @@ export const API = {
   deleteSite: `${BASE_URL}/${process.env.NEXT_PUBLIC_SITE_CONFIG_DELETE}`,
   updateSite: `${BASE_URL}/${process.env.NEXT_PUBLIC_SITE_CONFIG_UPDATE}`,
 
+  //subscription
   getAllSubscription: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_SUBSCRIPTION}`,
   deleteSubscription: `${BASE_URL}/${process.env.NEXT_PUBLIC_DELETE_SUBSCRIPTION}`,
   getSubscription: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_SUBSCRIPTION_BY_URSEID}`,
   getSubsById: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_SUBSCRIPTION_BY_ID}`,
+  subscriptionByUserId: `${BASE_URL}/${process.env.NEXT_PUBLIC_SUBSCRIPTION_BY_USERID}`,
 
   downloadPDF: `${BASE_URL}/${process.env.NEXT_PUBLIC_DOWNLOAD_RECEIPT}`,
-  markascomplete: `${BASE_URL}/${process.env.NEXT_PUBLIC_MARK_AS_COMPLETE}`,
+
   getEmailContent: `${BASE_URL}/${process.env.NEXT_PUBLIC_EMAIL_CONTENT_GET}`,
   createEmailContent: `${BASE_URL}/${process.env.NEXT_PUBLIC_EMAIL_CONTENT_CREATE}`,
   updateEmailContent: `${BASE_URL}/${process.env.NEXT_PUBLIC_EMAIL_CONTENT_UPDATE}`,
@@ -92,8 +94,12 @@ export const API = {
 
   //create enrolled courses
   createenrollcourse: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_CREATETENROLLEDCOURSE}`,
+  markascomplete: `${BASE_URL}/${process.env.NEXT_PUBLIC_MARK_AS_COMPLETE}`,
+  updatemarkascomplete: `${BASE_URL}/${process.env.NEXT_PUBLIC_UPDATE_MARK_AS_COMPLETE}`,
+
   //check enrolled courses
   checenrollcourses: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_CHECKENROLLEDCOURSE}`,
   //get top enrolled courses
   topenrolledcourses: `${BASE_URL}/${process.env.NEXT_PUBLIC_ACCEPT_TOPENROLLEDCOURSE}`,
+  getEnrollCoursesByUserId: `${BASE_URL}/${process.env.NEXT_PUBLIC_GET_ENROLLED_COURSE_BY_USERID}`,
 };
