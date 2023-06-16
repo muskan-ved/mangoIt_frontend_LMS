@@ -197,7 +197,7 @@ const AllModules = () => {
           {/* breadcumbs */}
           <BreadcrumbsHeading
             First="Home"
-            Middle="Module"
+            Current="Module"
             Text="MODULE"
             Link="/admin/courses/allmodules"
           />

@@ -219,6 +219,7 @@ export default function UpdateSession() {
           <BreadcrumbsHeading
             First="Home"
             Middle="Session"
+            Current='Update Session'
             Text="SESSION"
             Link="/admin/courses/allsessions"
           />
