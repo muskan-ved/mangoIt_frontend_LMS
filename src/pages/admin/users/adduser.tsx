@@ -73,7 +73,7 @@ export default function AddUser() {
           {/* breadcumbs */}
           <BreadcrumbsHeading
             First="Home"
-            Middle="User"
+            Middle="Add User"
             Text="USER"
             Link="/admin/users"
           />

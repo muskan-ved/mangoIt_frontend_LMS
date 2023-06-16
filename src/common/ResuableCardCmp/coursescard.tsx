@@ -104,7 +104,6 @@ export function SubscribtionPanCard(props: any) {
             ))
         })
     }
-
     return (
         <Grid item xs={12} md={6}>
             <center>
@@ -114,7 +113,8 @@ export function SubscribtionPanCard(props: any) {
                         <Box px={1}>
                             <Typography variant="h3" component="h2" gutterBottom={true}>
                                 ${props?.subsdata?.amount}/
-                                <Typography variant="h6" color="textSecondary" component="span">per month</Typography>
+                                <Typography variant="h6" color="textSecondary" component="span">per {props?.subsdata?.duration_term
+                                }</Typography>
                             </Typography>
                             <Typography color="textSecondary" variant="subtitle1" component="p">{totalcrscount} Courses</Typography>
                             <Typography color="textSecondary" variant="subtitle1" component="p" mt={2}>{totalmodulecount} Modules</Typography>
