@@ -17,7 +17,7 @@ import { TopEnrolledCourses } from "@/services/course_enroll";
 
 export default function About() {
     const [FreeCourses, setFreeCourses] = React.useState([]);
-    // const [PaidCourses, setPaidCourses] = React.useState([]);
+    const [PaidCourses, setPaidCourses] = React.useState([]);
     const [EnrolledCourses, setEnrolledCoursess] = React.useState([]);
 
     React.useEffect(() => {
@@ -28,14 +28,15 @@ export default function About() {
     //get courses
     const getAllCourseData = () => {
         HandleCourseGet('', "").then((courses) => {
-            setFreeCourses(courses?.data?.filter((a: any) =>
-                a?.course?.is_chargeable === "free"
+            setFreeCourses((courses?.data?.filter((a: any) =>
+                a?.course?.is_chargeable === "free" && a?.moduleCount.length > 0 && a?.sessionCount.length > 0)
             ))
-            // setPaidCourses(courses?.data?.filter((a: any) =>
-            //     a?.course?.is_chargeable === "paid"
-            // ))
+            setPaidCourses(courses?.data?.filter((a: any) =>
+                a?.course?.is_chargeable === "paid" && a?.moduleCount.length > 0 && a?.sessionCount.length > 0
+            ))
         })
     }
+
     var items = [
         {
             heading: "Random Name #1",
@@ -222,6 +223,25 @@ export default function About() {
                     </Box>
                     <Box className={styles.articles}>
                         {FreeCourses?.slice(0, 8).map((data, key) => {
+                            return (
+                                <CourseCard key={key} freecourses={data} />
+                            )
+                        })}
+                    </Box>
+                </Container>
+            </Box>
+
+            {/*top paid course*/}
+            <Box className={styles.freecourses}>
+                <Container maxWidth="lg">
+                    <Box className={styles.headerbox}>
+                        <Typography variant="h6" gutterBottom className={styles.h6}>
+                            Top Paid Courses
+                        </Typography>
+                        <Divider className={styles.divder} />
+                    </Box>
+                    <Box className={styles.articles}>
+                        {PaidCourses?.slice(0, 8).map((data, key) => {
                             return (
                                 <CourseCard key={key} freecourses={data} />
                             )

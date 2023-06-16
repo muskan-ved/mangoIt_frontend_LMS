@@ -61,7 +61,7 @@ export function CourseCardListView(props: any) {
                                 <Typography sx={{ display: 'flex', alignItems: 'center' }}>
                                     {props?.freecourses?.course?.long_description?.replace(/(<([^>]+)>)/ig, '') || props?.paidcourses?.course?.long_description?.replace(/(<([^>]+)>)/ig, '') || props?.coursedata?.course?.long_description?.replace(/(<([^>]+)>)/ig, '')}
                                 </Typography>
-                                <Typography variant="subtitle1" color="primary" mt={2}>
+                                <Typography variant="subtitle1" color="#e8661b" mt={2}>
                                     Continue reading...
                                 </Typography>
                             </CardContent>

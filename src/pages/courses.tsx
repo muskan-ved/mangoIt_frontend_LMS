@@ -36,7 +36,7 @@ export default function Courses() {
     const getAllCourseData = () => {
         setLoadar(true)
         HandleCourseGet('', "").then((courses) => {
-            setcourseData(courses?.data)
+            setcourseData(courses?.data?.reverse())
             setLoadar(false);
         })
     }
