@@ -6,7 +6,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { HandleLogout } from "./auth";
 
 export const HandleSubscriptionGet = async (search: string, reqData?: any) => {
-
   const API_URL = search
     ? `${API.getAllSubscription}/${search}`
     : `${API.getAllSubscription}`;
@@ -238,8 +237,26 @@ export const CreateUserSubsction = async (reqData: any) => {
     });
 };
 
-export const HandleInvoicesGet = async (search: string, reqData?: any) => {
+export const SubscriptionGetByUserID = async (subId: any) => {
+  return await axios({
+    method: "GET",
+    url: `${API.subscriptionByUserId}/${subId}`,
+    headers: LoginHeader(),
+  })
+    .then((request) => {
+      return request;
+    })
+    .catch((error) => {
+      if (error.response.status === 401) {
+        HandleLogout();
+      } else {
+        toast.error("Something went wrong");
+      }
+      return error;
+    });
+};
 
+export const HandleInvoicesGet = async (search: string, reqData?: any) => {
   const API_URL = search
     ? `${API.getInvoices}/${search}`
     : `${API.getInvoices}`;
