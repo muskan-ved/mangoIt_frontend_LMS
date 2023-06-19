@@ -481,11 +481,12 @@
   font-weight: bold !important;
   color: #e8661b !important;
 }
-.headingcssError{
- margin-left: 20px !important;
+.headingcssError {
+  margin-left: 20px !important;
   text-align: center !important;
   margin-top: 15px !important;
-  font-size: 20px !important;
+  font-size: 17px !important;
+  font-weight: bold !important;
 }
 .courses1 {
   padding-top: 3px !important;
@@ -525,28 +526,64 @@
 }
 .useNameFront1 {
   font-weight: bold !important;
-  margin-left: 6px !important;
+  margin-left: 24px !important;
   margin-top: 3px !important;
-  /* color: #362f2f !important; */
   color: #4e4a4a !important;
   font-size: 17px !important;
 }
 .fontCSS {
   padding: 2px !important;
   color: #1426a9 !important;
-  margin-left: 10px !important;
+  margin-right: 54px !important;
   font-weight: 600 !important;
 }
 .fontCSS1 {
   padding: 2px !important;
   color: #e57502 !important;
-  margin-left: -36px !important;
+  margin-right: 58px !important;
   font-weight: 600 !important;
 }
 .fontCSS2 {
   padding: 2px !important;
   color: #e30000 !important;
-  margin-left: 24px !important;
+  margin-left: 20px !important;
   font-weight: 600 !important;
 }
+.textHeadingCenter {
+  justify-content: center !important;
+}
+.gridColor {
+  color: #000000 !important;
+  width: 20px !important;
+}
 
+.gridColor:hover {
+  color: #000000 !important;
+  width: 23px !important;
+}
+
+@media (min-width: 900) and (max-width: 1024px) {
+  .imgcss {
+    border-radius: 30px !important;
+    margin-top: 5px !important;
+    width: 46px !important;
+    height: 55px !important;
+  }
+  .useNameFront {
+    color: #4e4a4a !important;
+    font-weight: bold !important;
+    margin-left: 10px !important;
+    margin-top: 3px !important;
+    font-size: 16px !important;
+  }
+  .fontCSS {
+    padding: 2px !important;
+    color: #1426a9 !important;
+    font-weight: 600 !important;
+  }
+  .fontCSS1 {
+    padding: 2px !important;
+    color: #1426a9 !important;
+    font-weight: 600 !important;
+  }
+}

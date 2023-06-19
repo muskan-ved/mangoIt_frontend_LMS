@@ -300,7 +300,7 @@ const Subscription = () => {
                             sx={{ fontWeight: 600, textAlign: "center" }}
                           >
                             {" "}
-                            Record not Found{" "}
+                            Record not found!{" "}
                           </TableCell>
                         </TableRow>
                       )}
