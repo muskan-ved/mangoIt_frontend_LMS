@@ -66,7 +66,7 @@ export const VerticalMenuItems = () => {
         title: "Dashboard",
         icon: HomeOutlinedIcon,
         path: "/admin/dashboard",
-        disable: true,
+        disable: false,
       },
       {
         title: "Users",
