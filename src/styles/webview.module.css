@@ -561,3 +561,29 @@
   color: #000000 !important;
   width: 23px !important;
 }
+
+@media (min-width: 900) and (max-width: 1024px) {
+  .imgcss {
+    border-radius: 30px !important;
+    margin-top: 5px !important;
+    width: 46px !important;
+    height: 55px !important;
+  }
+  .useNameFront {
+    color: #4e4a4a !important;
+    font-weight: bold !important;
+    margin-left: 10px !important;
+    margin-top: 3px !important;
+    font-size: 16px !important;
+  }
+  .fontCSS {
+    padding: 2px !important;
+    color: #1426a9 !important;
+    font-weight: 600 !important;
+  }
+  .fontCSS1 {
+    padding: 2px !important;
+    color: #1426a9 !important;
+    font-weight: 600 !important;
+  }
+}
