@@ -115,4 +115,7 @@ export const API = {
 
   //doenload payment receiprt
   downloadorderinvoice: `${BASE_URL}/downloadorderinvoice`,
+  // admin dashbaord 
+  dashboarddata: `${BASE_URL}/getdashboard`,
+
 };
