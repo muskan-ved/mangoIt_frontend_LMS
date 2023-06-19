@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "export": "next export",
+    "test": "jest --verbose",
     "start": "next start",
     "lint": "next lint"
   },
@@ -43,6 +44,13 @@
     "yup": "^1.0.2"
   },
   "devDependencies": {
-    "@types/react-pdf": "^6.2.0"
+    "@testing-library/dom": "^9.3.1",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.4.3",
+    "@types/jest": "^29.5.2",
+    "@types/react-pdf": "^6.2.0",
+    "babel-jest": "^29.5.0",
+    "jest": "^29.5.0"
   }
 }
