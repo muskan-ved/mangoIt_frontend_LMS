@@ -262,6 +262,16 @@ export default function View() {
     setDialougeopenOpen(false);
   };
 
+  //download receipt
+  const DownloadReceipt = (invoiceid: any) => {
+
+  }
+
+  //download invoice
+  const DownloadInvoice = (orderid: any) => {
+
+  }
+
   return (
     <>
       <Navbar />
@@ -693,10 +703,10 @@ export default function View() {
               </Box>
             </Box>
             <Box textAlign='center' mt={4} mb={2}>
-              <Button variant='contained' startIcon={<CloudDownloadOutlinedIcon />} id={styles.muibuttonBackgroundColor}>
+              <Button variant='contained' startIcon={<CloudDownloadOutlinedIcon />} id={styles.muibuttonBackgroundColor} onClick={() => DownloadReceipt(trxdata?.transaction_id)}>
                 DownLoad Receipt
               </Button>
-              <Button variant='contained' id={styles.muibuttonBackgroundColor} sx={{ marginLeft: "20px" }} startIcon={<CloudDownloadOutlinedIcon />}>
+              <Button variant='contained' id={styles.muibuttonBackgroundColor} sx={{ marginLeft: "20px" }} startIcon={<CloudDownloadOutlinedIcon />} onClick={() => DownloadInvoice(trxdata?.order_id)}>
                 DownLoad Invoice
               </Button>
             </Box>
