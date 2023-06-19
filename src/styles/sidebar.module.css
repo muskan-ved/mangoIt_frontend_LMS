@@ -17,7 +17,6 @@
   border-top-right-radius: 23px !important;
   border-bottom-right-radius: 23px !important;
   max-width: 200px !important;
-  /* color:#E8661B !important; */
 }
 
 .footerContainercss {
@@ -49,6 +48,8 @@
   background-color: #e8661b !important;
 }
 
-.menuItemHover {
-  background-color: #E8661B !important;
-}
+
+
+
+
+
