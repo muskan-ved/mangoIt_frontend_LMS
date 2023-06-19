@@ -50,7 +50,7 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-export default function View() {
+export default function Dashboard() {
   const [subsData, setSubsdata] = useState<any>([]);
   const [enrollCourse, setEnrollCourses] = useState<any>([]);
   const [userId, setuserId] = useState<any>();
@@ -252,7 +252,7 @@ export default function View() {
                   <Box sx={{ flexGrow: 1 }}>
                     <Grid container spacing={2}>
                       <Grid item xs={4}>
-                        <Item>
+                        <Item className={subs.cardBorder}>
                           <Box className={subs.maindisplay}>
                             <Image
                               src="/Images/pages/pages_icon/subscription.png"
@@ -281,7 +281,7 @@ export default function View() {
                         </Item>
                       </Grid>
                       <Grid item xs={4}>
-                        <Item>
+                        <Item className={subs.cardBorder}>
                           <Box className={subs.maindisplay}>
                             <Image
                               src="/Images/pages/pages_icon/calendar.png"
@@ -310,7 +310,7 @@ export default function View() {
                         </Item>
                       </Grid>
                       <Grid item xs={4}>
-                        <Item>
+                        <Item className={subs.cardBorder}>
                           <Box className={subs.maindisplay}>
                             <Image
                               src="/Images/pages/pages_icon/renewPic.png"

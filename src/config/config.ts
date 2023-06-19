@@ -5,13 +5,12 @@ export const BASE_URL = 'https://api-mangoit-lms.mangoitsol.com';
 export const FRONTEND_BASE_URL = 'https://mangoit-lms.mangoitsol.com';
 
 // //FRONTEND LOCAL URL
-// export const FRONTEND_BASE_URL = 'http://localhost:3000';
+// export const FRONTEND_BASE_URL = "http://localhost:3000";
 
 // // LOCAL API URL
-// export const BASE_URL = 'http://localhost:6030';
+// export const BASE_URL = "http://localhost:6030";
 
 export const API = {
-
   authToken: `${BASE_URL}/generatetoken`,
   register: `${BASE_URL}/registration`,
   login: `${BASE_URL}/loginuser`,
@@ -65,12 +64,12 @@ export const API = {
   getEmailContent: `${BASE_URL}/getemailmanage`,
   createEmailContent: `${BASE_URL}/createemailmanage`,
   updateEmailContent: `${BASE_URL}/updateemailmanage`,
-  
+
   // email type manage
   getEmailType: `${BASE_URL}/getemailtype`,
   createEmailType: `${BASE_URL}/createemailtype`,
   updateEmailType: `${BASE_URL}/updateemailtype`,
-  
+
   // invoices and orders
   getInvoices: `${BASE_URL}/getorders`,
   downloadPDF: `${BASE_URL}/downloadreceipt`,
@@ -110,5 +109,4 @@ export const API = {
   checenrollcourses: `${BASE_URL}/checenrollcourses`,
   topenrolledcourses: `${BASE_URL}/topenrolledcourses`,
   getEnrollCoursesByUserId: `${BASE_URL}/get_enrollcourse_by_user_id`,
-
 };

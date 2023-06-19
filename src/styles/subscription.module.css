@@ -214,3 +214,8 @@
   width: 105px !important;
   padding: 9px 22px !important;
 }
+.cardBorder{
+  border-top: 1px solid #e3e3e3 !important;
+  border-left: 1px solid #e3e3e3 !important;
+  border-right: 1px solid #e3e3e3 !important;
+}
