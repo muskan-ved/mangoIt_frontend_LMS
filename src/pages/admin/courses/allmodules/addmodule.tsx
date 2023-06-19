@@ -106,6 +106,7 @@ export default function AddSession() {
                <BreadcrumbsHeading
                   First="Home"
                   Middle="Module"
+                  Current='Add Module'
                   Text="MODULE"
                   Link="/admin/courses/allmodules"
                />

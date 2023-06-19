@@ -233,7 +233,7 @@ const AllSession = () => {
           {/* breadcumbs */}
           <BreadcrumbsHeading
             First="Home"
-            Middle="Session"
+            Current="Session"
             Text="SESSION"
             Link="/admin/courses/allsessions"
           />

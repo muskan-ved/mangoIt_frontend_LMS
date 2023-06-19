@@ -106,7 +106,8 @@ export default function UpdateUser() {
           {/* breadcumbs */}
           <BreadcrumbsHeading
             First="Home"
-            Middle="Update User"
+            Middle="User"
+            Current="Update User"
             Text="USER"
             Link="/admin/users"
           />
