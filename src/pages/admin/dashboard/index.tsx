@@ -1,6 +1,6 @@
 import Navbar from "@/common/LayoutNavigations/navbar";
 import SideBar from "@/common/LayoutNavigations/sideBar";
-import { Box } from "@mui/material";
+import { Box, Card, CardContent } from "@mui/material";
 import styles from '../../../styles/sidebar.module.css'
 import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
 
@@ -16,7 +16,8 @@ const Dashboard = () => {
                 <BreadcrumbsHeading First='Home' Current='Dashboard' Text="DASHBOARD" Link="/dashboard" />
 
                 {/* main content */}
-                <Box > dashboard</Box>
+                <Card><CardContent>
+                dashboard</CardContent></Card>
             </Box>
 
         </Box>

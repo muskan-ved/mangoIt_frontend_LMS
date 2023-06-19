@@ -25,7 +25,7 @@ export default function ForgotPassword() {
 
     const reqData: any = {
       to: event.email,
-      subject: 'Reset Password'
+      emailType: 'forgot_password'
     }
 
     const formData = new FormData()

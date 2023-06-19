@@ -217,7 +217,7 @@ const SiteConfiguration = () => {
           {/* breadcumbs */}
           <BreadcrumbsHeading
             First="Home"
-            Middle="Site Configuration"
+            Current="Site Configuration"
             Text="CONFIGURATION"
             Link="/admin/configuration/"
           />

@@ -4,14 +4,6 @@ import { FC } from "react";
 import { breadcrumbsVariableTypes } from "@/types/breadcrumbs";
 import { FRONTEND_BASE_URL } from "@/config/config";
 
-interface BreadcrumbsType{
-  First:string
-  Middle?:string
-  Current:string
-  Text:string
-  Link:string
-}
-
 const BreadcrumbsHeading: FC<breadcrumbsVariableTypes> = (props): any => {
   return (
     <Stack direction="row" spacing={2} justifyContent="space-between">

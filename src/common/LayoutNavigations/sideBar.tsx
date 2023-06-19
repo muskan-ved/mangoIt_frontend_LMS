@@ -3,13 +3,34 @@ import { VerticalMenuItems } from "../RoutingMenuItems/verticalMenuItems";
 import { HandleLogout } from "@/services/auth";
 import { useRouter } from "next/router";
 import styles from "../../styles/sidebar.module.css";
+import { useState } from "react";
 
 const SideBar = () => {
   const router = useRouter();
   const NavItem = VerticalMenuItems();
+  const [openSubMenu, setOpenSubMenu] = useState<string | null>(null);
+let submenuTitles:any;
 
-  const navigateURL = (path: string) => {
-    router.push(path);
+if(typeof window !== "undefined") {
+  const convertStringg:any = localStorage.getItem('submenuTitle')
+  submenuTitles = JSON?.parse(convertStringg)
+}
+
+  const navigateURL = (item: any,identifier:string) => {
+    if(identifier === 'menu'){
+      handleSubMenuClick(item?.title)
+    }
+    router.push(item?.path);
+  };
+
+  const handleSubMenuClick = (submenuTitle: string) => {
+    // if(submenuTitle === submenuTitles && router.pathname.includes('courses'){
+    //   setOpenSubMenu((prevSubMenu) => (prevSubMenu === submenuTitle ? null : 'none'));
+    //   localStorage.setItem("submenuTitle", JSON.stringify('none'))
+    // }else{
+      localStorage.setItem("submenuTitle", JSON.stringify(submenuTitle))
+      setOpenSubMenu((prevSubMenu) => (prevSubMenu === submenuTitle ? null : submenuTitle));
+    // }
   };
 
   return (
@@ -26,6 +47,9 @@ const SideBar = () => {
               router.pathname === item?.path || router.pathname.includes(item.path)
                 ? styles.activeMenuItem
                 : styles.nonActiveMenuItem;
+
+                const isSubMenuOpen = item.title === submenuTitles;
+                console.log(isSubMenuOpen,"isSubMenuOpen",submenuTitles,item.title,"openSubMenu",openSubMenu)
             return (
               <>
                 {item?.children ? (
@@ -33,9 +57,12 @@ const SideBar = () => {
                     key={index}
                     icon={<item.icon />}
                     label={item.title}
-                    defaultOpen={router.pathname.includes("all")}
+                    // defaultOpen={isSubMenuOpen}
                     className={pathnameMatch}
                     disabled={item.disable}
+                    open={isSubMenuOpen}
+                    onClick={() => handleSubMenuClick(item.title)}
+                   
                   >
                     {item?.children.map((subItem: any, idx: number) => {
                       const subPathnameMatch =
@@ -47,10 +74,20 @@ const SideBar = () => {
                         <MenuItem
                           key={idx}
                           icon={<subItem.icon />}
-                          onClick={() => navigateURL(subItem.path)}
+                          onClick={() => navigateURL(subItem,"submenu")}
                           active={router.pathname.includes(subItem.path) ? true : false}
-                          className={subPathnameMatch}
+                          className={`${subPathnameMatch} ${styles.menuItemHover}`}
                           disabled={subItem.disable}
+                          rootStyles={{
+                            li: {
+                              // the active class will be added automatically by react router
+                              // so we can use it to style the active menu item
+                              [`&.hover`]: {
+                                backgroundColor: 'yellow',
+                                color: '#b6c8d9',
+                              },
+                            },
+                          }}
 
                         >
                           {subItem.title}
@@ -62,12 +99,10 @@ const SideBar = () => {
                   <MenuItem
                     key={index}
                     icon={<item.icon />}
-                    onClick={() => navigateURL(item.path)}
+                    onClick={() => navigateURL(item,"menu")}
                     active={router.pathname === item.path}
                     className={pathnameMatch}
                     disabled={item.disable}
-
-
                   >
                     {item.title}
                   </MenuItem>

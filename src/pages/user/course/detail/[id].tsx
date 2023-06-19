@@ -330,6 +330,7 @@ export default function Couseview() {
             <BreadcrumbsHeading
               First="Home"
               Middle="Courses"
+              Current="Course View"
               Text="VIEW"
               Link="/user/course"
             />
@@ -339,11 +340,11 @@ export default function Couseview() {
                   type="submit"
                   size="large"
                   variant="contained"
-                  className={courseStyle.backbtncs}
+                  className={courseStyle.backbtncscourse}
                   id={styles.muibuttonBackgroundColor}
                 >
                   <ArrowBackOutlinedIcon />
-                  &nbsp;Back
+                  &nbsp;Back To List
                 </Button>
               </Link>
             </Box>

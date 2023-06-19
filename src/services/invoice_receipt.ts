@@ -1,13 +1,14 @@
-import { axios } from "axios";
-export const HandleDownloadReceipt = async (moduelId: any) => {
+import { authHeader } from "@/common/Tokens/authToken";
+import axios from "axios";
+import { API } from "../config/config";
+export const HandleDownloadReceipt = async (reqdata: any) => {
   let receiptdownloaddata;
   await axios({
     method: "post",
-    url: `${api_url}/downloadreceiptbytrxid`,
-    data: reqData,
+    url: `${API.downloadpaymentreceipt}`,
+    data: reqdata,
     responseType: "arraybuffer",
     headers: {
-      Authorization: auth_token,
       "Content-Type": "application/x-www-form-urlencoded",
       Accept: "application/pdf",
     },
@@ -23,26 +24,25 @@ export const HandleDownloadReceipt = async (moduelId: any) => {
   return receiptdownloaddata;
 };
 
-export const HandleModuleGetByID = async (moduelId: any) => {
-  let receiptdownloaddata;
+export const HandleDownloadInvoice = async (reqdata: any) => {
+  let invoicedownloaddata;
   await axios({
     method: "post",
-    url: `${api_url}/downloadreceipt`,
-    data: reqData,
+    url: `${API.downloadorderinvoice}`,
+    data: reqdata,
     responseType: "arraybuffer",
     headers: {
-      Authorization: auth_token,
       "Content-Type": "application/x-www-form-urlencoded",
       Accept: "application/pdf",
     },
   })
     .then((response: any) => {
       if (response) {
-        receiptdownloaddata = response;
+        invoicedownloaddata = response;
       }
     })
     .catch((error) => {
       console.log("error", error);
     });
-  return receiptdownloaddata;
+  return invoicedownloaddata;
 };

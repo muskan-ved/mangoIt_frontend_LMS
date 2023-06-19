@@ -95,7 +95,7 @@ const EmailConfiguration = () => {
                 <>
                   <Box className={emailStyles.listEmailPageBox}>
                     <Typography className={emailStyles.allEmailCountStyle}>All Email ({rows?.length > 0 ? rows?.length : 0})</Typography>
-                    {/* <Button
+                    <Button
                       variant="contained"
                       id={styles.muibuttonBackgroundColor}
                       onClick={() =>
@@ -103,7 +103,7 @@ const EmailConfiguration = () => {
                       }
                     >
                       + Add New{" "}
-                    </Button> */}
+                    </Button>
                   </Box>
                   <Paper>
                     <TableContainer
@@ -154,7 +154,7 @@ const EmailConfiguration = () => {
                                     {capitalizeFirstLetter(row.emailtype)}
                                   </TableCell>
                                   <TableCell>
-                                    {capitalizeFirstLetter(row.emailfrom)}
+                                    {row.emailfrom}
                                   </TableCell>
                                   <TableCell>{row.emailsubject}</TableCell>
                                   <TableCell>

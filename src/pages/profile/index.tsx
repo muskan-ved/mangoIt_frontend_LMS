@@ -167,7 +167,7 @@ export default function Profile() {
 					{/* breadcumbs */}
 					<BreadcrumbsHeading
 						First="Home"
-						Middle="Profile"
+						Current="Profile"
 						Text="USER PROFILE"
 						Link="/profile"
 					/>

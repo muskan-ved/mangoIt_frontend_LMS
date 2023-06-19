@@ -6,7 +6,7 @@ import WebViewNavbar from "@/common/LayoutNavigations/webviewnavbar";
 import WebViewFooter from "@/common/LayoutNavigations/webviewfooter";
 import styles from '../styles/webview.module.css'
 import { SubscribtionPanCard } from "@/common/ResuableCardCmp/coursescard";
-import { GetallSubsctions } from "@/services/subscription";
+import { GetAllSubsctionPlans } from "@/services/subscription";
 export default function HomePage() {
     const [subsdata, setsubsdata] = React.useState([]);
     React.useEffect(() => {
@@ -15,10 +15,12 @@ export default function HomePage() {
 
     //get subscription
     const getSubscribtion = () => {
-        GetallSubsctions().then((subscdata) => {
+        GetAllSubsctionPlans().then((subscdata) => {
             setsubsdata(subscdata)
         })
     }
+
+    console.log(subsdata)
 
     return (
         <>

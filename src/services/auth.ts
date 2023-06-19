@@ -17,7 +17,6 @@ export const GenerateToken = async() =>{
 }
 
 export const HandleRegister = async(reqData:any) =>{
-  
   return await axios({
     method: "POST",
     url: `${API.register}`,
@@ -43,7 +42,6 @@ export const HandleRegister = async(reqData:any) =>{
 }
 
 export const HandleLogin = async(reqData:any) =>{
-  
   return await axios({
     method: "POST",
     url: `${API.login}`,
@@ -66,7 +64,6 @@ export const HandleLogin = async(reqData:any) =>{
 }
 
 export const HandleLoginByGoogle = async(reqData:any) =>{
-  
   return await axios({
     method: "GET",
     url: `${process.env.NEXT_PUBLIC_GOOGLE_RESPONSE_API_URL}${reqData.access_token}`,
@@ -89,8 +86,7 @@ export const HandleLoginByGoogle = async(reqData:any) =>{
     })
 }
 
-export const HandleForgotPassword = async(reqData:any) =>{
-  
+export const HandleForgotPassword = async(reqData:any) =>{ 
   return await axios({
     method: "POST",
     url: `${API.forgotPassword}`,
@@ -117,7 +113,6 @@ export const HandleForgotPassword = async(reqData:any) =>{
 }
 
 export const HandleResetPassword = async(reqData:any) =>{
-  
   return await axios({
     method: "POST",
     url: `${API.resetPassword}`,

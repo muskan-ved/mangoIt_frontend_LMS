@@ -1,14 +1,28 @@
 import * as React from "react";
-import { Container, Divider, FormControl, Grid, IconButton, MenuItem, Pagination, Paper, Select, Stack } from "@mui/material";
+import {
+  Container,
+  Divider,
+  FormControl,
+  Grid,
+  IconButton,
+  MenuItem,
+  Pagination,
+  Paper,
+  Select,
+  Stack,
+} from "@mui/material";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import WebViewNavbar from "@/common/LayoutNavigations/webviewnavbar";
 import WebViewFooter from "@/common/LayoutNavigations/webviewfooter";
-import styles from '../styles/webview.module.css'
-import GridViewIcon from '@mui/icons-material/GridView';
-import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+import styles from "../styles/webview.module.css";
+import GridViewIcon from "@mui/icons-material/GridView";
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import { HandleCourseGet } from "@/services/course";
-import { CourseCard, CourseCardListView } from "@/common/ResuableCardCmp/coursescard";
+import {
+  CourseCard,
+  CourseCardListView,
+} from "@/common/ResuableCardCmp/coursescard";
 import { usePagination } from "@/common/Pagination/paginations";
 
 export default function Courses() {
@@ -57,141 +71,136 @@ export default function Courses() {
         DATA.jump(p);
     };
 
-    //gridview listview
-    const gridView = () => {
-        setgridview(true)
-    }
-    const listView = () => {
-        setgridview(false)
-    }
-    return (
-        <>
-            {/*header*/}
-            <WebViewNavbar />
-            {/*Landing page carousel*/}
-            <Paper
-                sx={{
-                    position: 'relative',
-                    backgroundColor: 'grey.800',
-                    color: '#fff',
-                    backgroundSize: 'cover',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundPosition: 'center',
-                    backgroundImage: `url(${landingpagecontent.image})`,
-                }}
-                className={styles.coursebanner}
-            >
-            </Paper>
-            {/*courses*/}
-            <Box className={styles.courses}>
-                <Container maxWidth="lg">
-                    <Grid className={styles.filtersection}>
-                        <Grid spacing={2} className={styles.filtercontainer}>
-                            <Grid item xs={12} md={3} lg={3}>
-                                <Stack spacing={1}>
-                                    <FormControl fullWidth>
-                                        <Select
-                                            className={styles.filterinput}
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            size="small"
-                                            onChange={(e: any) =>
-                                                setcustStatus(e.target.value)
-                                            }
-                                            value={courseStatus}
-                                        >
-                                            <MenuItem value={0} disabled>
-                                                Filter By
-                                            </MenuItem>
-                                            <MenuItem value={1} >
-                                                All
-                                            </MenuItem>
-                                            <MenuItem value={2}>
-                                                Free
-                                            </MenuItem>
-                                            <MenuItem value={3}>
-                                                Paid
-                                            </MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                </Stack>
-                            </Grid>
-                            <Grid item xs={12} md={6} lg={3} className={styles.gridbtn} >
-                                <Stack spacing={1} className={styles.gridicon}>
-                                    <IconButton className={styles.actionview} onClick={gridView} >
-                                        <GridViewIcon />
-                                    </IconButton>
-                                    <IconButton className={styles.actionview} onClick={listView}>
-                                        <FormatListBulletedIcon />
-                                    </IconButton>
-                                </Stack>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                    <Box className={styles.coursesheaderbox}>
-                        <Typography variant="h6" gutterBottom className={styles.h6}>
-                            Courses Information
-                        </Typography>
-                        <Divider className={styles.divder} />
-                    </Box>
-                    {gridview ? (<Box className={styles.articles}>
-                        {courseData && DATA.currentData() &&
-                            DATA.currentData().map((data: any, key: any) => {
-                                return (
-                                    <CourseCard key={key} coursedata={data} />
-                                )
-                            })}
-                    </Box>) : <Box className={styles.listviewarticles}>
-                        <Container maxWidth="lg">
-                            {courseData && DATA.currentData() &&
-                                DATA.currentData().map((data: any, key: any) => {
-                                    return (
-                                        <CourseCardListView key={key} coursedata={data} />
-                                    )
-                                })}
-                        </Container>
-                    </Box>}
-                    <Grid className={styles.filtersection} pb={6} pt={3}>
-                        <Grid spacing={2} className={styles.filtercontainer}>
-                            <Grid item xs={12} md={3} lg={3}>
-                                <Stack spacing={1}>
-                                    <Pagination
-                                        className="pagination"
-                                        count={count}
-                                        page={page}
-                                        color="primary"
-                                        onChange={handlePageChange}
-                                    />
-                                </Stack>
-                            </Grid>
-                            <Grid item xs={12} md={6} lg={3} className={styles.perpagedt} >
-                                <Box sx={{ display: 'flex' }}>
-                                    <Typography sx={{ margin: 'auto' }} >
-                                        Per Page Data</Typography>
-                                    <FormControl>
-                                        <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            defaultValue={12}
-                                            onChange={handlerowchange}
-                                            size="small"
-                                            className={styles.paignation}
-                                            style={{ height: "35px", marginRight: '11px' }}
-                                            sx={{ margin: '0px 0px 0px 15px' }}
-                                        >
-                                            <MenuItem value={12}>12</MenuItem>
-                                            <MenuItem value={24}>24</MenuItem>
-                                            <MenuItem value={48}>48</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                </Box>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </Container >
-            </Box >
-            {/*footer*/}
-            <WebViewFooter />
-        </>
-    );
+  //gridview listview
+  const gridView = () => {
+    setgridview(true);
+  };
+  const listView = () => {
+    setgridview(false);
+  };
+  console.log("gridviewgridview", gridview);
+
+  console.log("courseData", courseData);
+  return (
+    <>
+      {/*header*/}
+      <WebViewNavbar />
+      {/*Landing page carousel*/}
+      <Paper
+        sx={{
+          position: "relative",
+          backgroundColor: "grey.800",
+          color: "#fff",
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+          backgroundImage: `url(${landingpagecontent.image})`,
+        }}
+        className={styles.coursebanner}
+      ></Paper>
+      {/*courses*/}
+      <Box className={styles.courses}>
+        <Container maxWidth="lg">
+          <Grid className={styles.filtersection}>
+            <Grid spacing={2} className={styles.filtercontainer}>
+              <Grid item xs={12} md={3} lg={3}>
+                <Stack spacing={1}>
+                  <FormControl fullWidth>
+                    <Select
+                      className={styles.filterinput}
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      size="small"
+                      onChange={(e: any) => setcustStatus(e.target.value)}
+                      value={courseStatus}
+                    >
+                      <MenuItem value={0} disabled>
+                        Filter By
+                      </MenuItem>
+                      <MenuItem value={1}>All</MenuItem>
+                      <MenuItem value={2}>Free</MenuItem>
+                      <MenuItem value={3}>Paid</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Stack>
+              </Grid>
+              <Grid item xs={12} md={6} lg={3} className={styles.gridbtn}>
+                <Stack spacing={1} className={styles.gridicon}>
+                  <IconButton className={styles.actionview} onClick={gridView}>
+                    <GridViewIcon />
+                  </IconButton>
+                  <IconButton className={styles.actionview} onClick={listView}>
+                    <FormatListBulletedIcon />
+                  </IconButton>
+                </Stack>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Box className={styles.coursesheaderbox}>
+            <Typography variant="h6" gutterBottom className={styles.h6}>
+              Courses Information
+            </Typography>
+            <Divider className={styles.divder} />
+          </Box>
+          {gridview ? (
+            <Box className={styles.articles}>
+              {courseData &&
+                DATA.currentData() &&
+                DATA.currentData().map((data: any, key: any) => {
+                  return <CourseCard key={key} coursedata={data} />;
+                })}
+            </Box>
+          ) : (
+            <Box className={styles.listviewarticles}>
+              <Container maxWidth="lg">
+                {courseData &&
+                  DATA.currentData() &&
+                  DATA.currentData().map((data: any, key: any) => {
+                    return <CourseCardListView key={key} coursedata={data} />;
+                  })}
+              </Container>
+            </Box>
+          )}
+          <Grid className={styles.filtersection} pb={6} pt={3}>
+            <Grid spacing={2} className={styles.filtercontainer}>
+              <Grid item xs={12} md={3} lg={3}>
+                <Stack spacing={1}>
+                  <Pagination
+                    className="pagination"
+                    count={count}
+                    page={page}
+                    color="primary"
+                    onChange={handlePageChange}
+                  />
+                </Stack>
+              </Grid>
+              <Grid item xs={12} md={6} lg={3} className={styles.perpagedt}>
+                <Box sx={{ display: "flex" }}>
+                  <Typography sx={{ margin: "auto" }}>Per Page Data</Typography>
+                  <FormControl>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      defaultValue={12}
+                      onChange={handlerowchange}
+                      size="small"
+                      className={styles.paignation}
+                      style={{ height: "35px", marginRight: "11px" }}
+                      sx={{ margin: "0px 0px 0px 15px" }}
+                    >
+                      <MenuItem value={12}>12</MenuItem>
+                      <MenuItem value={24}>24</MenuItem>
+                      <MenuItem value={48}>48</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
+      {/*footer*/}
+      <WebViewFooter />
+    </>
+  );
 }
