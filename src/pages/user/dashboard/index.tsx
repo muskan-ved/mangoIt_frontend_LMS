@@ -56,6 +56,7 @@ export default function View() {
   const [userId, setuserId] = useState<any>();
   const [gridview, setgridview] = useState<any>(true);
   const [subsError, setSubsError] = useState<any>("");
+  const [dynamicCss, setDynamicCss] = useState<any>(1);
 
   useEffect(() => {
     let localData: any;
@@ -96,12 +97,14 @@ export default function View() {
   //gridview
   const gridView = () => {
     setgridview(true);
-  };
-  const listView = () => {
-    setgridview(false);
+    setDynamicCss(1);
   };
 
-  console.log("subsErrorsubsError", subsError);
+  const listView = () => {
+    setgridview(false);
+    setDynamicCss(2);
+  };
+
   return (
     <>
       <Navbar />
@@ -118,7 +121,7 @@ export default function View() {
             />
           </Box>
           {/* main content */}
-          {subsError && subsError !== null ? (
+          {subsData && subsData === "subsId not Found!" ? (
             <Fragment>
               <Card>
                 <CardContent>
@@ -129,7 +132,11 @@ export default function View() {
                   <br />
                   <br />
                   <Box sx={{ flexGrow: 1 }}>
-                    <Grid container spacing={2}>
+                    <Grid
+                      container
+                      spacing={2}
+                      className={style.textHeadingCenter}
+                    >
                       <Typography
                         variant="h5"
                         className={style.headingcssError}
@@ -154,49 +161,80 @@ export default function View() {
                           className={style.actionview1}
                           onClick={gridView}
                         >
-                          <GridViewIcon className={style.iconColor} />
+                          <GridViewIcon
+                            className={
+                              dynamicCss === 1
+                                ? style.gridColor
+                                : style.iconColor
+                            }
+                          />
                         </IconButton>
                         <IconButton
                           className={style.actionview1}
                           onClick={listView}
                         >
-                          <FormatListBulletedIcon className={style.iconColor} />
+                          <FormatListBulletedIcon
+                            className={
+                              dynamicCss === 2
+                                ? style.gridColor
+                                : style.iconColor
+                            }
+                          />
                         </IconButton>
                       </Stack>
                     </Box>
                   </Box>
                   <Divider sx={{ marginTop: "5px" }}></Divider>
-                  <Box className={style.courses1}>
-                    <Container maxWidth="lg">
-                      {gridview ? (
-                        <Box className={style.articles1}>
-                          {enrollCourse &&
-                            enrollCourse.map((data: any, key: any) => {
-                              return (
-                                <EnrolledCourseCard
-                                  key={key}
-                                  coursedata={data.course}
-                                />
-                              );
-                            })}
-                        </Box>
-                      ) : (
-                        <Box className={style.listviewarticles}>
-                          <Container maxWidth="lg">
+                  <br />
+                  <br />
+                  {enrollCourse && enrollCourse?.length === 0 ? (
+                    <Box sx={{ flexGrow: 1 }}>
+                      <Grid
+                        container
+                        spacing={2}
+                        className={style.textHeadingCenter}
+                      >
+                        <Typography
+                          variant="h5"
+                          className={style.headingcssError}
+                        >
+                          Enrolled courses not found!
+                        </Typography>
+                      </Grid>
+                    </Box>
+                  ) : (
+                    <Box className={style.courses1}>
+                      <Container maxWidth="lg">
+                        {gridview ? (
+                          <Box className={style.articles1}>
                             {enrollCourse &&
                               enrollCourse.map((data: any, key: any) => {
                                 return (
-                                  <EnrolledCourseCardListView
+                                  <EnrolledCourseCard
                                     key={key}
                                     coursedata={data.course}
                                   />
                                 );
                               })}
-                          </Container>
-                        </Box>
-                      )}
-                    </Container>
-                  </Box>
+                          </Box>
+                        ) : (
+                          <Box className={style.listviewarticles}>
+                            <Container maxWidth="lg">
+                              {enrollCourse &&
+                                enrollCourse.map((data: any, key: any) => {
+                                  return (
+                                    <EnrolledCourseCardListView
+                                      key={key}
+                                      coursedata={data.course}
+                                    />
+                                  );
+                                })}
+                            </Container>
+                          </Box>
+                        )}
+                      </Container>
+                    </Box>
+                  )}
                 </CardContent>
               </Card>
               <br />
@@ -318,13 +356,25 @@ export default function View() {
                           className={style.actionview1}
                           onClick={gridView}
                         >
-                          <GridViewIcon className={style.iconColor} />
+                          <GridViewIcon
+                            className={
+                              dynamicCss === 1
+                                ? style.gridColor
+                                : style.iconColor
+                            }
+                          />
                         </IconButton>
                         <IconButton
                           className={style.actionview1}
                           onClick={listView}
                         >
-                          <FormatListBulletedIcon className={style.iconColor} />
+                          <FormatListBulletedIcon
+                            className={
+                              dynamicCss === 2
+                                ? style.gridColor
+                                : style.iconColor
+                            }
+                          />
                         </IconButton>
                       </Stack>
                     </Box>

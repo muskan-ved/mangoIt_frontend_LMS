@@ -340,11 +340,11 @@ export default function Couseview() {
                   type="submit"
                   size="large"
                   variant="contained"
-                  className={courseStyle.backbtncs}
+                  className={courseStyle.backbtncscourse}
                   id={styles.muibuttonBackgroundColor}
                 >
                   <ArrowBackOutlinedIcon />
-                  &nbsp;Back
+                  &nbsp;Back To List
                 </Button>
               </Link>
             </Box>
