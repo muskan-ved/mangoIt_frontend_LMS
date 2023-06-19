@@ -45,7 +45,7 @@ import Image from "next/image";
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
-  padding: theme.spacing(1),
+  padding: theme.spacing(2),
   textAlign: "center",
   color: theme.palette.text.secondary,
 }));
@@ -250,8 +250,12 @@ export default function Dashboard() {
                   <br />
                   <br />
                   <Box sx={{ flexGrow: 1 }}>
-                    <Grid container spacing={2}>
-                      <Grid item xs={4}>
+                    <Grid
+                      container
+                      spacing={{ xs: 2, md: 3 }}
+                      // columns={{ xs: 4, sm: 8, md: 12 }}
+                    >
+                      <Grid item xs={12} sm={12} md={4} lg={4}>
                         <Item className={subs.cardBorder}>
                           <Box className={subs.maindisplay}>
                             <Image
@@ -280,7 +284,7 @@ export default function Dashboard() {
                           </Box>
                         </Item>
                       </Grid>
-                      <Grid item xs={4}>
+                      <Grid item xs={12} sm={12} md={4} lg={4}>
                         <Item className={subs.cardBorder}>
                           <Box className={subs.maindisplay}>
                             <Image
@@ -309,8 +313,9 @@ export default function Dashboard() {
                           </Box>
                         </Item>
                       </Grid>
-                      <Grid item xs={4}>
+                      <Grid item xs={12} sm={12} md={4} lg={4}>
                         <Item className={subs.cardBorder}>
+                          {" "}
                           <Box className={subs.maindisplay}>
                             <Image
                               src="/Images/pages/pages_icon/renewPic.png"
