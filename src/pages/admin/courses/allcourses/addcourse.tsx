@@ -112,6 +112,7 @@ const AddCourse = () => {
           <BreadcrumbsHeading
             First="Home"
             Middle="Courses"
+            Current="Add Course"
             Text="COURSES"
             Link="/admin/courses/allcourses"
           />

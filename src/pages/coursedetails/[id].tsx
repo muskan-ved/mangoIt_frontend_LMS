@@ -11,7 +11,7 @@ import Link from "next/link";
 import AlarmOnIcon from '@mui/icons-material/AlarmOn';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import { CourseCard, SubscribtionPanCard } from "@/common/ResuableCardCmp/coursescard";
-import { GetallSubsctions, HandleSubscriptionGetByUserID } from "@/services/subscription";
+import { GetAllSubsctionPlans, HandleSubscriptionGetByUserID } from "@/services/subscription";
 import { capitalizeFirstLetter } from "../../common/CapitalFirstLetter/capitalizeFirstLetter";
 import ReactPlayer from "react-player";
 import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
@@ -114,7 +114,7 @@ export default function CoursesDetailsPage() {
     const [subsdata, setsubsdata] = useState([]);
     const [Courses, setCourses] = useState([]);
     const [FreeCourses, setFreeCourses] = useState([]);
-    // const [PaidCourses, setPaidCourses] = useState([]);
+    const [PaidCourses, setPaidCourses] = useState([]);
     const [modulesdet, setmodulesdet] = useState([])
     const [userData, setUserData] = useState<any>("");
     const [enrolled, setenrolled] = useState<any>(false);
@@ -153,18 +153,18 @@ export default function CoursesDetailsPage() {
     //get courses
     const getAllCourseData = () => {
         HandleCourseGet('', "").then((courses) => {
-            setCourses(courses?.data);
+            setCourses(courses?.data?.reverse().slice(0, 10));
             setFreeCourses(courses?.data?.filter((a: any) =>
-                a?.course?.is_chargeable === "free"
+                a?.course?.is_chargeable === "free" && a?.moduleCount.length > 0 && a?.sessionCount.length > 0
             ))
-            // setPaidCourses(courses?.data?.filter((a: any) =>
-            //     a?.course?.is_chargeable === "paid"
-            // ))
+            setPaidCourses(courses?.data?.filter((a: any) =>
+                a?.course?.is_chargeable === "paid" && a?.moduleCount.length > 0 && a?.sessionCount.length > 0
+            ))
         })
     }
     //get subscription
     const getSubscribtion = () => {
-        GetallSubsctions().then((subscdata) => {
+        GetAllSubsctionPlans().then((subscdata) => {
             setsubsdata(subscdata)
         })
     }
@@ -202,7 +202,6 @@ export default function CoursesDetailsPage() {
             };
         })
     }
-
     //check user subscription 
     const ChecUserSubscription = (user_id: any) => {
         HandleSubscriptionGetByUserID(user_id).then(res => {
@@ -211,31 +210,25 @@ export default function CoursesDetailsPage() {
             };
         })
     }
-
     //dialogs
     const [open, setOpen] = useState(false);
     const handleClickOpen = () => {
         setOpen(true);
     };
-
     const [open1, setOpen1] = useState(false);
     const handleClickOpenCheckSubsc = () => {
         setOpen1(true);
     };
-
     const handleClose = () => {
         setOpen(false);
     };
-
     const handleClose1 = () => {
         setOpen1(false);
     };
-
     const LoginforSubsc = () => {
         setOpen(false);
         router.push('/login')
     }
-
     const Getsubscription = () => {
         setOpen(false);
         if (checkuserSubscStatus[0]?.status === 'inactive') {
@@ -306,7 +299,7 @@ export default function CoursesDetailsPage() {
                                             : "") : ""}
                                     </Typography>
                                     <Typography variant="subtitle1" color="text.secondary" paragraph sx={{ fontFamily: "sans - serif" }}>120 <sup>+</sup> Enrolled Students</Typography>
-                                    {userData ?
+                                    {userData && coursedet && modulesdet ?
                                         (
                                             <>
                                                 {enrolled === true ?
@@ -326,18 +319,29 @@ export default function CoursesDetailsPage() {
                                                             onClick={enrolledCourse}
                                                         >
                                                             Enroll Now
-                                                        </Button>) : (<Button variant="contained" className="authPageButton" id={styles.muibuttonBackgroundColor}
-                                                            onClick={handleClickOpenCheckSubsc}
-                                                        >
-                                                            Enroll Now
-                                                        </Button>)
+                                                        </Button>) :
+                                                            checkuserSubscStatus.length > 0 && coursedet?.is_chargeable === "free" && (checkuserSubscStatus[0]?.status === "active" || checkuserSubscStatus[0]?.status === "canceled" || checkuserSubscStatus[0]?.status === "expired" || checkuserSubscStatus[0]?.status === "inactive") ?
+                                                                (<Button variant="contained" className="authPageButton" id={styles.muibuttonBackgroundColor}
+                                                                    onClick={enrolledCourse}
+                                                                >
+                                                                    Enroll Now
+                                                                </Button>) : (<Button variant="contained" className="authPageButton" id={styles.muibuttonBackgroundColor}
+                                                                    onClick={handleClickOpenCheckSubsc}
+                                                                >
+                                                                    Enroll Now
+                                                                </Button>)
                                                 }
                                             </>
-                                        ) : <Button variant="contained" className="authPageButton" id={styles.muibuttonBackgroundColor}
-                                            onClick={handleClickOpen}
-                                        >
-                                            Enroll Now
-                                        </Button>}
+                                        ) : coursedet && modulesdet ?
+                                            (<Button variant="contained" className="authPageButton" id={styles.muibuttonBackgroundColor}
+                                                onClick={handleClickOpen}
+                                            >
+                                                Enroll Now
+                                            </Button>) : <Button variant="contained" sx={{ "&:hover": { backgroundColor: "red" }, backgroundColor: "red", fontWeight: "bold", borderRadius: "20px", cursor: "default" }}
+                                            >
+                                                Comming Soon
+                                            </Button>
+                                    }
                                 </CardContent>
                             </Box>
                         </Grid>
@@ -549,7 +553,7 @@ export default function CoursesDetailsPage() {
                         </Grid>
                     </Grid>
 
-                    {coursedet ?
+                    {coursedet && modulesdet ?
                         (<Grid container spacing={2} className={styles.crsgrid} mt={5}>
                             <Grid item xs={12} md={8} lg={9}>
                                 <Typography gutterBottom variant="h4" component="div" sx={{ fontWeight: "bold" }} >
@@ -559,9 +563,9 @@ export default function CoursesDetailsPage() {
                                     <Typography sx={{ fontSize: '15px' }} mb={1}>
                                         {coursedet?.modules?.length} Modules, {rotalsession} sessions
                                     </Typography>
-                                    {modulesdet.map((value: any, key) => {
+                                    {modulesdet?.map((value: any, key) => {
                                         return (
-                                            <Accordion key={key}  >
+                                            <Accordion key={key} >
                                                 <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
                                                     <Typography>  {value?.title}</Typography>
                                                 </AccordionSummary>
@@ -627,6 +631,24 @@ export default function CoursesDetailsPage() {
                             </Box>
                             <Box className={styles.articles}>
                                 {FreeCourses?.slice(0, 6).map((data, key) => {
+                                    return (
+                                        <CourseCard key={key} freecourses={data} />
+                                    )
+                                })}
+                            </Box>
+                        </Container>
+                    </Box>
+                    {/*top Paid course*/}
+                    <Box className={styles.freecourses}>
+                        <Container maxWidth="lg">
+                            <Box className={styles.headerbox}>
+                                <Typography variant="h6" gutterBottom className={styles.h6}>
+                                    Top Paid Courses
+                                </Typography>
+                                <Divider className={styles.divder} />
+                            </Box>
+                            <Box className={styles.articles}>
+                                {PaidCourses?.slice(0, 6).map((data, key) => {
                                     return (
                                         <CourseCard key={key} freecourses={data} />
                                     )

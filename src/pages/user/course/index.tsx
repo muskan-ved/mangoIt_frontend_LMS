@@ -164,7 +164,7 @@ const AllCourses = () => {
           {/* breadcumbs */}
           <BreadcrumbsHeading
             First="Home"
-            Middle="Courses"
+            Current="Courses"
             Text="COURSES"
             Link="/user/course"
           />

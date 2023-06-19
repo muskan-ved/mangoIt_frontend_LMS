@@ -56,6 +56,7 @@ import Preview from "@/common/PreviewAttachments/previewAttachment";
 import {
   HandleCourseGetByUserId,
   MarkAsComplete,
+  UpdateMarkAsComplete,
 } from "@/services/course_enroll";
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -217,6 +218,17 @@ export default function Couseview() {
     });
   };
 
+  // const handleUpdateMarkAsComplete = () => {
+  //   let reqData = {
+  //     user_id: userId,
+  //     course_id: sessionData.course_id,
+  //     module_id: sessionData.module_id,
+  //     session_id: sessionData.id,
+  //     status: couseData.is_chargeable,
+  //   };
+  //   console.log("reqDatareqData", reqData);
+  //   UpdateMarkAsComplete(reqData).then((data: any) => {});
+  // };
   var calculate: any;
   var isMatchFound: any;
 
@@ -238,6 +250,17 @@ export default function Couseview() {
         const sessionCount = item ? item.sessionCount : null;
         if (sessionCount) {
           calculate = (value / sessionCount) * 100;
+        }
+        if (calculate && calculate === 100) {
+          // handleUpdateMarkAsComplete();
+          let reqData = {
+            user_id: userId,
+            course_id: sessionData.course_id,
+            module_id: sessionData.module_id,
+            session_id: sessionData.id,
+            status: couseData.is_chargeable,
+          };
+          UpdateMarkAsComplete(reqData).then((data: any) => {});
         }
       }
     });
@@ -307,6 +330,7 @@ export default function Couseview() {
             <BreadcrumbsHeading
               First="Home"
               Middle="Courses"
+              Current="Course View"
               Text="VIEW"
               Link="/user/course"
             />

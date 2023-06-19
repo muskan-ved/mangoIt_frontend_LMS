@@ -9,6 +9,7 @@ import {
   CardContent,
   FormControl,
   Grid,
+  InputAdornment,
   InputLabel,
   MenuItem,
   Select,
@@ -28,17 +29,16 @@ import { LoadingButton } from "@mui/lab";
 import CircularProgressBar from "@/common/CircularProcess/circularProgressBar";
 import SpinnerProgress from "@/common/CircularProgressComponent/spinnerComponent";
 // Types Import
-import { sessionType } from "@/types/sessionType";
+import { subscriptionPlan } from "@/types/subscription";
 // CSS Import
 import styles from "../../../../styles/sidebar.module.css";
 import Subscription from "../../../../styles/subscription.module.css";
 import { ToastContainer } from "react-toastify";
 // API services
-import { subscriptionValidations } from "@/validation_schema/subscriptionValidation";
-import { HandleSubscriptionPost } from "@/services/subscription";
+import { subscriptionPlanValidations } from "@/validation_schema/subscriptionValidation";
+import { CreateSubscriptionPlan } from "@/services/subscription";
 
-
-export default function AddSubscription() {
+export default function AddSubscriptionPlans() {
   const router: any = useRouter();
   const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
@@ -49,40 +49,26 @@ export default function AddSubscription() {
     reset,
     control,
     formState: { errors },
-  } = useForm<sessionType | any>({
-    resolver: yupResolver(subscriptionValidations),
+  } = useForm<subscriptionPlan | any>({
+    resolver: yupResolver(subscriptionPlanValidations),
   });
 
   const onSubmit = async (event: any) => {
-    let localData: any;
-    if (typeof window !== "undefined") {
-      const parsingData: any = window.localStorage.getItem("userData");
-      localData = JSON.parse(parsingData);
-    }
-
-
-    const reqData: any = {
-      name: event.name,
-      description: event.description,
-      price: event.price,
-      userId: localData.id,
-      startDate: event.duration,
-      status: event.status,
-      duration_term: event.duration_term,
-      duration_value: event.duration_value,
-    };
-
     setLoading(true);
     setLoadingButton(false);
     try {
-      const res = await HandleSubscriptionPost(reqData);
+      const res = await CreateSubscriptionPlan(event);
+
+      if(res.status === 201){
+        setTimeout(() =>{
+            router.push("/admin/subscriptions/plans/");
+        },2000)
+      }
       setLoading(false);
-      router.push("/admin/subscription/");
     } catch (e) {
       console.log(e);
       setLoadingButton(true);
     }
-
   };
 
   function ErrorShowing(errorMessage: any) {
@@ -102,10 +88,10 @@ export default function AddSubscription() {
           {/* breadcumbs */}
           <BreadcrumbsHeading
             First="Home"
-            Middle="Subscription"
-            Current="Add Subscription"
-            Text="SUBSCRIPTION"
-            Link="/admin/subscriptions/allsubscription/"
+            Middle="Subscription Plans"
+            Current="Add Subscription Plan"
+            Text="SUBSCRIPTION PLANS"
+            Link="/admin/subscriptions/plans/"
           />
           {/* main content */}
           <Card>
@@ -119,88 +105,69 @@ export default function AddSubscription() {
                   onSubmit={handleSubmit(onSubmit)}
                   onReset={reset}
                 >
-                  <Grid container spacing={2}>
-                    <Grid item xs={12} sm={12} md={12} lg={6}>
+                  <Grid container >
+                    <Grid item xs={12} sm={12} md={6} lg={6}>
                       <Box
                         component="img"
                         src="/Images/pages/addFeature.jpg"
-                        width={"100%"}
+                        width={"85%"}
                       />
                     </Grid>
 
-                    <Grid item xs={12} sm={12} md={12} lg={6}>
+                    <Grid item xs={12} sm={12} md={6} lg={6}>
                       <Typography
                         className={Subscription.InputLabelFont}
                         mb={3}
                         mt={4}
                       >
-                        ADD SUBSCRIPTION
+                        ADD SUBSCRIPTION PLAN
                       </Typography>
 
-                      <Grid
-                        item
-                        xs={12}
-                        sm={12}
-                        md={12}
-                        lg={12}
-                        className={Subscription.sessionNameGride}
-                      >
-                        <Grid item xs={12} sm={12} md={6} lg={6} mr={2}>
+                        <Grid item xs={12} sm={12} md={12} lg={12} mb={2}>
                           <InputLabel className={Subscription.InputLabelFont}>
-                            Subscription Name
+                            Subscription Title
                           </InputLabel>
                           <TextField
-                            placeholder="Subscription Name"
-                            {...register("name")}
+                            placeholder="Subscription Title"
+                            {...register("title")}
                             fullWidth
                           />
-                          {errors && errors.name
-                            ? ErrorShowing(errors?.name?.message)
+                          {errors && errors.title
+                            ? ErrorShowing(errors?.title?.message)
                             : ""}
                         </Grid>
 
-                        <Grid item xs={12} sm={12} md={6} lg={6}>
-                          <InputLabel className={Subscription.InputLabelFont}>
-                            Price
-                          </InputLabel>
-                          <TextField
-                            placeholder="Price"
-                            {...register("price")}
-                            fullWidth
-                          />
-                          {errors && errors.price
-                            ? ErrorShowing(errors?.price?.message)
-                            : ""}
-                        </Grid>
-                      </Grid>
-
-                      <Grid
-                        item
-                        xs={12}
-                        sm={12}
-                        md={12}
-                        lg={12}
-                        className={Subscription.sessionNameGride}
-                      >
-                        <Grid item xs={12} sm={12} md={6} lg={6} mr={2}>
+                        
+                        <Grid item xs={12} sm={12} md={12} lg={12} mb={2}>
                           <InputLabel className={Subscription.InputLabelFont}>
                             Duration Term
                           </InputLabel>
-                          <TextField
-                            placeholder="Duration Term"
-                            {...register("duration_term")}
-                            fullWidth
+                          <Controller
+                            name="duration_term"
+                            control={control}
+                            defaultValue="month"
+                            
+                            render={({ field }) => (
+                              <FormControl fullWidth>
+                                <Select {...field} displayEmpty>
+                                  <MenuItem value={"week"}>Week</MenuItem>
+                                  <MenuItem value={"month"}>Month</MenuItem>
+                                  <MenuItem value={"year"}>Year</MenuItem>
+                                </Select>
+                              </FormControl>
+                            )}
                           />
                           {errors && errors.duration_term
                             ? ErrorShowing(errors?.duration_term?.message)
                             : ""}
                         </Grid>
 
-                        <Grid item xs={12} sm={12} md={6} lg={6}>
+                        <Grid item xs={12} sm={12} md={12} lg={12} mb={2}>
                           <InputLabel className={Subscription.InputLabelFont}>
                             Duration Value
                           </InputLabel>
                           <TextField
+                          type="number"
                             placeholder="Duration Value"
                             {...register("duration_value")}
                             fullWidth
@@ -209,67 +176,24 @@ export default function AddSubscription() {
                             ? ErrorShowing(errors?.duration_value?.message)
                             : ""}
                         </Grid>
-                      </Grid>
-
-                      <Grid
-                        item
-                        xs={12}
-                        sm={12}
-                        md={12}
-                        lg={12}
-                        className={Subscription.sessionNameGride}
-                      >
-                        <Grid item xs={12} sm={12} md={6} lg={6} mr={2}>
+                        <Grid item xs={12} sm={12} md={12} lg={12} mb={2}>
                           <InputLabel className={Subscription.InputLabelFont}>
-                            Duration
+                            Price
                           </InputLabel>
                           <TextField
+                          type="number"
+                            placeholder="Subscription Price"
+                            InputProps={{
+                                startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                              }}
+                            {...register("amount")}
                             fullWidth
-                            type="date"
-                            placeholder="Duration Date"
-                            {...register("duration")}
                           />
-                          {errors && errors.duration
-                            ? ErrorShowing(errors?.duration?.message)
+                          {errors && errors.amount
+                            ? ErrorShowing(errors?.amount?.message)
                             : ""}
                         </Grid>
-
-                        <Grid item xs={12} sm={12} md={6} lg={6}>
-                          <InputLabel className={Subscription.InputLabelFont}>
-                            Status
-                          </InputLabel>
-                          <Controller
-                            name="status"
-                            control={control}
-                            defaultValue="active"
-                            render={({ field }) => (
-                              <FormControl fullWidth>
-                                <Select {...field} displayEmpty>
-                                  <MenuItem value={"active"}>Active</MenuItem>
-                                  <MenuItem value={"inactive"}>
-                                    Inactive
-                                  </MenuItem>
-                                </Select>
-                              </FormControl>
-                            )}
-                          />
-                          {errors && errors.module_id
-                            ? ErrorShowing(errors?.module_id?.message)
-                            : ""}
-                        </Grid>
-                      </Grid>
-
-                      <Grid item xs={12} sm={12} md={12} lg={12} mb={2}>
-                        <InputLabel className={Subscription.InputLabelFont}>
-                          Description
-                        </InputLabel>
-                        <TextareaAutosize minRows={4} aria-label="empty textarea" placeholder="Empty" {...register("description")} className={Subscription.textareaManuallyStyle} />
-
-                        {errors && errors.description
-                          ? ErrorShowing(errors?.description?.message)
-                          : ""}
-                      </Grid>
-
+                      
                       <Grid
                         item
                         xs={12}
@@ -282,7 +206,7 @@ export default function AddSubscription() {
                           className={Subscription.cancelButton}
                           variant="contained"
                           size="large"
-                          onClick={() => router.push("/admin/subscription")}
+                          onClick={() => router.push("/admin/subscriptions/plans/")}
                           id={styles.muibuttonBackgroundColor}
                         >
                           Cancel
