@@ -49,7 +49,6 @@ if(typeof window !== "undefined") {
                 : styles.nonActiveMenuItem;
 
                 const isSubMenuOpen = item.title === submenuTitles;
-                console.log(isSubMenuOpen,"isSubMenuOpen",submenuTitles,item.title,"openSubMenu",openSubMenu)
             return (
               <>
                 {item?.children ? (

@@ -109,4 +109,8 @@ export const API = {
   checenrollcourses: `${BASE_URL}/checenrollcourses`,
   topenrolledcourses: `${BASE_URL}/topenrolledcourses`,
   getEnrollCoursesByUserId: `${BASE_URL}/get_enrollcourse_by_user_id`,
+
+  // admin dashbaord 
+  dashboarddata: `${BASE_URL}/getdashboard`,
+
 };
