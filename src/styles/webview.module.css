@@ -481,11 +481,12 @@
   font-weight: bold !important;
   color: #e8661b !important;
 }
-.headingcssError{
- margin-left: 20px !important;
+.headingcssError {
+  margin-left: 20px !important;
   text-align: center !important;
   margin-top: 15px !important;
-  font-size: 20px !important;
+  font-size: 17px !important;
+  font-weight: bold !important;
 }
 .courses1 {
   padding-top: 3px !important;
@@ -549,4 +550,15 @@
   margin-left: 24px !important;
   font-weight: 600 !important;
 }
+.textHeadingCenter {
+  justify-content: center !important;
+}
+.gridColor {
+  color: #000000 !important;
+  width: 20px !important;
+}
 
+.gridColor:hover {
+  color: #000000 !important;
+  width: 23px !important;
+}

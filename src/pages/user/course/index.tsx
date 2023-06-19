@@ -200,14 +200,20 @@ const AllCourses = () => {
                           <TableCell
                             key={column.id}
                             align={column.align}
-                            style={{ top: 0, minWidth: column.minWidth }}
+                            style={{
+                              top: 0,
+                              minWidth: column.minWidth,
+                              fontWeight: "600",
+                            }}
                             onClick={() => {
                               column.label === "ID" ? handleSort(rows) : "";
                             }}
                           >
                             {toggle ? (
                               column.label === "ID" ? (
-                                <Typography>
+                                <Typography
+                                  className={courseStyle.tableHeadingForId}
+                                >
                                   ID{" "}
                                   <ArrowDownwardOutlinedIcon fontSize="small" />{" "}
                                 </Typography>
@@ -215,7 +221,9 @@ const AllCourses = () => {
                                 column.label
                               )
                             ) : column.label === "ID" ? (
-                              <Typography>
+                              <Typography
+                                className={courseStyle.tableHeadingForId}
+                              >
                                 ID <ArrowUpwardOutlinedIcon fontSize="small" />{" "}
                               </Typography>
                             ) : (
@@ -303,7 +311,7 @@ const AllCourses = () => {
                             sx={{ fontWeight: 600, textAlign: "center" }}
                           >
                             {" "}
-                            Record not Found{" "}
+                            Record not found!{" "}
                           </TableCell>
                         </TableRow>
                       )}
