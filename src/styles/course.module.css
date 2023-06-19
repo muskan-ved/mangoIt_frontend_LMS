@@ -104,7 +104,7 @@ width: 70% !important hai;
   display: contents !important;
 }
 .widthCss {
-  width: 30% !important;  
+  width: 30% !important;
 }
 .typoTitle {
   font-size: 18px !important;
@@ -175,8 +175,12 @@ width: 70% !important hai;
   /* display: inline-flex; */
   color: #e8661b !important;
 }
-.hoverbtn:hover{
+.hoverbtn:hover {
   -webkit-text-decoration: none !important;
   text-decoration: none !important;
   background-color: rgba(255, 255, 255, 0.04) !important;
+}
+.backbtncscourse {
+  height: 37px !important;
+  font-size: 13px !important;
 }
