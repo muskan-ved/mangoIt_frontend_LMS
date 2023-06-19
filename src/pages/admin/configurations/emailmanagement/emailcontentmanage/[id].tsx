@@ -121,7 +121,7 @@ const EmailContentManage = () => {
         handleGetData();
         if (res?.status === 201) {
           setTimeout(() => {
-            router.replace("admin/configurations/emailmanagement/");
+            router.replace("/admin/configurations/emailmanagement/");
           }, 2000);
         }
       })
@@ -279,6 +279,7 @@ const EmailContentManage = () => {
                       type="button"
                       size="large"
                       className={emailStyle.bothButtonSpace}
+                      id={styles.muibuttonBackgroundColor}
                       variant="contained"
                       onClick={() => router.back()}
                     >

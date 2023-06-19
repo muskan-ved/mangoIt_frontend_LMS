@@ -144,7 +144,7 @@ export default function Login() {
               Login
             </Typography>
             <Grid container>
-              <Grid item className="GlobalTextColor">
+              <Grid item  className={styles.registerPage}>
                 Don&lsquo;t have an account?
                 <Link
                   href="/register"
@@ -222,14 +222,13 @@ export default function Login() {
 
               <Link
                 href="/forgotpassword"
-                className="GlobalTextColor"
+                className={styles.registerPage}
               >
                 Forgot a password?
               </Link>
 
               <Box sx={{ marginLeft: "90px" }}>
                 <Divider
-                  className="GlobalTextColor"
                   sx={{ width: "80%", fontWeight: "bold" }}
                 >
                   {" "}

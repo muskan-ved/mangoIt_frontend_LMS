@@ -154,7 +154,7 @@ const EmailConfiguration = () => {
                                     {capitalizeFirstLetter(row.emailtype)}
                                   </TableCell>
                                   <TableCell>
-                                    {capitalizeFirstLetter(row.emailfrom)}
+                                    {row.emailfrom}
                                   </TableCell>
                                   <TableCell>{row.emailsubject}</TableCell>
                                   <TableCell>
