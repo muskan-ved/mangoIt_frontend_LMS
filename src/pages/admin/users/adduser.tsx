@@ -19,8 +19,8 @@ import styles from "../../../styles/sidebar.module.css";
 import UserCSS from "../../../styles/user.module.css";
 import { ToastContainer } from 'react-toastify';
 import { userValidations } from '@/validation_schema/userValidation';
-import { HandleRegister } from '@/services/auth';
 // API services
+import { HandleForgotPassword, HandleRegister } from '@/services/auth';
 
 
 
@@ -45,11 +45,17 @@ export default function AddUser() {
     setLoading(true);
     setLoadingButton(false)
     try {
-      const res = await HandleRegister(event)
+      const res = await HandleRegister({...event, identifier: 'admin_logged_in'})
+      // console.log('res', res?.data?.email)
+      // const userEmail = await HandleForgotPassword({
+      //   "to": res?.data?.email,
+      //   "emailType": "forgot_password"
+      // })
       setLoading(false);
       setTimeout(() => {
-        router.push('/admin/users')
-      }, 1000)
+        // router.push('/admin/users')
+      }, 900)
+
     } catch (e) {
       console.log(e)
       setLoadingButton(true)
@@ -141,7 +147,7 @@ export default function AddUser() {
                         </Grid>
 
                         <Grid item xs={12} sm={12} md={6} lg={6}>
-                        <InputLabel className={UserCSS.InputLabelFont}>Role</InputLabel>
+                          <InputLabel className={UserCSS.InputLabelFont}>Role</InputLabel>
                           <Controller
                             name="role_id"
                             control={control}

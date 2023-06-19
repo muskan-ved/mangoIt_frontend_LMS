@@ -60,7 +60,6 @@ export const HandleEmailContentCreate = async (reqData: any) => {
         toast.success("Email content submitted")
         return request;
     }).catch((error) => {
-        console.log(error.response, "333333resposne33333333")
         if (error?.response?.status === 401) {
             HandleLogout()
         } else if (error.response?.status === 400) {
@@ -79,9 +78,7 @@ export const HandleEmailContentUpdate = async (updateData: any, id: any) => {
         headers: LoginHeader(),
         data: updateData,
     }).then((request) => {
-
         toast.success("Email content updated")
-
         return request;
     }).catch((error) => {
         if (error?.response?.status === 401) {

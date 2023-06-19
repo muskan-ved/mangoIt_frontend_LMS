@@ -69,13 +69,14 @@ export default function Register() {
             <Typography
               component="h1"
               variant="h4"
-              className="GlobalTextColor"
+             
               sx={{ fontWeight: "bold" }}
             >
               Create Your Account
             </Typography>
             <Grid container>
-              <Grid item className="GlobalTextColor">
+              <Grid item className={styles.registerPage}>
+             
                 Already have an account?
                 <Link
                   href="/login"
