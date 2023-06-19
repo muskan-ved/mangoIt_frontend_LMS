@@ -30,8 +30,7 @@ export default function ResetPassword() {
 
   const onSubmit = async(event: any) => {
     
-    const getToken = {token : localStorage.getItem('forgotPasswordToken'),
-  }
+    const getToken = {token : localStorage.getItem('forgotPasswordToken'), }
   const reqData = {
     ...getToken,
     ...event
