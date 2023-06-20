@@ -1,7 +1,7 @@
 import * as React from "react";
-import { Button ,TextField,Box,Grid,Typography, InputAdornment, IconButton} from "@mui/material";
+import { Button, TextField, Box, Grid, Typography, InputAdornment, IconButton } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import AuthSidebar from "../../common/LayoutNavigations/authSideLayout";
 import sidebarStyles from "../../styles/sidebar.module.css";
 import { LoadingButton } from "@mui/lab";
@@ -19,44 +19,43 @@ const theme = createTheme();
 
 export default function ResetPassword() {
 
-    const { register,	handleSubmit,formState: { errors } } = useForm<resetPasswordType>({resolver: yupResolver(userResetPasswordValidations)});
-    const router = useRouter();
-    const [loading,setLoading] = React.useState<boolean>(false);
-    const [showPassword, setShowPassword] = React.useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
+  const { register, handleSubmit, formState: { errors } } = useForm<resetPasswordType>({ resolver: yupResolver(userResetPasswordValidations) });
+  const router: any = useRouter();
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleClickShowConfirmPassword = () => setShowConfirmPassword((show) => !show);
+  const { token } = router.query;
 
-  const onSubmit = async(event: any) => {
-    
-    const getToken = {token : localStorage.getItem('forgotPasswordToken'),
-  }
-  const reqData = {
-    ...getToken,
-    ...event
-};
+  const onSubmit = async (event: any) => {
+    // const getToken = { token: localStorage.getItem('forgotPasswordToken'), }
+    const reqData = {
+      ...event, token
+    };
+    console.log('reqData',reqData)
     setLoading(true)
     await HandleResetPassword(reqData).then((res) => {
-    if(res.status === 202){
-      router.push('/login')
-      localStorage.removeItem('forgotPasswordToken')
-    }
+      if (res.status === 202) {
+        router.push('/login')
+        localStorage.removeItem('forgotPasswordToken')
+      }
       setLoading(false)
     }).catch(() => {
       setLoading(false)
     })
   };
 
-  function ErrorShowing (errorMessage:any){
-    return ( <Typography variant="body2" color={'error'} gutterBottom>{errorMessage} </Typography> );
+  function ErrorShowing(errorMessage: any) {
+    return (<Typography variant="body2" color={'error'} gutterBottom>{errorMessage} </Typography>);
   }
 
   return (
     <ThemeProvider theme={theme}>
-      <ToastContainer/>
+      <ToastContainer />
       <Grid container component="main">
-        <AuthSidebar/>
+        <AuthSidebar />
         <Grid item xs={12} sm={7} md={5} lg={5}>
           <Box
             sx={{
@@ -74,7 +73,7 @@ export default function ResetPassword() {
             >
               Reset Password
             </Typography>
-           
+
             <Box
               component="form"
               noValidate
@@ -91,16 +90,16 @@ export default function ResetPassword() {
                 autoFocus
                 InputProps={{
                   endAdornment: (
-                     <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  edge="end"
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
                   ),
                 }}
-               
+
               />
               {errors && errors.password ? ErrorShowing(errors?.password?.message) : ''}
 
@@ -113,34 +112,34 @@ export default function ResetPassword() {
                 id="outlined-confirm_password"
                 InputProps={{
                   endAdornment: (
-                     <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowConfirmPassword}
-                  edge="end"
-                >
-                  {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowConfirmPassword}
+                      edge="end"
+                    >
+                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
                   ),
                 }}
               />
               {errors && errors.confirm_password ? ErrorShowing(errors?.confirm_password?.message) : ''}
 
-             {!loading ? <Button
+              {!loading ? <Button
                 type="submit"
                 fullWidth
                 size="large"
                 variant="contained"
                 className="authPageButton"
                 sx={{ mt: 3, mb: 2 }}
-              id={sidebarStyles.muibuttonBackgroundColor}
+                id={sidebarStyles.muibuttonBackgroundColor}
 
               >
                 Save
-              </Button> : <LoadingButton loading={loading}  fullWidth
+              </Button> : <LoadingButton loading={loading} fullWidth
                 size="large" sx={{ mt: 3, mb: 2 }}
                 variant="outlined" disabled >
-         <CircularProgressBar/>
-        </LoadingButton>}
+                <CircularProgressBar />
+              </LoadingButton>}
             </Box>
           </Box>
         </Grid>
