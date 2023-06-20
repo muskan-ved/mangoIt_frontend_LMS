@@ -110,6 +110,11 @@ export const API = {
   topenrolledcourses: `${BASE_URL}/topenrolledcourses`,
   getEnrollCoursesByUserId: `${BASE_URL}/get_enrollcourse_by_user_id`,
 
-  // admin dashbaord
+  //doenload payment receiprt
+  downloadpaymentreceipt: `${BASE_URL}/downloadpaymentreceipt`,
+
+  //doenload payment receiprt
+  downloadorderinvoice: `${BASE_URL}/downloadorderinvoice`,
+  // admin dashbaord 
   dashboarddata: `${BASE_URL}/getdashboard`,
 };

@@ -74,17 +74,18 @@ import { GetdateAfterOneMonth } from "@/common/commonfunctions/connonfun";
 import { Dateformat } from "../../../../common/commonfunctions/connonfun";
 import { useTheme } from "@mui/material/styles";
 import CloudDownloadOutlinedIcon from "@mui/icons-material/CloudDownloadOutlined";
+import { HandleDownloadInvoice, HandleDownloadReceipt } from "../../../../services/invoice_receipt";
 import SpinnerProgress from "@/common/CircularProgressComponent/spinnerComponent";
 interface Column {
   id:
-    | "id"
-    | "amount"
-    | "date"
-    | "transaction_id"
-    | "payment_method"
-    | "pay_of_month"
-    | "action"
-    | "status";
+  | "id"
+  | "amount"
+  | "date"
+  | "transaction_id"
+  | "payment_method"
+  | "pay_of_month"
+  | "action"
+  | "status";
   label: string;
   minWidth?: number;
   align?: "right";
@@ -274,6 +275,38 @@ export default function View() {
     setDialougeopenOpen(false);
   };
 
+  //download receipt
+  const DownloadReceipt = (transactionid: any) => {
+    const reqdata = {
+      transactionId: transactionid
+    }
+    HandleDownloadReceipt(reqdata).then((response: any) => {
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `customer-recerpt-${transactionid}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      return false;
+    });
+  }
+
+  //download invoice
+  const DownloadInvoice = (orderid: any) => {
+    const reqdata = {
+      orderId: orderid
+    }
+    HandleDownloadInvoice(reqdata).then((response: any) => {
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `customer-invoice-${orderid}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      return false;
+    });
+  }
+
   return (
     <>
       <Navbar />
@@ -458,8 +491,8 @@ export default function View() {
                     >
                       {subsData?.duration_term
                         ? capitalizeFirstLetter(
-                            subsData && subsData?.duration_term
-                          )
+                          subsData && subsData?.duration_term
+                        )
                         : ""}
                     </Typography>
                   </Box>
@@ -477,53 +510,59 @@ export default function View() {
                     >
                       {subsData?.createdAt
                         ? moment(subsData?.createdAt).format("DD, MMM YYYY")
-                        : ""}
-                    </Typography>
-                  </Box>
-                  {subsData?.start_date ? (
-                    <Box className={subs.maindisplay}>
-                      <Typography
-                        variant="subtitle1"
-                        className={subs.useNameFront}
-                      >
-                        Last Pay date&nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;:
-                      </Typography>
-                      &emsp;
-                      <Typography
-                        variant="subtitle2"
-                        className={subs.fontCSSsubsc}
-                      >
-                        {subsData?.start_date
-                          ? moment(subsData?.start_date).format("DD, MMM YYYY")
-                          : ""}
-                      </Typography>
-                    </Box>
-                  ) : (
-                    ""
-                  )}
-                  {subsData?.start_date ? (
-                    <Box className={subs.maindisplay}>
-                      <Typography
-                        variant="subtitle1"
-                        className={subs.useNameFront}
-                      >
-                        Next pay date&nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;:
-                      </Typography>
-                      &emsp;
-                      <Typography
-                        variant="subtitle2"
-                        className={subs.fontCSSsubsc}
-                      >
-                        {subsData?.start_date
-                          ? moment(
+                        : ""
+                      }
+                    </Typography >
+                  </Box >
+                  {
+                    subsData?.start_date ? (
+                      <Box className={subs.maindisplay} >
+                        <Typography
+                          variant="subtitle1"
+                          className={subs.useNameFront}
+                        >
+                          Last Pay date&nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;:
+                        </Typography>
+                        & emsp;
+                        <Typography
+                          variant="subtitle2"
+                          className={subs.fontCSSsubsc}
+                        >
+                          {
+                            subsData?.start_date
+                              ? moment(subsData?.start_date).format("DD, MMM YYYY")
+                              : ""}
+                        </Typography>
+                      </Box >
+                    ) : (
+                      ""
+                    )
+                  }
+                  {
+                    subsData?.start_date ? (
+                      <Box className={subs.maindisplay}>
+                        <Typography
+                          variant="subtitle1"
+                          className={subs.useNameFront}
+                        >
+                          Next pay date&nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;:
+                        </Typography>
+                        &emsp;
+                        <Typography
+                          variant="subtitle2"
+                          className={subs.fontCSSsubsc}
+                        >
+                          {subsData?.start_date
+                            ? moment(
                               GetdateAfterOneMonth(subsData?.start_date)
                             ).format("DD, MMMM YYYY")
-                          : ""}
-                      </Typography>
-                    </Box>
-                  ) : (
-                    ""
-                  )}
+                            : ""}
+                        </Typography>
+                      </Box>
+                    ) : (
+                      ""
+                    )
+                  }
                   <Box sx={{ flexGrow: 1 }} mt={3}>
                     <Grid
                       container
@@ -621,8 +660,8 @@ export default function View() {
                       </Grid>
                     </Grid>
                   </Box>
-                </Box>
-              </CardContent>
+                </Box >
+              </CardContent >
             ) : (
               <Card>
                 <CardContent>
@@ -630,7 +669,7 @@ export default function View() {
                 </CardContent>
               </Card>
             )}
-          </Card>
+          </Card >
           <br />
           <Card>
             {!isLoading ? (
@@ -703,16 +742,16 @@ export default function View() {
                                   <TableCell>
                                     {row?.transaction_id
                                       ? row?.transaction_id?.substring(0, 15) +
-                                        "..."
+                                      "..."
                                       : ""}
                                   </TableCell>
                                   <TableCell>
                                     {row?.transaction_id
                                       ? capitalizeFirstLetter(
-                                          row?.payment_type
-                                            ? row?.payment_type
-                                            : ""
-                                        )
+                                        row?.payment_type
+                                          ? row?.payment_type
+                                          : ""
+                                      )
                                       : ""}
                                   </TableCell>
                                   <TableCell>
@@ -775,7 +814,7 @@ export default function View() {
                             </TableRow>
                           )}
                         </TableBody>
-                      </Table>
+                      </Table >
                       <Stack
                         className={courseStyle.stackStyle}
                         direction="row"
@@ -804,8 +843,8 @@ export default function View() {
                           </Select>
                         </FormControl>
                       </Stack>
-                    </TableContainer>
-                  </Paper>
+                    </TableContainer >
+                  </Paper >
                   <AlertSubscriptionDialog
                     open={open}
                     onClose={cancelSubscription}
@@ -813,8 +852,8 @@ export default function View() {
                     title={"Cancel Subscription"}
                     whatYouDelete="Cancel Subscription"
                   />
-                </Box>
-              </CardContent>
+                </Box >
+              </CardContent >
             ) : (
               <Card>
                 <CardContent>
@@ -822,8 +861,8 @@ export default function View() {
                 </CardContent>
               </Card>
             )}
-          </Card>
-        </Box>
+          </Card >
+        </Box >
         <Dialog
           fullScreen={fullScreen}
           open={dialougeopen}
@@ -900,20 +939,11 @@ export default function View() {
                 </Typography>
               </Box>
             </Box>
-            <Box textAlign="center" mt={4} mb={2}>
-              <Button
-                variant="contained"
-                startIcon={<CloudDownloadOutlinedIcon />}
-                id={styles.muibuttonBackgroundColor}
-              >
+            <Box textAlign='center' mt={4} mb={2}>
+              <Button variant='contained' startIcon={<CloudDownloadOutlinedIcon />} id={styles.muibuttonBackgroundColor} onClick={() => DownloadReceipt(trxdata?.id)}>
                 DownLoad Receipt
               </Button>
-              <Button
-                variant="contained"
-                id={styles.muibuttonBackgroundColor}
-                sx={{ marginLeft: "20px" }}
-                startIcon={<CloudDownloadOutlinedIcon />}
-              >
+              <Button variant='contained' id={styles.muibuttonBackgroundColor} sx={{ marginLeft: "20px" }} startIcon={<CloudDownloadOutlinedIcon />} onClick={() => DownloadInvoice(trxdata?.order_id)}>
                 DownLoad Invoice
               </Button>
             </Box>
@@ -930,9 +960,9 @@ export default function View() {
             </Button>
           </DialogActions>
         </Dialog>
-      </Box>
+      </Box >
       {/* <Footer /> */}
-      <ToastContainer />
+      < ToastContainer />
     </>
   );
 }
