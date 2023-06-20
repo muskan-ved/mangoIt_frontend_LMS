@@ -299,7 +299,7 @@ export default function Dashboard() {
                                 variant="subtitle1"
                                 className={style.useNameFront}
                               >
-                                Duration-Term
+                                Duration Term
                               </Typography>
                               <Typography
                                 variant="subtitle1"
