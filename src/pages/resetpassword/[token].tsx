@@ -83,8 +83,8 @@ export default function ResetPassword() {
               <TextField
                 margin="normal"
                 fullWidth
-                id="outlined-basic"
-                label="New Password"
+                id="outlined-new-password"
+                label="New Password "
                 {...register("password")}
                 type={showPassword ? 'text' : 'password'}
                 autoFocus
@@ -134,7 +134,7 @@ export default function ResetPassword() {
                 id={sidebarStyles.muibuttonBackgroundColor}
 
               >
-                Save
+                Reset
               </Button> : <LoadingButton loading={loading} fullWidth
                 size="large" sx={{ mt: 3, mb: 2 }}
                 variant="outlined" disabled >
