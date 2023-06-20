@@ -370,7 +370,7 @@ export default function Dashboard() {
                           />
                         </IconButton>
                         <IconButton
-                          className={style.actionview1}
+                          className={style.actionview2}
                           onClick={listView}
                         >
                           <FormatListBulletedIcon

@@ -463,7 +463,16 @@
 }
 
 .actionview1 {
-  /* background-color: #e8661b !important; */
+  border-radius: inherit !important;
+  margin-right: 10px !important;
+  margin-top: 0px !important;
+  border-radius: 5px !important;
+  width: 20px !important;
+  height: 20px !important;
+  padding: 15px !important;
+}
+
+.actionview2 {
   border-radius: inherit !important;
   margin-right: 20px !important;
   margin-top: 0px !important;
@@ -472,7 +481,6 @@
   height: 20px !important;
   padding: 15px !important;
 }
-
 .iconColor {
   color: rgb(0, 0, 0) !important;
   width: 22px !important;
