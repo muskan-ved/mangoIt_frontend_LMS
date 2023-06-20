@@ -1,5 +1,14 @@
-// import { render, screen } from "@testing-library/react";
-// import Dashboard from "@/pages/user/dashboard";
+// import { fireEvent, render, screen } from "@testing-library/react";
+// import {Dashboard} from "@/pages/user/dashboard";
+
+
+// describe("Home", () => {
+//   it("should render the Home component", () => {
+//     const { getByText }:any = render(<Dashboard />);
+//     expect(getByText("Home")).toBeInTheDOM;
+//   });
+// });
+
 
 describe("Test the User dashboard", () => {
   test("Dashboard button", () => {

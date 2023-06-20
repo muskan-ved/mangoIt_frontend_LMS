@@ -587,3 +587,19 @@
     font-weight: 600 !important;
   }
 }
+.gridlistview {
+  display: table-row-group !important;
+}
+
+.listunderline {
+  border: 2px solid #e8661b !important;
+  margin-top: 3px !important;
+  width: 30px !important;
+}
+.listunderline2 {
+  display: none !important;
+}
+
+.gridicondisplay {
+  display: contents !important;
+}
