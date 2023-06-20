@@ -357,36 +357,30 @@ export default function Dashboard() {
 
                     <Box className={style.alignendcss}>
                       <Stack spacing={1} className={style.gridicon}>
-                        <Box className={style.displayBox}>
-                          <Stack className={style.gridlistview}>
-                            <IconButton
-                              className={style.actionview1}
-                              onClick={gridView}
-                            >
-                              <GridViewIcon className={style.iconColor} />
-                            </IconButton>
-                            <Typography
-                              className={
-                                dynamicCss === 1 ? style.listunderline : ""
-                              }
-                            ></Typography>
-                          </Stack>
-                          <Stack>
-                            <IconButton
-                              className={style.actionview1}
-                              onClick={listView}
-                            >
-                              <FormatListBulletedIcon
-                                className={style.iconColor}
-                              />
-                            </IconButton>
-                            <Typography
-                              className={
-                                dynamicCss === 2 ? style.listunderline : ""
-                              }
-                            ></Typography>
-                          </Stack>
-                        </Box>
+                        <IconButton
+                          className={style.actionview1}
+                          onClick={gridView}
+                        >
+                          <GridViewIcon
+                            className={
+                              dynamicCss === 1
+                                ? style.gridColor
+                                : style.iconColor
+                            }
+                          />
+                        </IconButton>
+                        <IconButton
+                          className={style.actionview1}
+                          onClick={listView}
+                        >
+                          <FormatListBulletedIcon
+                            className={
+                              dynamicCss === 2
+                                ? style.gridColor
+                                : style.iconColor
+                            }
+                          />
+                        </IconButton>
                       </Stack>
                     </Box>
                   </Box>

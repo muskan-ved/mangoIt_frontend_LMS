@@ -463,7 +463,7 @@
 }
 
 .actionview1 {
-  background-color: #e8661b !important;
+  /* background-color: #e8661b !important; */
   border-radius: inherit !important;
   margin-right: 20px !important;
   margin-top: 0px !important;
@@ -474,8 +474,13 @@
 }
 
 .iconColor {
-  color: white !important;
-  width: 20px !important;
+  color: rgb(0, 0, 0) !important;
+  width: 22px !important;
+}
+
+.iconColor:hover {
+  color: rgb(0, 0, 0) !important;
+  width: 24px !important;
 }
 .headingcss {
   font-weight: bold !important;
@@ -507,10 +512,6 @@
   flex-wrap: wrap !important;
 }
 
-.iconColor:hover {
-  color: white !important;
-  width: 23px !important;
-}
 .imgcss {
   border-radius: 30px !important;
   margin-top: 5px !important;
@@ -553,13 +554,16 @@
   justify-content: center !important;
 }
 .gridColor {
-  color: #000000 !important;
-  width: 20px !important;
+  color: #e8661b !important;
+  background: #e9e9e9 !important;
+  padding: 1px !important;
+  border-radius: 3px !important;
+  width: 23px !important;
 }
 
 .gridColor:hover {
-  color: #000000 !important;
-  width: 23px !important;
+  color: #e8661b !important;
+  width: 25px !important;
 }
 
 @media (min-width: 900) and (max-width: 1024px) {
