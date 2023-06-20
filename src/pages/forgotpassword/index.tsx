@@ -34,7 +34,7 @@ export default function ForgotPassword() {
     }
     setLoading(true)
     await HandleForgotPassword(formData).then((res) => {
-      localStorage.setItem("forgotPasswordToken",res.data)
+      // localStorage.setItem("forgotPasswordToken",res.data)
       setLoading(false)
     }).catch(() => {
       setLoading(false)
