@@ -20,11 +20,16 @@
   font-weight: bold !important;
 }
 
-/* .quillShortDescription > div > div {
-    height: 80px;
-} */
+.quillShortDescription> div > div {
+  height: 80px !important;
+  margin-bottom: 80px !important;
+}
 .quillDescription > div > div {
-  height: 70px !important;
+  height: 80px !important;
+}
+.quillDescription1 > div > div {
+  height: 80px !important;
+  margin-bottom: 80px !important;
 }
 .wrapShortAndLongDescription {
   display: flex !important;
