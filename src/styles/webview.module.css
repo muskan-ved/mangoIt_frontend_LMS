@@ -268,15 +268,16 @@
 
 /* basic article elements styling */
 .article .h2 {
-  margin: 0 0 10px 0 !important;
+  /* margin: 0 0 10px 0 !important; */
   font-size: 1.5rem !important;
   color: "black" !important;
   text-align: center !important;
+  font-weight: 600 !important;
 }
 
 .article .h5 {
-  margin: 0 0 10px 0 !important;
-  font-size: 1.2rem !important;
+  /* margin: 0 0 10px 0 !important; */
+  font-size: 1rem !important;
   color: "black" !important;
   text-align: center !important;
 }
@@ -296,7 +297,7 @@
 }
 
 .articlebody {
-  padding: 24px !important;
+  padding: 15px !important;
 }
 
 .article a {
@@ -614,4 +615,10 @@
 
 .gridicondisplay {
   display: contents !important;
+}
+.titleCoursecs {
+  font-weight: 600 !important;
+}
+.continueRead {
+  color: #e8661b !important;
 }
