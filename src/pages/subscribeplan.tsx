@@ -20,6 +20,8 @@ export default function HomePage() {
         })
     }
 
+    console.log(subsdata)
+
     return (
         <>
             {/*header*/}

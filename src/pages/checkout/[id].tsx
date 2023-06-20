@@ -92,8 +92,8 @@ export default function Checkout() {
                             name: subscriptionplandet?.title,
                             description: subscriptionplandet?.title,
                             price: subscriptionplandet?.amount,
-                            duration_term: "days",
-                            duration_value: 30,
+                            duration_term: subscriptionplandet?.duration_term,
+                            duration_value: subscriptionplandet?.duration_value,
                             status: "inactive"
                         }
                         //create subscription
