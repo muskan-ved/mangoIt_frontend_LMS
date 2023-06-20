@@ -42,6 +42,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { useRouter } from "next/router";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import {
   HandleSubscriptionGetByID,
   HandleSubscriptionPayment,
@@ -73,6 +74,7 @@ import { GetdateAfterOneMonth } from "@/common/commonfunctions/connonfun";
 import { Dateformat } from "../../../../common/commonfunctions/connonfun";
 import { useTheme } from "@mui/material/styles";
 import CloudDownloadOutlinedIcon from "@mui/icons-material/CloudDownloadOutlined";
+import SpinnerProgress from "@/common/CircularProgressComponent/spinnerComponent";
 interface Column {
   id:
     | "id"
@@ -128,6 +130,7 @@ export default function View() {
   const [spinner, setshowspinner] = React.useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("lg"));
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     let localData: any;
@@ -139,6 +142,7 @@ export default function View() {
     if (localData) {
       getId = JSON.parse(localData);
     }
+    setIsLoading(true);
     getSubsData();
     setuserId(getId?.id);
   }, []);
@@ -150,6 +154,7 @@ export default function View() {
       HandleSubscriptionGetByID(id).then((data) => {
         getAllCourseData(id);
         setSubsdata(data?.data);
+        setIsLoading(false);
       });
     }
   };
@@ -172,6 +177,7 @@ export default function View() {
   const getAllCourseData = (id: any) => {
     HandleOrderGetByUserID(id).then((subs) => {
       setRows(subs.data.reverse());
+      setIsLoading(false);
     });
   };
 
@@ -195,10 +201,12 @@ export default function View() {
           toast.success(`Subscription updated successfully`);
           router.push("/user/subscription");
           setLoadingButton(false);
+          setIsLoading(false);
         }, 500);
       })
       .catch((err) => {
         console.log(err);
+        setIsLoading(false);
         setLoadingButton(false);
       });
   };
@@ -301,221 +309,237 @@ export default function View() {
           </Box>
           {/* main content */}
           <Card>
-            <CardContent>
-              <Box className={profiles.userData}>
-                <Box className={subs.maindisplay}>
-                  <Typography variant="subtitle1" className={subs.useNameFront}>
-                    Subscription Name&nbsp;&nbsp;&emsp;&emsp;:
-                  </Typography>
-                  &emsp;
-                  <Typography variant="subtitle2" className={subs.fontCSSsubsc}>
-                    {capitalizeFirstLetter(subsData && subsData?.name)}
-                  </Typography>
-                </Box>
-                <Box className={subs.maindisplay}>
-                  <Typography variant="subtitle1" className={subs.useNameFront}>
-                    Subscription Amount &emsp; :
-                  </Typography>
-                  &emsp;
-                  <Typography variant="subtitle2" className={subs.fontCSSsubsc}>
-                    ${subsData && subsData?.price}
-                  </Typography>
-                </Box>
-                <Box className={subs.maindisplay}>
-                  <Typography variant="subtitle1" className={subs.useNameFront}>
-                    Subscription Status&nbsp;&emsp;&emsp;:
-                  </Typography>
-                  &nbsp;&nbsp;&nbsp;&nbsp;
-                  {subsData && subsData?.status === "active" ? (
+            {!isLoading ? (
+              <CardContent>
+                <Box className={profiles.userData}>
+                  <Box className={subs.maindisplay}>
+                    <Typography
+                      variant="subtitle1"
+                      className={subs.useNameFront}
+                    >
+                      Subscription Name&nbsp;&nbsp;&emsp;&emsp;:
+                    </Typography>
+                    &emsp;
                     <Typography
                       variant="subtitle2"
-                      style={{
-                        color: "green",
-                        padding: "3px",
-                        fontWeight: "bold",
-                      }}
+                      className={subs.fontCSSsubsc}
                     >
-                      {subsData?.status
-                        ? capitalizeFirstLetter(subsData?.status)
-                        : ""}
+                      {capitalizeFirstLetter(subsData && subsData?.name)}
                     </Typography>
-                  ) : subsData && subsData?.status === "inactive" ? (
+                  </Box>
+                  <Box className={subs.maindisplay}>
+                    <Typography
+                      variant="subtitle1"
+                      className={subs.useNameFront}
+                    >
+                      Subscription Amount &emsp; :
+                    </Typography>
+                    &emsp;
                     <Typography
                       variant="subtitle2"
-                      style={{
-                        color: "red",
-                        padding: "3px",
-                        fontWeight: "bold",
-                      }}
+                      className={subs.fontCSSsubsc}
                     >
-                      {subsData?.status
-                        ? capitalizeFirstLetter(subsData?.status)
-                        : ""}
+                      $ {subsData && subsData?.price}
                     </Typography>
-                  ) : subsData && subsData?.status === "canceled" ? (
+                  </Box>
+                  <Box className={subs.maindisplay}>
                     <Typography
-                      variant="subtitle2"
-                      style={{
-                        color: "red",
-                        padding: "3px",
-                        fontWeight: "bold",
-                      }}
+                      variant="subtitle1"
+                      className={subs.useNameFront}
                     >
-                      {subsData?.status
-                        ? capitalizeFirstLetter(subsData?.status)
-                        : ""}
+                      Subscription Status&nbsp;&emsp;&emsp;:
                     </Typography>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    {subsData && subsData?.status === "active" ? (
+                      <Typography
+                        variant="subtitle2"
+                        style={{
+                          color: "green",
+                          padding: "3px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {subsData?.status
+                          ? capitalizeFirstLetter(subsData?.status)
+                          : ""}
+                      </Typography>
+                    ) : subsData && subsData?.status === "inactive" ? (
+                      <Typography
+                        variant="subtitle2"
+                        style={{
+                          color: "red",
+                          padding: "3px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {subsData?.status
+                          ? capitalizeFirstLetter(subsData?.status)
+                          : ""}
+                      </Typography>
+                    ) : subsData && subsData?.status === "canceled" ? (
+                      <Typography
+                        variant="subtitle2"
+                        style={{
+                          color: "red",
+                          padding: "3px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {subsData?.status
+                          ? capitalizeFirstLetter(subsData?.status)
+                          : ""}
+                      </Typography>
+                    ) : (
+                      <Typography
+                        variant="subtitle2"
+                        style={{
+                          color: "red",
+                          padding: "3px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {subsData?.status
+                          ? capitalizeFirstLetter(subsData?.status)
+                          : ""}
+                      </Typography>
+                    )}
+                  </Box>
+                  {subsData?.status === "inactive" ? (
+                    <Box className={subs.maindisplay}>
+                      <Typography
+                        variant="subtitle1"
+                        className={subs.useNameFront}
+                      >
+                        Payment Status &emsp;&emsp;&emsp;&emsp;:
+                      </Typography>
+                      &emsp;
+                      <Typography
+                        variant="subtitle2"
+                        style={{
+                          color: "red",
+                          padding: "4px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        Unpaid
+                      </Typography>
+                    </Box>
                   ) : (
-                    <Typography
-                      variant="subtitle2"
-                      style={{
-                        color: "red",
-                        padding: "3px",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {subsData?.status
-                        ? capitalizeFirstLetter(subsData?.status)
-                        : ""}
-                    </Typography>
+                    ""
                   )}
-                </Box>
-                {subsData?.status === "inactive" ? (
                   <Box className={subs.maindisplay}>
                     <Typography
                       variant="subtitle1"
                       className={subs.useNameFront}
                     >
-                      Payment Status &emsp;&emsp;&emsp;&emsp;:
-                    </Typography>
-                    &emsp;
-                    <Typography
-                      variant="subtitle2"
-                      style={{
-                        color: "red",
-                        padding: "4px",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      Unpaid
-                    </Typography>
-                  </Box>
-                ) : (
-                  ""
-                )}
-                <Box className={subs.maindisplay}>
-                  <Typography variant="subtitle1" className={subs.useNameFront}>
-                    Subscription date &emsp;&emsp;&emsp;:
-                  </Typography>
-                  &emsp;
-                  <Typography variant="subtitle2" className={subs.fontCSSsubsc}>
-                    {subsData?.createdAt
-                      ? moment(subsData?.createdAt).format("DD, MMM YYYY")
-                      : ""}
-                  </Typography>
-                </Box>
-                <Box className={subs.maindisplay}>
-                  <Typography variant="subtitle1" className={subs.useNameFront}>
-                    Subscription Type &nbsp;&nbsp;&emsp;&emsp; :
-                  </Typography>
-                  &emsp;
-                  <Typography variant="subtitle2" className={subs.fontCSSsubsc}>
-                    {subsData?.duration_term
-                      ? capitalizeFirstLetter(
-                          subsData && subsData?.duration_term
-                        )
-                      : ""}
-                  </Typography>
-                </Box>
-                <Box className={subs.maindisplay}>
-                  <Typography variant="subtitle1" className={subs.useNameFront}>
-                    Subscription date &emsp;&emsp;&emsp;:
-                  </Typography>
-                  &emsp;
-                  <Typography variant="subtitle2" className={subs.fontCSSsubsc}>
-                    {subsData?.createdAt
-                      ? moment(subsData?.createdAt).format("DD, MMM YYYY")
-                      : ""}
-                  </Typography>
-                </Box>
-                {subsData?.start_date ? (
-                  <Box className={subs.maindisplay}>
-                    <Typography
-                      variant="subtitle1"
-                      className={subs.useNameFront}
-                    >
-                      Last Pay date&nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;:
+                      Subscription date &emsp;&emsp;&emsp;:
                     </Typography>
                     &emsp;
                     <Typography
                       variant="subtitle2"
                       className={subs.fontCSSsubsc}
                     >
-                      {subsData?.start_date
-                        ? moment(subsData?.start_date).format("DD, MMM YYYY")
+                      {subsData?.createdAt
+                        ? moment(subsData?.createdAt).format("DD, MMM YYYY")
                         : ""}
                     </Typography>
                   </Box>
-                ) : (
-                  ""
-                )}
-                {subsData?.start_date ? (
                   <Box className={subs.maindisplay}>
                     <Typography
                       variant="subtitle1"
                       className={subs.useNameFront}
                     >
-                      Next pay date&nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;:
+                      Subscription Type &nbsp;&nbsp;&emsp;&emsp; :
                     </Typography>
                     &emsp;
                     <Typography
                       variant="subtitle2"
                       className={subs.fontCSSsubsc}
                     >
-                      {subsData?.start_date
-                        ? moment(
-                            GetdateAfterOneMonth(subsData?.start_date)
-                          ).format("DD, MMMM YYYY")
+                      {subsData?.duration_term
+                        ? capitalizeFirstLetter(
+                            subsData && subsData?.duration_term
+                          )
                         : ""}
                     </Typography>
                   </Box>
-                ) : (
-                  ""
-                )}
-                <Box sx={{ flexGrow: 1 }} mt={3}>
-                  <Grid
-                    container
-                    spacing={{ xs: 2, md: 3 }}
-                    columns={{ xs: 4, sm: 8, md: 12 }}
-                  >
-                    <Grid item xs={2} sm={4} md={11.8}>
-                      {subsData?.status === "inactive" ? (
-                        <Button
-                          variant="contained"
-                          endIcon={<CreditCardIcon />}
-                          onClick={() =>
-                            AcceptPaymentByorder(rows[0]?.id, rows[0]?.amount)
-                          }
-                        >
-                          Pay Now{" "}
-                          {spinner === true ? (
-                            <CircularProgress color="inherit" />
-                          ) : (
-                            ""
-                          )}
-                        </Button>
-                      ) : (
-                        ""
-                      )}
-                      {
-                        // Dateformat(new Date()) > Dateformat(GetdateAfterOneMonth(subsData?.start_date)) ?
-                        subsData?.status === "expired" ? (
+                  <Box className={subs.maindisplay}>
+                    <Typography
+                      variant="subtitle1"
+                      className={subs.useNameFront}
+                    >
+                      Subscription date &emsp;&emsp;&emsp;:
+                    </Typography>
+                    &emsp;
+                    <Typography
+                      variant="subtitle2"
+                      className={subs.fontCSSsubsc}
+                    >
+                      {subsData?.createdAt
+                        ? moment(subsData?.createdAt).format("DD, MMM YYYY")
+                        : ""}
+                    </Typography>
+                  </Box>
+                  {subsData?.start_date ? (
+                    <Box className={subs.maindisplay}>
+                      <Typography
+                        variant="subtitle1"
+                        className={subs.useNameFront}
+                      >
+                        Last Pay date&nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;:
+                      </Typography>
+                      &emsp;
+                      <Typography
+                        variant="subtitle2"
+                        className={subs.fontCSSsubsc}
+                      >
+                        {subsData?.start_date
+                          ? moment(subsData?.start_date).format("DD, MMM YYYY")
+                          : ""}
+                      </Typography>
+                    </Box>
+                  ) : (
+                    ""
+                  )}
+                  {subsData?.start_date ? (
+                    <Box className={subs.maindisplay}>
+                      <Typography
+                        variant="subtitle1"
+                        className={subs.useNameFront}
+                      >
+                        Next pay date&nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;:
+                      </Typography>
+                      &emsp;
+                      <Typography
+                        variant="subtitle2"
+                        className={subs.fontCSSsubsc}
+                      >
+                        {subsData?.start_date
+                          ? moment(
+                              GetdateAfterOneMonth(subsData?.start_date)
+                            ).format("DD, MMMM YYYY")
+                          : ""}
+                      </Typography>
+                    </Box>
+                  ) : (
+                    ""
+                  )}
+                  <Box sx={{ flexGrow: 1 }} mt={3}>
+                    <Grid
+                      container
+                      spacing={{ xs: 2, md: 3 }}
+                      columns={{ xs: 4, sm: 8, md: 12 }}
+                    >
+                      <Grid item xs={2} sm={4} md={11.8}>
+                        {subsData?.status === "inactive" ? (
                           <Button
                             variant="contained"
                             endIcon={<CreditCardIcon />}
-                            onClick={AcceptPayment}
+                            onClick={() =>
+                              AcceptPaymentByorder(rows[0]?.id, rows[0]?.amount)
+                            }
                           >
-                            Renew Subscription{" "}
+                            Pay Now{" "}
                             {spinner === true ? (
                               <CircularProgress color="inherit" />
                             ) : (
@@ -523,244 +547,281 @@ export default function View() {
                             )}
                           </Button>
                         ) : (
-                          <>
-                            {subsData?.status === "canceled" ? (
-                              // <Link href="www.google.com">
-                              <Fragment>
-                                <Box className={subs.maindisplay1}>
-                                  <Typography
-                                    variant="subtitle1"
-                                    className={subs.useSubsCancell}
-                                  >
-                                    If you want to activate this subscription
-                                  </Typography>
-                                  &nbsp; &nbsp;
-                                  <Link href="/subscribeplan">
+                          ""
+                        )}
+                        {
+                          // Dateformat(new Date()) > Dateformat(GetdateAfterOneMonth(subsData?.start_date)) ?
+                          subsData?.status === "expired" ? (
+                            <Button
+                              variant="contained"
+                              endIcon={<CreditCardIcon />}
+                              onClick={AcceptPayment}
+                            >
+                              Renew Subscription{" "}
+                              {spinner === true ? (
+                                <CircularProgress color="inherit" />
+                              ) : (
+                                ""
+                              )}
+                            </Button>
+                          ) : (
+                            <>
+                              {subsData?.status === "canceled" ? (
+                                // <Link href="www.google.com">
+                                <Fragment>
+                                  <Box className={subs.maindisplay1}>
                                     <Typography
                                       variant="subtitle1"
-                                      className={subs.useSubsMessage}
+                                      className={subs.useSubsCancell}
                                     >
-                                      Click here
+                                      If you want to activate this subscription
                                     </Typography>
-                                  </Link>
+                                    &nbsp; &nbsp;
+                                    <Link href="/subscribeplan">
+                                      <Typography
+                                        variant="subtitle1"
+                                        className={subs.useSubsMessage}
+                                      >
+                                        Click here
+                                      </Typography>
+                                    </Link>
+                                  </Box>
+                                </Fragment>
+                              ) : subsData.status === "inactive" ? (
+                                ""
+                              ) : (
+                                // </Link>
+                                <Box className={subs.btncss1}>
+                                  {!isLoadingButton ? (
+                                    <Button
+                                      variant="contained"
+                                      onClick={() =>
+                                        cancelSubscription(subsData?.id)
+                                      }
+                                      id={styles.muibuttonBackgroundColor}
+                                    >
+                                      Cancel Subscription
+                                    </Button>
+                                  ) : (
+                                    <LoadingButton
+                                      loading={isLoadingButton}
+                                      size="large"
+                                      className={subs.subsbtn}
+                                      variant="contained"
+                                      disabled
+                                    >
+                                      <CircularProgressBar />
+                                    </LoadingButton>
+                                  )}
                                 </Box>
-                              </Fragment>
-                            ) : subsData.status === "inactive" ? (
-                              ""
-                            ) : (
-                              // </Link>
-                              <Box className={subs.btncss1}>
-                                {!isLoadingButton ? (
-                                  <Button
-                                    variant="contained"
-                                    onClick={() =>
-                                      cancelSubscription(subsData?.id)
-                                    }
-                                    id={styles.muibuttonBackgroundColor}
-                                  >
-                                    Cancel Subscription
-                                  </Button>
-                                ) : (
-                                  <LoadingButton
-                                    loading={isLoadingButton}
-                                    size="large"
-                                    className={subs.subsbtn}
-                                    variant="contained"
-                                    disabled
-                                  >
-                                    <CircularProgressBar />
-                                  </LoadingButton>
-                                )}
-                              </Box>
-                            )}
-                          </>
-                        )
-                      }
+                              )}
+                            </>
+                          )
+                        }
+                      </Grid>
                     </Grid>
-                  </Grid>
+                  </Box>
                 </Box>
-              </Box>
-            </CardContent>
+              </CardContent>
+            ) : (
+              <Card>
+                <CardContent>
+                  <SpinnerProgress />
+                </CardContent>
+              </Card>
+            )}
           </Card>
           <br />
           <Card>
-            <CardContent>
-              <Typography variant="h5" className={subs.headingcss}>
-                Orders Details
-              </Typography>
-              <Box className={profiles.userData}>
-                <Paper>
-                  <TableContainer className={courseStyle.tableContainer}>
-                    <Table stickyHeader aria-label="sticky table">
-                      <TableHead>
-                        <TableRow>
-                          {columns.map((column) => (
-                            <TableCell
-                              key={column.id}
-                              align={column.align}
-                              style={{ top: 0, minWidth: column.minWidth }}
-                              className={courseStyle.tableHeadingForId}
-                              onClick={() => {
-                                column.label === "ID" ? handleSort(rows) : "";
-                              }}
-                            >
-                              {toggle ? (
-                                column.label === "ID" ? (
+            {!isLoading ? (
+              <CardContent>
+                <Typography variant="h5" className={subs.headingcss}>
+                  Orders Details
+                </Typography>
+                <Box className={profiles.userData}>
+                  <Paper>
+                    <TableContainer className={courseStyle.tableContainer}>
+                      <Table stickyHeader aria-label="sticky table">
+                        <TableHead>
+                          <TableRow>
+                            {columns.map((column) => (
+                              <TableCell
+                                key={column.id}
+                                align={column.align}
+                                style={{ top: 0, minWidth: column.minWidth }}
+                                className={courseStyle.tableHeadingForId}
+                                onClick={() => {
+                                  column.label === "ID" ? handleSort(rows) : "";
+                                }}
+                              >
+                                {toggle ? (
+                                  column.label === "ID" ? (
+                                    <Typography
+                                      className={courseStyle.tableHeadingForId}
+                                    >
+                                      ID{" "}
+                                      <ArrowDownwardOutlinedIcon fontSize="small" />{" "}
+                                    </Typography>
+                                  ) : (
+                                    column.label
+                                  )
+                                ) : column.label === "ID" ? (
                                   <Typography
                                     className={courseStyle.tableHeadingForId}
                                   >
                                     ID{" "}
-                                    <ArrowDownwardOutlinedIcon fontSize="small" />{" "}
+                                    <ArrowUpwardOutlinedIcon fontSize="small" />{" "}
                                   </Typography>
                                 ) : (
                                   column.label
-                                )
-                              ) : column.label === "ID" ? (
-                                <Typography
-                                  className={courseStyle.tableHeadingForId}
-                                >
-                                  ID{" "}
-                                  <ArrowUpwardOutlinedIcon fontSize="small" />{" "}
-                                </Typography>
-                              ) : (
-                                column.label
-                              )}
-                            </TableCell>
-                          ))}
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {rows && rows.length > 0 ? (
-                          DATA.currentData() &&
-                          DATA.currentData().map((row: any) => {
-                            return (
-                              <TableRow
-                                hover
-                                role="checkbox"
-                                tabIndex={-1}
-                                key={row.id}
-                              >
-                                <TableCell>{row?.id}</TableCell>
-                                <TableCell>${subsData?.price}</TableCell>
-                                <TableCell>
-                                  {moment(row?.createdAt).format("DD MMM YYYY")}
-                                </TableCell>
-                                <TableCell>
-                                  {monthNames[d.getMonth()]}
-                                </TableCell>
-                                <TableCell>
-                                  {row?.transaction_id
-                                    ? row?.transaction_id?.substring(0, 15) +
-                                      "..."
-                                    : ""}
-                                </TableCell>
-                                <TableCell>
-                                  {row?.transaction_id
-                                    ? capitalizeFirstLetter(
-                                        row?.payment_type
-                                          ? row?.payment_type
-                                          : ""
-                                      )
-                                    : ""}
-                                </TableCell>
-                                <TableCell>
-                                  {row?.status === "paid" ? (
-                                    <Typography style={{ color: "green" }}>
-                                      {capitalizeFirstLetter(
-                                        row?.status ? row?.status : ""
-                                      )}
-                                    </Typography>
-                                  ) : (
-                                    <Typography style={{ color: "red" }}>
-                                      {capitalizeFirstLetter(
-                                        row?.status ? row?.status : ""
-                                      )}
-                                    </Typography>
-                                  )}
-                                </TableCell>
-                                <TableCell>
-                                  {row?.status !== "paid" ? (
-                                    <Button
-                                      id={courseStyle.viewIcon}
-                                      className={courseStyle.editDeleteButton}
-                                      variant="outlined"
-                                      onClick={() =>
-                                        AcceptPaymentByorder(
-                                          row?.id,
-                                          row?.amount
-                                        )
-                                      }
-                                    >
-                                      <b>Pay</b>
-                                    </Button>
-                                  ) : (
-                                    <Button
-                                      variant="outlined"
-                                      onClick={() =>
-                                        handleClickOpenDialouge(row)
-                                      }
-                                      className={courseStyle.editDeleteButton}
-                                      id={courseStyle.viewIcon}
-                                    >
-                                      <RemoveRedEyeOutlinedIcon />
-                                    </Button>
-                                  )}
-                                </TableCell>
-                              </TableRow>
-                            );
-                          })
-                        ) : (
-                          <TableRow>
-                            <TableCell
-                              colSpan={7}
-                              sx={{ fontWeight: 600, textAlign: "center" }}
-                            >
-                              {" "}
-                              Record not Found{" "}
-                            </TableCell>
+                                )}
+                              </TableCell>
+                            ))}
                           </TableRow>
-                        )}
-                      </TableBody>
-                    </Table>
-                    <Stack
-                      className={courseStyle.stackStyle}
-                      direction="row"
-                      alignItems="right"
-                      justifyContent="space-between"
-                    >
-                      <Pagination
-                        className="pagination"
-                        count={count}
-                        page={page}
-                        color="primary"
-                        onChange={handlePageChange}
-                      />
-                      <FormControl>
-                        <Select
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select"
-                          defaultValue={5}
-                          onChange={handlerowchange}
-                          size="small"
-                          style={{ height: "40px", marginRight: "11px" }}
-                        >
-                          <MenuItem value={5}>5</MenuItem>
-                          <MenuItem value={20}>20</MenuItem>
-                          <MenuItem value={50}>50</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </Stack>
-                  </TableContainer>
-                </Paper>
-                <AlertSubscriptionDialog
-                  open={open}
-                  onClose={cancelSubscription}
-                  onSubmit={handleSubsUpdate}
-                  title={"Cancel Subscription"}
-                  whatYouDelete="Cancel Subscription"
-                />
-              </Box>
-            </CardContent>
+                        </TableHead>
+                        <TableBody>
+                          {rows && rows.length > 0 ? (
+                            DATA.currentData() &&
+                            DATA.currentData().map((row: any) => {
+                              return (
+                                <TableRow
+                                  hover
+                                  role="checkbox"
+                                  tabIndex={-1}
+                                  key={row.id}
+                                >
+                                  <TableCell>{row?.id}</TableCell>
+                                  <TableCell>$ {subsData?.price}</TableCell>
+                                  <TableCell>
+                                    {moment(row?.createdAt).format(
+                                      "DD MMM YYYY"
+                                    )}
+                                  </TableCell>
+                                  <TableCell>
+                                    {monthNames[d.getMonth()]}
+                                  </TableCell>
+                                  <TableCell>
+                                    {row?.transaction_id
+                                      ? row?.transaction_id?.substring(0, 15) +
+                                        "..."
+                                      : ""}
+                                  </TableCell>
+                                  <TableCell>
+                                    {row?.transaction_id
+                                      ? capitalizeFirstLetter(
+                                          row?.payment_type
+                                            ? row?.payment_type
+                                            : ""
+                                        )
+                                      : ""}
+                                  </TableCell>
+                                  <TableCell>
+                                    {row?.status === "paid" ? (
+                                      <Typography style={{ color: "green" }}>
+                                        {capitalizeFirstLetter(
+                                          row?.status ? row?.status : ""
+                                        )}
+                                      </Typography>
+                                    ) : (
+                                      <Typography style={{ color: "red" }}>
+                                        {capitalizeFirstLetter(
+                                          row?.status ? row?.status : ""
+                                        )}
+                                      </Typography>
+                                    )}
+                                  </TableCell>
+                                  <TableCell>
+                                    {row?.status !== "paid" ? (
+                                      <Button
+                                        id={courseStyle.viewIcon}
+                                        className={courseStyle.editDeleteButton}
+                                        variant="outlined"
+                                        onClick={() =>
+                                          AcceptPaymentByorder(
+                                            row?.id,
+                                            row?.amount
+                                          )
+                                        }
+                                      >
+                                        <b>Pay</b>
+                                      </Button>
+                                    ) : (
+                                      <Button
+                                        className={courseStyle.editDeleteButton}
+                                        //   href="/user/subscription/view"
+                                        id={courseStyle.viewIcon}
+                                        variant="outlined"
+                                        color="primary"
+                                        onClick={() =>
+                                          handleClickOpenDialouge(row)
+                                        }
+                                      >
+                                        <VisibilityIcon />
+                                      </Button>
+                                    )}
+                                  </TableCell>
+                                </TableRow>
+                              );
+                            })
+                          ) : (
+                            <TableRow>
+                              <TableCell
+                                colSpan={7}
+                                sx={{ fontWeight: 600, textAlign: "center" }}
+                              >
+                                {" "}
+                                Record not Found{" "}
+                              </TableCell>
+                            </TableRow>
+                          )}
+                        </TableBody>
+                      </Table>
+                      <Stack
+                        className={courseStyle.stackStyle}
+                        direction="row"
+                        alignItems="right"
+                        justifyContent="space-between"
+                      >
+                        <Pagination
+                          className="pagination"
+                          count={count}
+                          page={page}
+                          color="primary"
+                          onChange={handlePageChange}
+                        />
+                        <FormControl>
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            defaultValue={5}
+                            onChange={handlerowchange}
+                            size="small"
+                            style={{ height: "40px", marginRight: "11px" }}
+                          >
+                            <MenuItem value={5}>5</MenuItem>
+                            <MenuItem value={20}>20</MenuItem>
+                            <MenuItem value={50}>50</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </Stack>
+                    </TableContainer>
+                  </Paper>
+                  <AlertSubscriptionDialog
+                    open={open}
+                    onClose={cancelSubscription}
+                    onSubmit={handleSubsUpdate}
+                    title={"Cancel Subscription"}
+                    whatYouDelete="Cancel Subscription"
+                  />
+                </Box>
+              </CardContent>
+            ) : (
+              <Card>
+                <CardContent>
+                  <SpinnerProgress />
+                </CardContent>
+              </Card>
+            )}
           </Card>
         </Box>
         <Dialog
@@ -826,7 +887,7 @@ export default function View() {
                 </Typography>
                 &emsp;
                 <Typography variant="subtitle2" className={subs.fontCSS}>
-                  {trxdata?.trx_amount}
+                  $ {trxdata?.trx_amount}
                 </Typography>
               </Box>
               <Box className={subs.maindisplay}>

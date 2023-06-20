@@ -10,7 +10,7 @@
   right: 17px !important;
   color: white !important;
   position: relative !important;
-  background: #1a73e8 !important;
+  background: #e8661b !important;
   padding: 5px !important;
   border-radius: 50% !important;
 }
@@ -46,8 +46,14 @@
   width: 178px !important;
 }
 .userData {
-  margin-left: 15px;
+  margin-left: 15px !important;
 }
 .InputLabelFont {
-  font-weight: 700;
+  font-weight: 700 !important;
+}
+.profilebtnbackground {
+  background-color: #e8661b !important;
+}
+.editiconbtnn {
+  color:  #e8661b !important;
 }

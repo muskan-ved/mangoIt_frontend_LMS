@@ -42,6 +42,7 @@ import { handleSortData } from "@/common/Sorting/sorting";
 import { SearchOutlined } from "@mui/icons-material";
 import moment from "moment";
 import { GetdateAfterOneMonth } from "@/common/commonfunctions/connonfun";
+import SpinnerProgress from "@/common/CircularProgressComponent/spinnerComponent";
 
 interface Column {
   id:
@@ -76,6 +77,8 @@ const Subscription = () => {
   const [toggle, setToggle] = React.useState<boolean>(false);
   const [search, setSearch] = React.useState("");
   const [userId, setUserId] = React.useState<any>("");
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
   const router = useRouter();
   //pagination
   const [row_per_page, set_row_per_page] = React.useState(5);
@@ -104,6 +107,7 @@ const Subscription = () => {
     if (localData) {
       getId = JSON.parse(localData);
     }
+    setIsLoading(true);
     setUserId(getId);
     getAllCourseData(getId);
   }, []);
@@ -143,6 +147,7 @@ const Subscription = () => {
   const getAllCourseData = (data: any) => {
     HandleSubscriptionGetByUserID(data?.id).then((subs) => {
       setRows(subs?.data?.reverse());
+      setIsLoading(false);
     });
   };
 
@@ -162,182 +167,193 @@ const Subscription = () => {
           />
 
           {/* main content */}
-          <Card>
-            <CardContent>
-              <TextField
-                id="standard-search"
-                value={search}
-                variant="outlined"
-                placeholder="Search by 'Id or Name'"
-                size="small"
-                onChange={(e: any) => handleSearch(e, "")}
-                InputProps={{
-                  endAdornment: !search ? (
-                    <IconButton>
-                      <SearchOutlined />
-                    </IconButton>
-                  ) : (
-                    <IconButton onClick={(e) => handleSearch("", "reset")}>
-                      {" "}
-                      <CloseIcon />
-                    </IconButton>
-                  ),
-                }}
-              />
-              <Paper>
-                <TableContainer className={courseStyle.tableContainer}>
-                  <Table stickyHeader aria-label="sticky table">
-                    <TableHead>
-                      <TableRow>
-                        {columns.map((column) => (
-                          <TableCell
-                            key={column.id}
-                            align={column.align}
-                            style={{ top: 0, minWidth: column.minWidth }}
-                            onClick={() => {
-                              column.label === "ID" ? handleSort(rows) : "";
-                            }}
-                            className={courseStyle.tableHeadingForId}
-                          >
-                            {toggle ? (
-                              column.label === "ID" ? (
+          {!isLoading ? (
+            <Card>
+              <CardContent>
+                <TextField
+                  id="standard-search"
+                  value={search}
+                  variant="outlined"
+                  placeholder="Search by 'Name'"
+                  size="small"
+                  onChange={(e: any) => handleSearch(e, "")}
+                  InputProps={{
+                    endAdornment: !search ? (
+                      <IconButton>
+                        <SearchOutlined />
+                      </IconButton>
+                    ) : (
+                      <IconButton onClick={(e) => handleSearch("", "reset")}>
+                        {" "}
+                        <CloseIcon />
+                      </IconButton>
+                    ),
+                  }}
+                />
+                <Paper>
+                  <TableContainer className={courseStyle.tableContainer}>
+                    <Table stickyHeader aria-label="sticky table">
+                      <TableHead>
+                        <TableRow>
+                          {columns.map((column) => (
+                            <TableCell
+                              key={column.id}
+                              align={column.align}
+                              style={{ top: 0, minWidth: column.minWidth }}
+                              onClick={() => {
+                                column.label === "ID" ? handleSort(rows) : "";
+                              }}
+                              className={courseStyle.tableHeadingForId}
+                            >
+                              {toggle ? (
+                                column.label === "ID" ? (
+                                  <Typography
+                                    className={courseStyle.tableHeadingForId}
+                                  >
+                                    ID{" "}
+                                    <ArrowDownwardOutlinedIcon fontSize="small" />{" "}
+                                  </Typography>
+                                ) : (
+                                  column.label
+                                )
+                              ) : column.label === "ID" ? (
                                 <Typography
                                   className={courseStyle.tableHeadingForId}
                                 >
                                   ID{" "}
-                                  <ArrowDownwardOutlinedIcon fontSize="small" />{" "}
+                                  <ArrowUpwardOutlinedIcon fontSize="small" />{" "}
                                 </Typography>
                               ) : (
                                 column.label
-                              )
-                            ) : column.label === "ID" ? (
-                              <Typography
-                                className={courseStyle.tableHeadingForId}
-                              >
-                                ID <ArrowUpwardOutlinedIcon fontSize="small" />{" "}
-                              </Typography>
-                            ) : (
-                              column.label
-                            )}
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {rows && rows.length > 0 ? (
-                        DATA.currentData() &&
-                        DATA.currentData().map((row: any) => {
-                          return (
-                            <TableRow
-                              hover
-                              role="checkbox"
-                              tabIndex={-1}
-                              key={row.id}
-                            >
-                              <TableCell>{row?.id}</TableCell>
-                              <TableCell>
-                                {capitalizeFirstLetter(row?.name)}
-                              </TableCell>
-                              <TableCell>
-                                {capitalizeFirstLetter(row?.duration_term)}
-                              </TableCell>
-                              <TableCell>${row?.price}</TableCell>
-                              <TableCell>
-                                {moment(row?.createdAt).format("DD, MMMM YYYY")}
-                              </TableCell>
-                              <TableCell align="center">
-                                {row?.start_date
-                                  ? moment(row?.start_date).format(
-                                      "DD, MMMM YYYY"
-                                    )
-                                  : ""}
-                              </TableCell>
-                              <TableCell>
-                                {row?.start_date
-                                  ? moment(
-                                      GetdateAfterOneMonth(row?.start_date)
-                                    ).format("DD, MMMM YYYY")
-                                  : ""}
-                              </TableCell>
-                              {row?.status === "active" ? (
-                                <TableCell>
-                                  <Typography style={{ color: "green" }}>
-                                    {capitalizeFirstLetter(row?.status)}
-                                  </Typography>
-                                </TableCell>
-                              ) : row?.status === "inactive" ? (
-                                <TableCell style={{ color: "red" }}>
-                                  {capitalizeFirstLetter(row?.status)}
-                                </TableCell>
-                              ) : row?.status === "canceled" ? (
-                                <TableCell style={{ color: "red" }}>
-                                  {capitalizeFirstLetter(row?.status)}
-                                </TableCell>
-                              ) : (
-                                <TableCell style={{ color: "red" }}>
-                                  {capitalizeFirstLetter(row?.status)}
-                                </TableCell>
                               )}
-                              <TableCell>
-                                <Button
-                                  className={courseStyle.editDeleteButton}
-                                  //   href="/user/subscription/view"
-                                  id={courseStyle.viewIcon}
-                                  variant="outlined"
-                                  color="primary"
-                                  onClick={() => handleClickOpen(row?.id)}
-                                >
-                                  <VisibilityIcon />
-                                </Button>
-                              </TableCell>
-                            </TableRow>
-                          );
-                        })
-                      ) : (
-                        <TableRow>
-                          <TableCell
-                            colSpan={12}
-                            sx={{ fontWeight: 600, textAlign: "center" }}
-                          >
-                            {" "}
-                            Record not found!{" "}
-                          </TableCell>
+                            </TableCell>
+                          ))}
                         </TableRow>
-                      )}
-                    </TableBody>
-                  </Table>
-                  <Stack
-                    className={courseStyle.stackStyle}
-                    direction="row"
-                    alignItems="right"
-                    justifyContent="space-between"
-                  >
-                    <Pagination
-                      className="pagination"
-                      count={count}
-                      page={page}
-                      color="primary"
-                      onChange={handlePageChange}
-                    />
-                    <FormControl>
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        defaultValue={5}
-                        onChange={handlerowchange}
-                        size="small"
-                        style={{ height: "40px", marginRight: "11px" }}
-                      >
-                        <MenuItem value={5}>5</MenuItem>
-                        <MenuItem value={20}>20</MenuItem>
-                        <MenuItem value={50}>50</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Stack>
-                </TableContainer>
-              </Paper>
-            </CardContent>
-          </Card>
+                      </TableHead>
+                      <TableBody>
+                        {rows && rows.length > 0 ? (
+                          DATA.currentData() &&
+                          DATA.currentData().map((row: any) => {
+                            return (
+                              <TableRow
+                                hover
+                                role="checkbox"
+                                tabIndex={-1}
+                                key={row.id}
+                              >
+                                <TableCell>{row?.id}</TableCell>
+                                <TableCell>
+                                  {capitalizeFirstLetter(row?.name)}
+                                </TableCell>
+                                <TableCell>
+                                  {capitalizeFirstLetter(row?.duration_term)}
+                                </TableCell>
+                                <TableCell>$ {row?.price}</TableCell>
+                                <TableCell>
+                                  {moment(row?.createdAt).format(
+                                    "DD, MMMM YYYY"
+                                  )}
+                                </TableCell>
+                                <TableCell align="center">
+                                  {row?.start_date
+                                    ? moment(row?.start_date).format(
+                                        "DD, MMMM YYYY"
+                                      )
+                                    : ""}
+                                </TableCell>
+                                <TableCell>
+                                  {row?.start_date
+                                    ? moment(
+                                        GetdateAfterOneMonth(row?.start_date)
+                                      ).format("DD, MMMM YYYY")
+                                    : ""}
+                                </TableCell>
+                                {row?.status === "active" ? (
+                                  <TableCell>
+                                    <Typography style={{ color: "green" }}>
+                                      {capitalizeFirstLetter(row?.status)}
+                                    </Typography>
+                                  </TableCell>
+                                ) : row?.status === "inactive" ? (
+                                  <TableCell style={{ color: "red" }}>
+                                    {capitalizeFirstLetter(row?.status)}
+                                  </TableCell>
+                                ) : row?.status === "canceled" ? (
+                                  <TableCell style={{ color: "red" }}>
+                                    {capitalizeFirstLetter(row?.status)}
+                                  </TableCell>
+                                ) : (
+                                  <TableCell style={{ color: "red" }}>
+                                    {capitalizeFirstLetter(row?.status)}
+                                  </TableCell>
+                                )}
+                                <TableCell>
+                                  <Button
+                                    className={courseStyle.editDeleteButton}
+                                    //   href="/user/subscription/view"
+                                    id={courseStyle.viewIcon}
+                                    variant="outlined"
+                                    color="primary"
+                                    onClick={() => handleClickOpen(row?.id)}
+                                  >
+                                    <VisibilityIcon />
+                                  </Button>
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })
+                        ) : (
+                          <TableRow>
+                            <TableCell
+                              colSpan={12}
+                              sx={{ fontWeight: 600, textAlign: "center" }}
+                            >
+                              {" "}
+                              Record not found!{" "}
+                            </TableCell>
+                          </TableRow>
+                        )}
+                      </TableBody>
+                    </Table>
+                    <Stack
+                      className={courseStyle.stackStyle}
+                      direction="row"
+                      alignItems="right"
+                      justifyContent="space-between"
+                    >
+                      <Pagination
+                        className="pagination"
+                        count={count}
+                        page={page}
+                        color="primary"
+                        onChange={handlePageChange}
+                      />
+                      <FormControl>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          defaultValue={5}
+                          onChange={handlerowchange}
+                          size="small"
+                          style={{ height: "40px", marginRight: "11px" }}
+                        >
+                          <MenuItem value={5}>5</MenuItem>
+                          <MenuItem value={20}>20</MenuItem>
+                          <MenuItem value={50}>50</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Stack>
+                  </TableContainer>
+                </Paper>
+              </CardContent>
+            </Card>
+          ) : (
+            <Card>
+              <CardContent>
+                <SpinnerProgress />
+              </CardContent>
+            </Card>
+          )}
         </Box>
       </Box>
     </>

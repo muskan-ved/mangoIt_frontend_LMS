@@ -47,6 +47,7 @@ import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFir
 import { usePagination } from "@/common/Pagination/paginations";
 import { Controller, useForm } from "react-hook-form";
 import { handleSortData } from "@/common/Sorting/sorting";
+import SpinnerProgress from "@/common/CircularProgressComponent/spinnerComponent";
 
 interface Column {
   id:
@@ -65,9 +66,9 @@ interface Column {
 
 const columns: Column[] = [
   { id: "id", label: "ID" },
-  { id: "title", label: "COURSE NAME", minWidth: 170 },
-  { id: "module", label: "NO. MODULE", minWidth: 100 },
-  { id: "session", label: "NO. SESSION", minWidth: 100 },
+  { id: "title", label: "NAME", minWidth: 170 },
+  { id: "module", label: "NO. OF MODULE", minWidth: 100 },
+  { id: "session", label: "NO. OF SESSION", minWidth: 100 },
   { id: "is_chargeable", label: "TYPE", minWidth: 100 },
   { id: "percent", label: "COMPLETE (%)", minWidth: 100 },
   { id: "action", label: "ACTION", minWidth: 100 },
@@ -83,8 +84,10 @@ const AllCourses = () => {
   const [filterObject, setFilterObject] = useState<any>("");
   const [userId, getUserId] = useState<any>("");
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
+    setIsLoading(true);
     getAllCourseData();
   }, [router]);
 
@@ -100,15 +103,6 @@ const AllCourses = () => {
   const handlePageChange = (e: any, p: any) => {
     setPage(p);
     DATA.jump(p);
-  };
-
-  const { handleSubmit, control, reset } = useForm();
-
-  const onSubmit = (event: any) => {
-    // HandleCourseGet("", event).then((itemFiltered) => {
-    //   setRows(itemFiltered.data);
-    //   setFilterObject(event);
-    // });
   };
 
   const handleClickOpen = (row: any) => {
@@ -153,6 +147,7 @@ const AllCourses = () => {
       });
       getUserId(userIds?.id);
     }
+    setIsLoading(false);
   };
   return (
     <>
@@ -171,183 +166,192 @@ const AllCourses = () => {
 
           {/* main content */}
           <Card>
-            <CardContent>
-              <TextField
-                id="standard-search"
-                value={search}
-                variant="outlined"
-                placeholder="Search by 'Course Name'"
-                onChange={(e) => handleSearch(e, "")}
-                InputProps={{
-                  endAdornment: !search ? (
-                    <IconButton>
-                      <SearchOutlined />
-                    </IconButton>
-                  ) : (
-                    <IconButton onClick={(e) => handleSearch("", "reset")}>
-                      {" "}
-                      <CloseIcon />
-                    </IconButton>
-                  ),
-                }}
-              />
-              <Paper>
-                <TableContainer className={courseStyle.tableContainer}>
-                  <Table stickyHeader aria-label="sticky table">
-                    <TableHead>
-                      <TableRow>
-                        {columns.map((column) => (
-                          <TableCell
-                            key={column.id}
-                            align={column.align}
-                            style={{
-                              top: 0,
-                              minWidth: column.minWidth,
-                              fontWeight: "600",
-                            }}
-                            onClick={() => {
-                              column.label === "ID" ? handleSort(rows) : "";
-                            }}
-                          >
-                            {toggle ? (
-                              column.label === "ID" ? (
+            {!isLoading ? (
+              <CardContent>
+                <TextField
+                  id="standard-search"
+                  value={search}
+                  variant="outlined"
+                  placeholder="Search by 'Name'"
+                  onChange={(e) => handleSearch(e, "")}
+                  InputProps={{
+                    endAdornment: !search ? (
+                      <IconButton>
+                        <SearchOutlined />
+                      </IconButton>
+                    ) : (
+                      <IconButton onClick={(e) => handleSearch("", "reset")}>
+                        {" "}
+                        <CloseIcon />
+                      </IconButton>
+                    ),
+                  }}
+                />
+                <Paper>
+                  <TableContainer className={courseStyle.tableContainer}>
+                    <Table stickyHeader aria-label="sticky table">
+                      <TableHead>
+                        <TableRow>
+                          {columns.map((column) => (
+                            <TableCell
+                              key={column.id}
+                              align={column.align}
+                              style={{
+                                top: 0,
+                                minWidth: column.minWidth,
+                                fontWeight: "600",
+                              }}
+                              onClick={() => {
+                                column.label === "ID" ? handleSort(rows) : "";
+                              }}
+                            >
+                              {toggle ? (
+                                column.label === "ID" ? (
+                                  <Typography
+                                    className={courseStyle.tableHeadingForId}
+                                  >
+                                    ID{" "}
+                                    <ArrowDownwardOutlinedIcon fontSize="small" />{" "}
+                                  </Typography>
+                                ) : (
+                                  column.label
+                                )
+                              ) : column.label === "ID" ? (
                                 <Typography
                                   className={courseStyle.tableHeadingForId}
                                 >
                                   ID{" "}
-                                  <ArrowDownwardOutlinedIcon fontSize="small" />{" "}
+                                  <ArrowUpwardOutlinedIcon fontSize="small" />{" "}
                                 </Typography>
                               ) : (
                                 column.label
-                              )
-                            ) : column.label === "ID" ? (
-                              <Typography
-                                className={courseStyle.tableHeadingForId}
-                              >
-                                ID <ArrowUpwardOutlinedIcon fontSize="small" />{" "}
-                              </Typography>
-                            ) : (
-                              column.label
-                            )}
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {rows && rows.length > 0 ? (
-                        DATA.currentData() &&
-                        DATA.currentData().map((row: any) => {
-                          const statusColor =
-                            row?.course?.course?.status === "active"
-                              ? courseStyle.activeClassColor
-                              : row?.course?.course?.status === "inactive"
-                              ? courseStyle.inactiveClassColor
-                              : courseStyle.draftClassColor;
-
-                          const obj = row?.courseIdCounts;
-                          const key = row?.course?.course?.id;
-                          const value = obj[key];
-                          const sessionValue =
-                            row?.sessionCount[0]?.sessionCount;
-                          let calculate = (value / sessionValue) * 100;
-
-                          return (
-                            <TableRow
-                              hover
-                              role="checkbox"
-                              tabIndex={-1}
-                              key={row?.course?.course?.id}
-                            >
-                              <TableCell>{row?.course?.course?.id}</TableCell>
-                              <TableCell>
-                                {capitalizeFirstLetter(
-                                  row?.course?.course?.title
-                                )}
-                              </TableCell>
-                              <TableCell>
-                                {row?.moduleCount?.length !== 0
-                                  ? row?.moduleCount[0]?.moduleCount
-                                  : 0}
-                              </TableCell>
-                              <TableCell>
-                                {row?.sessionCount?.length !== 0
-                                  ? row?.sessionCount[0]?.sessionCount
-                                  : 0}
-                              </TableCell>
-                              <TableCell>
-                                {capitalizeFirstLetter(
-                                  row?.course?.course_type
-                                )}
-                              </TableCell>
-                              <TableCell
-                              //  className={statusColor}
-                              >
-                                {`${
-                                  calculate && calculate
-                                    ? calculate?.toFixed(0)
-                                    : 0
-                                }%`}
-                              </TableCell>
-                              <TableCell>
-                                <Button
-                                  className={courseStyle.editDeleteButton}
-                                  id={courseStyle.viewIcon}
-                                  variant="outlined"
-                                  color="primary"
-                                  onClick={() =>
-                                    handleClickOpen(row?.course?.course?.id)
-                                  }
-                                >
-                                  <VisibilityIcon />
-                                </Button>
-                              </TableCell>
-                            </TableRow>
-                          );
-                        })
-                      ) : (
-                        <TableRow>
-                          <TableCell
-                            colSpan={7}
-                            sx={{ fontWeight: 600, textAlign: "center" }}
-                          >
-                            {" "}
-                            Record not found!{" "}
-                          </TableCell>
+                              )}
+                            </TableCell>
+                          ))}
                         </TableRow>
-                      )}
-                    </TableBody>
-                  </Table>
-                  <Stack
-                    className={courseStyle.stackStyle}
-                    direction="row"
-                    alignItems="right"
-                    justifyContent="space-between"
-                  >
-                    <Pagination
-                      className="pagination"
-                      count={count}
-                      page={page}
-                      color="primary"
-                      onChange={handlePageChange}
-                    />
-                    <FormControl>
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        defaultValue={5}
-                        onChange={handlerowchange}
-                        size="small"
-                        style={{ height: "40px", marginRight: "11px" }}
-                      >
-                        <MenuItem value={5}>5</MenuItem>
-                        <MenuItem value={20}>20</MenuItem>
-                        <MenuItem value={50}>50</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Stack>
-                </TableContainer>
-              </Paper>
-            </CardContent>
+                      </TableHead>
+                      <TableBody>
+                        {rows && rows.length > 0 ? (
+                          DATA.currentData() &&
+                          DATA.currentData().map((row: any) => {
+                            const statusColor =
+                              row?.course?.course?.status === "active"
+                                ? courseStyle.activeClassColor
+                                : row?.course?.course?.status === "inactive"
+                                ? courseStyle.inactiveClassColor
+                                : courseStyle.draftClassColor;
+
+                            const obj = row?.courseIdCounts;
+                            const key = row?.course?.course?.id;
+                            const value = obj[key];
+                            const sessionValue =
+                              row?.sessionCount[0]?.sessionCount;
+                            let calculate = (value / sessionValue) * 100;
+
+                            return (
+                              <TableRow
+                                hover
+                                role="checkbox"
+                                tabIndex={-1}
+                                key={row?.course?.course?.id}
+                              >
+                                <TableCell>{row?.course?.course?.id}</TableCell>
+                                <TableCell>
+                                  {capitalizeFirstLetter(
+                                    row?.course?.course?.title
+                                  )}
+                                </TableCell>
+                                <TableCell>
+                                  {row?.moduleCount?.length !== 0
+                                    ? row?.moduleCount[0]?.moduleCount
+                                    : 0}
+                                </TableCell>
+                                <TableCell>
+                                  {row?.sessionCount?.length !== 0
+                                    ? row?.sessionCount[0]?.sessionCount
+                                    : 0}
+                                </TableCell>
+                                <TableCell>
+                                  {capitalizeFirstLetter(
+                                    row?.course?.course_type
+                                  )}
+                                </TableCell>
+                                <TableCell
+                                //  className={statusColor}
+                                >
+                                  {`${
+                                    calculate && calculate
+                                      ? calculate?.toFixed(0)
+                                      : 0
+                                  }%`}
+                                </TableCell>
+                                <TableCell>
+                                  <Button
+                                    className={courseStyle.editDeleteButton}
+                                    id={courseStyle.viewIcon}
+                                    variant="outlined"
+                                    color="primary"
+                                    onClick={() =>
+                                      handleClickOpen(row?.course?.course?.id)
+                                    }
+                                  >
+                                    <VisibilityIcon />
+                                  </Button>
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })
+                        ) : (
+                          <TableRow>
+                            <TableCell
+                              colSpan={7}
+                              sx={{ fontWeight: 600, textAlign: "center" }}
+                            >
+                              {" "}
+                              Record not found!{" "}
+                            </TableCell>
+                          </TableRow>
+                        )}
+                      </TableBody>
+                    </Table>
+                    <Stack
+                      className={courseStyle.stackStyle}
+                      direction="row"
+                      alignItems="right"
+                      justifyContent="space-between"
+                    >
+                      <Pagination
+                        className="pagination"
+                        count={count}
+                        page={page}
+                        color="primary"
+                        onChange={handlePageChange}
+                      />
+                      <FormControl>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          defaultValue={5}
+                          onChange={handlerowchange}
+                          size="small"
+                          style={{ height: "40px", marginRight: "11px" }}
+                        >
+                          <MenuItem value={5}>5</MenuItem>
+                          <MenuItem value={20}>20</MenuItem>
+                          <MenuItem value={50}>50</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Stack>
+                  </TableContainer>
+                </Paper>
+              </CardContent>
+            ) : (
+              <Card>
+                <CardContent>
+                  <SpinnerProgress />
+                </CardContent>
+              </Card>
+            )}
           </Card>
         </Box>
       </Box>

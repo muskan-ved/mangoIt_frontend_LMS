@@ -7,7 +7,7 @@ export const FRONTEND_BASE_URL = 'https://mangoit-lms.mangoitsol.com';
 // //FRONTEND LOCAL URL
 // export const FRONTEND_BASE_URL = "http://localhost:3000";
 
-// // LOCAL API URL
+// LOCAL API URL
 // export const BASE_URL = "http://localhost:6030";
 
 export const API = {

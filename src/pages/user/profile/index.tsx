@@ -107,7 +107,12 @@ export default function Profile() {
       }
       if (localData1) {
         const userId = JSON.parse(localData1);
-        profile_picManage = { ...userId, profile_pic: user.data?.profile_pic };
+        profile_picManage = {
+          ...userId,
+          profile_pic: user.data?.profile_pic,
+          first_name: user.data?.first_name,
+          last_name: user.data?.last_name,
+        };
         window.localStorage.setItem(
           "userData",
           JSON.stringify(profile_picManage)
@@ -153,7 +158,11 @@ export default function Profile() {
 
   return (
     <>
-      <Navbar profilePic={getUserData?.profile_pic} />
+      <Navbar
+        profilePic={getUserData?.profile_pic}
+        firstName={getUserData?.first_name}
+        lastName={getUserData?.last_name}
+      />
       <Box className={styles.combineContentAndSidebar}>
         <SideBar />
 
@@ -260,8 +269,16 @@ export default function Profile() {
                                 {"Learner"}
                               </Typography>
 
-                              <IconButton onClick={handleEdit}>
-                                <EditIcon></EditIcon>
+                              <IconButton
+                                onClick={handleEdit}
+                              >
+                                <EditIcon
+                                  className={
+                                    toggle && toggle
+                                      ? profiles.editiconbtnn
+                                      : ""
+                                  }
+                                ></EditIcon>
                               </IconButton>
                             </Box>
                           </Box>
