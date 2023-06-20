@@ -144,7 +144,7 @@ const Dashboard = () => {
             <Grid item xs={12} sm={12} md={6} lg={6}>
               <Card>
                 <CardHeader
-                  title={<><Typography component={'span'} className={dashboardStyles.tableColumnFont}>Today's Registered Users</Typography>
+                  title={<><Typography component={'span'} className={dashboardStyles.tableColumnFont}>Today&apos;s Registered Users</Typography>
                   <Typography className={dashboardStyles.seeMore}><Link href={'/admin/users'}>See More</Link></Typography>
                   </>
                 }
@@ -179,7 +179,7 @@ const Dashboard = () => {
             <Grid item xs={12} sm={12} md={6} lg={6}>
               <Card>
               <CardHeader
-                  title={<><Typography component={'span'} className={dashboardStyles.tableColumnFont}>Today's Subscriptions</Typography>
+                  title={<><Typography component={'span'} className={dashboardStyles.tableColumnFont}>Today&apos;s Subscriptions</Typography>
                   <Typography className={dashboardStyles.seeMore}><Link href={'/admin/subscriptions/allsubscription/'}>See More</Link></Typography>
                   </>
                 }

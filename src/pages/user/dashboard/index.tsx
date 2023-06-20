@@ -41,6 +41,7 @@ import {
 } from "@/common/ResuableCardCmp/coursescard";
 import { GetEnrolledCoursesByUserId } from "@/services/course_enroll";
 import Image from "next/image";
+import SpinnerProgress from "@/common/CircularProgressComponent/spinnerComponent";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -57,6 +58,7 @@ export default function Dashboard() {
   const [gridview, setgridview] = useState<any>(true);
   const [subsError, setSubsError] = useState<any>("");
   const [dynamicCss, setDynamicCss] = useState<any>(1);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     let localData: any;
@@ -68,7 +70,7 @@ export default function Dashboard() {
     if (localData) {
       getId = JSON.parse(localData);
     }
-    // getAllCourseData(getId?.id);
+    setIsLoading(true);
     getSubsData();
     setuserId(getId?.id);
     getEnrollCourse();
@@ -78,8 +80,10 @@ export default function Dashboard() {
     if (userId) {
       SubscriptionGetByUserID(userId).then((data: any) => {
         if (data && data?.response?.data === "subsId not Found!") {
+          setIsLoading(false);
           setSubsError(data?.response?.data);
         } else {
+          setIsLoading(false);
           setSubsdata(data?.data);
         }
       });
@@ -90,6 +94,7 @@ export default function Dashboard() {
     if (userId) {
       GetEnrolledCoursesByUserId(userId).then((data: any) => {
         setEnrollCourses(data?.data);
+        setIsLoading(false);
       });
     }
   };
@@ -121,73 +126,17 @@ export default function Dashboard() {
             />
           </Box>
           {/* main content */}
-          {subsData && subsData === "subsId not Found!" ? (
-            <Fragment>
-              <Card>
-                <CardContent>
-                  <Typography variant="h5" className={style.headingcss}>
-                    Your Subscription Plan
-                  </Typography>
-                  <Divider sx={{ marginTop: "5px" }}></Divider>
-                  <br />
-                  <br />
-                  <Box sx={{ flexGrow: 1 }}>
-                    <Grid
-                      container
-                      spacing={2}
-                      className={style.textHeadingCenter}
-                    >
-                      <Typography
-                        variant="h5"
-                        className={style.headingcssError}
-                      >
-                        Record not found!
-                      </Typography>
-                    </Grid>
-                  </Box>
-                </CardContent>
-              </Card>
-              <br />
-              <Card>
-                <CardContent>
-                  <Box sx={{ display: "flex" }}>
+          {!isLoading ? (
+            subsData && subsData === "subsId not Found!" ? (
+              <Fragment>
+                <Card>
+                  <CardContent>
                     <Typography variant="h5" className={style.headingcss}>
-                      Enrolled Courses
+                      Your Subscription Plan
                     </Typography>
-
-                    <Box className={style.alignendcss}>
-                      <Stack spacing={1} className={style.gridicon}>
-                        <IconButton
-                          className={style.actionview1}
-                          onClick={gridView}
-                        >
-                          <GridViewIcon
-                            className={
-                              dynamicCss === 1
-                                ? style.gridColor
-                                : style.iconColor
-                            }
-                          />
-                        </IconButton>
-                        <IconButton
-                          className={style.actionview1}
-                          onClick={listView}
-                        >
-                          <FormatListBulletedIcon
-                            className={
-                              dynamicCss === 2
-                                ? style.gridColor
-                                : style.iconColor
-                            }
-                          />
-                        </IconButton>
-                      </Stack>
-                    </Box>
-                  </Box>
-                  <Divider sx={{ marginTop: "5px" }}></Divider>
-                  <br />
-                  <br />
-                  {enrollCourse && enrollCourse?.length === 0 ? (
+                    <Divider sx={{ marginTop: "5px" }}></Divider>
+                    <br />
+                    <br />
                     <Box sx={{ flexGrow: 1 }}>
                       <Grid
                         container
@@ -198,11 +147,250 @@ export default function Dashboard() {
                           variant="h5"
                           className={style.headingcssError}
                         >
-                          Enrolled courses not found!
+                          Record not found!
                         </Typography>
                       </Grid>
                     </Box>
-                  ) : (
+                  </CardContent>
+                </Card>
+                <br />
+                <Card>
+                  <CardContent>
+                    <Box sx={{ display: "flex" }}>
+                      <Typography variant="h5" className={style.headingcss}>
+                        Enrolled Courses
+                      </Typography>
+
+                      <Box className={style.alignendcss}>
+                        <Stack spacing={1} className={style.gridicon}>
+                          <IconButton
+                            className={style.actionview1}
+                            onClick={gridView}
+                          >
+                            <GridViewIcon
+                              className={
+                                dynamicCss === 1
+                                  ? style.gridColor
+                                  : style.iconColor
+                              }
+                            />
+                          </IconButton>
+                          <IconButton
+                            className={style.actionview1}
+                            onClick={listView}
+                          >
+                            <FormatListBulletedIcon
+                              className={
+                                dynamicCss === 2
+                                  ? style.gridColor
+                                  : style.iconColor
+                              }
+                            />
+                          </IconButton>
+                        </Stack>
+                      </Box>
+                    </Box>
+                    <Divider sx={{ marginTop: "5px" }}></Divider>
+                    <br />
+                    <br />
+                    {enrollCourse && enrollCourse?.length === 0 ? (
+                      <Box sx={{ flexGrow: 1 }}>
+                        <Grid
+                          container
+                          spacing={2}
+                          className={style.textHeadingCenter}
+                        >
+                          <Typography
+                            variant="h5"
+                            className={style.headingcssError}
+                          >
+                            Enrolled courses not found!
+                          </Typography>
+                        </Grid>
+                      </Box>
+                    ) : (
+                      <Box className={style.courses1}>
+                        <Container maxWidth="lg">
+                          {gridview ? (
+                            <Box className={style.articles1}>
+                              {enrollCourse &&
+                                enrollCourse.map((data: any, key: any) => {
+                                  return (
+                                    <EnrolledCourseCard
+                                      key={key}
+                                      coursedata={data.course}
+                                    />
+                                  );
+                                })}
+                            </Box>
+                          ) : (
+                            <Box className={style.listviewarticles}>
+                              <Container maxWidth="lg">
+                                {enrollCourse &&
+                                  enrollCourse.map((data: any, key: any) => {
+                                    return (
+                                      <EnrolledCourseCardListView
+                                        key={key}
+                                        coursedata={data.course}
+                                      />
+                                    );
+                                  })}
+                              </Container>
+                            </Box>
+                          )}
+                        </Container>
+                      </Box>
+                    )}
+                  </CardContent>
+                </Card>
+                <br />
+              </Fragment>
+            ) : (
+              <Fragment>
+                <Card>
+                  <CardContent>
+                    <Typography variant="h5" className={style.headingcss}>
+                      Your Subscription Plan
+                    </Typography>
+                    <Divider sx={{ marginTop: "5px" }}></Divider>
+                    <br />
+                    <br />
+                    <Box sx={{ flexGrow: 1 }}>
+                      <Grid
+                        container
+                        spacing={{ xs: 2, md: 3 }}
+                        // columns={{ xs: 4, sm: 8, md: 12 }}
+                      >
+                        <Grid item xs={12} sm={12} md={4} lg={4}>
+                          <Item className={subs.cardBorder}>
+                            <Box className={subs.maindisplay}>
+                              <Image
+                                src="/Images/pages/pages_icon/subscription.png"
+                                alt="image"
+                                width="50"
+                                height="50"
+                                className={style.imgcss}
+                              />
+                              <Box>
+                                <Typography
+                                  variant="subtitle1"
+                                  className={style.useNameFront}
+                                >
+                                  Subscription Name
+                                </Typography>
+                                <Typography
+                                  variant="subtitle1"
+                                  className={style.fontCSS}
+                                >
+                                  {capitalizeFirstLetter(
+                                    subsData && subsData?.name
+                                  )}
+                                </Typography>
+                              </Box>
+                            </Box>
+                          </Item>
+                        </Grid>
+                        <Grid item xs={12} sm={12} md={4} lg={4}>
+                          <Item className={subs.cardBorder}>
+                            <Box className={subs.maindisplay}>
+                              <Image
+                                src="/Images/pages/pages_icon/calendar.png"
+                                alt="image"
+                                width="50"
+                                height="50"
+                                className={style.imgcss}
+                              />
+                              <Box>
+                                <Typography
+                                  variant="subtitle1"
+                                  className={style.useNameFront}
+                                >
+                                  Duration Term
+                                </Typography>
+                                <Typography
+                                  variant="subtitle1"
+                                  className={style.fontCSS1}
+                                >
+                                  {capitalizeFirstLetter(
+                                    subsData && subsData?.duration_term
+                                  )}
+                                </Typography>
+                              </Box>
+                            </Box>
+                          </Item>
+                        </Grid>
+                        <Grid item xs={12} sm={12} md={4} lg={4}>
+                          <Item className={subs.cardBorder}>
+                            {" "}
+                            <Box className={subs.maindisplay}>
+                              <Image
+                                src="/Images/pages/pages_icon/renewPic.png"
+                                alt="image"
+                                width="50"
+                                height="50"
+                                className={style.imgcss}
+                              />
+                              <Box>
+                                <Typography
+                                  variant="subtitle1"
+                                  className={style.useNameFront1}
+                                >
+                                  Renew Date
+                                </Typography>
+                                <Typography
+                                  variant="subtitle1"
+                                  className={style.fontCSS2}
+                                >
+                                  {moment(
+                                    GetdateAfterOneMonth(subsData?.start_date)
+                                  ).format("DD MMMM YYYY")}
+                                </Typography>
+                              </Box>
+                            </Box>
+                          </Item>
+                        </Grid>
+                      </Grid>
+                    </Box>
+                  </CardContent>
+                </Card>
+                <br />
+                <Card>
+                  <CardContent>
+                    <Box sx={{ display: "flex" }}>
+                      <Typography variant="h5" className={style.headingcss}>
+                        Enrolled Courses
+                      </Typography>
+
+                      <Box className={style.alignendcss}>
+                        <Stack spacing={1} className={style.gridicon}>
+                          <IconButton
+                            className={style.actionview1}
+                            onClick={gridView}
+                          >
+                            <GridViewIcon
+                              className={
+                                dynamicCss === 1
+                                  ? style.gridColor
+                                  : style.iconColor
+                              }
+                            />
+                          </IconButton>
+                          <IconButton
+                            className={style.actionview2}
+                            onClick={listView}
+                          >
+                            <FormatListBulletedIcon
+                              className={
+                                dynamicCss === 2
+                                  ? style.gridColor
+                                  : style.iconColor
+                              }
+                            />
+                          </IconButton>
+                        </Stack>
+                      </Box>
+                    </Box>
+                    <Divider sx={{ marginTop: "5px" }}></Divider>
                     <Box className={style.courses1}>
                       <Container maxWidth="lg">
                         {gridview ? (
@@ -234,192 +422,17 @@ export default function Dashboard() {
                         )}
                       </Container>
                     </Box>
-                  )}
-                </CardContent>
-              </Card>
-              <br />
-            </Fragment>
+                  </CardContent>
+                </Card>
+                <br />
+              </Fragment>
+            )
           ) : (
-            <Fragment>
-              <Card>
-                <CardContent>
-                  <Typography variant="h5" className={style.headingcss}>
-                    Your Subscription Plan
-                  </Typography>
-                  <Divider sx={{ marginTop: "5px" }}></Divider>
-                  <br />
-                  <br />
-                  <Box sx={{ flexGrow: 1 }}>
-                    <Grid
-                      container
-                      spacing={{ xs: 2, md: 3 }}
-                      // columns={{ xs: 4, sm: 8, md: 12 }}
-                    >
-                      <Grid item xs={12} sm={12} md={4} lg={4}>
-                        <Item className={subs.cardBorder}>
-                          <Box className={subs.maindisplay}>
-                            <Image
-                              src="/Images/pages/pages_icon/subscription.png"
-                              alt="image"
-                              width="50"
-                              height="50"
-                              className={style.imgcss}
-                            />
-                            <Box>
-                              <Typography
-                                variant="subtitle1"
-                                className={style.useNameFront}
-                              >
-                                Subscription Name
-                              </Typography>
-                              <Typography
-                                variant="subtitle1"
-                                className={style.fontCSS}
-                              >
-                                {capitalizeFirstLetter(
-                                  subsData && subsData?.name
-                                )}
-                              </Typography>
-                            </Box>
-                          </Box>
-                        </Item>
-                      </Grid>
-                      <Grid item xs={12} sm={12} md={4} lg={4}>
-                        <Item className={subs.cardBorder}>
-                          <Box className={subs.maindisplay}>
-                            <Image
-                              src="/Images/pages/pages_icon/calendar.png"
-                              alt="image"
-                              width="50"
-                              height="50"
-                              className={style.imgcss}
-                            />
-                            <Box>
-                              <Typography
-                                variant="subtitle1"
-                                className={style.useNameFront}
-                              >
-                                Duration-Term
-                              </Typography>
-                              <Typography
-                                variant="subtitle1"
-                                className={style.fontCSS1}
-                              >
-                                {capitalizeFirstLetter(
-                                  subsData && subsData?.duration_term
-                                )}
-                              </Typography>
-                            </Box>
-                          </Box>
-                        </Item>
-                      </Grid>
-                      <Grid item xs={12} sm={12} md={4} lg={4}>
-                        <Item className={subs.cardBorder}>
-                          {" "}
-                          <Box className={subs.maindisplay}>
-                            <Image
-                              src="/Images/pages/pages_icon/renewPic.png"
-                              alt="image"
-                              width="50"
-                              height="50"
-                              className={style.imgcss}
-                            />
-                            <Box>
-                              <Typography
-                                variant="subtitle1"
-                                className={style.useNameFront1}
-                              >
-                                Renew Date
-                              </Typography>
-                              <Typography
-                                variant="subtitle1"
-                                className={style.fontCSS2}
-                              >
-                                {moment(
-                                  GetdateAfterOneMonth(subsData?.start_date)
-                                ).format("DD MMMM YYYY")}
-                              </Typography>
-                            </Box>
-                          </Box>
-                        </Item>
-                      </Grid>
-                    </Grid>
-                  </Box>
-                </CardContent>
-              </Card>
-              <br />
-              <Card>
-                <CardContent>
-                  <Box sx={{ display: "flex" }}>
-                    <Typography variant="h5" className={style.headingcss}>
-                      Enrolled Courses
-                    </Typography>
-
-                    <Box className={style.alignendcss}>
-                      <Stack spacing={1} className={style.gridicon}>
-                        <IconButton
-                          className={style.actionview1}
-                          onClick={gridView}
-                        >
-                          <GridViewIcon
-                            className={
-                              dynamicCss === 1
-                                ? style.gridColor
-                                : style.iconColor
-                            }
-                          />
-                        </IconButton>
-                        <IconButton
-                          className={style.actionview1}
-                          onClick={listView}
-                        >
-                          <FormatListBulletedIcon
-                            className={
-                              dynamicCss === 2
-                                ? style.gridColor
-                                : style.iconColor
-                            }
-                          />
-                        </IconButton>
-                      </Stack>
-                    </Box>
-                  </Box>
-                  <Divider sx={{ marginTop: "5px" }}></Divider>
-                  <Box className={style.courses1}>
-                    <Container maxWidth="lg">
-                      {gridview ? (
-                        <Box className={style.articles1}>
-                          {enrollCourse &&
-                            enrollCourse.map((data: any, key: any) => {
-                              return (
-                                <EnrolledCourseCard
-                                  key={key}
-                                  coursedata={data.course}
-                                />
-                              );
-                            })}
-                        </Box>
-                      ) : (
-                        <Box className={style.listviewarticles}>
-                          <Container maxWidth="lg">
-                            {enrollCourse &&
-                              enrollCourse.map((data: any, key: any) => {
-                                return (
-                                  <EnrolledCourseCardListView
-                                    key={key}
-                                    coursedata={data.course}
-                                  />
-                                );
-                              })}
-                          </Container>
-                        </Box>
-                      )}
-                    </Container>
-                  </Box>
-                </CardContent>
-              </Card>
-              <br />
-            </Fragment>
+            <Card>
+              <CardContent>
+                <SpinnerProgress />
+              </CardContent>
+            </Card>
           )}
         </Box>
       </Box>

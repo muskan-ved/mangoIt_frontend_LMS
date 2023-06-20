@@ -20,6 +20,8 @@ import Link from "next/link";
 interface appbar {
   portalData?: any;
   profilePic?: any;
+  firstName?: any;
+  lastName?: any;
 }
 
 function stringAvatar(first_name: string, last_name: string) {
@@ -33,7 +35,12 @@ function stringAvatar(first_name: string, last_name: string) {
   };
 }
 
-export default function Navbar({ portalData, profilePic }: appbar) {
+export default function Navbar({
+  portalData,
+  profilePic,
+  firstName,
+  lastName,
+}: appbar) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
@@ -94,7 +101,7 @@ export default function Navbar({ portalData, profilePic }: appbar) {
         horizontal: "right",
       }}
       open={isMenuOpen}
-      sx={{marginTop: "25px !important"}}
+      sx={{ marginTop: "25px !important" }}
       onClose={handleMenuClose}
     >
       {userData && userData?.role_id === 1 ? (
@@ -135,7 +142,7 @@ export default function Navbar({ portalData, profilePic }: appbar) {
         horizontal: "right",
       }}
       open={isMobileMenuOpen}
-      sx={{marginTop: "25px !important"}}
+      sx={{ marginTop: "25px !important" }}
       onClose={handleMobileMenuClose}
     >
       <MenuItem onClick={() => router.push("/profile")}>
@@ -156,20 +163,20 @@ export default function Navbar({ portalData, profilePic }: appbar) {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" className={styles.appBarCss}>
         <Toolbar>
-        <Link href={"dashboard"} >
-          <Box
-            component="img"
-            src={
-              portalData
-                ? BASE_URL + "/" + portalData?.org_logo
-                : "/Images/company_logo.png"
-            }
-            width={"180px"}
-            height={"50px"}
-            sx={{ display: { xs: "block", sm: "block" } }}
-            alt="Company logo"
-          />
-           </Link>
+          <Link href={"dashboard"}>
+            <Box
+              component="img"
+              src={
+                portalData
+                  ? BASE_URL + "/" + portalData?.org_logo
+                  : "/Images/company_logo.png"
+              }
+              width={"180px"}
+              height={"50px"}
+              sx={{ display: { xs: "block", sm: "block" } }}
+              alt="Company logo"
+            />
+          </Link>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <Box className={styles.createVrLine}></Box>
@@ -190,8 +197,12 @@ export default function Navbar({ portalData, profilePic }: appbar) {
               variant="body2"
               className={styles.windowFullWidthNameAlign}
             >
-              {capitalizeFirstLetter(userData?.first_name)}{" "}
-              {capitalizeFirstLetter(userData?.last_name)}
+              {capitalizeFirstLetter(
+                firstName && firstName ? firstName : userData?.first_name
+              )}{" "}
+              {capitalizeFirstLetter(
+                lastName && lastName ? lastName : userData?.last_name
+              )}
             </Typography>
 
             <IconButton

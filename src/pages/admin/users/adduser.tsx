@@ -46,14 +46,9 @@ export default function AddUser() {
     setLoadingButton(false)
     try {
       const res = await HandleRegister({...event, identifier: 'admin_logged_in'})
-      // console.log('res', res?.data?.email)
-      // const userEmail = await HandleForgotPassword({
-      //   "to": res?.data?.email,
-      //   "emailType": "forgot_password"
-      // })
       setLoading(false);
       setTimeout(() => {
-        // router.push('/admin/users')
+        router.push('/admin/users')
       }, 900)
 
     } catch (e) {

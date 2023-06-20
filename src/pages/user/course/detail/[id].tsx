@@ -76,6 +76,7 @@ export default function Couseview() {
   const [progress, setProgress] = useState<any>(10);
   const [allData, setAllData] = useState<any>([]);
   const [userId, setUserId] = useState<any>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   var fileViewComplete: any = 0;
   var viewhistoryLength: any = [];
@@ -89,6 +90,7 @@ export default function Couseview() {
     if (localData) {
       getId = JSON.parse(localData);
     }
+    setIsLoading(true);
     setUserId(getId.id);
     getCourseData();
     setProgress((prevProgress: any) =>
@@ -109,7 +111,9 @@ export default function Couseview() {
         HandleCourseGetByUserId(userId).then((data1) => {
           setAllData(data1.data);
         });
+        setIsLoading(false);
       }
+      setIsLoading(false);
     }
   };
 
@@ -218,17 +222,6 @@ export default function Couseview() {
     });
   };
 
-  // const handleUpdateMarkAsComplete = () => {
-  //   let reqData = {
-  //     user_id: userId,
-  //     course_id: sessionData.course_id,
-  //     module_id: sessionData.module_id,
-  //     session_id: sessionData.id,
-  //     status: couseData.is_chargeable,
-  //   };
-  //   console.log("reqDatareqData", reqData);
-  //   UpdateMarkAsComplete(reqData).then((data: any) => {});
-  // };
   var calculate: any;
   var isMatchFound: any;
 
@@ -330,8 +323,8 @@ export default function Couseview() {
             <BreadcrumbsHeading
               First="Home"
               Middle="Courses"
-              Current="Course View"
-              Text="VIEW"
+              Current={couseData && couseData?.title}
+              Text=""
               Link="/user/course"
             />
             <Box className={courseStyle.backbtn}>
@@ -349,6 +342,7 @@ export default function Couseview() {
               </Link>
             </Box>
           </Box>
+          <br />
           {/* main content */}
           <Box>
             <Card className={subs.mediaque}>
@@ -608,16 +602,36 @@ export default function Couseview() {
                                     aria-controls="panel1a-content"
                                     id="panel1a-header"
                                   >
-                                    <Typography
-                                      className={courseStyle.typoTitle}
-                                    >
-                                      <MenuBookIcon className={subs.iconcss} />{" "}
-                                      &nbsp;{" "}
-                                      {capitalizeFirstLetter(item?.title)}
-                                    </Typography>
+                                    <Box className="vvvvvv">
+                                      <Typography
+                                        className={courseStyle.typoTitle}
+                                      >
+                                        <MenuBookIcon
+                                          className={subs.iconcss}
+                                        />{" "}
+                                        &nbsp;{" "}
+                                        {capitalizeFirstLetter(item?.title)}
+                                      </Typography>
+                                      <Box
+                                        sx={{ width: "60%", float: "right" }}
+                                      >
+                                        <LinearProgressWithLabel1
+                                          value={
+                                            moduleCheckIdManage &&
+                                            moduleCheckIdManage.includes(
+                                              item.id
+                                            )
+                                              ? (numberConversion /
+                                                  item?.sessions?.length) *
+                                                100
+                                              : 0
+                                          }
+                                        />
+                                      </Box>
+                                    </Box>
                                   </AccordionSummary>
-                                  <AccordionDetails className="vvv">
-                                    <Box sx={{ width: "92%" }}>
+                                  <AccordionDetails>
+                                    {/* <Box sx={{ width: "92%" }}>
                                       <LinearProgressWithLabel1
                                         value={
                                           moduleCheckIdManage &&
@@ -628,7 +642,7 @@ export default function Couseview() {
                                             : 0
                                         }
                                       />
-                                    </Box>
+                                    </Box> */}
                                     {item?.sessions.map((itemData: any) => {
                                       const togglee =
                                         itemData?.id === activeToggle
