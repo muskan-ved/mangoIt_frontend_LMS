@@ -313,6 +313,7 @@ export default function UpdateSession() {
                       </Grid>
                       <Grid item xs={12} sm={12} md={12} lg={12} mb={2}>
                         <InputLabel className={Sessions.InputLabelFont}>Description</InputLabel>
+                        <Box className={Sessions.quillDescription}>
                         <RichEditor
                           {...register("description")}
                           value={despcriptionContent ? despcriptionContent : getSession?.description}
@@ -320,6 +321,7 @@ export default function UpdateSession() {
                             handleContentChange(e, "description")
                           }
                         />
+                        </Box>
                         {errors && errors.description ? ErrorShowing(errors?.description?.message) : ""}
                         {/* {despcriptionContent ? '' : errors && errors.description ? ErrorShowing(errors?.description?.message) : ""} */}
                       </Grid>

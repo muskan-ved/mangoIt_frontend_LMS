@@ -172,5 +172,5 @@ a {
 /* auth pages label color */
 .css-1ald77x.Mui-focused{
   color: #E8661B !important;
-  border: 1px solid #e8661b !important;
+  /* border: 1px solid #e8661b !important; */
 }
