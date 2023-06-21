@@ -177,7 +177,7 @@ export default function UpdateCourse() {
                 >
                   <Grid container spacing={2}>
                     <Grid item xs={12} sm={12} md={12} lg={6} >
-                      <Box component="img" src="/Images/pages/addFeature.jpg" width={'100%'} />
+                      <Box component="img" src="/Images/pages/addsession_pic.png" width={'100%'} />
                     </Grid>
 
                     <Grid item xs={12} sm={12} md={12} lg={6} >
@@ -250,6 +250,7 @@ export default function UpdateCourse() {
                       </Grid>
                       <Grid item xs={12} sm={12} md={12} lg={12} mb={2}>
                         <InputLabel className={courseStyle.InputLabelFont}>Short Description</InputLabel>
+                        <Box className={courseStyle.quillDescription1}>
                         <RichEditor
                           {...register("short_description")}
                           value={getShortDespcriptionContent ? getShortDespcriptionContent : getCourse?.short_description}
@@ -257,13 +258,14 @@ export default function UpdateCourse() {
                             handleContentChange(value, "short_description")
                           }
                         />
+                        </Box>
                         {errors && errors.short_description ? ErrorShowing(errors?.short_description?.message) : ""}
                         {/* {getShortDespcriptionContent ? '' : errors && errors.description ? ErrorShowing(errors?.description?.message) : ""} */}
                       </Grid>
 
                       <Grid item xs={12} sm={12} md={12} lg={12} mb={2} >
                         <InputLabel className={courseStyle.InputLabelFont}>Long Description</InputLabel>
-                        <Box >
+                        <Box className={courseStyle.quillDescription1}>
                           <RichEditor
                             {...register("long_description")}
                             value={getLongDespcriptionContent ? getLongDespcriptionContent : getCourse?.long_description}

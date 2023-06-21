@@ -15,3 +15,55 @@
 .registerPage{
     font-family: "Roboto","Helvetica","Arial",sans-serif !important;
 }
+
+.mainBoxContentForm{
+    margin-top: 8px;
+}
+
+.mainBoxContent{
+    display: flex  !important;
+    flex-direction: column  !important;
+    margin: 0px 80px  !important;
+    justify-content: center  !important;
+    height: 100vh  !important;
+}
+
+.mainBoxLabel{
+    font-weight: bold !important;
+}
+
+.mainBoxButton{
+    margin-top: 24px !important;
+    margin-bottom: 16px !important;
+}
+
+.mainBoxDividerBox{
+    margin-left: 90px !important;
+}
+
+.mainBoxDivider{
+    width: 80% !important;
+    font-weight: bold !important;
+}
+
+.googleButtonStyle{
+    margin-top: 24px !important;
+    color: #000 !important;
+    border-color: #e8661b !important;
+}
+
+
+
+@media (max-width: 899px) {
+    .loginSideImage {
+      display: none !important;
+    }
+
+    .mainBoxContent{
+        display: flex  !important;
+        flex-direction: column  !important;
+        margin: 0px 50px  !important;
+        justify-content: center  !important;
+        height: 80vh  !important;
+    }
+  }

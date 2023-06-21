@@ -126,20 +126,14 @@ export default function Login() {
       <ToastContainer />
       <Grid container component="main">
         <AuthSidebar />
-        <Grid item xs={12} sm={6} md={6} lg={5}>
+        <Grid item xs={12} sm={12} md={6} lg={6}>
           <Box
-            sx={{
-              my: 17,
-              mx: 13,
-              display: "flex",
-              flexDirection: "column",
-            }}
+            className={styles.mainBoxContent}
           >
             <Typography
               component="h1"
               variant="h4"
-              className="GlobalTextColor"
-              sx={{ fontWeight: "bold" }}
+              className={styles.mainBoxLabel}
             >
               Login
             </Typography>
@@ -161,7 +155,7 @@ export default function Login() {
               noValidate
               autoComplete="off"
               onSubmit={handleSubmit(onSubmit)}
-              sx={{ mt: 1 }}
+             className={styles.mainBoxContentForm}
             >
               <TextField
                 margin="normal"
@@ -203,7 +197,7 @@ export default function Login() {
                   size="large"
                   variant="contained"
                  id={sidebarStyles.muibuttonBackgroundColor}
-                  sx={{ mt: 3, mb: 2 }}
+                  className={styles.mainBoxButton}
                 >
                   Sign In
                 </Button>
@@ -212,7 +206,7 @@ export default function Login() {
                   loading={loading}
                   fullWidth
                   size="large"
-                  sx={{ mt: 3, mb: 2 }}
+                  className={styles.mainBoxButton}
                   variant="outlined"
                   disabled
                 >
@@ -227,9 +221,10 @@ export default function Login() {
                 Forgot a password?
               </Link>
 
-              <Box sx={{ marginLeft: "90px" }}>
+              <Box                  className={styles.mainBoxDividerBox}
+>
                 <Divider
-                  sx={{ width: "80%", fontWeight: "bold" }}
+                 className={styles.mainBoxDivider}
                 >
                   {" "}
                   Or{" "}
@@ -249,7 +244,7 @@ export default function Login() {
                   />}
                   disabled={googleLoading}
                   onClick={() => googleLogin()}
-                  sx={{ mt: 3 , color: "#000",borderColor: "#e8661b"}}
+                 className={styles.googleButtonStyle}
                 >
                   Continue with Google
                 </Button>

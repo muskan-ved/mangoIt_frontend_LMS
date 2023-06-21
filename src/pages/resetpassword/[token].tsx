@@ -4,6 +4,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useRouter } from "next/router";
 import AuthSidebar from "../../common/LayoutNavigations/authSideLayout";
 import sidebarStyles from "../../styles/sidebar.module.css";
+import styles from "../../styles/login.module.css";
 import { LoadingButton } from "@mui/lab";
 import CircularProgressBar from "@/common/CircularProcess/circularProgressBar";
 import { resetPasswordType } from "@/types/authType";
@@ -56,20 +57,14 @@ export default function ResetPassword() {
       <ToastContainer />
       <Grid container component="main">
         <AuthSidebar />
-        <Grid item xs={12} sm={7} md={5} lg={5}>
+        <Grid item xs={12} sm={12} md={6} lg={6}>
           <Box
-            sx={{
-              my: 28,
-              mx: 13,
-              display: "flex",
-              flexDirection: "column",
-            }}
+             className={styles.mainBoxContent}
           >
             <Typography
               component="h1"
               variant="h4"
-              className="GlobalTextColor"
-              sx={{ fontWeight: "bold" }}
+              className={styles.mainBoxLabel}
             >
               Reset Password
             </Typography>
@@ -78,7 +73,7 @@ export default function ResetPassword() {
               component="form"
               noValidate
               onSubmit={handleSubmit(onSubmit)}
-              sx={{ mt: 1 }}
+              className={styles.mainBoxContentForm}
             >
               <TextField
                 margin="normal"
@@ -129,14 +124,13 @@ export default function ResetPassword() {
                 fullWidth
                 size="large"
                 variant="contained"
-                className="authPageButton"
-                sx={{ mt: 3, mb: 2 }}
+                className={styles.mainBoxButton}
                 id={sidebarStyles.muibuttonBackgroundColor}
 
               >
                 Reset
               </Button> : <LoadingButton loading={loading} fullWidth
-                size="large" sx={{ mt: 3, mb: 2 }}
+                size="large" className={styles.mainBoxButton}
                 variant="outlined" disabled >
                 <CircularProgressBar />
               </LoadingButton>}

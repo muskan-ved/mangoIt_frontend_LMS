@@ -168,7 +168,7 @@ export default function Profile() {
 					<BreadcrumbsHeading
 						First="Home"
 						Current="Profile"
-						Text="USER PROFILE"
+						Text="PROFILE"
 						Link="/profile"
 					/>
 
@@ -312,7 +312,7 @@ export default function Profile() {
 													lg={12}
 													textAlign={"right"}
 												>
-													{!isLoadingButton ? <Button type="submit" size="large" variant="contained">
+													{!isLoadingButton ? <Button type="submit" size="large" variant="contained" id={styles.muibuttonBackgroundColor}>
 														Update Profile
 													</Button> : <LoadingButton loading={isLoadingButton}
 														size="large" className={profiles.updateLoadingButton} variant="contained" disabled >

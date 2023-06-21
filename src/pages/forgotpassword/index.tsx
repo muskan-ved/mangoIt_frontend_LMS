@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import AuthSidebar from "../../common/LayoutNavigations/authSideLayout";
 import sidebarStyles from "../../styles/sidebar.module.css";
+import styles from "../../styles/login.module.css";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { forgotPasswordType } from "@/types/authType";
@@ -50,25 +51,19 @@ export default function ForgotPassword() {
       <ToastContainer />
       <Grid container component="main">
         <AuthSidebar />
-        <Grid item xs={12} sm={7} md={5} lg={5}>
+        <Grid item xs={12} sm={12} md={6} lg={6}>
           <Box
-            sx={{
-              my: 24,
-              mx: 13,
-              display: "flex",
-              flexDirection: "column",
-            }}
+           className={styles.mainBoxContent}
           >
             <Typography
               component="h1"
               variant="h4"
-              className="GlobalTextColor"
-              sx={{ fontWeight: "bold" }}
+              className={styles.mainBoxLabel}
             >
               Forgot Password
             </Typography>
             <Grid container>
-              <Grid item className="GlobalTextColor">
+              <Grid item>
                 Enter Email Address
               </Grid>
             </Grid>
@@ -77,7 +72,7 @@ export default function ForgotPassword() {
               component="form"
               noValidate
               onSubmit={handleSubmit(onSubmit)}
-              sx={{ mt: 1 }}
+              className={styles.mainBoxContentForm}
             >
               <TextField
                 margin="normal"
@@ -94,15 +89,15 @@ export default function ForgotPassword() {
                 fullWidth
                 size="large"
                 variant="contained"
-                className="authPageButton"
+                
                 id={sidebarStyles.muibuttonBackgroundColor}
-                sx={{ mt: 3, mb: 2 }}
+                className={styles.mainBoxButton}
 
               >
                 Send
               </Button>
                 : <LoadingButton loading={loading} fullWidth
-                  size="large" sx={{ mt: 3, mb: 2 }}
+                  size="large"  className={styles.mainBoxButton}
                   variant="outlined" disabled >
                   <CircularProgressBar />
                 </LoadingButton>}
@@ -114,10 +109,10 @@ export default function ForgotPassword() {
                 Back to sign in
               </Link>
 
-              <Box sx={{ marginLeft: "90px" }}>
+              <Box  className={styles.mainBoxDividerBox}>
                 <Divider
-                  className="GlobalTextColor"
-                  sx={{ width: "80%", fontWeight: "bold" }}
+                  
+                  className={styles.mainBoxDivider}
                 >
                   {" "}
                   Or{" "}
@@ -135,7 +130,7 @@ export default function ForgotPassword() {
                     height={"18px"}
                  
                   />}
-                  sx={{ mt: 3 , color: "#000",borderColor: "#e8661b"}}
+                  className={styles.googleButtonStyle}
                 >
                   Continue with Google
                 </Button>
