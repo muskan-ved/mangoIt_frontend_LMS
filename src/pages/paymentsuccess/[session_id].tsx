@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import styles from "../../styles/payment.module.css";
 import { useRouter } from "next/router";
-import { HandlePaymentDetails, HandleSubscriptionUpdate } from "@/services/subscription";
+import { HandlePaymentDetails, HandleSubscriptionUpdate, HandleSubscriptionGetByID } from "@/services/subscription";
 import { UpdateOrder } from "@/services/order";
 import { CreateTransaction } from "@/services/transaction";
 import Link from "next/link";
 import moment from "moment";
+import { GetdateAfterOneMonth, GetdateAfterOneYear } from "@/common/commonfunctions/connonfun";
+import Loader from "../../common/CircularProcess/processing";
 
 export default function PaymentSuccess() {
     const router = useRouter();
@@ -24,6 +26,7 @@ export default function PaymentSuccess() {
     }
     //get payment details
     const getPaymentDetails = () => {
+        setLoadar(true)
         const orderid = localStorage.getItem("orderId");
         HandlePaymentDetails(reqdata).then((paymentdet) => {
             const peymentdet = paymentdet?.orderdetails?.data[0];
@@ -33,7 +36,7 @@ export default function PaymentSuccess() {
                     transaction_id: session_id
                 }
                 UpdateOrder(orderdet, orderid).then((order) => {
-                    if (order) {
+                    if (order?.data) {
                         const orderdatas = order?.data;
                         //create transaction 
                         const tnxdata =
@@ -46,16 +49,28 @@ export default function PaymentSuccess() {
                             createdAt: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
                         }
                         CreateTransaction(tnxdata).then((tnxdet) => {
-                            if (tnxdet) {
-                                const reqdata = {
-                                    status: "active",
-                                    start_date: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
-                                }
-                                HandleSubscriptionUpdate(orderdatas?.subscription_id, reqdata).then((subcdet) => {
-                                    if (subcdet) {
-                                        setTimeout(function () {
-                                            router.push(`/user/subscription`);
-                                        }, 10000)
+                            if (tnxdet?.data) {
+                                HandleSubscriptionGetByID(orderdatas?.subscription_id).then((subsdet) => {
+                                    if (subsdet?.data) {
+                                        let expirtdt;
+                                        if (subsdet?.data?.duration_term === "month" || subsdet?.data?.duration_value == 30) {
+                                            expirtdt = GetdateAfterOneMonth(new Date());
+                                        } else {
+                                            expirtdt = GetdateAfterOneYear(new Date())
+                                        }
+                                        const reqdata = {
+                                            status: "active",
+                                            start_date: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+                                            expiry_date: moment(expirtdt).format('YYYY-MM-DD HH:mm:ss'),
+                                        }
+                                        HandleSubscriptionUpdate(orderdatas?.subscription_id, reqdata).then((subcdet) => {
+                                            if (subcdet?.data) {
+                                                setLoadar(false)
+                                                setTimeout(function () {
+                                                    router.push(`/user/subscription`);
+                                                }, 10000)
+                                            }
+                                        })
                                     }
                                 })
                             }
@@ -66,8 +81,8 @@ export default function PaymentSuccess() {
         });
     }
     return (
-        <Box>
-            <Box className={styles.content}>
+        <>
+            {loader ? (<Loader />) : (<Box className={styles.content}>
                 <Box className={styles.wrapper1}>
                     <Box className={styles.wrapper2}>
                         <Typography variant="h3" className={styles.h1}>Thank you !</Typography>
@@ -80,7 +95,7 @@ export default function PaymentSuccess() {
                         </Link>
                     </Box>
                 </Box>
-            </Box>
-        </Box >
+            </Box>)}
+        </ >
     );
 }
