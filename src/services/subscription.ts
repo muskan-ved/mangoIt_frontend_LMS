@@ -249,11 +249,8 @@ export const HandleInvoicesGet = async (search: string, reqData?: any) => {
     });
 };
 
-
 // Subscription plans
-
 export const GetAllSubsctionPlans = async (search?: string, reqData?: any) => {
-
   const API_URL = search
     ? `${API.allsubscriptions}/${search}`
     : `${API.allsubscriptions}`;
@@ -289,7 +286,6 @@ export const GetSubsctionsPlansDet = async (id: any) => {
 };
 
 export const CreateSubscriptionPlan = async (reqData: any) => {
-
   return await axios({
     method: "POST",
     url: `${API.addSubscriptionPlans}`,
@@ -305,9 +301,9 @@ export const CreateSubscriptionPlan = async (reqData: any) => {
     .catch((error) => {
       if (error.response.status === 401) {
         HandleLogout();
-      }else if (error.response.status === 400){
+      } else if (error.response.status === 400) {
         toast.error(error.response?.data.message);
-      }  else {
+      } else {
         toast.error("Something went wrong");
       }
       return error;
@@ -328,10 +324,10 @@ export const UpdateSubscriptionPlan = async (id: any, reqData: any) => {
       return request;
     })
     .catch((error) => {
-      console.log(error.response)
+      console.log(error.response);
       if (error.response.status === 401) {
         HandleLogout();
-      }else if (error.response.status === 400){
+      } else if (error.response.status === 400) {
         toast.error(error?.response?.data?.message);
       } else {
         toast.error("Something went wrong!");
@@ -341,7 +337,6 @@ export const UpdateSubscriptionPlan = async (id: any, reqData: any) => {
 };
 
 export const DeleteSubscriptionPlan = async (id: string) => {
-
   return await axios({
     method: "DELETE",
     url: `${API.deleteSubscriptionPlans}/${id}`,
@@ -350,7 +345,7 @@ export const DeleteSubscriptionPlan = async (id: string) => {
     .then((request) => {
       if (request.status === 201) {
         toast.success("Deleted successfully.");
-      }else if (request.status === 400){
+      } else if (request.status === 400) {
         toast.error(request.data.message);
       }
       return request;
@@ -364,9 +359,3 @@ export const DeleteSubscriptionPlan = async (id: string) => {
       return error;
     });
 };
-
-
-
-
-
-
