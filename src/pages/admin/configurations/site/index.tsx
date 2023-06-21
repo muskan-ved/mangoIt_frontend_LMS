@@ -240,7 +240,7 @@ const SiteConfiguration = () => {
                         <Grid item xs={12} sm={12} md={12} lg={6}>
                           <Box
                             component="img"
-                            src="/Images/pages/sideImages/siteSide.svg"
+                            src="/Images/sideImages/siteSide.svg"
                             width={"100%"}
                           />
                         </Grid>
@@ -426,7 +426,7 @@ const SiteConfiguration = () => {
                         <Grid item xs={12} sm={12} md={12} lg={6}>
                           <Box
                             component="img"
-                            src="/Images/pages/sideImages/siteSide.svg"
+                            src="/Images/sideImages/siteSide.svg"
                             width={"100%"}
                           />
                         </Grid>

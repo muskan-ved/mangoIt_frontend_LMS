@@ -302,6 +302,7 @@ const AddEmailContent = () => {
                       size="large"
                       className={emailStyle.bothButtonSpace}
                       variant="contained"
+                      id={styles.muibuttonBackgroundColor}
                       onClick={() => router.back()}
                     >
                       Cancel
