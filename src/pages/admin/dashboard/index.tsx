@@ -47,6 +47,7 @@ const Dashboard = () => {
   
   }, [])
 
+const reverseData =[...dashboardContent?.todaysSubscriptionData].reverse();
 
   return (
     <>
@@ -197,12 +198,12 @@ const Dashboard = () => {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                      {dashboardContent?.todaysSubscriptionData.map((subs:any) =>(
+                      {reverseData && reverseData?.map((subs:any) =>(
                         <TableRow key={subs.id}>
                           <TableCell align="left">{subs.id}</TableCell>
                           <TableCell align="left">{subs.name}</TableCell>
                           <TableCell align="left">{subs.description}</TableCell>
-                          <TableCell align="left">{subs.price}</TableCell>
+                          <TableCell align="left">${subs.price}</TableCell>
                         </TableRow>
                         ))}
                         
