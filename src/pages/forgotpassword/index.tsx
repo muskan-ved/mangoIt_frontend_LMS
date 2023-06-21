@@ -68,7 +68,7 @@ export default function ForgotPassword() {
               Forgot Password
             </Typography>
             <Grid container>
-              <Grid item className="GlobalTextColor">
+              <Grid item className="GlobalTextColor" sx={{ fontFamily: '"Roboto","Helvetica","Arial",sans-serif !important' }}>
                 Enter Email Address
               </Grid>
             </Grid>
@@ -111,7 +111,7 @@ export default function ForgotPassword() {
                 href="/login"
                 className="GlobalTextColor"
               >
-                Back to sign in
+                <Grid item sx={{ fontFamily: '"Roboto","Helvetica","Arial",sans-serif !important' }}>Back to sign in</Grid>
               </Link>
 
               <Box sx={{ marginLeft: "90px" }}>
@@ -128,14 +128,14 @@ export default function ForgotPassword() {
                   type="submit"
                   fullWidth
                   variant="outlined"
-                  startIcon={ <Box
+                  startIcon={<Box
                     component={"img"}
                     src={"/Images/pages/google.svg"}
                     width={"18px"}
                     height={"18px"}
-                 
+
                   />}
-                  sx={{ mt: 3 , color: "#000",borderColor: "#e8661b"}}
+                  sx={{ mt: 3, color: "#000", borderColor: "#e8661b" }}
                 >
                   Continue with Google
                 </Button>

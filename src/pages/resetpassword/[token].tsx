@@ -30,21 +30,33 @@ export default function ResetPassword() {
   const { token } = router.query;
 
   const onSubmit = async (event: any) => {
-    // const getToken = { token: localStorage.getItem('forgotPasswordToken'), }
     const reqData = {
       ...event, token
     };
-    console.log('reqData',reqData)
     setLoading(true)
-    await HandleResetPassword(reqData).then((res) => {
-      if (res.status === 202) {
-        router.push('/login')
-        localStorage.removeItem('forgotPasswordToken')
+    try {
+      const result = await HandleResetPassword(reqData)
+      if (result) {
+        setTimeout(() => {
+          router.push('/login')
+          localStorage.removeItem('forgotPasswordToken')
+        }, 900);
+        setLoading(false)
       }
+    }
+    catch (err) {
       setLoading(false)
-    }).catch(() => {
-      setLoading(false)
-    })
+    }
+
+    // await HandleResetPassword(reqData).then((res) => {
+    //   if (res.status === 202) {
+    //     router.push('/login')
+    //     localStorage.removeItem('forgotPasswordToken')
+    //   }
+    //   setLoading(false)
+    // }).catch(() => {
+    //   setLoading(false)
+    // })
   };
 
   function ErrorShowing(errorMessage: any) {
