@@ -88,9 +88,12 @@ export default function Login() {
           await HandleRegister(reqData)
             .then((res) => {
               if (res.status === 201) {
-                localStorage.setItem('loginToken', res.data.loginToken)
-                localStorage.setItem('userData', JSON.stringify(res?.data?.updatedUser))
-                router.push('/profile')
+                localStorage.setItem("loginToken", res.data.loginToken);
+                localStorage.setItem(
+                  "userData",
+                  JSON.stringify(res?.data?.updatedUser)
+                );
+                router.push("/profile");
               }
               setGoogleLoading(false);
             })
@@ -127,9 +130,7 @@ export default function Login() {
       <Grid container component="main">
         <AuthSidebar />
         <Grid item xs={12} sm={12} md={6} lg={6}>
-          <Box
-            className={styles.mainBoxContent}
-          >
+          <Box className={styles.mainBoxContent}>
             <Typography
               component="h1"
               variant="h4"
@@ -138,13 +139,11 @@ export default function Login() {
               Login
             </Typography>
             <Grid container>
-              <Grid item  className={styles.registerPage}>
+              <Grid item className={styles.registerPage}>
                 Don&lsquo;t have an account?
-                <Link
-                  href="/register"
-                  className={styles.signInUpColor}
-                >
-                  {" "} Create Now
+                <Link href="/register" className={styles.signInUpColor}>
+                  {" "}
+                  Create Now
                 </Link>
               </Grid>
             </Grid>
@@ -155,7 +154,7 @@ export default function Login() {
               noValidate
               autoComplete="off"
               onSubmit={handleSubmit(onSubmit)}
-             className={styles.mainBoxContentForm}
+              className={styles.mainBoxContentForm}
             >
               <TextField
                 margin="normal"
@@ -196,7 +195,7 @@ export default function Login() {
                   fullWidth
                   size="large"
                   variant="contained"
-                 id={sidebarStyles.muibuttonBackgroundColor}
+                  id={sidebarStyles.muibuttonBackgroundColor}
                   className={styles.mainBoxButton}
                 >
                   Sign In
@@ -214,37 +213,29 @@ export default function Login() {
                 </LoadingButton>
               )}
 
-              <Link
-                href="/forgotpassword"
-                className={styles.registerPage}
-              >
+              <Link href="/forgotpassword" className={styles.registerPage}>
                 Forgot a password?
               </Link>
 
-              <Box                  className={styles.mainBoxDividerBox}
->
-                <Divider
-                 className={styles.mainBoxDivider}
-                >
-                  {" "}
-                  Or{" "}
-                </Divider>
+              <Box className={styles.mainBoxDividerBox}>
+                <Divider className={styles.mainBoxDivider}> Or </Divider>
               </Box>
               <Box textAlign={"center"}>
                 <Button
                   type="button"
                   fullWidth
                   variant="outlined"
-                  startIcon={ <Box
-                    component={"img"}
-                    src={"/Images/pages/google.svg"}
-                    width={"18px"}
-                    height={"18px"}
-                 
-                  />}
+                  startIcon={
+                    <Box
+                      component={"img"}
+                      src={"/Images/pages/google.svg"}
+                      width={"18px"}
+                      height={"18px"}
+                    />
+                  }
                   disabled={googleLoading}
                   onClick={() => googleLogin()}
-                 className={styles.googleButtonStyle}
+                  className={styles.googleButtonStyle}
                 >
                   Continue with Google
                 </Button>

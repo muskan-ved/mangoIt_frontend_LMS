@@ -1,5 +1,13 @@
 import * as React from "react";
-import { Button, TextField, Box, Grid, Typography, InputAdornment, IconButton } from "@mui/material";
+import {
+  Button,
+  TextField,
+  Box,
+  Grid,
+  Typography,
+  InputAdornment,
+  IconButton,
+} from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useRouter } from "next/router";
 import AuthSidebar from "../../common/LayoutNavigations/authSideLayout";
@@ -13,43 +21,56 @@ import { userResetPasswordValidations } from "@/validation_schema/authValidation
 import { useForm } from "react-hook-form";
 import { HandleResetPassword } from "@/services/auth";
 import { ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const theme = createTheme();
 
 export default function ResetPassword() {
-
-  const { register, handleSubmit, formState: { errors } } = useForm<resetPasswordType>({ resolver: yupResolver(userResetPasswordValidations) });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<resetPasswordType>({
+    resolver: yupResolver(userResetPasswordValidations),
+  });
   const router: any = useRouter();
   const [loading, setLoading] = React.useState<boolean>(false);
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const handleClickShowConfirmPassword = () => setShowConfirmPassword((show) => !show);
+  const handleClickShowConfirmPassword = () =>
+    setShowConfirmPassword((show) => !show);
   const { token } = router.query;
 
   const onSubmit = async (event: any) => {
     // const getToken = { token: localStorage.getItem('forgotPasswordToken'), }
     const reqData = {
-      ...event, token
+      ...event,
+      token,
     };
-    console.log('reqData',reqData)
-    setLoading(true)
-    await HandleResetPassword(reqData).then((res) => {
-      if (res.status === 202) {
-        router.push('/login')
-        localStorage.removeItem('forgotPasswordToken')
-      }
-      setLoading(false)
-    }).catch(() => {
-      setLoading(false)
-    })
+    console.log("reqData", reqData);
+    setLoading(true);
+    await HandleResetPassword(reqData)
+      .then((res) => {
+        if (res.status === 202) {
+          router.push("/login");
+          localStorage.removeItem("forgotPasswordToken");
+        }
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
   };
 
   function ErrorShowing(errorMessage: any) {
-    return (<Typography variant="body2" color={'error'} gutterBottom>{errorMessage} </Typography>);
+    return (
+      <Typography variant="body2" color={"error"} gutterBottom>
+        {errorMessage}{" "}
+      </Typography>
+    );
   }
 
   return (
@@ -58,9 +79,7 @@ export default function ResetPassword() {
       <Grid container component="main">
         <AuthSidebar />
         <Grid item xs={12} sm={12} md={6} lg={6}>
-          <Box
-             className={styles.mainBoxContent}
-          >
+          <Box className={styles.mainBoxContent}>
             <Typography
               component="h1"
               variant="h4"
@@ -81,7 +100,7 @@ export default function ResetPassword() {
                 id="outlined-new-password"
                 label="New Password "
                 {...register("password")}
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 autoFocus
                 InputProps={{
                   endAdornment: (
@@ -94,16 +113,17 @@ export default function ResetPassword() {
                     </IconButton>
                   ),
                 }}
-
               />
-              {errors && errors.password ? ErrorShowing(errors?.password?.message) : ''}
+              {errors && errors.password
+                ? ErrorShowing(errors?.password?.message)
+                : ""}
 
               <TextField
                 margin="none"
                 fullWidth
                 {...register("confirm_password")}
                 label="Confirm Password"
-                type={showConfirmPassword ? 'text' : 'password'}
+                type={showConfirmPassword ? "text" : "password"}
                 id="outlined-confirm_password"
                 InputProps={{
                   endAdornment: (
@@ -117,23 +137,33 @@ export default function ResetPassword() {
                   ),
                 }}
               />
-              {errors && errors.confirm_password ? ErrorShowing(errors?.confirm_password?.message) : ''}
+              {errors && errors.confirm_password
+                ? ErrorShowing(errors?.confirm_password?.message)
+                : ""}
 
-              {!loading ? <Button
-                type="submit"
-                fullWidth
-                size="large"
-                variant="contained"
-                className={styles.mainBoxButton}
-                id={sidebarStyles.muibuttonBackgroundColor}
-
-              >
-                Reset
-              </Button> : <LoadingButton loading={loading} fullWidth
-                size="large" className={styles.mainBoxButton}
-                variant="outlined" disabled >
-                <CircularProgressBar />
-              </LoadingButton>}
+              {!loading ? (
+                <Button
+                  type="submit"
+                  fullWidth
+                  size="large"
+                  variant="contained"
+                  className={styles.mainBoxButton}
+                  id={sidebarStyles.muibuttonBackgroundColor}
+                >
+                  Reset
+                </Button>
+              ) : (
+                <LoadingButton
+                  loading={loading}
+                  fullWidth
+                  size="large"
+                  className={styles.mainBoxButton}
+                  variant="outlined"
+                  disabled
+                >
+                  <CircularProgressBar />
+                </LoadingButton>
+              )}
             </Box>
           </Box>
         </Grid>
