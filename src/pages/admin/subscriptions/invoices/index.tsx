@@ -331,7 +331,7 @@ const Invoices = () => {
                               <TableCell>
                                 {capitalizeFirstLetter(row.subscription.name)}
                               </TableCell>
-                              <TableCell>$ {row.amount}</TableCell>
+                              <TableCell>${row.amount}</TableCell>
                               <TableCell className={statusColor}>
                                 {capitalizeFirstLetter(row.status)}
                               </TableCell>

@@ -372,7 +372,7 @@ export default function View() {
                       variant="subtitle2"
                       className={subs.fontCSSsubsc}
                     >
-                      $ {subsData && subsData?.price}
+                      ${subsData && subsData?.price}
                     </Typography>
                   </Box>
                   <Box className={subs.maindisplay}>
@@ -730,7 +730,7 @@ export default function View() {
                                   key={row.id}
                                 >
                                   <TableCell>{row?.id}</TableCell>
-                                  <TableCell>$ {subsData?.price}</TableCell>
+                                  <TableCell>${subsData?.price}</TableCell>
                                   <TableCell>
                                     {moment(row?.createdAt).format(
                                       "DD MMM YYYY"
@@ -926,7 +926,7 @@ export default function View() {
                 </Typography>
                 &emsp;
                 <Typography variant="subtitle2" className={subs.fontCSS}>
-                  $ {trxdata?.trx_amount}
+                  ${trxdata?.trx_amount}
                 </Typography>
               </Box>
               <Box className={subs.maindisplay}>

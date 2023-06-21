@@ -224,7 +224,7 @@ const SubscriptionPlans = () => {
                               <TableCell>
                                 {capitalizeFirstLetter(row?.title)}{" "}
                               </TableCell>
-                              <TableCell>$ {row.amount}</TableCell>
+                              <TableCell>${row.amount}</TableCell>
                               <TableCell>{capitalizeFirstLetter(row?.duration_term)}{" "}</TableCell>
                               <TableCell>{row.duration_value}</TableCell>
                               <TableCell>

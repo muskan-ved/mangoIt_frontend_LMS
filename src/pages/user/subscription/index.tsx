@@ -248,7 +248,7 @@ const Subscription = () => {
                                 <TableCell>
                                   {capitalizeFirstLetter(row?.duration_term)}
                                 </TableCell>
-                                <TableCell>$ {row?.price}</TableCell>
+                                <TableCell>${row?.price}</TableCell>
                                 <TableCell>
                                   {moment(row?.createdAt).format(
                                     "DD, MMMM YYYY"

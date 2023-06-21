@@ -1,7 +1,14 @@
 import * as React from "react";
-import { Button, Divider, Box, Typography, Grid, TextField } from "@mui/material";
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import {
+  Button,
+  Divider,
+  Box,
+  Typography,
+  Grid,
+  TextField,
+} from "@mui/material";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import AuthSidebar from "../../common/LayoutNavigations/authSideLayout";
 import sidebarStyles from "../../styles/sidebar.module.css";
@@ -18,32 +25,42 @@ import Link from "next/link";
 const theme = createTheme();
 
 export default function ForgotPassword() {
-
-  const { register, handleSubmit, formState: { errors } } = useForm<forgotPasswordType>({ resolver: yupResolver(userForgotPasswordValidations) });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<forgotPasswordType>({
+    resolver: yupResolver(userForgotPasswordValidations),
+  });
   const [loading, setLoading] = React.useState<boolean>(false);
 
   const onSubmit = async (event: any) => {
-
     const reqData: any = {
       to: event.email,
-      emailType: 'forgot_password'
-    }
+      emailType: "forgot_password",
+    };
 
-    const formData = new FormData()
+    const formData = new FormData();
     for (var key in reqData) {
       formData.append(key, reqData[key]);
     }
-    setLoading(true)
-    await HandleForgotPassword(formData).then((res) => {
-      // localStorage.setItem("forgotPasswordToken",res.data)
-      setLoading(false)
-    }).catch(() => {
-      setLoading(false)
-    })
+    setLoading(true);
+    await HandleForgotPassword(formData)
+      .then((res) => {
+        // localStorage.setItem("forgotPasswordToken",res.data)
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
   };
 
   function ErrorShowing(errorMessage: any) {
-    return (<Typography variant="body2" color={'error'} gutterBottom>{errorMessage} </Typography>);
+    return (
+      <Typography variant="body2" color={"error"} gutterBottom>
+        {errorMessage}{" "}
+      </Typography>
+    );
   }
 
   return (
@@ -52,9 +69,7 @@ export default function ForgotPassword() {
       <Grid container component="main">
         <AuthSidebar />
         <Grid item xs={12} sm={12} md={6} lg={6}>
-          <Box
-           className={styles.mainBoxContent}
-          >
+          <Box className={styles.mainBoxContent}>
             <Typography
               component="h1"
               variant="h4"
@@ -63,9 +78,7 @@ export default function ForgotPassword() {
               Forgot Password
             </Typography>
             <Grid container>
-              <Grid item>
-                Enter Email Address
-              </Grid>
+              <Grid item>Enter Email Address</Grid>
             </Grid>
 
             <Box
@@ -82,54 +95,52 @@ export default function ForgotPassword() {
                 {...register("email")}
                 autoFocus
               />
-              {errors && errors.email ? ErrorShowing(errors?.email?.message) : ''}
+              {errors && errors.email
+                ? ErrorShowing(errors?.email?.message)
+                : ""}
 
-              {!loading ? <Button
-                type="submit"
-                fullWidth
-                size="large"
-                variant="contained"
-                
-                id={sidebarStyles.muibuttonBackgroundColor}
-                className={styles.mainBoxButton}
-
-              >
-                Send
-              </Button>
-                : <LoadingButton loading={loading} fullWidth
-                  size="large"  className={styles.mainBoxButton}
-                  variant="outlined" disabled >
-                  <CircularProgressBar />
-                </LoadingButton>}
-
-              <Link
-                href="/login"
-                className="GlobalTextColor"
-              >
-                Back to sign in
-              </Link>
-
-              <Box  className={styles.mainBoxDividerBox}>
-                <Divider
-                  
-                  className={styles.mainBoxDivider}
+              {!loading ? (
+                <Button
+                  type="submit"
+                  fullWidth
+                  size="large"
+                  variant="contained"
+                  id={sidebarStyles.muibuttonBackgroundColor}
+                  className={styles.mainBoxButton}
                 >
-                  {" "}
-                  Or{" "}
-                </Divider>
+                  Send
+                </Button>
+              ) : (
+                <LoadingButton
+                  loading={loading}
+                  fullWidth
+                  size="large"
+                  className={styles.mainBoxButton}
+                  variant="outlined"
+                  disabled
+                >
+                  <CircularProgressBar />
+                </LoadingButton>
+              )}
+
+              <Link href="/login">Back to sign in</Link>
+
+              <Box className={styles.mainBoxDividerBox}>
+                <Divider className={styles.mainBoxDivider}> Or </Divider>
               </Box>
               <Box textAlign={"center"}>
                 <Button
                   type="submit"
                   fullWidth
                   variant="outlined"
-                  startIcon={ <Box
-                    component={"img"}
-                    src={"/Images/pages/google.svg"}
-                    width={"18px"}
-                    height={"18px"}
-                 
-                  />}
+                  startIcon={
+                    <Box
+                      component={"img"}
+                      src={"/Images/pages/google.svg"}
+                      width={"18px"}
+                      height={"18px"}
+                    />
+                  }
                   className={styles.googleButtonStyle}
                 >
                   Continue with Google
@@ -140,6 +151,5 @@ export default function ForgotPassword() {
         </Grid>
       </Grid>
     </ThemeProvider>
-
   );
 }
