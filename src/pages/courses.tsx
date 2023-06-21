@@ -78,9 +78,7 @@ export default function Courses() {
   const listView = () => {
     setgridview(false);
   };
-  console.log("gridviewgridview", gridview);
 
-  console.log("courseData", courseData);
   return (
     <>
       {/*header*/}

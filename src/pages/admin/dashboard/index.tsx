@@ -78,7 +78,7 @@ const reverseData =[...dashboardContent?.todaysSubscriptionData].reverse();
                     </Box>
                     <Box
                       component={"img"}
-                      src="/Images/pages/users.png"
+                      src="/Images/pages_icon/users.png"
                       width={"20%"}
                     />
                   </Box>
@@ -97,7 +97,7 @@ const reverseData =[...dashboardContent?.todaysSubscriptionData].reverse();
                     </Box>
                     <Box
                       component={"img"}
-                      src="/Images/pages/course.png"
+                      src="/Images/pages_icon/course.png"
                       width={"20%"}
                     />
                   </Box>
@@ -116,7 +116,7 @@ const reverseData =[...dashboardContent?.todaysSubscriptionData].reverse();
                     </Box>
                     <Box
                       component={"img"}
-                      src="/Images/pages/earning.png"
+                      src="/Images/pages_icon/earning.png"
                       width={"20%"}
                     />
                   </Box>
@@ -135,7 +135,7 @@ const reverseData =[...dashboardContent?.todaysSubscriptionData].reverse();
                     </Box>
                     <Box
                       component={"img"}
-                      src="/Images/pages/sub.png"
+                      src="/Images/pages_icon/sub.png"
                       width={"20%"}
                     />
                   </Box>
