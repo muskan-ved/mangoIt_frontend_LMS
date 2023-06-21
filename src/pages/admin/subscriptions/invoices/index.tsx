@@ -48,6 +48,7 @@ import Subscription from "../../../../styles/subscription.module.css";
 import { ToastContainer } from "react-toastify";
 // API Service
 import { HandleInvoicesGet } from "@/services/subscription";
+import { HandleDownloadInvoice } from "@/services/invoice_receipt";
 
 interface Column {
   id:
@@ -98,8 +99,6 @@ const Invoices = () => {
 
   const { handleSubmit, control, reset } = useForm();
 
-  const handleDownloadInvoice = (row: any) => {};
-
   const resetFilterValue = () => {
     setFilter("all");
     reset({ status: "all" });
@@ -137,6 +136,23 @@ const Invoices = () => {
     getAllInvoiceData("", e);
     setFilter("all");
   };
+
+  //download invoice
+  const DownloadInvoice = (orderid: any) => {
+    console.log(orderid,"orderid")
+    const reqdata = {
+      orderId: orderid
+    }
+    HandleDownloadInvoice(reqdata).then((response: any) => {
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `customer-invoice-${orderid}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      return false;
+    });
+  }
 
   return (
     <>
@@ -331,7 +347,7 @@ const Invoices = () => {
                               <TableCell>
                                 {capitalizeFirstLetter(row.subscription.name)}
                               </TableCell>
-                              <TableCell>$ {row.amount}</TableCell>
+                              <TableCell>${row.amount}</TableCell>
                               <TableCell className={statusColor}>
                                 {capitalizeFirstLetter(row.status)}
                               </TableCell>
@@ -345,7 +361,7 @@ const Invoices = () => {
                                   className={Subscription.editDeleteButton}
                                   variant="outlined"
                                   color="error"
-                                  onClick={() => handleDownloadInvoice(row)}
+                                  onClick={() => DownloadInvoice(row.id)}
                                 >
                                   <FileDownloadOutlinedIcon />
                                 </Button>

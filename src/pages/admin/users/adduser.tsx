@@ -20,7 +20,7 @@ import UserCSS from "../../../styles/user.module.css";
 import { ToastContainer } from 'react-toastify';
 import { userValidations } from '@/validation_schema/userValidation';
 // API services
-import { HandleForgotPassword, HandleRegister } from '@/services/auth';
+import { HandleRegister } from '@/services/auth';
 
 
 
@@ -33,7 +33,6 @@ export default function AddUser() {
     register,
     handleSubmit,
     reset,
-    setValue,
     control,
     formState: { errors },
   } = useForm<any>({

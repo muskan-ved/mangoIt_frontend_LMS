@@ -245,7 +245,6 @@ export default function Couseview() {
           calculate = (value / sessionCount) * 100;
         }
         if (calculate && calculate === 100) {
-          // handleUpdateMarkAsComplete();
           let reqData = {
             user_id: userId,
             course_id: sessionData.course_id,
@@ -290,7 +289,6 @@ export default function Couseview() {
     for (let i = 0; i < moduleIdd.length; i++) {
       const viewHistory = filteredData && filteredData[0]?.course?.view_history;
       if (viewHistory === null) {
-        console.log("ViewHistory Empty");
       } else {
         for (let j = 0; j < viewHistory?.length; j++) {
           Object.entries(viewHistory[j]).map(([key, value]: any) => {

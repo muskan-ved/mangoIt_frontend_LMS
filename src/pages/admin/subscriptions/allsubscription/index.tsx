@@ -243,10 +243,10 @@ const Subscriptions = () => {
                                             Active
                                           </MenuItem>
                                           <MenuItem value={'inactive'}>
-                                            In-active
+                                            Inactive
                                           </MenuItem>
                                           <MenuItem value={'canceled'}>
-                                            Cancel
+                                            Cancelled
                                           </MenuItem>
                                           <MenuItem value={'expired'}>
                                             Expired
@@ -337,7 +337,7 @@ const Subscriptions = () => {
                       DATA.currentData()
                         .map((row: any) => {
 
-                          const statusColor = (row.status === "active" ? Subscription.activeClassColor : row.status === "inactive" ? Subscription.inactiveClassColor : Subscription.draftClassColor)
+                          const statusColor = (row.status === "active" ? Subscription.activeClassColor : row.status === "inactive" ? Subscription.inactiveClassColor :  row.status === "canceled" ? Subscription.cancelClassColor : Subscription.expiredClassColor)
                           return (
                             <TableRow
                               hover
@@ -345,7 +345,7 @@ const Subscriptions = () => {
                             >
                               <TableCell>{row.id}</TableCell>
                               <TableCell>{capitalizeFirstLetter(row.name)}</TableCell>
-                              <TableCell>$ {row.price}</TableCell>
+                              <TableCell>${row.price}</TableCell>
                               <TableCell>{capitalizeFirstLetter(row.duration_term)}</TableCell>
                               <TableCell>{row.duration_value}</TableCell>
                               <TableCell className={statusColor}>{capitalizeFirstLetter(row.status)}</TableCell>

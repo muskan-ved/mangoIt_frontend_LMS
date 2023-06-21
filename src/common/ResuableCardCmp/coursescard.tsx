@@ -84,7 +84,7 @@ export function CourseCardListView(props: any) {
             />
             <Box sx={{ display: "flex", flexDirection: "column" }}>
               <CardContent sx={{ flex: "1 0 auto" }}>
-                <Typography component="h2" variant="h5">
+                <Typography component="h2" variant="h5" className={styles.titleCoursecs}>
                   {capitalizeFirstLetter(props?.paidcourses?.course?.title) ||
                     capitalizeFirstLetter(props?.freecourses?.course?.title) ||
                     capitalizeFirstLetter(props?.coursedata?.course?.title)}
@@ -121,7 +121,7 @@ export function CourseCardListView(props: any) {
                 {/* <Typography sx={{ display: 'flex', alignItems: 'center' }}>
                                     {props?.freecourses?.course?.long_description?.replace(/(<([^>]+)>)/ig, '').substring(0,50) || props?.paidcourses?.course?.long_description?.replace(/(<([^>]+)>)/ig, '').substring(0,50) || props?.coursedata?.course?.long_description?.replace(/(<([^>]+)>)/ig, '').substring(0,50)}
                                 </Typography> */}
-                <Typography variant="subtitle1" color="primary" mt={2}>
+                <Typography variant="subtitle1" mt={2} className={styles.continueRead}>
                   Continue reading...
                 </Typography>
               </CardContent>
@@ -298,7 +298,7 @@ export function EnrolledCourseCardListView(props: any) {
             />
             <Box sx={{ display: "flex", flexDirection: "column" }}>
               <CardContent sx={{ flex: "1 0 auto" }}>
-                <Typography component="h2" variant="h5">
+                <Typography component="h2" variant="h5" className={styles.titleCoursecs}>
                   {capitalizeFirstLetter(props?.paidcourses?.course?.title) ||
                     capitalizeFirstLetter(props?.freecourses?.course?.title) ||
                     capitalizeFirstLetter(props?.coursedata?.course?.title)}
@@ -335,7 +335,7 @@ export function EnrolledCourseCardListView(props: any) {
                 {/* <Typography sx={{ display: 'flex', alignItems: 'center' }}>
                                     {props?.freecourses?.course?.long_description?.replace(/(<([^>]+)>)/ig, '').substring(0,50) || props?.paidcourses?.course?.long_description?.replace(/(<([^>]+)>)/ig, '').substring(0,50) || props?.coursedata?.course?.long_description?.replace(/(<([^>]+)>)/ig, '').substring(0,50)}
                                 </Typography> */}
-                <Typography variant="subtitle1" color="primary" mt={2}>
+                <Typography variant="subtitle1" mt={2} className={styles.continueRead}>
                   Continue reading...
                 </Typography>
               </CardContent>

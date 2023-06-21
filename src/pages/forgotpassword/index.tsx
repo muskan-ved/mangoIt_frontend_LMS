@@ -1,10 +1,18 @@
 import * as React from "react";
-import { Button, Divider, Box, Typography, Grid, TextField } from "@mui/material";
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import {
+  Button,
+  Divider,
+  Box,
+  Typography,
+  Grid,
+  TextField,
+} from "@mui/material";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import AuthSidebar from "../../common/LayoutNavigations/authSideLayout";
 import sidebarStyles from "../../styles/sidebar.module.css";
+import styles from "../../styles/login.module.css";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { forgotPasswordType } from "@/types/authType";
@@ -17,32 +25,42 @@ import Link from "next/link";
 const theme = createTheme();
 
 export default function ForgotPassword() {
-
-  const { register, handleSubmit, formState: { errors } } = useForm<forgotPasswordType>({ resolver: yupResolver(userForgotPasswordValidations) });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<forgotPasswordType>({
+    resolver: yupResolver(userForgotPasswordValidations),
+  });
   const [loading, setLoading] = React.useState<boolean>(false);
 
   const onSubmit = async (event: any) => {
-
     const reqData: any = {
       to: event.email,
-      emailType: 'forgot_password'
-    }
+      emailType: "forgot_password",
+    };
 
-    const formData = new FormData()
+    const formData = new FormData();
     for (var key in reqData) {
       formData.append(key, reqData[key]);
     }
-    setLoading(true)
-    await HandleForgotPassword(formData).then((res) => {
-      // localStorage.setItem("forgotPasswordToken",res.data)
-      setLoading(false)
-    }).catch(() => {
-      setLoading(false)
-    })
+    setLoading(true);
+    await HandleForgotPassword(formData)
+      .then((res) => {
+        // localStorage.setItem("forgotPasswordToken",res.data)
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
   };
 
   function ErrorShowing(errorMessage: any) {
-    return (<Typography variant="body2" color={'error'} gutterBottom>{errorMessage} </Typography>);
+    return (
+      <Typography variant="body2" color={"error"} gutterBottom>
+        {errorMessage}{" "}
+      </Typography>
+    );
   }
 
   return (
@@ -50,20 +68,12 @@ export default function ForgotPassword() {
       <ToastContainer />
       <Grid container component="main">
         <AuthSidebar />
-        <Grid item xs={12} sm={7} md={5} lg={5}>
-          <Box
-            sx={{
-              my: 24,
-              mx: 13,
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
+        <Grid item xs={12} sm={12} md={6} lg={6}>
+          <Box className={styles.mainBoxContent}>
             <Typography
               component="h1"
               variant="h4"
-              className="GlobalTextColor"
-              sx={{ fontWeight: "bold" }}
+              className={styles.mainBoxLabel}
             >
               Forgot Password
             </Typography>
@@ -77,7 +87,7 @@ export default function ForgotPassword() {
               component="form"
               noValidate
               onSubmit={handleSubmit(onSubmit)}
-              sx={{ mt: 1 }}
+              className={styles.mainBoxContentForm}
             >
               <TextField
                 margin="normal"
@@ -87,25 +97,33 @@ export default function ForgotPassword() {
                 {...register("email")}
                 autoFocus
               />
-              {errors && errors.email ? ErrorShowing(errors?.email?.message) : ''}
+              {errors && errors.email
+                ? ErrorShowing(errors?.email?.message)
+                : ""}
 
-              {!loading ? <Button
-                type="submit"
-                fullWidth
-                size="large"
-                variant="contained"
-                className="authPageButton"
-                id={sidebarStyles.muibuttonBackgroundColor}
-                sx={{ mt: 3, mb: 2 }}
-
-              >
-                Send
-              </Button>
-                : <LoadingButton loading={loading} fullWidth
-                  size="large" sx={{ mt: 3, mb: 2 }}
-                  variant="outlined" disabled >
+              {!loading ? (
+                <Button
+                  type="submit"
+                  fullWidth
+                  size="large"
+                  variant="contained"
+                  id={sidebarStyles.muibuttonBackgroundColor}
+                  className={styles.mainBoxButton}
+                >
+                  Send
+                </Button>
+              ) : (
+                <LoadingButton
+                  loading={loading}
+                  fullWidth
+                  size="large"
+                  className={styles.mainBoxButton}
+                  variant="outlined"
+                  disabled
+                >
                   <CircularProgressBar />
-                </LoadingButton>}
+                </LoadingButton>
+              )}
 
               <Link
                 href="/login"
@@ -114,28 +132,23 @@ export default function ForgotPassword() {
                 <Grid item sx={{ fontFamily: '"Roboto","Helvetica","Arial",sans-serif !important' }}>Back to sign in</Grid>
               </Link>
 
-              <Box sx={{ marginLeft: "90px" }}>
-                <Divider
-                  className="GlobalTextColor"
-                  sx={{ width: "80%", fontWeight: "bold" }}
-                >
-                  {" "}
-                  Or{" "}
-                </Divider>
+              <Box className={styles.mainBoxDividerBox}>
+                <Divider className={styles.mainBoxDivider}> Or </Divider>
               </Box>
               <Box textAlign={"center"}>
                 <Button
                   type="submit"
                   fullWidth
                   variant="outlined"
-                  startIcon={<Box
-                    component={"img"}
-                    src={"/Images/pages/google.svg"}
-                    width={"18px"}
-                    height={"18px"}
-
-                  />}
-                  sx={{ mt: 3, color: "#000", borderColor: "#e8661b" }}
+                  startIcon={
+                    <Box
+                      component={"img"}
+                      src={"/Images/pages/google.svg"}
+                      width={"18px"}
+                      height={"18px"}
+                    />
+                  }
+                  className={styles.googleButtonStyle}
                 >
                   Continue with Google
                 </Button>
@@ -145,6 +158,5 @@ export default function ForgotPassword() {
         </Grid>
       </Grid>
     </ThemeProvider>
-
   );
 }
