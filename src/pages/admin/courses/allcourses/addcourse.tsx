@@ -132,9 +132,9 @@ const AddCourse = () => {
                   <Grid item xs={12} sm={12} md={12} lg={6}>
                     <Box
                       component="img"
-                      src="/Images/pages/addFeature.jpg"
+                      src="/Images/pages/addsession_pic.png"
                       width={"100%"}
-                      height={"100%"}
+                      height={"80%"}
                     />
                   </Grid>
 

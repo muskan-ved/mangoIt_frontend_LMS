@@ -34,6 +34,8 @@ import BreadcrumbsHeading from "@/common/BreadCrumbs/breadcrumbs";
 import styles from "../../../styles/sidebar.module.css";
 import style from "../../../styles/webview.module.css";
 import subs from "../../../styles/subscription.module.css";
+import dashboardStyles from "../../../styles/dashboard.module.css";
+
 import { GetdateAfterOneMonth } from "@/common/commonfunctions/connonfun";
 import {
   EnrolledCourseCard,
@@ -71,29 +73,30 @@ export default function Dashboard() {
       getId = JSON.parse(localData);
     }
     setIsLoading(true);
-    getSubsData();
+    // getSubsData();
     setuserId(getId?.id);
     getEnrollCourse();
   }, [userId]);
 
-  const getSubsData = async () => {
-    if (userId) {
-      SubscriptionGetByUserID(userId).then((data: any) => {
-        if (data && data?.response?.data === "subsId not Found!") {
-          setIsLoading(false);
-          setSubsError(data?.response?.data);
-        } else {
-          setIsLoading(false);
-          setSubsdata(data?.data);
-        }
-      });
-    }
-  };
+  // const getSubsData = async () => {
+  //   if (userId) {
+  //     SubscriptionGetByUserID(userId).then((data: any) => {
+  //       if (data && data?.response?.data === "subsId not Found!") {
+  //         setIsLoading(false);
+  //         setSubsError(data?.response?.data);
+  //       } else {
+  //         setIsLoading(false);
+  //         setSubsdata(data?.data);
+  //       }
+  //     });
+  //   }
+  // };
 
   const getEnrollCourse = async () => {
     if (userId) {
       GetEnrolledCoursesByUserId(userId).then((data: any) => {
-        setEnrollCourses(data?.data);
+        setEnrollCourses(data?.data?.enroll_course);
+        setSubsdata(data?.data?.subscription);
         setIsLoading(false);
       });
     }
@@ -127,7 +130,7 @@ export default function Dashboard() {
           </Box>
           {/* main content */}
           {!isLoading ? (
-            subsData && subsData === "subsId not Found!" ? (
+            !subsData  ? (
               <Fragment>
                 <Card>
                   <CardContent>
@@ -247,112 +250,92 @@ export default function Dashboard() {
               </Fragment>
             ) : (
               <Fragment>
-                <Card>
-                  <CardContent>
-                    <Typography variant="h5" className={style.headingcss}>
-                      Your Subscription Plan
-                    </Typography>
-                    <Divider sx={{ marginTop: "5px" }}></Divider>
-                    <br />
-                    <br />
-                    <Box sx={{ flexGrow: 1 }}>
-                      <Grid
-                        container
-                        spacing={{ xs: 2, md: 3 }}
-                        // columns={{ xs: 4, sm: 8, md: 12 }}
+                <Grid container spacing={3}>
+                  <Grid item xs={12} sm={12} md={6} lg={4}>
+                    <Card>
+                      <CardContent
+                        className={dashboardStyles.quickstatText1user}
                       >
-                        <Grid item xs={12} sm={12} md={4} lg={4}>
-                          <Item className={subs.cardBorder}>
-                            <Box className={subs.maindisplay}>
-                              <Image
-                                src="/Images/pages/pages_icon/subscription.png"
-                                alt="image"
-                                width="50"
-                                height="50"
-                                className={style.imgcss}
-                              />
-                              <Box>
-                                <Typography
-                                  variant="subtitle1"
-                                  className={style.useNameFront}
-                                >
-                                  Subscription Name
-                                </Typography>
-                                <Typography
-                                  variant="subtitle1"
-                                  className={style.fontCSS}
-                                >
-                                  {capitalizeFirstLetter(
-                                    subsData && subsData?.name
-                                  )}
-                                </Typography>
-                              </Box>
-                            </Box>
-                          </Item>
-                        </Grid>
-                        <Grid item xs={12} sm={12} md={4} lg={4}>
-                          <Item className={subs.cardBorder}>
-                            <Box className={subs.maindisplay}>
-                              <Image
-                                src="/Images/pages/pages_icon/calendar.png"
-                                alt="image"
-                                width="50"
-                                height="50"
-                                className={style.imgcss}
-                              />
-                              <Box>
-                                <Typography
-                                  variant="subtitle1"
-                                  className={style.useNameFront}
-                                >
-                                  Duration Term
-                                </Typography>
-                                <Typography
-                                  variant="subtitle1"
-                                  className={style.fontCSS1}
-                                >
-                                  {capitalizeFirstLetter(
-                                    subsData && subsData?.duration_term
-                                  )}
-                                </Typography>
-                              </Box>
-                            </Box>
-                          </Item>
-                        </Grid>
-                        <Grid item xs={12} sm={12} md={4} lg={4}>
-                          <Item className={subs.cardBorder}>
-                            {" "}
-                            <Box className={subs.maindisplay}>
-                              <Image
-                                src="/Images/pages/pages_icon/renewPic.png"
-                                alt="image"
-                                width="50"
-                                height="50"
-                                className={style.imgcss}
-                              />
-                              <Box>
-                                <Typography
-                                  variant="subtitle1"
-                                  className={style.useNameFront1}
-                                >
-                                  Renew Date
-                                </Typography>
-                                <Typography
-                                  variant="subtitle1"
-                                  className={style.fontCSS2}
-                                >
-                                  {moment(
-                                    GetdateAfterOneMonth(subsData?.start_date)
-                                  ).format("DD MMMM YYYY")}
-                                </Typography>
-                              </Box>
-                            </Box>
-                          </Item>
-                        </Grid>
-                      </Grid>
-                    </Box>
-                  </CardContent>
-                </Card>
+                        <Box className={dashboardStyles.quickstatBoxes}>
+                          <Box>
+                            <Typography
+                              className={dashboardStyles.quickstatText}
+                            >
+                              Subscription Name
+                            </Typography>
+                            <Typography>
+                              {capitalizeFirstLetter(
+                                subsData && subsData?.name
+                              )}
+                            </Typography>
+                          </Box>
+                          <Box
+                            component={"img"}
+                            src="/Images/pages_icon/bell1.png"
+                            width={"20%"}
+                            className={dashboardStyles.bdradius}
+                          />
+                        </Box>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={6} lg={4}>
+                    <Card>
+                      <CardContent
+                        className={dashboardStyles.quickstatText2user}
+                      >
+                        <Box className={dashboardStyles.quickstatBoxes}>
+                          <Box>
+                            <Typography
+                              className={dashboardStyles.quickstatText}
+                            >
+                              Duration Term
+                            </Typography>
+                            <Typography>
+                              {capitalizeFirstLetter(
+                                subsData && subsData?.duration_term
+                              )}
+                            </Typography>
+                          </Box>
+                          <Box
+                            component={"img"}
+                            src="/Images/pages_icon/calender11.png"
+                            width={"20%"}
+                            // className={dashboardStyles.bdradius}
+                          />
+                        </Box>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={6} lg={4}>
+                    <Card>
+                      <CardContent
+                        className={dashboardStyles.quickstatText3user}
+                      >
+                        <Box className={dashboardStyles.quickstatBoxes}>
+                          <Box>
+                            <Typography
+                              className={dashboardStyles.quickstatText}
+                            >
+                              Renew Date
+                            </Typography>
+                            <Typography>
+                              {moment(
+                                GetdateAfterOneMonth(subsData?.start_date)
+                              ).format("DD MMMM YYYY")}
+                            </Typography>
+                          </Box>
+                          <Box
+                            component={"img"}
+                            src="/Images/pages_icon/renew1.png"
+                            width={"20%"}
+                            className={dashboardStyles.bdradius}
+                          />
+                        </Box>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                </Grid>
                 <br />
                 <Card>
                   <CardContent>
@@ -391,37 +374,55 @@ export default function Dashboard() {
                       </Box>
                     </Box>
                     <Divider sx={{ marginTop: "5px" }}></Divider>
-                    <Box className={style.courses1}>
-                      <Container maxWidth="lg">
-                        {gridview ? (
-                          <Box className={style.articles1}>
-                            {enrollCourse &&
-                              enrollCourse.map((data: any, key: any) => {
-                                return (
-                                  <EnrolledCourseCard
-                                    key={key}
-                                    coursedata={data.course}
-                                  />
-                                );
-                              })}
-                          </Box>
-                        ) : (
-                          <Box className={style.listviewarticles}>
-                            <Container maxWidth="lg">
+                    <br />
+                    {enrollCourse && enrollCourse?.length === 0 ? (
+                      <Box sx={{ flexGrow: 1 }}>
+                        <Grid
+                          container
+                          spacing={2}
+                          className={style.textHeadingCenter}
+                        >
+                          <Typography
+                            variant="h5"
+                            className={style.headingcssError}
+                          >
+                            Enrolled courses not found!
+                          </Typography>
+                        </Grid>
+                      </Box>
+                    ) : (
+                      <Box className={style.courses1}>
+                        <Container maxWidth="lg">
+                          {gridview ? (
+                            <Box className={style.articles1}>
                               {enrollCourse &&
                                 enrollCourse.map((data: any, key: any) => {
                                   return (
-                                    <EnrolledCourseCardListView
+                                    <EnrolledCourseCard
                                       key={key}
                                       coursedata={data.course}
                                     />
                                   );
                                 })}
-                            </Container>
-                          </Box>
-                        )}
-                      </Container>
-                    </Box>
+                            </Box>
+                          ) : (
+                            <Box className={style.listviewarticles}>
+                              <Container maxWidth="lg">
+                                {enrollCourse &&
+                                  enrollCourse.map((data: any, key: any) => {
+                                    return (
+                                      <EnrolledCourseCardListView
+                                        key={key}
+                                        coursedata={data.course}
+                                      />
+                                    );
+                                  })}
+                              </Container>
+                            </Box>
+                          )}
+                        </Container>
+                      </Box>
+                    )}
                   </CardContent>
                 </Card>
                 <br />

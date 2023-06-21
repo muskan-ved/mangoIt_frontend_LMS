@@ -181,10 +181,10 @@ div#panel1a-header > div {
 
 /* navbar */
 .css-1670zxu {
-  background-color: #e9e9e9 !important;
+  background-color: #ffffff !important;
 }
 /* auth pages label color */
-.css-1ald77x.Mui-focused {
-  color: #e8661b !important;
-  border: 1px solid #e8661b !important;
+.css-1ald77x.Mui-focused{
+  color: #E8661B !important;
+  /* border: 1px solid #e8661b !important; */
 }

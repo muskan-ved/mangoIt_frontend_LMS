@@ -4,7 +4,7 @@ import styles from "../../styles/login.module.css";
 
 const AuthSidebar = () => {
     return ( <><CssBaseline />
-    <Grid item xs={12} sm={6} md={6} lg={7}>
+    <Grid item xs={12} sm={12} md={6} lg={6}>
       <Box
         component={"img"}
         src={"/Images/company_logo.png"}
@@ -14,9 +14,9 @@ const AuthSidebar = () => {
       />
       <Box
         component={"img"}
-        src={"/Images/authSide.png"}
+        src={"/Images/pages/sideImages/Sign in-amico.svg"}
         className={styles.loginSideImage}
-        height={"640px"}
+        height={"86vh"}
       />
     </Grid></> );
 }

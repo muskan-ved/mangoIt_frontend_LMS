@@ -324,7 +324,6 @@ export const UpdateSubscriptionPlan = async (id: any, reqData: any) => {
       return request;
     })
     .catch((error) => {
-      console.log(error.response);
       if (error.response.status === 401) {
         HandleLogout();
       } else if (error.response.status === 400) {
