@@ -56,21 +56,14 @@ export default function Register() {
       <ToastContainer />
       <Grid container component="main">
         <AuthSidebar />
-        <Grid item xs={12} sm={7} md={5} lg={5}>
+        <Grid item xs={12} sm={12} md={6} lg={6}>
           <Box
-            sx={{
-              my: 6,
-              mx: 13,
-
-              display: "flex",
-              flexDirection: "column",
-            }}
+            className={styles.mainBoxContent}
           >
             <Typography
               component="h1"
               variant="h4"
-             
-              sx={{ fontWeight: "bold" }}
+              className={styles.mainBoxLabel}
             >
               Create Your Account
             </Typography>
@@ -93,15 +86,15 @@ export default function Register() {
               noValidate
               autoComplete="off"
               onSubmit={handleSubmit(onSubmit)}
-              sx={{ mt: 1 }}
+              className={styles.mainBoxContentForm}
             >
               <TextField
+                autoFocus
                 margin="normal"
                 fullWidth
                 id="outlined-fname"
                 label="First Name"
                 {...register("first_name")}
-                autoFocus
               />
               {errors && errors.first_name ? ErrorShowing(errors?.first_name?.message) : ''}
               <TextField
@@ -127,7 +120,7 @@ export default function Register() {
                 label="Password"
                 {...register("password")}
                 type={showPassword ? 'text' : 'password'}
-                autoFocus
+                
                 InputProps={{
                   endAdornment: (
                     <IconButton
@@ -168,21 +161,21 @@ export default function Register() {
                 fullWidth
                 size="large"
                 variant="contained"
-                className="authPageButton"
+               
                 id={sidebarStyles.muibuttonBackgroundColor}
-                sx={{ mt: 3, mb: 2 }}
+                className={styles.mainBoxButton}
               >
                 Register
               </Button> : <LoadingButton loading={loading} fullWidth
-                size="large" sx={{ mt: 3, mb: 2 }}
+                size="large" className={styles.mainBoxButton}
                 variant="outlined" disabled >
                 <CircularProgressBar />
               </LoadingButton>}
 
-              <Box sx={{ marginLeft: "90px" }}>
+              <Box  className={styles.mainBoxDividerBox}>
                 <Divider
-                  className="GlobalTextColor"
-                  sx={{ width: "80%", fontWeight: "bold" }}
+                  
+                  className={styles.mainBoxDivider}
                 >
                   {" "}
                   Or{" "}
@@ -200,7 +193,8 @@ export default function Register() {
                     height={"18px"}
                  
                   />}
-                  sx={{ mt: 3 , color: "#000",borderColor: "#e8661b"}}
+                  className={styles.googleButtonStyle}
+
                 >
                   Continue with Google
                 </Button>
