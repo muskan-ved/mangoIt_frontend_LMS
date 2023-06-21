@@ -41,7 +41,7 @@ import { CreateSubscriptionPlan } from "@/services/subscription";
 export default function AddSubscriptionPlans() {
   const router: any = useRouter();
   const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
-  const [isLoading, setLoading] = useState<boolean>(false);
+
 
   const {
     register,
@@ -54,8 +54,8 @@ export default function AddSubscriptionPlans() {
   });
 
   const onSubmit = async (event: any) => {
-    setLoading(true);
-    setLoadingButton(false);
+
+    setLoadingButton(true);
     try {
       const res = await CreateSubscriptionPlan(event);
 
@@ -64,10 +64,10 @@ export default function AddSubscriptionPlans() {
             router.push("/admin/subscriptions/plans/");
         },2000)
       }
-      setLoading(false);
+      setLoadingButton(false);
     } catch (e) {
       console.log(e);
-      setLoadingButton(true);
+      setLoadingButton(false);
     }
   };
 
@@ -96,7 +96,7 @@ export default function AddSubscriptionPlans() {
           {/* main content */}
           <Card>
             <CardContent>
-              {!isLoading ? (
+           
                 <Box
                   component="form"
                   method="POST"
@@ -235,9 +235,7 @@ export default function AddSubscriptionPlans() {
                     </Grid>
                   </Grid>
                 </Box>
-              ) : (
-                <SpinnerProgress />
-              )}
+             
             </CardContent>
           </Card>
         </Box>

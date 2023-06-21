@@ -58,6 +58,7 @@ const {id} = router.query;
   });
 
   const onSubmit = async (event: any) => {
+
     setLoadingButton(true);
     try {
       const res = await UpdateSubscriptionPlan(id,event);

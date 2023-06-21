@@ -91,7 +91,8 @@ export default function Login() {
                 localStorage.setItem("loginToken", res.data.loginToken);
                 localStorage.setItem(
                   "userData",
-                  JSON.stringify(res?.data?.updatedUser)
+                  JSON.stringify(res?.data?.updatedUser ? res?.data?.updatedUser : res?.data?.user
+                  )
                 );
                 router.push("/profile");
               }
@@ -228,7 +229,7 @@ export default function Login() {
                   startIcon={
                     <Box
                       component={"img"}
-                      src={"/Images/pages/google.svg"}
+                      src={"/Images/pages_icon/google.svg"}
                       width={"18px"}
                       height={"18px"}
                     />
