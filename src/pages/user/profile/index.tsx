@@ -82,7 +82,6 @@ export default function Profile() {
         }, 900);
       })
       .catch((err) => {
-        console.log(err);
         setLoadingButton(false);
       });
   };

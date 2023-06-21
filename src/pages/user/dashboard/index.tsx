@@ -73,29 +73,30 @@ export default function Dashboard() {
       getId = JSON.parse(localData);
     }
     setIsLoading(true);
-    getSubsData();
+    // getSubsData();
     setuserId(getId?.id);
     getEnrollCourse();
   }, [userId]);
 
-  const getSubsData = async () => {
-    if (userId) {
-      SubscriptionGetByUserID(userId).then((data: any) => {
-        if (data && data?.response?.data === "subsId not Found!") {
-          setIsLoading(false);
-          setSubsError(data?.response?.data);
-        } else {
-          setIsLoading(false);
-          setSubsdata(data?.data);
-        }
-      });
-    }
-  };
+  // const getSubsData = async () => {
+  //   if (userId) {
+  //     SubscriptionGetByUserID(userId).then((data: any) => {
+  //       if (data && data?.response?.data === "subsId not Found!") {
+  //         setIsLoading(false);
+  //         setSubsError(data?.response?.data);
+  //       } else {
+  //         setIsLoading(false);
+  //         setSubsdata(data?.data);
+  //       }
+  //     });
+  //   }
+  // };
 
   const getEnrollCourse = async () => {
     if (userId) {
       GetEnrolledCoursesByUserId(userId).then((data: any) => {
-        setEnrollCourses(data?.data);
+        setEnrollCourses(data?.data?.enroll_course);
+        setSubsdata(data?.data?.subscription);
         setIsLoading(false);
       });
     }
@@ -129,7 +130,7 @@ export default function Dashboard() {
           </Box>
           {/* main content */}
           {!isLoading ? (
-            subsData && subsData === "subsId not Found!" ? (
+            !subsData  ? (
               <Fragment>
                 <Card>
                   <CardContent>
@@ -248,11 +249,13 @@ export default function Dashboard() {
                 <br />
               </Fragment>
             ) : (
-              <Fragment>      
+              <Fragment>
                 <Grid container spacing={3}>
                   <Grid item xs={12} sm={12} md={6} lg={4}>
                     <Card>
-                      <CardContent className={dashboardStyles.quickstatText1user}>
+                      <CardContent
+                        className={dashboardStyles.quickstatText1user}
+                      >
                         <Box className={dashboardStyles.quickstatBoxes}>
                           <Box>
                             <Typography
@@ -268,7 +271,7 @@ export default function Dashboard() {
                           </Box>
                           <Box
                             component={"img"}
-                            src="/Images/pages/pages_icon/bell1.png"
+                            src="/Images/pages_icon/bell1.png"
                             width={"20%"}
                             className={dashboardStyles.bdradius}
                           />
@@ -278,13 +281,15 @@ export default function Dashboard() {
                   </Grid>
                   <Grid item xs={12} sm={12} md={6} lg={4}>
                     <Card>
-                      <CardContent className={dashboardStyles.quickstatText2user}>
+                      <CardContent
+                        className={dashboardStyles.quickstatText2user}
+                      >
                         <Box className={dashboardStyles.quickstatBoxes}>
                           <Box>
                             <Typography
                               className={dashboardStyles.quickstatText}
                             >
-                                Duration Term
+                              Duration Term
                             </Typography>
                             <Typography>
                               {capitalizeFirstLetter(
@@ -294,7 +299,7 @@ export default function Dashboard() {
                           </Box>
                           <Box
                             component={"img"}
-                            src="/Images/pages/pages_icon/calender11.png"
+                            src="/Images/pages_icon/calender11.png"
                             width={"20%"}
                             // className={dashboardStyles.bdradius}
                           />
@@ -304,7 +309,9 @@ export default function Dashboard() {
                   </Grid>
                   <Grid item xs={12} sm={12} md={6} lg={4}>
                     <Card>
-                      <CardContent className={dashboardStyles.quickstatText3user}>
+                      <CardContent
+                        className={dashboardStyles.quickstatText3user}
+                      >
                         <Box className={dashboardStyles.quickstatBoxes}>
                           <Box>
                             <Typography
@@ -320,7 +327,7 @@ export default function Dashboard() {
                           </Box>
                           <Box
                             component={"img"}
-                            src="/Images/pages/pages_icon/renew1.png"
+                            src="/Images/pages_icon/renew1.png"
                             width={"20%"}
                             className={dashboardStyles.bdradius}
                           />
@@ -367,37 +374,55 @@ export default function Dashboard() {
                       </Box>
                     </Box>
                     <Divider sx={{ marginTop: "5px" }}></Divider>
-                    <Box className={style.courses1}>
-                      <Container maxWidth="lg">
-                        {gridview ? (
-                          <Box className={style.articles1}>
-                            {enrollCourse &&
-                              enrollCourse.map((data: any, key: any) => {
-                                return (
-                                  <EnrolledCourseCard
-                                    key={key}
-                                    coursedata={data.course}
-                                  />
-                                );
-                              })}
-                          </Box>
-                        ) : (
-                          <Box className={style.listviewarticles}>
-                            <Container maxWidth="lg">
+                    <br />
+                    {enrollCourse && enrollCourse?.length === 0 ? (
+                      <Box sx={{ flexGrow: 1 }}>
+                        <Grid
+                          container
+                          spacing={2}
+                          className={style.textHeadingCenter}
+                        >
+                          <Typography
+                            variant="h5"
+                            className={style.headingcssError}
+                          >
+                            Enrolled courses not found!
+                          </Typography>
+                        </Grid>
+                      </Box>
+                    ) : (
+                      <Box className={style.courses1}>
+                        <Container maxWidth="lg">
+                          {gridview ? (
+                            <Box className={style.articles1}>
                               {enrollCourse &&
                                 enrollCourse.map((data: any, key: any) => {
                                   return (
-                                    <EnrolledCourseCardListView
+                                    <EnrolledCourseCard
                                       key={key}
                                       coursedata={data.course}
                                     />
                                   );
                                 })}
-                            </Container>
-                          </Box>
-                        )}
-                      </Container>
-                    </Box>
+                            </Box>
+                          ) : (
+                            <Box className={style.listviewarticles}>
+                              <Container maxWidth="lg">
+                                {enrollCourse &&
+                                  enrollCourse.map((data: any, key: any) => {
+                                    return (
+                                      <EnrolledCourseCardListView
+                                        key={key}
+                                        coursedata={data.course}
+                                      />
+                                    );
+                                  })}
+                              </Container>
+                            </Box>
+                          )}
+                        </Container>
+                      </Box>
+                    )}
                   </CardContent>
                 </Card>
                 <br />
