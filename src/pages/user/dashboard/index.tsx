@@ -271,7 +271,7 @@ export default function Dashboard() {
                           </Box>
                           <Box
                             component={"img"}
-                            src="/Images/pages/pages_icon/bell1.png"
+                            src="/Images/pages_icon/bell1.png"
                             width={"20%"}
                             className={dashboardStyles.bdradius}
                           />
@@ -299,7 +299,7 @@ export default function Dashboard() {
                           </Box>
                           <Box
                             component={"img"}
-                            src="/Images/pages/pages_icon/calender11.png"
+                            src="/Images/pages_icon/calender11.png"
                             width={"20%"}
                             // className={dashboardStyles.bdradius}
                           />
@@ -327,7 +327,7 @@ export default function Dashboard() {
                           </Box>
                           <Box
                             component={"img"}
-                            src="/Images/pages/pages_icon/renew1.png"
+                            src="/Images/pages_icon/renew1.png"
                             width={"20%"}
                             className={dashboardStyles.bdradius}
                           />
