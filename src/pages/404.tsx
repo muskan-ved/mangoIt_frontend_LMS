@@ -30,7 +30,7 @@ const Error404 = () => {
             We couldn&prime;t find the page you are looking for.
           </Typography>
         </BoxWrapper>
-        <Img alt="error-illustration" src="/Images/pages/404.png" />
+        <Img alt="error-illustration" src="/Images/error_pages/404.png" />
         <Button
           onClick={() => router.back()}
           variant="contained"

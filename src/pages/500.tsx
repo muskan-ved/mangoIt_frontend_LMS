@@ -26,7 +26,7 @@ const Error500 = () => {
           </Typography>
           <Typography variant='body2'>Oops, something went wrong!</Typography>
         </BoxWrapper>
-        <Img alt='error-illustration' src='/Images/pages/500.png' />
+        <Img alt='error-illustration' src='/Images/error_pages/500.png' />
         <Button onClick={() => router.back()} variant='contained' className={styles.errorCodeBackButton}>
           Go Back
         </Button>
