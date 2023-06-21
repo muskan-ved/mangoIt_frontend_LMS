@@ -7,14 +7,14 @@ const AuthSidebar = () => {
     <Grid item xs={12} sm={12} md={6} lg={6}>
       <Box
         component={"img"}
-        src={"/Images/company_logo.png"}
+        src={"/Images/pages_icon/company_logo.png"}
         width={"210px"}
         height={"70px"}
         className={styles.loginSideLogo}
       />
       <Box
         component={"img"}
-        src={"/Images/pages/sideImages/Sign in-amico.svg"}
+        src={"/Images/sideImages/Sign in-amico.svg"}
         className={styles.loginSideImage}
         height={"86vh"}
       />

@@ -13,7 +13,7 @@ const WebViewFooter = () => {
                         <Link href="/" >
                             <Box
                                 component="img"
-                                src="/Images/company_logo.png"
+                                src="/Images/pages_icon/company_logo.png"
                                 width={"180px"}
                                 height={"50px"}
                                 sx={{ display: { xs: "block", sm: "block" } }}

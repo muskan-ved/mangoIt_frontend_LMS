@@ -169,7 +169,7 @@ export default function Navbar({
               src={
                 portalData
                   ? BASE_URL + "/" + portalData?.org_logo
-                  : "/Images/company_logo.png"
+                  : "/Images/pages_icon/company_logo.png"
               }
               width={"180px"}
               height={"50px"}

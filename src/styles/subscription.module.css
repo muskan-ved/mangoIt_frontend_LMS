@@ -182,9 +182,12 @@
 .inactiveClassColor {
   color: red !important;
 }
-.draftClassColor {
+.cancelClassColor {
   color: orange !important;
 }
+.expiredClassColor {
+    color: rgb(116, 116, 116) !important;
+  }
 .stackStyle {
   margin-bottom: 10px !important;
   margin-top: 10px !important;
