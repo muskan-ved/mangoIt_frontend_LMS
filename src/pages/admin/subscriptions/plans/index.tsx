@@ -51,6 +51,7 @@ import { ToastContainer } from "react-toastify";
 import { DeleteSubscriptionPlan, GetAllSubsctionPlans, HandleInvoicesGet } from "@/services/subscription";
 import { useRouter } from "next/router";
 import { AlertDialog } from "@/common/DeleteListRow/deleteRow";
+import SpinnerProgress from "@/common/CircularProgressComponent/spinnerComponent";
 
 interface Column {
   id:
@@ -82,6 +83,7 @@ const SubscriptionPlans = () => {
   const [search, setSearch] = useState("");
   const [deleteRow, setDeleteRow] = useState<any>([])
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const router = useRouter()
 
   //pagination
@@ -133,14 +135,19 @@ const SubscriptionPlans = () => {
 
   const getAllSubscriptionPlanData = (search: string = "") => {
     GetAllSubsctionPlans(search).then((subs: any) => {
+    setLoading(true);
       setRows(subs);
-    });
+    }).catch((err) => {
+    setLoading(true);
+    })
   };
 
   useEffect(() => {
+    setLoading(true);
     getAllSubscriptionPlanData();
   }, []);
 
+  
 
   return (
     <>
@@ -183,6 +190,7 @@ const SubscriptionPlans = () => {
                 &nbsp;
               <Button variant="contained" onClick={() => router.push('/admin/subscriptions/plans/addsubscriptionplan')} id={styles.muibuttonBackgroundColor}> + Add Subscription Plan</Button>
               </Box>
+              {!loading?
               <Paper className={Subscription.papperForTable}>
                 <TableContainer className={Subscription.tableContainer}>
                   <Table stickyHeader aria-label="sticky table">
@@ -279,7 +287,7 @@ const SubscriptionPlans = () => {
                     </FormControl>
                   </Stack>
                 </TableContainer>
-              </Paper>
+              </Paper>:<SpinnerProgress/>}
               <AlertDialog
               open={open}
               onClose={handleClickOpen}
