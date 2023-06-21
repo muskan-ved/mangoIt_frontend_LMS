@@ -598,7 +598,7 @@ export default function CoursesDetailsPage() {
                                 </Typography>
                                 <Divider className={styles.divder} />
                             </Box>
-                            {subsdata.map((data, key) => {
+                            {subsdata && subsdata?.map((data, key) => {
                                 return (<SubscribtionPanCard subsdata={data} key={key} />)
                             })
                             }

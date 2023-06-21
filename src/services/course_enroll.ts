@@ -129,7 +129,7 @@ export const UpdateMarkAsComplete = async (reqData: any) => {
     })
     .catch((error) => {
       if (error.response.status === 400) {
-        HandleLogout();
+        // HandleLogout();
       } else {
         toast.error("Something went wrong");
       }
