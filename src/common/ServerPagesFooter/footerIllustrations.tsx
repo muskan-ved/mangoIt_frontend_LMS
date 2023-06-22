@@ -42,9 +42,9 @@ const FooterIllustrations = (props: FooterIllustrationsProp) => {
       <Fragment>
         <ShapeImg
           alt="shape"
-          src={`/Images/pages/misc-${pageCode}-object.png`}
+          src={`/Images/error_pages/misc-${pageCode}-object.png`}
         />
-        <MaskImg alt="mask" src={`/Images/pages/misc-mask-light.png`} />
+        <MaskImg alt="mask" src={`/Images/error_pages/misc-mask-light.png`} />
       </Fragment>
     );
   } else {

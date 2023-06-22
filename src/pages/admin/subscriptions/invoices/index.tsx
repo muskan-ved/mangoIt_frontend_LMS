@@ -341,8 +341,7 @@ const Invoices = () => {
                             <TableRow hover key={row.id}>
                               <TableCell>{row.id}</TableCell>
                               <TableCell>
-                                {capitalizeFirstLetter(row?.user?.first_name)}{" "}
-                                {capitalizeFirstLetter(row?.user?.last_name)}
+                                {row?.user?.first_name && row?.user?.last_name ? `${capitalizeFirstLetter(row?.user?.first_name)} ${capitalizeFirstLetter(row?.user?.last_name)}` : ''}
                               </TableCell>
                               <TableCell>
                                 {capitalizeFirstLetter(row.subscription.name)}
