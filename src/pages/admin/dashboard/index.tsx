@@ -47,6 +47,7 @@ const Dashboard = () => {
   
   }, [])
 
+const reverseData:any = (dashboardContent && dashboardContent?.todaysSubscriptionData && [...dashboardContent?.todaysSubscriptionData].reverse());
 
   return (
     <>
@@ -77,7 +78,7 @@ const Dashboard = () => {
                     </Box>
                     <Box
                       component={"img"}
-                      src="/Images/pages/users.png"
+                      src="/Images/pages_icon/users.png"
                       width={"20%"}
                     />
                   </Box>
@@ -96,7 +97,7 @@ const Dashboard = () => {
                     </Box>
                     <Box
                       component={"img"}
-                      src="/Images/pages/course.png"
+                      src="/Images/pages_icon/course.png"
                       width={"20%"}
                     />
                   </Box>
@@ -115,7 +116,7 @@ const Dashboard = () => {
                     </Box>
                     <Box
                       component={"img"}
-                      src="/Images/pages/earning.png"
+                      src="/Images/pages_icon/earning.png"
                       width={"20%"}
                     />
                   </Box>
@@ -134,7 +135,7 @@ const Dashboard = () => {
                     </Box>
                     <Box
                       component={"img"}
-                      src="/Images/pages/sub.png"
+                      src="/Images/pages_icon/sub.png"
                       width={"20%"}
                     />
                   </Box>
@@ -197,12 +198,12 @@ const Dashboard = () => {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                      {dashboardContent?.todaysSubscriptionData.map((subs:any) =>(
+                      {reverseData && reverseData?.map((subs:any) =>(
                         <TableRow key={subs.id}>
                           <TableCell align="left">{subs.id}</TableCell>
                           <TableCell align="left">{subs.name}</TableCell>
                           <TableCell align="left">{subs.description}</TableCell>
-                          <TableCell align="left">{subs.price}</TableCell>
+                          <TableCell align="left">${subs.price}</TableCell>
                         </TableRow>
                         ))}
                         

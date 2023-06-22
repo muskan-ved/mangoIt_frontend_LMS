@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "export": "next export",
-    "test": "jest --verbose",
+    "test": "jest --watch",
     "start": "next start",
     "lint": "next lint"
   },

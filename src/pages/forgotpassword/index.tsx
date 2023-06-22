@@ -78,7 +78,9 @@ export default function ForgotPassword() {
               Forgot Password
             </Typography>
             <Grid container>
-              <Grid item>Enter Email Address</Grid>
+              <Grid item className="GlobalTextColor" sx={{ fontFamily: '"Roboto","Helvetica","Arial",sans-serif !important' }}>
+                Enter Email Address
+              </Grid>
             </Grid>
 
             <Box
@@ -123,7 +125,12 @@ export default function ForgotPassword() {
                 </LoadingButton>
               )}
 
-              <Link href="/login">Back to sign in</Link>
+              <Link
+                href="/login"
+                className="GlobalTextColor"
+              >
+                <Grid item sx={{ fontFamily: '"Roboto","Helvetica","Arial",sans-serif !important' }}>Back to sign in</Grid>
+              </Link>
 
               <Box className={styles.mainBoxDividerBox}>
                 <Divider className={styles.mainBoxDivider}> Or </Divider>

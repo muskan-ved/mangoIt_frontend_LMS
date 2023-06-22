@@ -21,6 +21,12 @@ export function CourseCard(props: any) {
     props?.paidcourses?.course?.id ||
     props?.freecourses?.course?.id ||
     props?.enrolledCourses.id;
+
+  let title =
+    (props && props?.coursedata?.course?.title?.substring(0, 15)) ||
+    props?.paidcourses?.course?.title?.substring(0, 15) ||
+    props?.freecourses?.course?.title?.substring(0, 15) ||
+    props?.enrolledCourses.title?.substring(0, 15);
   return (
     <Link href={`/coursedetails/${c_id}`}>
       <CardActionArea component="a">
@@ -35,10 +41,9 @@ export function CourseCard(props: any) {
             </Box>
             <Box className={styles.articlebody}>
               <Typography className={styles.h2}>
-                {capitalizeFirstLetter(props?.paidcourses?.course?.title) ||
-                  capitalizeFirstLetter(props?.freecourses?.course?.title) ||
-                  capitalizeFirstLetter(props?.coursedata?.course?.title) ||
-                  capitalizeFirstLetter(props?.enrolledCourses.title)}
+                {title && title?.length < 15
+                  ? capitalizeFirstLetter(title)
+                  : capitalizeFirstLetter(title)+"..."}
               </Typography>
               <Typography className={styles.h5}>
                 Type :{" "}
@@ -84,7 +89,11 @@ export function CourseCardListView(props: any) {
             />
             <Box sx={{ display: "flex", flexDirection: "column" }}>
               <CardContent sx={{ flex: "1 0 auto" }}>
-                <Typography component="h2" variant="h5" className={styles.titleCoursecs}>
+                <Typography
+                  component="h2"
+                  variant="h5"
+                  className={styles.titleCoursecs}
+                >
                   {capitalizeFirstLetter(props?.paidcourses?.course?.title) ||
                     capitalizeFirstLetter(props?.freecourses?.course?.title) ||
                     capitalizeFirstLetter(props?.coursedata?.course?.title)}
@@ -121,7 +130,11 @@ export function CourseCardListView(props: any) {
                 {/* <Typography sx={{ display: 'flex', alignItems: 'center' }}>
                                     {props?.freecourses?.course?.long_description?.replace(/(<([^>]+)>)/ig, '').substring(0,50) || props?.paidcourses?.course?.long_description?.replace(/(<([^>]+)>)/ig, '').substring(0,50) || props?.coursedata?.course?.long_description?.replace(/(<([^>]+)>)/ig, '').substring(0,50)}
                                 </Typography> */}
-                <Typography variant="subtitle1" mt={2} className={styles.continueRead}>
+                <Typography
+                  variant="subtitle1"
+                  mt={2}
+                  className={styles.continueRead}
+                >
                   Continue reading...
                 </Typography>
               </CardContent>
@@ -235,6 +248,13 @@ export function EnrolledCourseCard(props: any) {
     props?.paidcourses?.course?.id ||
     props?.freecourses?.course?.id ||
     props?.enrolledCourses.id;
+
+    let title =
+    (props && props?.coursedata?.course?.title?.substring(0, 15)) ||
+    props?.paidcourses?.course?.title?.substring(0, 15) ||
+    props?.freecourses?.course?.title?.substring(0, 15) ||
+    props?.enrolledCourses.title?.substring(0, 15);
+
   return (
     <Link href={`/user/course/detail/${c_id}`}>
       <CardActionArea component="a">
@@ -249,10 +269,9 @@ export function EnrolledCourseCard(props: any) {
             </Box>
             <Box className={styles.articlebody}>
               <Typography className={styles.h2}>
-                {capitalizeFirstLetter(props?.paidcourses?.course?.title) ||
-                  capitalizeFirstLetter(props?.freecourses?.course?.title) ||
-                  capitalizeFirstLetter(props?.coursedata?.course?.title) ||
-                  capitalizeFirstLetter(props?.enrolledCourses.title)}
+              {title && title?.length < 15
+                  ? capitalizeFirstLetter(title)
+                  : capitalizeFirstLetter(title)+"..."}
               </Typography>
               <Typography className={styles.h5}>
                 Type :{" "}
@@ -298,7 +317,11 @@ export function EnrolledCourseCardListView(props: any) {
             />
             <Box sx={{ display: "flex", flexDirection: "column" }}>
               <CardContent sx={{ flex: "1 0 auto" }}>
-                <Typography component="h2" variant="h5" className={styles.titleCoursecs}>
+                <Typography
+                  component="h2"
+                  variant="h5"
+                  className={styles.titleCoursecs}
+                >
                   {capitalizeFirstLetter(props?.paidcourses?.course?.title) ||
                     capitalizeFirstLetter(props?.freecourses?.course?.title) ||
                     capitalizeFirstLetter(props?.coursedata?.course?.title)}
@@ -335,7 +358,11 @@ export function EnrolledCourseCardListView(props: any) {
                 {/* <Typography sx={{ display: 'flex', alignItems: 'center' }}>
                                     {props?.freecourses?.course?.long_description?.replace(/(<([^>]+)>)/ig, '').substring(0,50) || props?.paidcourses?.course?.long_description?.replace(/(<([^>]+)>)/ig, '').substring(0,50) || props?.coursedata?.course?.long_description?.replace(/(<([^>]+)>)/ig, '').substring(0,50)}
                                 </Typography> */}
-                <Typography variant="subtitle1" mt={2} className={styles.continueRead}>
+                <Typography
+                  variant="subtitle1"
+                  mt={2}
+                  className={styles.continueRead}
+                >
                   Continue reading...
                 </Typography>
               </CardContent>
