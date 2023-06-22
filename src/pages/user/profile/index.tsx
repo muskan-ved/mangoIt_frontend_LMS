@@ -157,16 +157,16 @@ export default function Profile() {
 
   return (
     <>
-      {/* <Navbar
+      <Navbar
         profilePic={getUserData?.profile_pic}
         firstName={getUserData?.first_name}
         lastName={getUserData?.last_name}
-      /> */}
+      />
       <Box
         className={styles.combineContentAndSidebar}
         data-testid="step-1"
       >
-        {/* <SideBar /> */}
+        <SideBar />
 
         <Box className={styles.siteBodyContainer}>
           {/* breadcumbs */}

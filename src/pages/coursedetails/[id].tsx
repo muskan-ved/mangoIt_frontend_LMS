@@ -339,7 +339,7 @@ export default function CoursesDetailsPage() {
                                                 Enroll Now
                                             </Button>) : <Button variant="contained" sx={{ "&:hover": { backgroundColor: "red" }, backgroundColor: "red", fontWeight: "bold", borderRadius: "20px", cursor: "default" }}
                                             >
-                                                Comming Soon
+                                                Coming Soon
                                             </Button>
                                     }
                                 </CardContent>
