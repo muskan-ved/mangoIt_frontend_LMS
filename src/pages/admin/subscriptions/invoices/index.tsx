@@ -84,7 +84,7 @@ const Invoices = () => {
   const [getFilter, setFilter] = useState<any>("all");
 
   //pagination
-  const [row_per_page, set_row_per_page] = useState(5);
+  const [row_per_page, set_row_per_page] = useState(10);
   let [page, setPage] = useState<any>(1);
   function handlerowchange(e: any) {
     set_row_per_page(e.target.value);
@@ -398,14 +398,14 @@ const Invoices = () => {
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        defaultValue={5}
+                        defaultValue={10}
                         onChange={handlerowchange}
                         size="small"
                         style={{ height: "40px", marginRight: "11px" }}
                       >
-                        <MenuItem value={5}>5</MenuItem>
+                        <MenuItem value={10}>10</MenuItem>
                         <MenuItem value={20}>20</MenuItem>
-                        <MenuItem value={50}>50</MenuItem>
+                        <MenuItem value={30}>30</MenuItem>
                       </Select>
                     </FormControl>
                   </Stack>
