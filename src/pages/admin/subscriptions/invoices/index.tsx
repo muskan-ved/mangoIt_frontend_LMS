@@ -49,6 +49,7 @@ import { ToastContainer } from "react-toastify";
 // API Service
 import { HandleInvoicesGet } from "@/services/subscription";
 import { HandleDownloadInvoice } from "@/services/invoice_receipt";
+import SpinnerProgress from "@/common/CircularProgressComponent/spinnerComponent";
 
 interface Column {
   id:
@@ -82,6 +83,8 @@ const Invoices = () => {
   const [toggle, setToggle] = useState<boolean>(false);
   const [search, setSearch] = useState("");
   const [getFilter, setFilter] = useState<any>("all");
+  const [loading, setLoading] = useState(false);
+
 
   //pagination
   const [row_per_page, set_row_per_page] = useState(5);
@@ -123,12 +126,15 @@ const Invoices = () => {
 
   const getAllInvoiceData = (search: string = "", payload?: any) => {
     HandleInvoicesGet(search, payload).then((subs: any) => {
-      console.log(subs, "subs");
       setRows(subs.data);
+      setLoading(false)
+    }).catch((err: any) => {
+      setLoading(false)
     });
   };
 
   useEffect(() => {
+    setLoading(true)
     getAllInvoiceData();
   }, []);
 
@@ -298,6 +304,7 @@ const Invoices = () => {
                   )}
                 </PopupState>
               </Box>
+              {!loading? 
               <Paper className={Subscription.papperForTable}>
                 <TableContainer className={Subscription.tableContainer}>
                   <Table stickyHeader aria-label="sticky table">
@@ -344,13 +351,13 @@ const Invoices = () => {
                                 {row?.user?.first_name && row?.user?.last_name ? `${capitalizeFirstLetter(row?.user?.first_name)} ${capitalizeFirstLetter(row?.user?.last_name)}` : ''}
                               </TableCell>
                               <TableCell>
-                                {capitalizeFirstLetter(row.subscription.name)}
+                                {row?.subscription?.name ? capitalizeFirstLetter(row?.subscription?.name) : ''}
                               </TableCell>
-                              <TableCell>${row.amount}</TableCell>
+                              <TableCell>${row?.amount}</TableCell>
                               <TableCell className={statusColor}>
                                 {capitalizeFirstLetter(row.status)}
                               </TableCell>
-                              <TableCell>{row.payment_type}</TableCell>
+                              <TableCell>{row?.payment_type}</TableCell>
                               <TableCell>
                                 {row?.transaction_id?.slice(0, 20)}
                                 {row?.transaction_id ? "..." : ""}
@@ -360,7 +367,7 @@ const Invoices = () => {
                                   className={Subscription.editDeleteButton}
                                   variant="outlined"
                                   color="error"
-                                  onClick={() => DownloadInvoice(row.id)}
+                                  onClick={() => DownloadInvoice(row?.id)}
                                 >
                                   <FileDownloadOutlinedIcon />
                                 </Button>
@@ -410,7 +417,7 @@ const Invoices = () => {
                     </FormControl>
                   </Stack>
                 </TableContainer>
-              </Paper>
+              </Paper>:<SpinnerProgress/>}
             </CardContent>
           </Card>
         </Box>

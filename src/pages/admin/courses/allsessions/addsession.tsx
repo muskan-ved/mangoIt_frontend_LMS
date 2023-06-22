@@ -188,6 +188,8 @@ export default function AddSession() {
                           <TextField
                             placeholder="Session Name"
                             {...register("title")}
+                            fullWidth
+                       
                           />
                           {errors && errors.title
                             ? ErrorShowing(errors?.title?.message)

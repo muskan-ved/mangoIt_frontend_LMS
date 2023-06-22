@@ -135,10 +135,10 @@ const SubscriptionPlans = () => {
 
   const getAllSubscriptionPlanData = (search: string = "") => {
     GetAllSubsctionPlans(search).then((subs: any) => {
-    setLoading(true);
+    setLoading(false);
       setRows(subs);
     }).catch((err) => {
-    setLoading(true);
+    setLoading(false);
     })
   };
 

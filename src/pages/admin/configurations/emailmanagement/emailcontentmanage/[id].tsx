@@ -29,6 +29,7 @@ import {
 import CodeMirror from "@uiw/react-codemirror";
 import { useRouter } from "next/router";
 import { ToastContainer } from "react-toastify";
+import { HandleSiteGetByID } from "@/services/site";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -63,6 +64,8 @@ const EmailContentManage = () => {
   const [tabs, setTab] = useState(0);
   const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
   const [emailBodyText, setEmailBodyText] = useState<string>("");
+  const [orgLogo, setOrgLogo] = useState<string>("");
+  
   const {
     register,
     handleSubmit,
@@ -72,6 +75,8 @@ const EmailContentManage = () => {
   } = useForm<emailmanagementType | any>({
     resolver: yupResolver(emailmanagementConfigValidations),
   });
+
+  const emailBodyTextManage =  emailBodyText && emailBodyText?.replace("{{org_logo}}",orgLogo)
 
   const router = useRouter();
   const { id } = router.query;
@@ -102,7 +107,27 @@ const EmailContentManage = () => {
       });
   };
 
+  const handleGetSiteOptionsDataById = async (userId:any) => {
+  await HandleSiteGetByID(userId).then((res) => {
+
+    const hasOLOrOFOrT = res.data.filter(
+      (item: any) =>
+        item.key === "org_logo"
+    );
+
+    setOrgLogo(hasOLOrOFOrT && hasOLOrOFOrT[0]?.value)
+  }).catch((err) => {
+    console.log(err)
+  });
+
+  }
   useEffect(() => {
+      let localData: any;
+      if (typeof window !== "undefined") {
+        localData = window.localStorage.getItem("userData");
+      }
+      const user_id = JSON.parse(localData);
+      handleGetSiteOptionsDataById(user_id?.id);
     handleGetData();
   }, []);
 
@@ -259,7 +284,7 @@ const EmailContentManage = () => {
                 <TabPanel value={tabs} index={2}>
                   <Box className={emailStyle.emailBodyTextPreview}>
                     <Box
-                      dangerouslySetInnerHTML={{ __html: emailBodyText }}
+                      dangerouslySetInnerHTML={{ __html: emailBodyTextManage }}
                       padding={2}
                     ></Box>
                   </Box>
