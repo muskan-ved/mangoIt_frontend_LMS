@@ -44,6 +44,7 @@ import {
 import { GetEnrolledCoursesByUserId } from "@/services/course_enroll";
 import Image from "next/image";
 import SpinnerProgress from "@/common/CircularProgressComponent/spinnerComponent";
+import Link from "next/link";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -130,7 +131,7 @@ export default function Dashboard() {
           </Box>
           {/* main content */}
           {!isLoading ? (
-            !subsData  ? (
+            !subsData ? (
               <Fragment>
                 <Card>
                   <CardContent>
@@ -150,7 +151,10 @@ export default function Dashboard() {
                           variant="h5"
                           className={style.headingcssError}
                         >
-                          Record not found!
+                          You dont have subscription plan{" "}
+                          <Link className={style.plancss} href="/subscribeplan">
+                            Subscribe Now
+                          </Link>
                         </Typography>
                       </Grid>
                     </Box>
