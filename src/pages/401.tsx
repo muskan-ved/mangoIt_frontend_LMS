@@ -26,7 +26,7 @@ const Error401 = () => {
           </Typography>
           <Typography variant='body2'>You don&prime;t have permission to access this page. Go Home!</Typography>
         </BoxWrapper>
-        <Img alt='error-illustration' src='/Images/pages/401.png' />
+        <Img alt='error-illustration' src='/Images/error_pages/401.png' />
         <Button onClick={() => router.back()} variant='contained' className={styles.errorCodeBackButton}>
           Go Back
         </Button>

@@ -16,35 +16,36 @@
 }
 
 .siteAttachmentBox{
-    border: 1px solid grey;
-    text-align: -webkit-center;
+    border: 1px solid grey !important;
+    text-align: -webkit-center !important;
 }
 
 .subbox{
-    border: 1px dashed grey;
-    margin: 5px;
+    border: 1px dashed grey !important;
+    margin: 5px !important;
 }
 
 .siteAttachments{
-    padding: 10px 33px;
-    width: 190px;
-    margin: 10px;
-    background: #f1f1f1;
-    border-radius: 50px;
-    display: flex;
-    justify-content: space-evenly;
+    padding: 10px 33px !important;
+    width: 190px !important;
+    margin: 10px !important;
+    background: #f1f1f1 !important;
+    border-radius: 50px !important;
+    display: flex !important;
+    justify-content: space-evenly !important;
 }
 
 .inputLabels{
-    font-size: 21px;
-    font-weight: 600;
+    font-size: 21px !important;
+    font-weight: 700 !important;
+    color: black !important;
 }
 
 .previewImage{
-    padding: 10px;
-    height: 64px;
-    display: flex;
-    justify-content: center;
+    padding: 10px !important;
+    height: 64px !important;
+    display: flex !important;
+    justify-content: center !important;
 }
 
 .siteCameraIconFavicon {
@@ -111,11 +112,11 @@
 }
 
 .bothButtonSpace{
-    margin-right: 15px;
+    margin-right: 15px !important;
 }
 
 #tabHeadingFontWeight{
-    font-weight: 600;
+    font-weight: 600 !important;
 }
 
 .emailBodyTextPreview{
