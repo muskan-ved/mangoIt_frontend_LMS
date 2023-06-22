@@ -16,6 +16,7 @@ import Typography from "@mui/material/Typography";
 import WebViewNavbar from "@/common/LayoutNavigations/webviewnavbar";
 import WebViewFooter from "@/common/LayoutNavigations/webviewfooter";
 import styles from "../styles/webview.module.css";
+import style from "../styles/webview.module.css";
 import GridViewIcon from "@mui/icons-material/GridView";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import { HandleCourseGet } from "@/services/course";
@@ -24,59 +25,63 @@ import {
   CourseCardListView,
 } from "@/common/ResuableCardCmp/coursescard";
 import { usePagination } from "@/common/Pagination/paginations";
+import Image from "next/image";
 
 export default function Courses() {
-    const [courseData, setcourseData] = React.useState([]);
-    const [courseStatus, setcourseStatus] = React.useState(0);
-    const [gridview, setgridview] = React.useState(true)
-    const [color, setcolor] = React.useState(true)
-    const [loader, setLoadar] = React.useState(true);
-    const landingpagecontent = {
-        image: 'https://source.unsplash.com/random',
-    };
-    const setcustStatus = (e: any) => {
-        setLoadar(true)
-        const is_chargeable = e === 2 ? "free" : e === 3 ? "paid" : 0
-        setcourseStatus(e);
-        HandleCourseGet('', {
-            is_chargeable: is_chargeable,
-            status: 0
-        }).then((courses) => {
-            setcourseData(courses?.data)
-            setLoadar(false)
-        })
-    }
-    //get courses
-    const getAllCourseData = () => {
-        setLoadar(true)
-        HandleCourseGet('', "").then((courses) => {
-            setcourseData(courses?.data?.reverse())
-            setLoadar(false);
-        })
-    }
-    React.useEffect(() => {
-        getAllCourseData();
-    }, [])
-    //pagination
-    const [row_per_page, set_row_per_page] = React.useState(12);
-    let [page, setPage] = React.useState<any>(1);
-    function handlerowchange(e: any) {
-        set_row_per_page(e.target.value);
-    }
-    const PER_PAGE = row_per_page;
-    const count = Math.ceil(courseData?.length / PER_PAGE);
-    const DATA = usePagination(courseData, PER_PAGE);
-    const handlePageChange = (e: any, p: any) => {
-        setPage(p);
-        DATA.jump(p);
-    };
+  const [courseData, setcourseData] = React.useState([]);
+  const [courseStatus, setcourseStatus] = React.useState(0);
+  const [gridview, setgridview] = React.useState(true);
+  const [color, setcolor] = React.useState(true);
+  const [loader, setLoadar] = React.useState(true);
+  const [dynamicCss, setDynamicCss] = React.useState<any>(1);
+  const landingpagecontent = {
+    image: "/Images/sideImages/couseBanner.png",
+  };
+  const setcustStatus = (e: any) => {
+    setLoadar(true);
+    const is_chargeable = e === 2 ? "free" : e === 3 ? "paid" : 0;
+    setcourseStatus(e);
+    HandleCourseGet("", {
+      is_chargeable: is_chargeable,
+      status: 0,
+    }).then((courses) => {
+      setcourseData(courses?.data);
+      setLoadar(false);
+    });
+  };
+  //get courses
+  const getAllCourseData = () => {
+    setLoadar(true);
+    HandleCourseGet("", "").then((courses) => {
+      setcourseData(courses?.data?.reverse());
+      setLoadar(false);
+    });
+  };
+  React.useEffect(() => {
+    getAllCourseData();
+  }, []);
+  //pagination
+  const [row_per_page, set_row_per_page] = React.useState(12);
+  let [page, setPage] = React.useState<any>(1);
+  function handlerowchange(e: any) {
+    set_row_per_page(e.target.value);
+  }
+  const PER_PAGE = row_per_page;
+  const count = Math.ceil(courseData?.length / PER_PAGE);
+  const DATA = usePagination(courseData, PER_PAGE);
+  const handlePageChange = (e: any, p: any) => {
+    setPage(p);
+    DATA.jump(p);
+  };
 
   //gridview listview
   const gridView = () => {
     setgridview(true);
+    setDynamicCss(1);
   };
   const listView = () => {
     setgridview(false);
+    setDynamicCss(2);
   };
 
   return (
@@ -84,18 +89,32 @@ export default function Courses() {
       {/*header*/}
       <WebViewNavbar />
       {/*Landing page carousel*/}
-      <Paper
+      {/* <Paper
         sx={{
-          position: "relative",
+          // position: "relative",
           backgroundColor: "grey.800",
           color: "#fff",
-          backgroundSize: "cover",
+          // backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
+          // backgroundPosition: "center",
           backgroundImage: `url(${landingpagecontent.image})`,
         }}
         className={styles.coursebanner}
-      ></Paper>
+      ></Paper> */}
+      <Box>
+        <Container maxWidth={false}>
+          <Grid>
+            <Image
+              src="/Images/sideImages/banner7.jpg"
+              alt="image"
+              width={100}
+              height={200}
+              className={style.imagecssbanner}
+            />
+          </Grid>
+        </Container>
+      </Box>
+
       {/*courses*/}
       <Box className={styles.courses}>
         <Container maxWidth="lg">
@@ -123,14 +142,30 @@ export default function Courses() {
                 </Stack>
               </Grid>
               <Grid item xs={12} md={6} lg={3} className={styles.gridbtn}>
-                <Stack spacing={1} className={styles.gridicon}>
+                <Stack spacing={1} className={style.gridicon}>
+                  <IconButton className={style.actionview1} onClick={gridView}>
+                    <GridViewIcon
+                      className={
+                        dynamicCss === 1 ? style.gridColor : style.iconColor
+                      }
+                    />
+                  </IconButton>
+                  <IconButton className={style.actionview2} onClick={listView}>
+                    <FormatListBulletedIcon
+                      className={
+                        dynamicCss === 2 ? style.gridColor : style.iconColor
+                      }
+                    />
+                  </IconButton>
+                </Stack>
+                {/* <Stack spacing={1} className={styles.gridicon}>
                   <IconButton className={styles.actionview} onClick={gridView}>
                     <GridViewIcon />
                   </IconButton>
                   <IconButton className={styles.actionview} onClick={listView}>
                     <FormatListBulletedIcon />
                   </IconButton>
-                </Stack>
+                </Stack> */}
               </Grid>
             </Grid>
           </Grid>
@@ -174,7 +209,7 @@ export default function Courses() {
               </Grid>
               <Grid item xs={12} md={6} lg={3} className={styles.perpagedt}>
                 <Box sx={{ display: "flex" }}>
-                  <Typography sx={{ margin: "auto" }}>Per Page Data</Typography>
+                  <Typography sx={{ margin: "auto" }}>Per Page</Typography>
                   <FormControl>
                     <Select
                       labelId="demo-simple-select-label"
