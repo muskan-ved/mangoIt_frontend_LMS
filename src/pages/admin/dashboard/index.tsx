@@ -47,7 +47,7 @@ const Dashboard = () => {
   
   }, [])
 
-const reverseData =[...dashboardContent?.todaysSubscriptionData].reverse();
+const reverseData:any = (dashboardContent && dashboardContent?.todaysSubscriptionData && [...dashboardContent?.todaysSubscriptionData].reverse());
 
   return (
     <>
