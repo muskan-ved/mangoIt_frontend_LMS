@@ -26,50 +26,50 @@ import {
 import { usePagination } from "@/common/Pagination/paginations";
 
 export default function Courses() {
-    const [courseData, setcourseData] = React.useState([]);
-    const [courseStatus, setcourseStatus] = React.useState(0);
-    const [gridview, setgridview] = React.useState(true)
-    const [color, setcolor] = React.useState(true)
-    const [loader, setLoadar] = React.useState(true);
-    const landingpagecontent = {
-        image: 'https://source.unsplash.com/random',
-    };
-    const setcustStatus = (e: any) => {
-        setLoadar(true)
-        const is_chargeable = e === 2 ? "free" : e === 3 ? "paid" : 0
-        setcourseStatus(e);
-        HandleCourseGet('', {
-            is_chargeable: is_chargeable,
-            status: 0
-        }).then((courses) => {
-            setcourseData(courses?.data)
-            setLoadar(false)
-        })
-    }
-    //get courses
-    const getAllCourseData = () => {
-        setLoadar(true)
-        HandleCourseGet('', "").then((courses) => {
-            setcourseData(courses?.data?.reverse())
-            setLoadar(false);
-        })
-    }
-    React.useEffect(() => {
-        getAllCourseData();
-    }, [])
-    //pagination
-    const [row_per_page, set_row_per_page] = React.useState(12);
-    let [page, setPage] = React.useState<any>(1);
-    function handlerowchange(e: any) {
-        set_row_per_page(e.target.value);
-    }
-    const PER_PAGE = row_per_page;
-    const count = Math.ceil(courseData?.length / PER_PAGE);
-    const DATA = usePagination(courseData, PER_PAGE);
-    const handlePageChange = (e: any, p: any) => {
-        setPage(p);
-        DATA.jump(p);
-    };
+  const [courseData, setcourseData] = React.useState([]);
+  const [courseStatus, setcourseStatus] = React.useState(0);
+  const [gridview, setgridview] = React.useState(true)
+  const [color, setcolor] = React.useState(true)
+  const [loader, setLoadar] = React.useState(true);
+  const landingpagecontent = {
+    image: 'https://source.unsplash.com/random',
+  };
+  const setcustStatus = (e: any) => {
+    setLoadar(true)
+    const is_chargeable = e === 2 ? "free" : e === 3 ? "paid" : 0
+    setcourseStatus(e);
+    HandleCourseGet('', {
+      is_chargeable: is_chargeable,
+      status: 0
+    }).then((courses) => {
+      setcourseData(courses?.data)
+      setLoadar(false)
+    })
+  }
+  //get courses
+  const getAllCourseData = () => {
+    setLoadar(true)
+    HandleCourseGet('', "").then((courses) => {
+      setcourseData(courses?.data?.reverse())
+      setLoadar(false);
+    })
+  }
+  React.useEffect(() => {
+    getAllCourseData();
+  }, [])
+  //pagination
+  const [row_per_page, set_row_per_page] = React.useState(12);
+  let [page, setPage] = React.useState<any>(1);
+  function handlerowchange(e: any) {
+    set_row_per_page(e.target.value);
+  }
+  const PER_PAGE = row_per_page;
+  const count = Math.ceil(courseData?.length / PER_PAGE);
+  const DATA = usePagination(courseData, PER_PAGE);
+  const handlePageChange = (e: any, p: any) => {
+    setPage(p);
+    DATA.jump(p);
+  };
 
   //gridview listview
   const gridView = () => {
@@ -78,9 +78,6 @@ export default function Courses() {
   const listView = () => {
     setgridview(false);
   };
-  console.log("gridviewgridview", gridview);
-
-  console.log("courseData", courseData);
   return (
     <>
       {/*header*/}

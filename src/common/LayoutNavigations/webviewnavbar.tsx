@@ -70,7 +70,7 @@ export default function WebViewNavbar() {
       }}
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
-      sx={{marginTop:"25px !important"}}
+      sx={{ marginTop: "25px !important" }}
 
     >
       <MenuItem onClick={() => router.push("/")}>
@@ -196,7 +196,7 @@ export default function WebViewNavbar() {
                     }}
                     open={Boolean(anchorEl)}
                     onClose={handleClose}
-                    sx={{marginTop:"35px !important"}}
+                    sx={{ marginTop: "35px !important" }}
                   >
                     <MenuItem>
                       Hii, {capitalizeFirstLetter(userData?.first_name)}
@@ -204,7 +204,7 @@ export default function WebViewNavbar() {
                     <Link href="/user/profile">
                       <MenuItem>Profile </MenuItem>
                     </Link>
-                    <MenuItem disabled>
+                    <MenuItem>
                       <Link href="/user/dashboard">Dashboard </Link>
                     </MenuItem>
                     <MenuItem onClick={HandleLogout}>

@@ -29,10 +29,11 @@ export default function About() {
     const getAllCourseData = () => {
         HandleCourseGet('', "").then((courses) => {
             setFreeCourses((courses?.data?.filter((a: any) =>
-                a?.course?.is_chargeable === "free" && a?.moduleCount.length > 0 && a?.sessionCount.length > 0)
+                a?.course?.is_chargeable === "free" && a?.course?.status === "active"
+                && a?.moduleCount.length > 0 && a?.sessionCount.length > 0)
             ))
             setPaidCourses(courses?.data?.filter((a: any) =>
-                a?.course?.is_chargeable === "paid" && a?.moduleCount.length > 0 && a?.sessionCount.length > 0
+                a?.course?.is_chargeable === "paid" && a?.course?.status === "active" && a?.moduleCount.length > 0 && a?.sessionCount.length > 0
             ))
         })
     }
