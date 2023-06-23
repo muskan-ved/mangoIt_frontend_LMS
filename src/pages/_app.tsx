@@ -10,14 +10,36 @@ import { AppContext } from 'next/app';
 import { NextPageContext } from 'next';
 import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
 import { GenerateToken } from "@/services/auth";
+import { HandleGetAllSiteGet } from "@/services/site";
 interface MyAppProps {
   siteConfigData: any; // Replace with the actual type of your site config data
 }
 export default function App({ Component, pageProps, siteConfigData }: AppProps | any) {
   const router = useRouter();
+
+  const [orgFavicon, setorgFavicon] = useState<any>('');
+  const [orgTitle, setorgTitle] = useState<any>('');
+
+  const handleGetSiteOptionsDataById = async () => {
+    await HandleGetAllSiteGet().then((res) => {
+      const objWithTitle = res && res.data.find((obj:any) => obj.key === "title");
+      const objWithFavicon = res && res.data.find((obj:any) => obj.key === "org_favicon");
+
+      setorgFavicon(objWithFavicon.value)
+      setorgTitle(objWithTitle.value)
+    }).catch((err) => {
+      console.log(err)
+    });
+  
+    }
+    useEffect(() => {
+        handleGetSiteOptionsDataById();
+    }, []);
+
   useEffect(() => {
     //generate authorizationtoken and set localstorage
     GenerateToken();
+    handleGetSiteOptionsDataById();
     if (typeof window !== "undefined") {
       router.push(router.asPath);
     }
@@ -26,8 +48,8 @@ export default function App({ Component, pageProps, siteConfigData }: AppProps |
   return (
     <>
       <Head>
-        <link rel="icon" href={siteConfigData ? BASE_URL + '/' + siteConfigData?.org_favicon : "/favicon.svg"} />
-        <title>{siteConfigData ? `${siteConfigData.title} - ${lastSegment ? capitalizeFirstLetter(lastSegment) : ''}` : `MLMS`}</title>
+        <link rel="icon" href={siteConfigData ? BASE_URL + '/' + siteConfigData?.org_favicon : orgFavicon ? BASE_URL + '/' + orgFavicon : "/favicon.svg"} />
+        <title>{siteConfigData ? `${siteConfigData.title} - ${lastSegment ? capitalizeFirstLetter(lastSegment) : ''}` : orgTitle ? `${orgTitle} - ${lastSegment ? capitalizeFirstLetter(lastSegment) : ''}` : `MLMS`}</title>
       </Head>
       <GoogleOAuthProvider
         clientId={`${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}`}

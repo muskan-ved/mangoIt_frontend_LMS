@@ -51,6 +51,7 @@ import { ToastContainer } from "react-toastify";
 // API Service
 import { AlertDialog } from "@/common/DeleteListRow/deleteRow";
 import { HandleSubscriptionDelete, HandleSubscriptionGet } from "@/services/subscription";
+import SpinnerProgress from "@/common/CircularProgressComponent/spinnerComponent";
 
 interface Column {
   id: "id" | "name" | "price" | "durationTerm" | "durationValue" | "status" | "username" | "action";
@@ -76,10 +77,12 @@ const Subscriptions = () => {
 
   const [rows, setRows] = useState<any>([]);
   const [toggle, setToggle] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [search, setSearch] = useState('');
   const [deleteRow, setDeleteRow] = useState<any>([])
   const [open, setOpen] = useState(false);
   const [getFilter, setFilter] = useState<any>('all');
+  
 
   //pagination
   const [row_per_page, set_row_per_page] = useState(10);
@@ -140,10 +143,14 @@ const Subscriptions = () => {
   const getAllSubscriptionData = (search: string = '',payload?:any) => {
     HandleSubscriptionGet(search,payload).then((subs: any) => {
       setRows(subs.data)
-    })
+      setLoading(false)
+    }).catch((err) => {
+      setLoading(false)
+    });
   }
 
   useEffect(() => {
+    setLoading(true)
     getAllSubscriptionData();
   }, [])
 
@@ -299,6 +306,7 @@ const Subscriptions = () => {
               &nbsp;
               {/* <Button variant="contained" onClick={() => router.push('/admin/subscriptions/allsubscription/addSubscription')} id={styles.muibuttonBackgroundColor}> + Add Subscription</Button> */}
             </Box>
+            {!loading?
             <Paper className={Subscription.papperForTable}>
               <TableContainer className={Subscription.tableContainer}>
                 <Table stickyHeader aria-label="sticky table">
@@ -388,7 +396,7 @@ const Subscriptions = () => {
                   </FormControl>
                 </Stack>
               </TableContainer>
-            </Paper>
+            </Paper>:<SpinnerProgress/>}
 
             <AlertDialog
               open={open}
