@@ -103,11 +103,17 @@ export default function AddSession() {
     HandleCourseGet('', '').then((courses) => {
       setCourses(courses.data)
     })
+
   };
 
-  const getModuleData = () => {
+  const getModuleData = (courseId:any) => {
     HandleModuleGet('', '').then((modules) => {
-      setModules(modules.data)
+      const findModuleAccToCourse = modules.data.filter((ress:any)=>{
+        return (
+          ress.module.course_id === courseId
+        )
+      })
+      setModules(findModuleAccToCourse)
     })
   }
 
@@ -119,7 +125,6 @@ export default function AddSession() {
     if (localData) {
       const userId = JSON.parse(localData);
       getCourseData();
-      getModuleData();
     }
   }, []);
 
@@ -145,7 +150,6 @@ export default function AddSession() {
       }
    }
 
-   // console.log("oopps", errors)
    return (
       <>
          <Navbar />
@@ -173,7 +177,7 @@ export default function AddSession() {
                            onReset={reset}
                         >
                            <Grid container spacing={2}>
-                              <Grid item xs={12} sm={12} md={12} lg={6} >
+                              <Grid item xs={12} sm={12} md={12} lg={6} mt={5}>
                                  <Box component="img" src="/Images/sideImages/add_section.svg" width={'100%'} />
                               </Grid>
 
@@ -188,7 +192,8 @@ export default function AddSession() {
                           <TextField
                             placeholder="Session Name"
                             {...register("title")}
-                            fullWidth
+                            className={Sessions.inputFieldWidth}
+
                        
                           />
                           {errors && errors.title
@@ -213,6 +218,7 @@ export default function AddSession() {
                             )}
                             onChange={(event, newValue) => {
                               setCourseId(newValue?.course?.id);
+                              getModuleData(newValue?.course?.id)
                             }}
                           />
                           {errors && errors.course_id

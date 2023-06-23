@@ -34,7 +34,6 @@ export default function AddSession() {
    const [getCourses, setCourses] = useState<courseType | any>();
    const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
    const [isLoading, setLoading] = useState<boolean>(false);
-   const [getCourseTitle, setCourseTitle] = React.useState<any>("");
    const [getCourseId, setCourseId] = React.useState<any>(0);
 
    const {
@@ -96,6 +95,8 @@ export default function AddSession() {
       );
    }
 
+
+
    return (
       <>
          <Navbar />
@@ -112,7 +113,7 @@ export default function AddSession() {
                />
                {/* main content */}
                <Card>
-                  <CardContent>
+                  <CardContent sx={{padding:'0px !important'}}>
                      {!isLoading ?
                         <Box
                            component="form"
@@ -124,20 +125,21 @@ export default function AddSession() {
                         >
                            <Grid container spacing={2}>
                               <Grid item xs={12} sm={12} md={12} lg={6} >
-                                 <Box component="img" src="/Images/sideImages/add_section.svg" width={'100%'} />
+                                 <Box component="img" src="/Images/sideImages/add_section.svg" width={'100%'} height={'568px'} />
                               </Grid>
 
-                              <Grid item xs={12} sm={12} md={12} lg={6} mt={5}>
+                              <Grid item xs={12} sm={12} md={12} lg={6} mt={6} p={3}>
                                  <Typography className={ModuleCss.InputLabelFont} mb={1}>ADD MODULE</Typography>
-                                 <Grid item xs={12} sm={12} md={12} lg={12} className={ModuleCss.sessionNameGride} >
+                                 <Grid item xs={12} sm={12} md={12} lg={12} className={ModuleCss.sessionNameGride} mt={5}>
 
-                                    <Grid item xs={12} sm={12} md={6} lg={6}>
+                                    <Grid item xs={12} sm={12} md={6} lg={6} >
                                        <InputLabel className={ModuleCss.InputLabelFont}>
                                           Module Name
                                        </InputLabel>
                                        <TextField
                                           placeholder="Module Name"
                                           {...register("title")}
+                                          className={ModuleCss.inputFieldWidth}
                                        />
                                        {errors && errors.title
                                           ? ErrorShowing(errors?.title?.message)
