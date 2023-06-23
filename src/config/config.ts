@@ -44,6 +44,7 @@ export const API = {
   deleteSession: `${BASE_URL}/deletesession`,
 
   //Site Options
+  getAllSiteConfiguration: `${BASE_URL}/getsiteconfigs`,
   getSite: `${BASE_URL}/getsiteconfigs`,
   createSite: `${BASE_URL}/createsiteconfig`,
   updateSite: `${BASE_URL}/updatesiteconfigs`,

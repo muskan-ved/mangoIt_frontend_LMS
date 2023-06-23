@@ -209,7 +209,7 @@ export default function Register() {
                   startIcon={
                     <Box
                       component={"img"}
-                      src={"/Images/pages/google.svg"}
+                      src={"/Images/pages_icon/google.svg"}
                       width={"18px"}
                       height={"18px"}
                     />
