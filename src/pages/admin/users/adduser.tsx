@@ -93,13 +93,13 @@ export default function AddUser() {
                 >
                   <Grid container spacing={2}>
                     <Grid item xs={12} sm={12} md={12} lg={6} >
-                      <Box component="img" src="/Images/sideImages/add_section.svg" width={'100%'} />
+                      <Box component="img" src="/Images/sideImages/add_section.svg" width={'100%'} height={'490px'}/>
                     </Grid>
 
-                    <Grid item xs={12} sm={12} md={12} lg={6} mt={10}>
-                      <Typography className={UserCSS.InputLabelFont} mb={1}>ADD USER</Typography>
+                    <Grid item xs={12} sm={12} md={12} lg={6} >
+                      <Typography className={UserCSS.InputLabelFont} mb={1} mt={8}>ADD USER</Typography>
 
-                      <Grid item xs={12} sm={12} md={12} lg={12} className={UserCSS.sessionNameGride} >
+                      <Grid item xs={12} sm={12} md={12} lg={12} className={UserCSS.sessionNameGride} mt={5}>
                         <Grid item xs={12} sm={12} md={6} lg={6}>
                           <InputLabel className={UserCSS.InputLabelFont}>
                             First Name
@@ -107,6 +107,7 @@ export default function AddUser() {
                           <TextField
                             placeholder="First Name"
                             {...register("first_name")}
+                            className={UserCSS.inputFieldWidth}
                           />
                           {errors && errors.first_name
                             ? ErrorShowing(errors?.first_name?.message)
@@ -120,6 +121,7 @@ export default function AddUser() {
                           <TextField
                             placeholder="Last Name"
                             {...register("last_name")}
+                            className={UserCSS.inputFieldWidth}
                           />
                           {errors && errors.last_name
                             ? ErrorShowing(errors?.last_name?.message)
@@ -135,6 +137,7 @@ export default function AddUser() {
                           <TextField
                             placeholder="Email Id"
                             {...register("email")}
+                            className={UserCSS.inputFieldWidth}
                           />
                           {errors && errors.email
                             ? ErrorShowing(errors?.email?.message)
@@ -148,8 +151,8 @@ export default function AddUser() {
                             control={control}
                             defaultValue=""
                             render={({ field }) => (
-                              <FormControl sx={{width:'238px'}}>
-                                <Select {...field} displayEmpty>
+                              <FormControl fullWidth>
+                                <Select {...field} displayEmpty className={UserCSS.inputFieldWidth}>
                                   <MenuItem disabled value="">
                                     Role
                                   </MenuItem>
