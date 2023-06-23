@@ -30,6 +30,7 @@ import CodeMirror from "@uiw/react-codemirror";
 import { useRouter } from "next/router";
 import { ToastContainer } from "react-toastify";
 import { HandleSiteGetByID } from "@/services/site";
+import SpinnerProgress from "@/common/CircularProgressComponent/spinnerComponent";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -63,6 +64,8 @@ function a11yProps(index: number) {
 const EmailContentManage = () => {
   const [tabs, setTab] = useState(0);
   const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  
   const [emailBodyText, setEmailBodyText] = useState<string>("");
   const [orgLogo, setOrgLogo] = useState<string>("");
   
@@ -108,6 +111,7 @@ const EmailContentManage = () => {
   };
 
   const handleGetSiteOptionsDataById = async (userId:any) => {
+    setLoading(true)
   await HandleSiteGetByID(userId).then((res) => {
 
     const hasOLOrOFOrT = res.data.filter(
@@ -116,8 +120,12 @@ const EmailContentManage = () => {
     );
 
     setOrgLogo(hasOLOrOFOrT && hasOLOrOFOrT[0]?.value)
+    setLoading(false)
+
   }).catch((err) => {
     console.log(err)
+    setLoading(false)
+
   });
 
   }
@@ -175,6 +183,8 @@ const EmailContentManage = () => {
           {/* main content */}
           <Card>
             <CardContent>
+            {!loading?
+            <>
               <Box sx={{ borderBottom: 1, borderColor: "rgb(0,0,0,0.12)" }}>
                 <Tabs
                   value={tabs}
@@ -201,6 +211,7 @@ const EmailContentManage = () => {
                   />
                 </Tabs>
               </Box>
+            
               <Box
                 component="form"
                 method="POST"
@@ -332,7 +343,7 @@ const EmailContentManage = () => {
                     )}
                   </Grid>
                 )}
-              </Box>
+              </Box></>:<SpinnerProgress/>}
             </CardContent>
           </Card>
         </Box>

@@ -47,8 +47,6 @@ const Dashboard = () => {
   
   }, [])
 
-const reverseData:any = (dashboardContent && dashboardContent?.todaysSubscriptionData && [...dashboardContent?.todaysSubscriptionData].reverse());
-
   return (
     <>
       <Navbar />
@@ -145,14 +143,13 @@ const reverseData:any = (dashboardContent && dashboardContent?.todaysSubscriptio
             <Grid item xs={12} sm={12} md={6} lg={6}>
               <Card>
                 <CardHeader
-                  title={<><Typography component={'span'} className={dashboardStyles.tableColumnFont}>Today&apos;s Registered Users</Typography>
-                  <Typography className={dashboardStyles.seeMore}><Link href={'/admin/users'}>See More</Link></Typography>
-                  </>
+                  title={<Typography component={'span'} className={dashboardStyles.tableColumnFont}>Today&apos;s Registered Users</Typography>
+                 
                 }
                   subheader={<Divider></Divider>}
                 ></CardHeader>
                 <CardContent>
-                  <TableContainer component={Paper}>
+                  <TableContainer component={Paper} className={dashboardContent && dashboardContent.todaysUsersData.length > 0 ? dashboardStyles.tableHeight: ''}>
                     <Table className={dashboardStyles.tableMinWidth} aria-label="simple table">
                       <TableHead>
                         <TableRow>
@@ -182,14 +179,13 @@ const reverseData:any = (dashboardContent && dashboardContent?.todaysSubscriptio
             <Grid item xs={12} sm={12} md={6} lg={6}>
               <Card>
               <CardHeader
-                  title={<><Typography component={'span'} className={dashboardStyles.tableColumnFont}>Today&apos;s Subscriptions</Typography>
-                  <Typography className={dashboardStyles.seeMore}><Link href={'/admin/subscriptions/allsubscription/'}>See More</Link></Typography>
-                  </>
+                  title={<Typography component={'span'} className={dashboardStyles.tableColumnFont}>Today&apos;s Subscriptions</Typography>
+                  
                 }
                   subheader={<Divider></Divider>}
                 ></CardHeader>
                 <CardContent>
-                  <TableContainer component={Paper}>
+                  <TableContainer component={Paper} className={dashboardContent && dashboardContent?.todaysSubscriptionData?.length > 0 ? dashboardStyles.tableHeight : ''}>
                     <Table className={dashboardStyles.tableMinWidth} aria-label="simple table">
                       <TableHead>
                         <TableRow>
@@ -200,7 +196,7 @@ const reverseData:any = (dashboardContent && dashboardContent?.todaysSubscriptio
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                      {reverseData?.length > 0 ? reverseData?.map((subs:any) =>(
+                      {dashboardContent && dashboardContent?.todaysSubscriptionData?.length > 0 ? dashboardContent?.todaysSubscriptionData?.map((subs:any) =>(
                         <TableRow key={subs.id}>
                           <TableCell align="left">{subs.id}</TableCell>
                           <TableCell align="left">{subs.name}</TableCell>
