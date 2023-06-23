@@ -139,24 +139,25 @@ const AddCourse = () => {
   const onSubmit = async (value: any) => {
     if (rowsForCourseTopic.length > 1) {
       if (rowsForCourseMaterial.length > 1) {
-        console.log(value)
-        const reqData = {
-          title: value.value?.title,
+        const reqData: any = {
+          title: value?.title,
           is_chargeable: value?.is_chargeable,
           long_description: value?.long_description,
           short_description: value?.short_description,
           status: value?.status,
           duration: value?.courseduration,
           level: value?.courselevel,
-          // image:,
-          // video:,
-          course_learning_topics: rowsForCourseTopic,
-          Course_learning_material: rowsForCourseMaterial
+          image: value?.imageattachment,
+          video: value?.videoattachment,
+          course_learning_topics: JSON.stringify(rowsForCourseTopic),
+          Course_learning_material: JSON.stringify(rowsForCourseMaterial)
         }
-        console.log(reqData);
-        return false;
+        const formData = new FormData()
+        for (var key in reqData) {
+          formData.append(key, reqData[key]);
+        }
         try {
-          await HandleCourseCreate(value)
+          await HandleCourseCreate(formData)
           setTimeout(() => {
             router.push('/admin/courses/allcourses/')
           }, 1000)
@@ -165,10 +166,10 @@ const AddCourse = () => {
           console.log(e);
         };
       } else {
-        toast.error("Please Add Course Study Materials !")
+        toast.error("Please add course study materials !")
       }
     } else {
-      toast.error("Please Add Course Learning Topics !")
+      toast.error("Please add course learning topics !")
     }
   }
   const handleImageChange = (e: any) => {
@@ -228,14 +229,14 @@ const AddCourse = () => {
       tempRows.splice(idx, 1);
       setrowsForCourseTopic(tempRows);
     } else {
-      toast.error("Please Add Course Topics !")
+      toast.error("Please add course topics !")
     }
   };
   const courseTopic = () => {
     if (rowsForCourseTopic.length > 0) {
       handleCloseCourseTopicBox();
     } else {
-      toast.error("Please Add Course Topics !")
+      toast.error("Please add course topics !")
     }
   };
   //study material boxes
@@ -265,14 +266,14 @@ const AddCourse = () => {
       tempRows.splice(idx, 1);
       setrowsForCourseMaterial(tempRows);
     } else {
-      toast.error("Please Add Course Material !")
+      toast.error("Please add course material!")
     }
   }
   const courseMaterial = () => {
     if (rowsForCourseMaterial.length > 0) {
       handleCloseStudyMaterialBox();
     } else {
-      toast.error("Please Add Course Material !")
+      toast.error("Please add course material !")
     }
   };
 
@@ -540,7 +541,7 @@ const AddCourse = () => {
           <Grid item mb={2}>
             <Stack direction="row" sx={{ display: "flex", justifyContent: "end" }} spacing={2}>
               <Button variant="outlined" size="small" onClick={ResetTopicRow} startIcon={<RestartAltOutlinedIcon />}>Reset</Button>
-              <Button variant="outlined" size="small" onClick={handleAddTopicRow} startIcon={<AddIcon />}>Add New Row</Button>
+              <Button variant="outlined" size="small" onClick={handleAddTopicRow} startIcon={<AddIcon />}>Add New</Button>
             </Stack>
             <Table>
               <TableHead>
@@ -610,7 +611,7 @@ const AddCourse = () => {
           <Grid item mb={2}>
             <Stack direction="row" sx={{ display: "flex", justifyContent: "end" }} spacing={2}>
               <Button variant="outlined" size="small" onClick={ResetMaterialRow} startIcon={<RestartAltOutlinedIcon />}>Reset</Button>
-              <Button variant="outlined" size="small" onClick={handleAddCourseMaterialRow} startIcon={<AddIcon />}>Add New Row</Button>
+              <Button variant="outlined" size="small" onClick={handleAddCourseMaterialRow} startIcon={<AddIcon />}>Add New </Button>
             </Stack>
             <Table>
               <TableHead>

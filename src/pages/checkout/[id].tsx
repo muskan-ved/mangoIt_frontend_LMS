@@ -111,7 +111,7 @@ export default function Checkout() {
                                 }
                                 //create order
                                 CreateOrder(orderData).then((order) => {
-                                    if (order) {
+                                    if (order?.data) {
                                         localStorage.setItem("orderId", order?.data?.id)
                                         //create payment
                                         const data = {
