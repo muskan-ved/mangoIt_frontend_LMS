@@ -535,7 +535,7 @@ const AddCourse = () => {
         <BootstrapDialogTitle id="customized-dialog-title"
           //onClose={handleCloseCourseTopicBox}
           variant="h6" sx={{ fontWeight: "bold" }}>
-          Add course topics what you'll covered in this course
+          Add course topics what you&apos;ll covered in this course
         </BootstrapDialogTitle>
         <DialogContent dividers>
           <Grid item mb={2}>
@@ -605,7 +605,7 @@ const AddCourse = () => {
         <BootstrapDialogTitle id="customized-dialog-title"
           //onClose={handleCloseCourseTopicBox}
           variant="h6" sx={{ fontWeight: "bold" }}>
-          Add study material what you'll provide in this course
+          Add study material what you&apos;ll provide in this course
         </BootstrapDialogTitle>
         <DialogContent dividers>
           <Grid item mb={2}>

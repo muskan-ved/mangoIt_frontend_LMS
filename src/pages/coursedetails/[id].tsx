@@ -361,7 +361,7 @@ export default function CoursesDetailsPage() {
                                 <Box sx={{ maxWidth: 345, display: 'flex' }} >
                                     <Box sx={{ background: "white", border: "border: 1px solid #80808024", borderRadius: "6px" }}>
                                         <ReactPlayer
-                                            url={`${BASE_URL}/${coursedet?.video}`} 
+                                            url={`${BASE_URL}/${coursedet?.video}`}
                                             // url="https://www.youtube.com/watch?v=ZsqSucH58D4"
                                             width={250} height={'auto'}
                                             playing={true}
@@ -408,7 +408,7 @@ export default function CoursesDetailsPage() {
                                     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                                         {coursematerial?.map((item: any, key: any) => {
                                             return (
-                                                <Grid item xs={6}>
+                                                <Grid item xs={6} key={key}>
                                                     <ListItem>
                                                         <ListItemIcon>
                                                             <CheckOutlinedIcon />
