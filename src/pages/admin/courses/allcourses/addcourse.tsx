@@ -129,10 +129,10 @@ const AddCourse = () => {
                 onReset={reset}
               >
                 <Grid container spacing={5}>
-                  <Grid item xs={12} sm={12} md={12} lg={6}>
+                  <Grid item xs={12} sm={12} md={12} lg={6} mt={6}>
                     <Box
                       component="img"
-                      src="/Images/pages/addsession_pic.png"
+                      src="/Images/sideImages/add_section.svg"
                       width={"100%"}
                       height={"80%"}
                     />

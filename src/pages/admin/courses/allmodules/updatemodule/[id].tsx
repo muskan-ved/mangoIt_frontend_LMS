@@ -72,6 +72,8 @@ export default function UpdateModule() {
       setDespcriptionContent(value);
     }
   };
+
+
   //submit form
   const onSubmit = async (event: any) => {
     const id = router.query.id
@@ -180,7 +182,7 @@ export default function UpdateModule() {
                 <form onSubmit={handleSubmit(onSubmit)}>
 
                   <Grid container spacing={2}>
-                    <Grid item xs={12} sm={12} md={12} lg={6} >
+                    <Grid item xs={12} sm={12} md={12} lg={6} mt={6}>
                       <Box component="img" src="/Images/sideImages/update_section.svg" width={'100%'} />
                     </Grid>
 
@@ -196,6 +198,8 @@ export default function UpdateModule() {
                             {...register("title")}
                             value={getModule?.title}
                             onChange={handleUpdate}
+                            className={ModuleCss.inputFieldWidth}
+
                           />
                           {errors && errors.title
                             ? ErrorShowing(errors?.title?.message)

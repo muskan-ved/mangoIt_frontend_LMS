@@ -176,7 +176,7 @@ export default function UpdateCourse() {
                   onReset={reset}
                 >
                   <Grid container spacing={2}>
-                    <Grid item xs={12} sm={12} md={12} lg={6} >
+                    <Grid item xs={12} sm={12} md={12} lg={6} mt={15} >
                       <Box component="img" src="/Images/sideImages/update_section.svg" width={'100%'} />
                     </Grid>
 
