@@ -75,7 +75,7 @@ export default function UpdateCourse() {
     // const reqData = { ...event }
     if (errors.description?.message === '' || (typeof errors === 'object' && errors !== null)) {
       setLoading(true);
-      setLoadingButton(false)
+      setLoadingButton(true);
       try {
         const res = await HandleCourseUpdate(id, event)
         getCourseData()
@@ -83,6 +83,7 @@ export default function UpdateCourse() {
         setTimeout(() => {
           router.push('/admin/courses/allcourses/')
         }, 1000)
+        setLoadingButton(true)
       } catch (e) {
         console.log(e)
         setLoadingButton(true)
@@ -238,7 +239,7 @@ export default function UpdateCourse() {
                                   Active
                                 </MenuItem>
                                 <MenuItem value={'inactive'}>
-                                  In-active
+                                  Inactive
                                 </MenuItem>
                               </Select>
                             </FormControl>
@@ -286,7 +287,6 @@ export default function UpdateCourse() {
                         </LoadingButton>}
                       </Grid>
                     </Grid>
-
                   </Grid>
                 </Box>
                 : <SpinnerProgress />}

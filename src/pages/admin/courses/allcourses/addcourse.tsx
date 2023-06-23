@@ -31,13 +31,13 @@ import { HandleCourseCreate } from "@/services/course";
 import { useRouter } from "next/router";
 import CircularProgressBar from "@/common/CircularProcess/circularProgressBar";
 import { LoadingButton } from "@mui/lab";
+import SpinnerProgress from "@/common/CircularProgressComponent/spinnerComponent";
 
 
 const AddCourse = () => {
   const [shortDespcriptionContent, setShortDespcriptionContent] = useState("");
   const [despcriptionContent, setdespcriptionContent] = useState("");
   const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
-  const [isLoading, setLoading] = useState<boolean>(false);
   const router: any = useRouter();
 
   const {
@@ -73,15 +73,17 @@ const AddCourse = () => {
   };
 
   const onSubmit = async (value: any) => {
+    setLoadingButton(true)
     try {
       const courseCreated = await HandleCourseCreate(value)
-      setLoading(false);
       setTimeout(() => {
         router.push('/admin/courses/allcourses/')
       }, 1000)
+    setLoadingButton(false)
     }
     catch (e) {
       console.log(e);
+      setLoadingButton(false)
     };
   }
 
@@ -119,8 +121,8 @@ const AddCourse = () => {
 
           {/* main content */}
           <Card>
-            <CardContent>
-              <Box
+            <CardContent>        
+             <Box
                 component="form"
                 method="POST"
                 noValidate
@@ -204,7 +206,7 @@ const AddCourse = () => {
                                 Active
                               </MenuItem>
                               <MenuItem value={'inactive'}>
-                                In-active
+                                Inactive
                               </MenuItem>
                             </Select>
                           </FormControl>
@@ -262,7 +264,7 @@ const AddCourse = () => {
                     </Grid>
                   </Grid>
                 </Grid>
-              </Box>
+              </Box>            
             </CardContent>
           </Card>
         </Box>

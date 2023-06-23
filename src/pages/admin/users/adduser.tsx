@@ -21,6 +21,7 @@ import { ToastContainer } from 'react-toastify';
 import { userValidations } from '@/validation_schema/userValidation';
 // API services
 import { HandleRegister } from '@/services/auth';
+import { WidthFull } from '@mui/icons-material';
 
 
 
@@ -129,7 +130,7 @@ export default function AddUser() {
                       <Grid item xs={12} sm={12} md={12} lg={12} className={UserCSS.sessionNameGride} >
                         <Grid item xs={12} sm={12} md={6} lg={6}>
                           <InputLabel className={UserCSS.InputLabelFont}>
-                            Email Id
+                            Email
                           </InputLabel>
                           <TextField
                             placeholder="Email Id"
@@ -141,13 +142,13 @@ export default function AddUser() {
                         </Grid>
 
                         <Grid item xs={12} sm={12} md={6} lg={6}>
-                          <InputLabel className={UserCSS.InputLabelFont}>Role</InputLabel>
+                          <InputLabel  className={UserCSS.InputLabelFont}>Role</InputLabel>
                           <Controller
                             name="role_id"
                             control={control}
                             defaultValue=""
                             render={({ field }) => (
-                              <FormControl fullWidth>
+                              <FormControl sx={{width:'238px'}}>
                                 <Select {...field} displayEmpty>
                                   <MenuItem disabled value="">
                                     Role

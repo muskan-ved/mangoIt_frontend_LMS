@@ -144,9 +144,8 @@ export default function UpdateSession() {
       for (var key in reqData) {
         formData.append(key, reqData[key]);
       }
-
       setLoading(true);
-      setLoadingButton(false)
+      setLoadingButton(true)
       try {
         const res = await HandleSessionUpdate(id, formData)
         getSessionData(id)
@@ -156,7 +155,7 @@ export default function UpdateSession() {
         }, 1000)
       } catch (e) {
         console.log(e)
-        setLoadingButton(true)
+        setLoadingButton(false)
       }
     } else {
       setError('description', { message: 'Description is a required field' });

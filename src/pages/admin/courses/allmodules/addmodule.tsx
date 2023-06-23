@@ -33,8 +33,6 @@ export default function AddSession() {
    const [despcriptionContent, setdespcriptionContent] = useState("");
    const [getCourses, setCourses] = useState<courseType | any>();
    const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
-   const [isLoading, setLoading] = useState<boolean>(false);
-   const [getCourseTitle, setCourseTitle] = React.useState<any>("");
    const [getCourseId, setCourseId] = React.useState<any>(0);
 
    const {
@@ -66,17 +64,16 @@ export default function AddSession() {
    };
 
    const onSubmit = async (event: any) => {
-      setLoading(true);
-      setLoadingButton(false)
+      setLoadingButton(true)
       try {
          const res = await HandleModuleCreate({ ...event, course_id: getCourseId })
-         setLoading(false);
          setTimeout(() => {
             router.push('/admin/courses/allmodules/')
-         },900)
+         },1000)
+         setLoadingButton(false)
       } catch (e) {
          console.log(e)
-         setLoadingButton(true)
+         setLoadingButton(false)
       }
    };
 
@@ -112,8 +109,7 @@ export default function AddSession() {
                />
                {/* main content */}
                <Card>
-                  <CardContent>
-                     {!isLoading ?
+                  <CardContent>    
                         <Box
                            component="form"
                            method="POST"
@@ -186,7 +182,7 @@ export default function AddSession() {
                                                    Active
                                                 </MenuItem>
                                                 <MenuItem value={'inactive'}>
-                                                   In-active
+                                                   Inactive
                                                 </MenuItem>
                                              </Select>
                                           </FormControl>
@@ -223,7 +219,6 @@ export default function AddSession() {
 
                            </Grid>
                         </Box>
-                        : <SpinnerProgress />}
                   </CardContent>
                </Card>
             </Box>
