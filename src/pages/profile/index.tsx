@@ -51,6 +51,8 @@ export default function Profile() {
 	const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
 	const [getUserData, setUserData] = useState<userType | null>(null);
 	const [toggle, setToggle] = useState<boolean>(false);
+	// const [userRole, setUserRole] = useState<any >([]);
+
 	const {
 		register,
 		handleSubmit,
@@ -105,10 +107,11 @@ export default function Profile() {
 				"first_name",
 				"last_name",
 				"email",
-				"role_id",
+				
 				"profile_pic",
 			];
 			fields.forEach((field) => setValue(field, user.data[field]));
+			setValue("role_id",user.data['role_id'] === "1" ? "Admin" : "Learner")
 			setLoading(false);
 			if (typeof window !== "undefined") {
 				localData1 = window.localStorage.getItem("userData");
@@ -157,6 +160,11 @@ export default function Profile() {
 			}
 		}
 	}
+
+	const userRoles = [1,2]
+	const filterRole = userRoles.filter(role => role !== getUserData?.role_id)
+	console.log('filterRole',filterRole && filterRole.includes(2) ? 'learner ' : 'admin')
+
 	return (
 		<>
 			<Navbar profilePic={getUserData?.profile_pic} />
@@ -235,7 +243,13 @@ export default function Profile() {
 														</Typography>
 
 														<IconButton onClick={handleEdit}>
-															<EditIcon></EditIcon>
+															<EditIcon
+															 className={
+																toggle && toggle
+																	? profiles.editiconbtnn
+																	: ""
+															}
+															></EditIcon>
 														</IconButton>
 													</Box>
 												</Box>
@@ -290,15 +304,18 @@ export default function Profile() {
 
 											<Grid item xs={12} sm={12} md={6} lg={6}>
 												<FormControl fullWidth>
-													<InputLabel>Role</InputLabel>
+													<InputLabel>Role </InputLabel>
+													
 													<Select
 														label="Role"
 														{...register("role_id")}
 														defaultValue={getUserData.role_id}
 														disabled={!toggle}
 													>
-														<MenuItem value={1}>Admin</MenuItem>
-														<MenuItem value={2}>Learner</MenuItem>
+													{/* <MenuItem value={filterRole && filterRole[0]}>{filterRole && filterRole.includes(2) ? 'Learner ' : 'Admin'}</MenuItem> */}
+													<MenuItem value={1}>Admin</MenuItem>
+													<MenuItem value={2}>Learner</MenuItem>
+												
 													</Select>
 												</FormControl>
 											</Grid>
