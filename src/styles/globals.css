@@ -55,11 +55,12 @@ a {
   background-color: #e8661b !important;
 }
 
-.css-1e6y48t-MuiButtonBase-root-MuiButton-root:hover {
+/* .css-1e6y48t-MuiButtonBase-root-MuiButton-root:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background-color: white !important;
-}
+} */
+
 .linercss .css-5xe99f-MuiLinearProgress-bar1 {
   width: 100%;
   position: absolute;

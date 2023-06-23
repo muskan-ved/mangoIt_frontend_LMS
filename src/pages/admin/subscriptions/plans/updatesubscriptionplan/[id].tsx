@@ -14,7 +14,6 @@ import {
   MenuItem,
   Select,
   TextField,
-  TextareaAutosize,
   Typography,
 } from "@mui/material";
 // External Components
@@ -84,10 +83,14 @@ const {id} = router.query;
       ];
       fields.forEach((field) => setValue(field, subscriptions[field]));
       setDurationTerm(subscriptions?.duration_term)
-    })
+      setLoading(false);
+    }).catch((error) => {
+      setLoading(false)
+    });
   }
 
   useEffect(() => {
+    setLoading(true)
     getSubscriptionPlanById()
   }, [])
 
@@ -132,12 +135,12 @@ const {id} = router.query;
                   onReset={reset}
                 >
                   <Grid container >
-                    <Grid item xs={12} sm={12} md={6} lg={6}>
+                    <Grid item xs={12} sm={12} md={6} lg={6} className={Subscription.imageCenter}>
                       <Box
                         component="img"
-                        src="/Images/pages/addFeature.jpg"
+                        src="/Images/sideImages/update_section.svg"
                         width={"85%"}
-                      />
+                        />
                     </Grid>
 
                     <Grid item xs={12} sm={12} md={6} lg={6}>

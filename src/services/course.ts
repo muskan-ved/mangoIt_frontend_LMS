@@ -56,6 +56,7 @@ export const HandleCourseGetByID = async (courseId: any) => {
 };
 
 export const HandleCourseCreate = async (reqData: any) => {
+  console.log(reqData);
   return await axios({
     method: "POST",
     url: `${API.createCourse}`,
@@ -136,4 +137,19 @@ export const HandleCourseDelete = async (rowID: any, title:any) => {
     });
 };
 
-
+export const TotalLearner = async (courseId: any) => {
+  return await axios({
+    method: "GET",
+    url: `${API.getTotalLearner}/${courseId}`,
+    headers: LoginHeader(),
+  })
+    .then((request) => {
+      return request;
+    })
+    .catch((error) => {
+      if (error.response.status === 401) {
+        HandleLogout();
+      }
+      return error;
+    });
+};
