@@ -112,7 +112,7 @@ const reverseData:any = (dashboardContent && dashboardContent?.todaysSubscriptio
                       <Typography className={dashboardStyles.quickstatText}>
                         Earning
                       </Typography>
-                      <Typography>${dashboardContent?.totalSubscriptionsPrice}</Typography>
+                      <Typography>{dashboardContent?.totalSubscriptionsPrice ? `$${dashboardContent?.totalSubscriptionsPrice}`:''}</Typography>
                     </Box>
                     <Box
                       component={"img"}
@@ -163,14 +163,16 @@ const reverseData:any = (dashboardContent && dashboardContent?.todaysSubscriptio
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {dashboardContent?.todaysUsersData.map((user:any) =>(
+                        { dashboardContent && dashboardContent.todaysUsersData.length > 0 ? dashboardContent?.todaysUsersData.map((user:any) =>(
                         <TableRow key={user.id}>
                           <TableCell align="left">{user.id}</TableCell>
                           <TableCell align="left">{capitalizeFirstLetter(user.first_name)} {capitalizeFirstLetter(user.last_name)}</TableCell>
                           <TableCell align="left">{user.email}</TableCell>
                           <TableCell align="left">{user.role === 1 ? 'Admin' : 'Learner'}</TableCell>
                         </TableRow>
-                        ))}
+                        )): <TableRow >
+                        <TableCell align="center" colSpan={4}  className={dashboardStyles.tableColumnFont} >Record not found</TableCell>
+                        </TableRow>}
                       </TableBody>
                     </Table>
                   </TableContainer>
@@ -198,14 +200,16 @@ const reverseData:any = (dashboardContent && dashboardContent?.todaysSubscriptio
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                      {reverseData && reverseData?.map((subs:any) =>(
+                      {reverseData?.length > 0 ? reverseData?.map((subs:any) =>(
                         <TableRow key={subs.id}>
                           <TableCell align="left">{subs.id}</TableCell>
                           <TableCell align="left">{subs.name}</TableCell>
                           <TableCell align="left">{subs.description}</TableCell>
                           <TableCell align="left">${subs.price}</TableCell>
                         </TableRow>
-                        ))}
+                        )): <TableRow >
+                        <TableCell align="center" colSpan={4}  className={dashboardStyles.tableColumnFont} >Record not found</TableCell>
+                        </TableRow>}
                         
                       </TableBody>
                     </Table>
