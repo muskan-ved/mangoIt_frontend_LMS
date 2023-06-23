@@ -29,6 +29,8 @@ import {
 import CodeMirror from "@uiw/react-codemirror";
 import { useRouter } from "next/router";
 import { ToastContainer } from "react-toastify";
+import { HandleSiteGetByID } from "@/services/site";
+import SpinnerProgress from "@/common/CircularProgressComponent/spinnerComponent";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -62,7 +64,11 @@ function a11yProps(index: number) {
 const EmailContentManage = () => {
   const [tabs, setTab] = useState(0);
   const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  
   const [emailBodyText, setEmailBodyText] = useState<string>("");
+  const [orgLogo, setOrgLogo] = useState<string>("");
+  
   const {
     register,
     handleSubmit,
@@ -72,6 +78,8 @@ const EmailContentManage = () => {
   } = useForm<emailmanagementType | any>({
     resolver: yupResolver(emailmanagementConfigValidations),
   });
+
+  const emailBodyTextManage =  emailBodyText && emailBodyText?.replace("{{org_logo}}",orgLogo)
 
   const router = useRouter();
   const { id } = router.query;
@@ -102,7 +110,32 @@ const EmailContentManage = () => {
       });
   };
 
+  const handleGetSiteOptionsDataById = async (userId:any) => {
+    setLoading(true)
+  await HandleSiteGetByID(userId).then((res) => {
+
+    const hasOLOrOFOrT = res.data.filter(
+      (item: any) =>
+        item.key === "org_logo"
+    );
+
+    setOrgLogo(hasOLOrOFOrT && hasOLOrOFOrT[0]?.value)
+    setLoading(false)
+
+  }).catch((err) => {
+    console.log(err)
+    setLoading(false)
+
+  });
+
+  }
   useEffect(() => {
+      let localData: any;
+      if (typeof window !== "undefined") {
+        localData = window.localStorage.getItem("userData");
+      }
+      const user_id = JSON.parse(localData);
+      handleGetSiteOptionsDataById(user_id?.id);
     handleGetData();
   }, []);
 
@@ -150,6 +183,8 @@ const EmailContentManage = () => {
           {/* main content */}
           <Card>
             <CardContent>
+            {!loading?
+            <>
               <Box sx={{ borderBottom: 1, borderColor: "rgb(0,0,0,0.12)" }}>
                 <Tabs
                   value={tabs}
@@ -176,6 +211,7 @@ const EmailContentManage = () => {
                   />
                 </Tabs>
               </Box>
+            
               <Box
                 component="form"
                 method="POST"
@@ -259,7 +295,7 @@ const EmailContentManage = () => {
                 <TabPanel value={tabs} index={2}>
                   <Box className={emailStyle.emailBodyTextPreview}>
                     <Box
-                      dangerouslySetInnerHTML={{ __html: emailBodyText }}
+                      dangerouslySetInnerHTML={{ __html: emailBodyTextManage }}
                       padding={2}
                     ></Box>
                   </Box>
@@ -307,7 +343,7 @@ const EmailContentManage = () => {
                     )}
                   </Grid>
                 )}
-              </Box>
+              </Box></>:<SpinnerProgress/>}
             </CardContent>
           </Card>
         </Box>

@@ -222,3 +222,7 @@
   border-left: 1px solid #e3e3e3 !important;
   border-right: 1px solid #e3e3e3 !important;
 }
+.imageCenter{
+  text-align: center;
+  margin-top: 5%;
+}

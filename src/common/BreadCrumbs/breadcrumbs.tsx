@@ -3,7 +3,7 @@ import { Breadcrumbs, Stack, Typography } from "@mui/material";
 import { FC } from "react";
 import { breadcrumbsVariableTypes } from "@/types/breadcrumbs";
 import { FRONTEND_BASE_URL } from "@/config/config";
-
+import styles from "../../styles/login.module.css";
 const BreadcrumbsHeading: FC<breadcrumbsVariableTypes> = (props): any => {
   return (
     <Stack direction="row" spacing={2} justifyContent="space-between">
@@ -16,6 +16,7 @@ const BreadcrumbsHeading: FC<breadcrumbsVariableTypes> = (props): any => {
               href={
                 props && props?.Link?.includes("user") ? `${FRONTEND_BASE_URL}/user/dashboard` : `${FRONTEND_BASE_URL}/admin/dashboard`
               }
+              className={styles.registerPage}
               style={{ color: "#7D86A5", textDecoration: "none" }}
               >
               {props.First}

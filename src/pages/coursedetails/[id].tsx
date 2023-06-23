@@ -27,7 +27,11 @@ import {
 import WebViewNavbar from "@/common/LayoutNavigations/webviewnavbar";
 import WebViewFooter from "@/common/LayoutNavigations/webviewfooter";
 import styles from "../../styles/webview.module.css";
-import { HandleCourseByCourseId, HandleCourseGet } from "@/services/course";
+import {
+  HandleCourseByCourseId,
+  HandleCourseGet,
+  TotalLearner,
+} from "@/services/course";
 import PeopleIcon from "@mui/icons-material/People";
 import Link from "next/link";
 import AlarmOnIcon from "@mui/icons-material/AlarmOn";
@@ -42,11 +46,6 @@ import {
 } from "@/services/subscription";
 import { capitalizeFirstLetter } from "../../common/CapitalFirstLetter/capitalizeFirstLetter";
 import ReactPlayer from "react-player";
-import OndemandVideoIcon from "@mui/icons-material/OndemandVideo";
-import SystemUpdateAltIcon from "@mui/icons-material/SystemUpdateAlt";
-import PhoneIphoneIcon from "@mui/icons-material/PhoneIphone";
-import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
-import EmojiEventsOutlinedIcon from "@mui/icons-material/EmojiEventsOutlined";
 import { styled } from "@mui/material/styles";
 import MuiAccordion, { AccordionProps } from "@mui/material/Accordion";
 import MuiAccordionSummary from "@mui/material/AccordionSummary";
@@ -61,6 +60,7 @@ import {
   UserEnrolledCourses,
 } from "@/services/course_enroll";
 import { ToastContainer, toast } from "react-toastify";
+import { API, BASE_URL } from "@/config/config";
 
 const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -140,6 +140,8 @@ export default function CoursesDetailsPage() {
   const router = useRouter();
   const { id } = router.query;
   const [coursedet, setcoursedet] = useState<any>([]);
+  const [coursetopic, setcoursetopic] = useState<any>([]);
+  const [coursematerial, setcoursematerial] = useState<any>([]);
   const [subsdata, setsubsdata] = useState([]);
   const [Courses, setCourses] = useState([]);
   const [FreeCourses, setFreeCourses] = useState([]);
@@ -149,6 +151,7 @@ export default function CoursesDetailsPage() {
   const [enrolled, setenrolled] = useState<any>(false);
   const [EnrolledCourses, setEnrolledCoursess] = useState([]);
   const [checkuserSubscStatus, setcheckuserSubscStatus] = useState<any>([]);
+  const [totalLearner, setTotalLearner] = useState<any>(0);
 
   useEffect(() => {
     if (router.isReady) {
@@ -176,9 +179,17 @@ export default function CoursesDetailsPage() {
   const getCourseDetails = () => {
     HandleCourseByCourseId(id).then((coursedetails) => {
       setcoursedet(coursedetails?.data);
+      getTotalLearner(coursedetails?.data?.id);
+      setcoursetopic(
+        JSON.parse(JSON.parse(coursedetails?.data?.course_learning_topics))
+      );
+      setcoursematerial(
+        JSON.parse(JSON.parse(coursedetails?.data?.Course_learning_material))
+      );
       setmodulesdet(coursedetails?.data?.modules);
     });
   };
+
   //get courses
   const getAllCourseData = () => {
     HandleCourseGet("", "").then((courses) => {
@@ -207,6 +218,14 @@ export default function CoursesDetailsPage() {
       setsubsdata(subscdata);
     });
   };
+
+  //get total enrolled(total learner)courses by course id
+  const getTotalLearner = (course_id: any) => {
+    TotalLearner(course_id).then((res) => {
+      setTotalLearner(res?.data);
+    });
+  };
+
   //get top enrolled courses
   const getTopEnrolledCourses = () => {
     TopEnrolledCourses().then((res) => {
@@ -280,7 +299,6 @@ export default function CoursesDetailsPage() {
   };
 
   const Enrolled = () => {
-    // toast.success("You are already enrolled");
     router.push(`/user/course/detail/${coursedet?.id}`);
   };
 
@@ -324,7 +342,7 @@ export default function CoursesDetailsPage() {
                     width: 300,
                     display: { xs: "none", sm: "block", borderRadius: "10px" },
                   }}
-                  image="https://leverageedu.com/blog/wp-content/uploads/2020/06/Short-term-Professional-Courses-after-Graduation.jpg"
+                  image={`${BASE_URL}/${coursedet?.image}`}
                   alt={"image"}
                 />
                 <CardContent
@@ -367,7 +385,8 @@ export default function CoursesDetailsPage() {
                     paragraph
                     sx={{ fontFamily: "sans - serif" }}
                   >
-                    120 <sup>+</sup> Enrolled Students
+                    {totalLearner === 0 ? 10 : totalLearner * 2} <sup>+</sup>{" "}
+                    Enrolled Students
                   </Typography>
                   {userData && coursedet && modulesdet ? (
                     <>
@@ -463,9 +482,10 @@ export default function CoursesDetailsPage() {
                     }}
                   >
                     <ReactPlayer
-                      url="https://youtu.be/yRpLlJmRo2w?t=4"
-                      width={"auto"}
-                      height={270}
+                      url={`${BASE_URL}/${coursedet?.video}`}
+                      // url="https://www.youtube.com/watch?v=ZsqSucH58D4"
+                      width={250}
+                      height={"auto"}
                       playing={true}
                       muted={true}
                       controls={true}
@@ -523,46 +543,18 @@ export default function CoursesDetailsPage() {
                       rowSpacing={1}
                       columnSpacing={{ xs: 1, sm: 2, md: 3 }}
                     >
-                      <Grid item xs={6}>
-                        <ListItem>
-                          <ListItemIcon>
-                            <CheckOutlinedIcon />
-                          </ListItemIcon>
-                          <ListItemText primary="Extensive, informative and interesting video lecture" />
-                        </ListItem>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <ListItem>
-                          <ListItemIcon>
-                            <CheckOutlinedIcon />
-                          </ListItemIcon>
-                          <ListItemText primary="Complete Code demonstrated in lecture" />
-                        </ListItem>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <ListItem>
-                          <ListItemIcon>
-                            <CheckOutlinedIcon />
-                          </ListItemIcon>
-                          <ListItemText primary="Coverage of all important primary Javascript concepts" />
-                        </ListItem>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <ListItem>
-                          <ListItemIcon>
-                            <CheckOutlinedIcon />
-                          </ListItemIcon>
-                          <ListItemText primary="Lab Solution Sets" />
-                        </ListItem>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <ListItem>
-                          <ListItemIcon>
-                            <CheckOutlinedIcon />
-                          </ListItemIcon>
-                          <ListItemText primary="All Powerpoint Demonstrations Used in Course" />
-                        </ListItem>
-                      </Grid>
+                      {coursetopic?.map((item: any, key: any) => {
+                        return (
+                          <Grid item xs={6} key={key}>
+                            <ListItem>
+                              <ListItemIcon>
+                                <CheckOutlinedIcon />
+                              </ListItemIcon>
+                              <ListItemText primary={Object.values(item)} />
+                            </ListItem>
+                          </Grid>
+                        );
+                      })}
                     </Grid>
                   </Box>
                   <Typography
@@ -579,46 +571,18 @@ export default function CoursesDetailsPage() {
                     rowSpacing={1}
                     columnSpacing={{ xs: 1, sm: 2, md: 3 }}
                   >
-                    <Grid item xs={6}>
-                      <ListItem>
-                        <ListItemIcon>
-                          <OndemandVideoIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="7 hours on-demand video" />
-                      </ListItem>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <ListItem>
-                        <ListItemIcon>
-                          <SystemUpdateAltIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="25+ downloadable resources" />
-                      </ListItem>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <ListItem>
-                        <ListItemIcon>
-                          <PhoneIphoneIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Access on mobile and computers" />
-                      </ListItem>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <ListItem>
-                        <ListItemIcon>
-                          <LibraryBooksIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="100+ Modules and Sessions" />
-                      </ListItem>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <ListItem>
-                        <ListItemIcon>
-                          <EmojiEventsOutlinedIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Certificate of completion" />
-                      </ListItem>
-                    </Grid>
+                    {coursematerial?.map((item: any, key: any) => {
+                      return (
+                        <Grid item xs={6} key={key}>
+                          <ListItem>
+                            <ListItemIcon>
+                              <CheckOutlinedIcon />
+                            </ListItemIcon>
+                            <ListItemText primary={Object.values(item)} />
+                          </ListItem>
+                        </Grid>
+                      );
+                    })}
                   </Grid>
                 </CardContent>
               </Card>
@@ -633,25 +597,45 @@ export default function CoursesDetailsPage() {
                           <ListItemIcon>
                             <PeopleIcon />
                           </ListItemIcon>
-                          <ListItemText primary="146 Learner" />
+                          <ListItemText
+                            primary={
+                              (totalLearner === 0 ? 10 : totalLearner * 2) +
+                              " " +
+                              "Learner"
+                            }
+                          />
                         </ListItem>
                         <ListItem>
                           <ListItemIcon>
                             <AlarmOnIcon />
                           </ListItemIcon>
-                          <ListItemText primary="3 weeks" />
+                          <ListItemText
+                            primary={
+                              coursedet?.duration === "three_months"
+                                ? "3 Months"
+                                : coursedet?.duration === "six_months"
+                                ? "6 Months"
+                                : "12 Months"
+                            }
+                          />
                         </ListItem>
                         <ListItem>
                           <ListItemIcon>
                             <WorkspacePremiumIcon />
                           </ListItemIcon>
-                          <ListItemText primary="Intermediate" />
+                          <ListItemText
+                            primary={
+                              capitalizeFirstLetter(coursedet?.level) +
+                              " " +
+                              "level"
+                            }
+                          />
                         </ListItem>
                         <ListItem>
                           <ListItemIcon>
                             <AlarmOnIcon />
                           </ListItemIcon>
-                          <ListItemText primary="3-4 hour per week" />
+                          <ListItemText primary="3-4 Hour per week" />
                         </ListItem>
                       </List>
                     </CardContent>
@@ -693,7 +677,7 @@ export default function CoursesDetailsPage() {
           </Grid>
 
           {coursedet && modulesdet ? (
-            <Grid container spacing={2} className={styles.crsgrid} mt={5} mb={5}>
+            <Grid container spacing={2} className={styles.crsgrid} mt={5}>
               <Grid item xs={12} md={8} lg={9}>
                 <Typography
                   gutterBottom
@@ -735,7 +719,6 @@ export default function CoursesDetailsPage() {
             ""
           )}
           {/*top enrolled course*/}
-          <Divider></Divider>
           <Box className={styles.enrolled}>
             <Container maxWidth="lg">
               <Box className={styles.headerbox}>
@@ -744,22 +727,10 @@ export default function CoursesDetailsPage() {
                 </Typography>
                 <Divider className={styles.divder} />
               </Box>
-              <Box className={styles.freecourses} mt={5}>
-                <Container maxWidth="lg">
-                  {/* <Box> */}
-                  <Box>
-                    <Grid container spacing={2} justifyContent={"space-evenly"}>
-                      {subsdata &&
-                        subsdata?.map((data, key) => {
-                          return (
-                            <SubscribtionPanCard subsdata={data} key={key} />
-                          );
-                        })}
-                    </Grid>
-                  </Box>
-                  {/* </Box> */}
-                </Container>
-              </Box>
+              {subsdata &&
+                subsdata?.map((data, key) => {
+                  return <SubscribtionPanCard subsdata={data} key={key} />;
+                })}
             </Container>
           </Box>
           {/*top enrolled course*/}

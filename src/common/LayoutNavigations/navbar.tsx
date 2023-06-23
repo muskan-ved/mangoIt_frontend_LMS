@@ -16,6 +16,7 @@ import { HandleLogout } from "@/services/auth";
 import { capitalizeFirstLetter } from "../CapitalFirstLetter/capitalizeFirstLetter";
 import { BASE_URL } from "@/config/config";
 import Link from "next/link";
+import { HandleSiteGetByID } from "@/services/site";
 
 interface appbar {
   portalData?: any;
@@ -42,8 +43,9 @@ export default function Navbar({
   lastName,
 }: appbar) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [orgLogo, setOrgLogo] = React.useState<string>("");
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
-    React.useState<null | HTMLElement>(null);
+  React.useState<null | HTMLElement>(null);
   const [userData, setUserData] = React.useState<any>("");
   const { collapseSidebar, toggleSidebar, toggled } = useProSidebar();
   const isMenuOpen = Boolean(anchorEl);
@@ -51,14 +53,33 @@ export default function Navbar({
   const router = useRouter();
 
   React.useEffect(() => {
-    let localData: any;
+    let localData: any,parseLocalData :any;
     if (typeof window !== "undefined") {
       localData = window.localStorage.getItem("userData");
     }
     if (localData) {
+      parseLocalData = JSON.parse(localData)
       setUserData(JSON.parse(localData));
     }
+
+    handleGetSiteOptionsDataById(parseLocalData.id);
   }, []);
+
+
+  const handleGetSiteOptionsDataById = async (userId:any) => {
+    await HandleSiteGetByID(userId).then((res) => {
+
+      const hasOLOrOFOrT = res.data.filter(
+        (item: any) =>
+          item.key === "org_logo"
+      );
+  
+      setOrgLogo(hasOLOrOFOrT && hasOLOrOFOrT[0]?.value)
+    }).catch((err) => {
+      console.log(err)
+    });
+  
+    }
 
   const toggle = () => {
     toggleSidebar();
@@ -169,7 +190,7 @@ export default function Navbar({
               src={
                 portalData
                   ? BASE_URL + "/" + portalData?.org_logo
-                  : "/Images/pages_icon/company_logo.png"
+                  : orgLogo ? BASE_URL + "/" + orgLogo : "/Images/pages_icon/company_logo.png"
               }
               width={"180px"}
               height={"50px"}

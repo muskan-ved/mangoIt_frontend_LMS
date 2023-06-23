@@ -100,8 +100,6 @@ const SubscriptionPlans = () => {
     DATA.jump(p);
   };
 
-  const { handleSubmit, control } = useForm();
-
   const handleClickOpen = (row: any) => {
     setDeleteRow(row)
     setOpen(!open);
@@ -109,7 +107,7 @@ const SubscriptionPlans = () => {
   }
   // to delete a row
   const handleDeletesRow = () => {
-    DeleteSubscriptionPlan(deleteRow.id).then((newRows) => {
+    DeleteSubscriptionPlan(deleteRow.id,deleteRow.title).then((newRows) => {
       setRows(newRows.data)
       getAllSubscriptionPlanData()
     })
@@ -135,10 +133,10 @@ const SubscriptionPlans = () => {
 
   const getAllSubscriptionPlanData = (search: string = "") => {
     GetAllSubsctionPlans(search).then((subs: any) => {
-    setLoading(true);
+    setLoading(false);
       setRows(subs);
     }).catch((err) => {
-    setLoading(true);
+    setLoading(false);
     })
   };
 

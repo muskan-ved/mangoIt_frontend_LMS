@@ -4,6 +4,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { HandleLogout } from "./auth";
+import { capitalizeFirstLetter } from "@/common/CapitalFirstLetter/capitalizeFirstLetter";
 
 export const HandleSubscriptionGet = async (search: string, reqData?: any) => {
   const API_URL = search
@@ -335,7 +336,7 @@ export const UpdateSubscriptionPlan = async (id: any, reqData: any) => {
     });
 };
 
-export const DeleteSubscriptionPlan = async (id: string) => {
+export const DeleteSubscriptionPlan = async (id: string,deletedName:string) => {
   return await axios({
     method: "DELETE",
     url: `${API.deleteSubscriptionPlans}/${id}`,
@@ -343,7 +344,7 @@ export const DeleteSubscriptionPlan = async (id: string) => {
   })
     .then((request) => {
       if (request.status === 201) {
-        toast.success("Deleted successfully.");
+        toast.success(`'${capitalizeFirstLetter(deletedName)}' deleted successfully.`);
       } else if (request.status === 400) {
         toast.error(request.data.message);
       }

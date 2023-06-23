@@ -92,7 +92,7 @@ export default function AddUser() {
                 >
                   <Grid container spacing={2}>
                     <Grid item xs={12} sm={12} md={12} lg={6} >
-                      <Box component="img" src="/Images/pages/addFeature.jpg" width={'100%'} />
+                      <Box component="img" src="/Images/sideImages/add_section.svg" width={'100%'} />
                     </Grid>
 
                     <Grid item xs={12} sm={12} md={12} lg={6} mt={10}>

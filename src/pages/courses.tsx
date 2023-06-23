@@ -82,7 +82,6 @@ export default function Courses() {
     setgridview(false);
     setDynamicCss(2);
   };
-
   return (
     <>
       {/*header*/}

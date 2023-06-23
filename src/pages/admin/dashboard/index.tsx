@@ -47,8 +47,6 @@ const Dashboard = () => {
   
   }, [])
 
-const reverseData:any = (dashboardContent && dashboardContent?.todaysSubscriptionData && [...dashboardContent?.todaysSubscriptionData].reverse());
-
   return (
     <>
       <Navbar />
@@ -112,7 +110,7 @@ const reverseData:any = (dashboardContent && dashboardContent?.todaysSubscriptio
                       <Typography className={dashboardStyles.quickstatText}>
                         Earning
                       </Typography>
-                      <Typography>${dashboardContent?.totalSubscriptionsPrice}</Typography>
+                      <Typography>{dashboardContent?.totalSubscriptionsPrice ? `$${dashboardContent?.totalSubscriptionsPrice}`:''}</Typography>
                     </Box>
                     <Box
                       component={"img"}
@@ -145,14 +143,13 @@ const reverseData:any = (dashboardContent && dashboardContent?.todaysSubscriptio
             <Grid item xs={12} sm={12} md={6} lg={6}>
               <Card>
                 <CardHeader
-                  title={<><Typography component={'span'} className={dashboardStyles.tableColumnFont}>Today&apos;s Registered Users</Typography>
-                  <Typography className={dashboardStyles.seeMore}><Link href={'/admin/users'}>See More</Link></Typography>
-                  </>
+                  title={<Typography component={'span'} className={dashboardStyles.tableColumnFont}>Today&apos;s Registered Users</Typography>
+                 
                 }
                   subheader={<Divider></Divider>}
                 ></CardHeader>
                 <CardContent>
-                  <TableContainer component={Paper}>
+                  <TableContainer component={Paper} className={dashboardContent && dashboardContent.todaysUsersData.length > 0 ? dashboardStyles.tableHeight: ''}>
                     <Table className={dashboardStyles.tableMinWidth} aria-label="simple table">
                       <TableHead>
                         <TableRow>
@@ -163,14 +160,16 @@ const reverseData:any = (dashboardContent && dashboardContent?.todaysSubscriptio
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {dashboardContent?.todaysUsersData.map((user:any) =>(
+                        { dashboardContent && dashboardContent.todaysUsersData.length > 0 ? dashboardContent?.todaysUsersData.map((user:any) =>(
                         <TableRow key={user.id}>
                           <TableCell align="left">{user.id}</TableCell>
                           <TableCell align="left">{capitalizeFirstLetter(user.first_name)} {capitalizeFirstLetter(user.last_name)}</TableCell>
                           <TableCell align="left">{user.email}</TableCell>
                           <TableCell align="left">{user.role === 1 ? 'Admin' : 'Learner'}</TableCell>
                         </TableRow>
-                        ))}
+                        )): <TableRow >
+                        <TableCell align="center" colSpan={4}  className={dashboardStyles.tableColumnFont} >Record not found</TableCell>
+                        </TableRow>}
                       </TableBody>
                     </Table>
                   </TableContainer>
@@ -180,14 +179,13 @@ const reverseData:any = (dashboardContent && dashboardContent?.todaysSubscriptio
             <Grid item xs={12} sm={12} md={6} lg={6}>
               <Card>
               <CardHeader
-                  title={<><Typography component={'span'} className={dashboardStyles.tableColumnFont}>Today&apos;s Subscriptions</Typography>
-                  <Typography className={dashboardStyles.seeMore}><Link href={'/admin/subscriptions/allsubscription/'}>See More</Link></Typography>
-                  </>
+                  title={<Typography component={'span'} className={dashboardStyles.tableColumnFont}>Today&apos;s Subscriptions</Typography>
+                  
                 }
                   subheader={<Divider></Divider>}
                 ></CardHeader>
                 <CardContent>
-                  <TableContainer component={Paper}>
+                  <TableContainer component={Paper} className={dashboardContent && dashboardContent?.todaysSubscriptionData?.length > 0 ? dashboardStyles.tableHeight : ''}>
                     <Table className={dashboardStyles.tableMinWidth} aria-label="simple table">
                       <TableHead>
                         <TableRow>
@@ -198,14 +196,16 @@ const reverseData:any = (dashboardContent && dashboardContent?.todaysSubscriptio
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                      {reverseData && reverseData?.map((subs:any) =>(
+                      {dashboardContent && dashboardContent?.todaysSubscriptionData?.length > 0 ? dashboardContent?.todaysSubscriptionData?.map((subs:any) =>(
                         <TableRow key={subs.id}>
                           <TableCell align="left">{subs.id}</TableCell>
                           <TableCell align="left">{subs.name}</TableCell>
                           <TableCell align="left">{subs.description}</TableCell>
                           <TableCell align="left">${subs.price}</TableCell>
                         </TableRow>
-                        ))}
+                        )): <TableRow >
+                        <TableCell align="center" colSpan={4}  className={dashboardStyles.tableColumnFont} >Record not found</TableCell>
+                        </TableRow>}
                         
                       </TableBody>
                     </Table>

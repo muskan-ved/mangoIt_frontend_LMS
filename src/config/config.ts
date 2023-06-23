@@ -1,8 +1,8 @@
 //SERVER API URL
-export const BASE_URL = 'https://api-mangoit-lms.mangoitsol.com';
+export const BASE_URL = "https://api-mangoit-lms.mangoitsol.com";
 
 // FRONTEND SERVER URL
-export const FRONTEND_BASE_URL = 'https://mangoit-lms.mangoitsol.com';
+export const FRONTEND_BASE_URL = "https://mangoit-lms.mangoitsol.com";
 
 // //FRONTEND LOCAL URL
 // export const FRONTEND_BASE_URL = "http://localhost:3000";
@@ -44,6 +44,7 @@ export const API = {
   deleteSession: `${BASE_URL}/deletesession`,
 
   //Site Options
+  getAllSiteConfiguration: `${BASE_URL}/getsiteconfigs`,
   getSite: `${BASE_URL}/getsiteconfigs`,
   createSite: `${BASE_URL}/createsiteconfig`,
   updateSite: `${BASE_URL}/updatesiteconfigs`,
@@ -115,7 +116,7 @@ export const API = {
 
   //doenload payment receiprt
   downloadorderinvoice: `${BASE_URL}/downloadorderinvoice`,
-  // admin dashbaord 
+  // admin dashbaord
   dashboarddata: `${BASE_URL}/getdashboard`,
-
+  getTotalLearner: `${BASE_URL}/gettotallearner`,
 };

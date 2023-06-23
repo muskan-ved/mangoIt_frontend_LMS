@@ -103,12 +103,12 @@ const AddEmailContent = () => {
     setLoadingButton(true);
     await HandleEmailContentCreate(reqData)
       .then((res) => {
-        setLoadingButton(false);
         if (res?.status === 201) {
           setTimeout(() => {
             router.replace("admin/configurations/emailmanagement/");
           }, 2000);
         }
+        setLoadingButton(false);
       })
       .catch((err) => {
         console.log(err);
