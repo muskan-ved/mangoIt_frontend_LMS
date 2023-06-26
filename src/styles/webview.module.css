@@ -410,7 +410,7 @@
   height: 36px !important;
   margin-right: 15px !important;
   margin-top: -5px !important;
-  background-color: aliceblue !important;
+  background-color: rgb(255, 255, 255) !important;
   padding-right: 50px !important;
 }
 .listitem {

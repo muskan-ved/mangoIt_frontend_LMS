@@ -727,10 +727,20 @@ export default function CoursesDetailsPage() {
                 </Typography>
                 <Divider className={styles.divder} />
               </Box>
-              {subsdata &&
-                subsdata?.map((data, key) => {
-                  return <SubscribtionPanCard subsdata={data} key={key} />;
-                })}
+              <Box className={styles.freecourses} mt={5}>
+                <Container maxWidth="lg">
+                  <Box>
+                    <Grid container spacing={2} justifyContent={"space-evenly"}>
+                      {subsdata &&
+                        subsdata?.map((data, key) => {
+                          return (
+                            <SubscribtionPanCard subsdata={data} key={key} />
+                          );
+                        })}
+                    </Grid>
+                  </Box>
+                </Container>
+              </Box>
             </Container>
           </Box>
           {/*top enrolled course*/}
