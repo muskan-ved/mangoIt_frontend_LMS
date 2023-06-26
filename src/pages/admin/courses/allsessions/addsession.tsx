@@ -40,7 +40,7 @@ export default function AddSession() {
   const [getModuleId, setModuleId] = React.useState<any>(0);
   const [file, setFile] = useState<string | any>('')
   const [isLoadingButton, setLoadingButton] = useState<boolean>(false);
-  const [isLoading, setLoading] = useState<boolean>(false);
+
 
   const {
     register,
@@ -73,23 +73,19 @@ export default function AddSession() {
         title: event.title,
         attachment: file
       }
-
       const formData = new FormData()
       for (var key in reqData) {
         formData.append(key, reqData[key]);
       }
-
-      setLoading(true);
-      setLoadingButton(false)
+      setLoadingButton(true)
       try {
         const res = await HandleSessionCreate(formData)
         setSession(res.data)
-        setLoading(false);
         setTimeout(() => {
           router.push('/admin/courses/allsessions/')
-        },900)
+        },1000) 
+        setLoadingButton(true)  
       }
-
       catch (e) {
         console.log(e)
         setLoadingButton(true)
@@ -167,7 +163,6 @@ export default function AddSession() {
                {/* main content */}
                <Card>
                   <CardContent>
-                     {!isLoading ?
                         <Box
                            component="form"
                            method="POST"
@@ -292,7 +287,6 @@ export default function AddSession() {
 
                   </Grid>
                 </Box>
-                : <SpinnerProgress />}
             </CardContent>
           </Card>
         </Box>

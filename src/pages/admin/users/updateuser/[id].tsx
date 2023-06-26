@@ -168,7 +168,7 @@ export default function UpdateUser() {
                       <Grid item xs={12} sm={12} md={12} lg={12} className={UserCSS.sessionNameGride} >
                         <Grid item xs={12} sm={12} md={6} lg={6}>
                           <InputLabel className={UserCSS.InputLabelFont}>
-                            Email Id
+                            Email
                           </InputLabel>
                           <TextField
                             value={rows?.email}

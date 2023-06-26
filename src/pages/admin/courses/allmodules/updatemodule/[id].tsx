@@ -80,17 +80,18 @@ export default function UpdateModule() {
     const reqData = { ...event, course_id: value?.id }
     if (errors.description?.message === '' || (typeof errors === 'object' && errors !== null)) {
       setLoading(true);
-      setLoadingButton(false)
+      setLoadingButton(true)
       try {
         const res = await HandleModuleUpdate(id, reqData)
         getModuleData()
         setLoading(false);
         setTimeout(() => {
           router.push('/admin/courses/allmodules/')
-        }, 900)
+        }, 1000)
+        setLoadingButton(false)
       } catch (e) {
         console.log(e)
-        setLoadingButton(true)
+        setLoadingButton(false)
       }
     } else {
       setError('description', { message: 'Description is a required field' });
@@ -249,7 +250,7 @@ export default function UpdateModule() {
                                   Active
                                 </MenuItem>
                                 <MenuItem value={'inactive'}>
-                                  In-active
+                                  Inactive
                                 </MenuItem>
                               </Select>
                             </FormControl>
@@ -283,7 +284,6 @@ export default function UpdateModule() {
                         </LoadingButton>}
                       </Grid>
                     </Grid>
-
                   </Grid>
                   {/* </Box> */}
                 </form>

@@ -137,6 +137,7 @@ export default function UpdateCourse() {
         setTimeout(() => {
           router.push('/admin/courses/allcourses/')
         }, 1000)
+        setLoadingButton(true)
       } catch (e) {
         console.log(e)
         setLoadingButton(true)
