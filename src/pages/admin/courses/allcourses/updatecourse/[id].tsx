@@ -641,7 +641,7 @@ export default function UpdateCourse() {
               </TableHead>
               <TableBody>
                 <TableRow>
-                  {rowsForCourseTopic && rowsForCourseMaterial?.map((item: any, idx: any) => (
+                  {rowsForCourseMaterial && rowsForCourseMaterial?.map((item: any, idx: any) => (
                     <Stack key={idx} direction="row" spacing={2} mb={1} mt={1}>
                       <TextField
                         id={idx}
